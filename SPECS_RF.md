@@ -1,0 +1,19 @@
+A continuación, se presenta el análisis detallado para el desarrollo de la aplicación, integrando la **Dieta Mediterránea erMedDiet** (con reducción de energía) y las recomendaciones sostenibles de la **AESAN 2022**.
+
+### 📦 Requisitos y Especificaciones: App Nutrición DT2 Sostenible
+
+|Categoría|Especificaciones y Requisitos|
+|:--|:--|
+|**Análisis Nutricional (Pirámide DT2 + AESAN)**|• **Cereales:** 3-6 raciones/día (máximo 4 si hay restricción calórica), siempre **100% integrales**.• **Hortalizas y Frutas:** Mínimo 3 raciones de hortalizas y 2-3 de frutas diarias. Evitar frutas en almíbar o desecadas.• **Legumbres:** Mínimo 4 raciones/semana hasta consumo diario (fuente principal de proteína vegetal).• **Pescado:** Mínimo 3 raciones/semana, priorizando pescado azul y especies de bajo impacto ambiental.• **Grasas:** Aceite de Oliva virgen/virgen extra como grasa de elección diaria.|
+|**Algoritmos del Escáner**|• **Calificación Dual:** Evaluación de salud metabólica (carga glucémica) e impacto ambiental (huella de carbono/hídrica) [Sec. 1 de modelo anterior].• **Detección de Ocultos:** Identificación de variantes de azúcar (jarabes, dextrosa) y grasas trans en procesados.• **Sustitución Inteligente:** Sugerencia automática de alternativas sostenibles (ej. cambiar carne roja por legumbres o pescado azul) [Sec. 1A-B de modelo anterior].|
+|**Requisitos Funcionales (RF)**|• **RF-01 Menús AESAN:** Generación de recetas ajustadas a raciones gramadas (ej. 40-60g pan integral) para control glucémico.• **RF-02 erMedDiet:** Reducción automática de **600 kcal/día** si el IMC > 25, con fraccionamiento en 3-6 tomas.• **RF-03 Actividad Física:** Seguimiento de 150-300 min/semana de actividad moderada y 2 días de fortalecimiento muscular.|
+|**Requisitos No Funcionales (RNF)**|• **RNF-01 Seguridad:** Aviso legal obligatorio de validación por **dietista-nutricionista** personal.• **RNF-02 Convivialidad:** Fomento del comer en compañía y técnicas culinarias sencillas (vapor/hervido).• **RNF-03 Sostenibilidad:** Priorización de productos locales, de temporada y minimización de envases.|
+
+---
+
+#### 🔗 Enlaces de las Fuentes Consultadas:
+
+- [Informe AESAN 2022: Recomendaciones Dietéticas Sostenibles y Actividad Física](https://www.aesan.gob.es/AECOSAN/docs/documentos/seguridad_alimentaria/evaluacion_riesgos/informes_comite/INFORME_RECOMENDACIONES_DIETETICAS.pdf)
+- [Guía Práctica AESAN: Come Sano, Muévete y Cuida tu Planeta](https://www.aesan.gob.es/AECOSAN/web/nutricion/seccion/estrategia_naos.htm)
+- [Estrategia en Diabetes del Sistema Nacional de Salud](https://www.msssi.gob.es/organizacion/sns/planCalidadSNS/pdf/excelencia/estrategia_diabetes_actualizacion.pdf)
+- [Guía Nutricional Digital: Dieta Mediterránea y Diabetes Tipo 2](https://notebooklm.google.com/) (Documento de referencia interna en el cuaderno)
