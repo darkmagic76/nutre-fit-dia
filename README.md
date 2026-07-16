@@ -11,12 +11,14 @@ Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y 
 ## Stack tecnológico utilizado
 
 | Tecnología | Versión | Propósito |
-|---|---|---|
-| React | 19.2.7 | Componentes de UI |
-| TypeScript | 6.0.2 | Type safety, erasableSyntaxOnly para código más limpio |
-| Vite | 8.1.1 | Servidor de desarrollo rápido y builds optimizados |
-| Tailwind CSS | 4.3.2 | CSS utility-first, integrado via Vite plugin |
-| Zod | 4.4.3 | Validación en runtime con inferencia de tipos TypeScript |
+|---|---|---|---|
+| React | 19.2.7 | Componentes de UI (Container/Presentational) |
+| TypeScript | 6.0.2 | Type safety, erasableSyntaxOnly |
+| Vite | 8.1.1 | Servidor de desarrollo y builds |
+| Tailwind CSS | 4.3.2 | CSS utility-first (Vite plugin) |
+| Zod | 4.4.3 | Validación runtime con inferencia de tipos |
+| Zustand | 5.0.8 | State management — una store por feature |
+| Supabase JS | 2.87.3 | BaaS: PostgreSQL, Auth, Storage (V1) |
 | Vitest | 4.1.10 | Test runner unitario y de componentes |
 | Testing Library React | 16.3.2 | Testing conductual de componentes |
 | Oxlint | 1.71.0 | Linting basado en Rust |
@@ -49,33 +51,51 @@ pnpm verify          # quality + build
 src/
 ├── features/
 │   ├── nutritional-traffic-light/
-│   │   └── services/              # classificationService, occultSugarDetector
+│   │   ├── ScannerContainer.tsx          # Lógica: estado, store, handlers
+│   │   ├── ScannerView.tsx               # UI puro: props, sin store
+│   │   ├── store/scannerStore.ts         # Historial de escaneos (Zustand)
+│   │   └── services/                     # classificationService, occultSugarDetector
 │   ├── metabolic-tracker/
-│   │   └── services/              # caloricTargetService
+│   │   ├── MetabolicTrackerContainer.tsx # Lógica: perfil metabólico
+│   │   ├── MetabolicTrackerView.tsx      # UI: formulario + resultados
+│   │   ├── store/trackerStore.ts         # Perfil + objetivo calórico + restrictionActive
+│   │   └── services/                     # caloricTargetService
 │   ├── med-diet-validator/
-│   │   ├── models.ts              # RATION_LIMITS + tipos
-│   │   └── services/              # rationFrequencyService, weeklyAccumulatorService
-│   └── recipe-engine/
-│       ├── models.ts              # Recipe schemas + PORTION_LIMITS
-│       ├── services/              # 7 servicios de generacion y validacion
-│       ├── hooks/                 # useRecipeEngine
-│       ├── components/            # RecipePlanDisplay
-│       └── recipe-engine.tsx      # Contenedor principal
+│   │   ├── DailyLogContainer.tsx         # Lógica: registro diario
+│   │   ├── DailyLogView.tsx              # UI: lista alimentos + validación
+│   │   └── store/logStore.ts             # todayLog + validación (Zustand)
+│   ├── recipe-engine/
+│   │   ├── PlanContainer.tsx             # Lógica: plan semanal
+│   │   ├── PlanView.tsx                  # UI: checkbox + plan generado
+│   │   ├── store/planStore.ts            # weeklyPlan (Zustand)
+│   │   └── services/                     # planGenerator
+│   ├── activity-tracker/                 # [scaffolded] ADR-006 V1
+│   │   ├── types.ts                      # ActivityEntry, WeeklyGoal
+│   │   └── store/activityStore.ts        # weeklyMinutes, strengthSessions
+│   └── nudge-engine/                     # [scaffolded] ADR-008
+│       ├── types.ts                      # NudgeRule, NudgeContext
+│       └── store/nudgeStore.ts           # pending nudges queue
 ├── shared/
-│   ├── types/                     # metabolic.ts (Food, MealEntry, etc.)
-│   └── data/                      # foods.ts (catalogo 34 alimentos)
+│   ├── domain/                           # FoodCategory, TrafficLight, Notification, Zod schemas
+│   ├── data/foods.ts                     # Catálogo 34 alimentos
+│   ├── services/rationValidator.ts       # Validación diaria/semanal (cross-feature)
+│   ├── sustainability/                   # [scaffolded] ADR-007 — EnvironmentalScore, Seasonality
+│   ├── ui/primitives.tsx                 # Card, SelectField, TabButton, StatCard
+│   └── utils/                            # sanitizeNumeric, computeIMC
 ├── infrastructure/
-│   ├── ml/                        # mockScannerAdapter
-│   └── storage/                   # (futuro)
-└── test/                          # setup.ts (Testing Library + jsdom)
+│   └── ml/                               # ADR-003 — ScannerAdapter + MockScannerAdapter
+└── test/setup.ts                         # Testing Library + jsdom
 ```
 
 ## Funcionalidades principales
 
-- **Semáforo Nutricional**: Clasifica alimentos en Verde/Naranja/Rojo según impacto metabólico. Detecta azúcares ocultos en procesados.
-- **Metabolic Tracker**: Calcula objetivo calórico diario con déficit condicional de 600 kcal (solo si IMC > 25).
-- **Validador Dieta Mediterránea**: Valida frecuencias diarias y semanales según matriz AESAN 2022 (11 límites, 41 tests).
-- **Recipe Engine**: Genera planes semanales personalizados. Valida porciones gramadas (RF-01), puntúa sostenibilidad ambiental (FR-2.2), exige alternancia pescado blanco/azul, alerta sobre frutas de alta carga glucémica, valida fraccionamiento 3-6 tomas, y ofrece doble cualificación metabólico-ambiental (FR-5.2).
+- **Semáforo Nutricional**: Clasifica alimentos en Verde/Naranja/Rojo según impacto metabólico. Detecta azúcares ocultos en procesados (18 tests).
+- **Metabolic Tracker**: Calcula objetivo calórico diario con déficit condicional de 600 kcal (solo si IMC > 25). 12 tests.
+- **Validador Dieta Mediterránea**: Valida frecuencias diarias y semanales según matriz AESAN 2022 (41 tests).
+- **Recipe Engine**: Genera planes semanales con restricción calórica opcional. 12 tests.
+- **Activity Tracker** `[scaffolded]`: Seguimiento WHO/OMS 150-300 min/semana + 2 días de fuerza. ADR-006 V1.
+- **Nudge Engine** `[scaffolded]`: Taxonomía de notificaciones SafetyAlert / SystemAction / BehavioralNudge. ADR-008.
+- **Sustainability Scoring** `[scaffolded]`: EnvironmentalScore con huella de carbono, estacionalidad y proximidad. ADR-007.
 
 ## Especificación Técnica y Arquitectónica: Ecosistema de Autocuidado Integral (DT2 y Salud Sostenible)
 
@@ -163,10 +183,10 @@ Cada objeto `Recipe` en nuestra base de datos debe cumplir con un esquema de met
 
 ### Fases de Ejecución Técnica
 
-1. **Fase 1: Domain Modeling**: Definición de tipos de datos estrictos para perfiles metabólicos, raciones AESAN y tipos de alimentos.
-2. **Fase 2: Domain Services & Containers**: Implementación de la lógica erMedDiet y contenedores de lógica de negocio.
-3. **Fase 3: Presentational Layer**: Desarrollo de componentes de UI puros (Semáforo, gráficas de HbA1c).
-4. **Fase 4: CI/CD & Compliance**: Automatización de pruebas unitarias para validación de raciones y despliegue.
+1. **Fase 1: Domain Modeling** ✅ — Definición de tipos estrictos para perfiles metabólicos, raciones AESAN, tipos de alimentos, notification taxonomy.
+2. **Fase 2: Domain Services & Containers** ✅ — Implementación de lógica erMedDiet, Container/Presentational split, per-feature Zustand stores.
+3. **Fase 3: ADR Scaffolding** ✅ — ScannerAdapter (ADR-003), Activity Tracker (ADR-006), Sustainability (ADR-007), Nudge Engine (ADR-008).
+4. **Fase 4: CI/CD & Compliance** 🔲 — Automatización de pruebas unitarias para validación de raciones y despliegue.
 
 ### Estructura de Proyecto (Scope Rule & Colocation)
 
