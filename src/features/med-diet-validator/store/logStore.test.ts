@@ -2,9 +2,9 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { useLogStore } from './logStore'
 import { useTrackerStore } from '@features/metabolic-tracker/store'
 import { FoodCategory } from '@shared/domain'
-import type { Food } from '@shared/domain'
+import { makeFood } from '@/test/fixtures'
 
-const mockFood: Food = {
+const mockFood = makeFood({
   id: 'test-food-1',
   name: 'Pan integral',
   category: FoodCategory.CEREALS,
@@ -15,13 +15,8 @@ const mockFood: Food = {
   fiberPer100g: 6,
   fatPer100g: 2,
   saturatedFatPer100g: 0.3,
-  addedSugarsPer100g: 0,
-  harmfulIngredients: [],
-  hasTransFats: false,
-  isProcessed: false,
   carbonFootprint: 0.5,
-  isSeasonal: false,
-}
+})
 
 describe('logStore', () => {
   beforeEach(() => {

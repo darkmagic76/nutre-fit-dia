@@ -17,12 +17,13 @@ describe('App integration', () => {
   beforeEach(() => {
     render(<App />)
   })
-  // Función Helper para seleccionar una pestaña por su nombre
+
   const selectTab = (name: string) => {
     fireEvent.click(screen.getByRole('tab', { name: new RegExp(name, 'i') }))
   }
-  // Pruebas de integración de la aplicación, verificando la navegación entre pestañas 
-  // y la interacción con los componentes principales. 
+
+  const getSelectedTabs = () =>
+    screen.getAllByRole('tab').filter(t => t.getAttribute('aria-selected') === 'true')
   it('renders all navigation tabs', () => {
     expect(screen.getByRole('tab', { name: /semáforo/i })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: /hoy/i })).toBeInTheDocument()
@@ -37,41 +38,29 @@ describe('App integration', () => {
 
     fireEvent.keyDown(document, { key: 'ArrowRight' })
 
-    const updatedTab = screen.getAllByRole('tab').find(
-      t => t.getAttribute('aria-selected') === 'true',
-    )
+    const updatedTab = getSelectedTabs()[0]
     expect(updatedTab).toBeDefined()
     expect(updatedTab).not.toBe(firstTab)
   })
 
   it('does not navigate when modifier key is held', () => {
-    const initial = screen.getAllByRole('tab').filter(
-      t => t.getAttribute('aria-selected') === 'true',
-    )
+    const initial = getSelectedTabs()
     fireEvent.keyDown(document, { key: 'ArrowRight', ctrlKey: true })
-    const after = screen.getAllByRole('tab').filter(
-      t => t.getAttribute('aria-selected') === 'true',
-    )
+    const after = getSelectedTabs()
     expect(after).toEqual(initial)
   })
 
   it('does not navigate on non-arrow key', () => {
-    const initial = screen.getAllByRole('tab').filter(
-      t => t.getAttribute('aria-selected') === 'true',
-    )
+    const initial = getSelectedTabs()
     fireEvent.keyDown(document, { key: 'x' })
-    const after = screen.getAllByRole('tab').filter(
-      t => t.getAttribute('aria-selected') === 'true',
-    )
+    const after = getSelectedTabs()
     expect(after).toEqual(initial)
   })
 
   it('navigates with ArrowLeft wrapping to last tab', () => {
     fireEvent.keyDown(document, { key: 'ArrowLeft' })
 
-    const selected = screen.getAllByRole('tab').find(
-      t => t.getAttribute('aria-selected') === 'true',
-    )
+    const selected = getSelectedTabs()[0]
     expect(selected?.textContent).toContain('Plan')
   })
 

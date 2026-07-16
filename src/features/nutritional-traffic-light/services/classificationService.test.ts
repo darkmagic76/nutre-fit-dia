@@ -1,29 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { classifyFood, classifyFoodWithReasons } from './classificationService'
 import { TrafficLightColor, FoodCategory } from '@shared/domain'
-import type { Food } from '@shared/domain'
 import { foodsById } from '@shared/data/foods'
-
-function makeFood(overrides: Partial<Food> = {}): Food {
-  return {
-    id: 'test-food',
-    name: 'Test Food',
-    category: FoodCategory.VEGETABLES,
-    gramsPerRation: 100,
-    kcalPer100g: 50,
-    proteinPer100g: 2,
-    carbsPer100g: 5,
-    fiberPer100g: 2,
-    fatPer100g: 1,
-    saturatedFatPer100g: 0.2,
-    addedSugarsPer100g: 0,
-    harmfulIngredients: [],
-    hasTransFats: false,
-    isProcessed: false,
-    isSeasonal: false,
-    ...overrides,
-  }
-}
+import { makeFood } from '@/test/fixtures'
 
 describe('classificationService', () => {
   describe('classifyFood', () => {
