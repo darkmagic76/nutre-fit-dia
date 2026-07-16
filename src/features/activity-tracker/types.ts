@@ -17,11 +17,11 @@ export interface WeeklyGoal {
   strengthSessionsMin: 2
 }
 
-export const DEFAULT_WEEKLY_GOAL: WeeklyGoal = {
+export const DEFAULT_WEEKLY_GOAL = {
   moderateMinutesMin: 150,
   moderateMinutesMax: 300,
   strengthSessionsMin: 2,
-}
+} as const satisfies WeeklyGoal
 
 export interface ComplianceReport {
   /** ISO week start date */
