@@ -9,10 +9,9 @@ export function ScannerContainer() {
   const [result, setResult] = useState<ReturnType<typeof classifyFoodWithReasons> | null>(null)
   const addFoodToLog = useLogStore(s => s.addFoodToLog)
 
-  const foodIds = Array.from(foodsById.keys())
-  const options = foodIds.map(id => ({
+  const options = Array.from(foodsById.entries()).map(([id, food]) => ({
     value: id,
-    label: `${foodsById.get(id)!.name} ${foodsById.get(id)!.isProcessed ? '⚠️' : ''}`,
+    label: `${food.name} ${food.isProcessed ? '⚠️' : ''}`,
   }))
 
   const selected = selectedId ? foodsById.get(selectedId) : null
