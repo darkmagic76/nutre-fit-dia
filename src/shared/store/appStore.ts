@@ -7,6 +7,14 @@ import type { CaloricTargetOutput } from '@features/metabolic-tracker/services/c
 import type { ValidationResult } from '@features/med-diet-validator/services/rationValidator'
 import type { WeeklyPlan } from '@features/recipe-engine/services/planGenerator'
 
+/** Sanitize numeric input: strip non-numeric chars, cap to reasonable range */
+function sanitizeNumeric(value: string, max: number, min = 0): number {
+  const cleaned = value.replace(/[^0-9.]/g, '')
+  const num = parseFloat(cleaned)
+  if (Number.isNaN(num)) return min
+  return Math.max(min, Math.min(num, max))
+}
+
 interface AppState {
   // Metabolic profile
   weight: string
@@ -58,16 +66,18 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   calculateTarget: () => {
     const { weight, height, age, gender, paf } = get()
-    const w = parseFloat(weight)
-    const h = parseFloat(height)
+    const w = sanitizeNumeric(weight, 300, 30)
+    const h = sanitizeNumeric(height, 250, 100)
+    const a = sanitizeNumeric(age, 120, 18)
+    const p = sanitizeNumeric(paf, 2.5, 1.0)
     if (!w || !h) return
     const imc = Math.round((w / ((h / 100) ** 2)) * 10) / 10
     const target = computeCaloricTarget({
       weight: w,
       height: h,
-      age: parseInt(age) || 55,
+      age: a || 55,
       gender,
-      physicalActivityFactor: parseFloat(paf) || 1.2,
+      physicalActivityFactor: p || 1.2,
       imc,
     })
     set({ caloricTarget: target, restrictionActive: target.restrictionActive })
