@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { z } from 'zod'
-import { computeIMC, sanitizeNumeric } from '@shared/utils'
+import { ValidationError } from '@shared/errors'
+import { computeIMC, parseNumeric } from '@shared/utils'
 import {
   computeCaloricTarget,
   type CaloricTargetOutput,
@@ -16,7 +17,7 @@ interface TrackerState {
   paf: string
   caloricTarget: CaloricTargetOutput | null
   restrictionActive: boolean
-  profileError: string | null
+  profileError: ValidationError | null
 
   setWeight: (v: string) => void
   setHeight: (v: string) => void
@@ -40,30 +41,47 @@ export const useTrackerStore = create<TrackerState>((set, get) => ({
   setWeight: v => set({ weight: v }),
   setHeight: v => set({ height: v }),
   setAge: v => set({ age: v }),
+
   setGender: v => {
-    const parsed = genderSchema.safeParse(v)
-    if (parsed.success) set({ gender: parsed.data })
+    try {
+      const parsed = genderSchema.parse(v)
+      set({ gender: parsed, profileError: null })
+    } catch (e) {
+      const message = e instanceof Error
+        ? `Género no válido: ${e.message}`
+        : 'Género no válido'
+      set({ profileError: new ValidationError(message, { value: v }) })
+    }
   },
+
   setPaf: v => set({ paf: v }),
   setRestrictionActive: v => set({ restrictionActive: v }),
 
   calculateTarget: () => {
     const { weight, height, age, gender, paf } = get()
-    const w = sanitizeNumeric(weight, 300, 30)
-    const h = sanitizeNumeric(height, 250, 100)
-    const a = sanitizeNumeric(age, 120, 18)
-    const p = sanitizeNumeric(paf, 2.5, 1.0)
-    if (!w || !h) {
-      set({ profileError: 'Peso y altura son obligatorios para calcular el objetivo calórico' })
+
+    let w: number, h: number, a: number, p: number
+    try {
+      w = parseNumeric(weight, 300, 30)
+      h = parseNumeric(height, 250, 100)
+      a = parseNumeric(age, 120, 18)
+      p = parseNumeric(paf, 2.5, 1.0)
+    } catch (e) {
+      if (e instanceof ValidationError) {
+        set({ profileError: e })
+      } else {
+        set({ profileError: new ValidationError('Error al procesar los datos del perfil') })
+      }
       return
     }
+
     const imc = computeIMC(w, h)
     const target = computeCaloricTarget({
       weight: w,
       height: h,
-      age: a || 55,
+      age: a,
       gender,
-      physicalActivityFactor: p || 1.2,
+      physicalActivityFactor: p,
       imc,
     })
     set({ caloricTarget: target, restrictionActive: target.restrictionActive, profileError: null })

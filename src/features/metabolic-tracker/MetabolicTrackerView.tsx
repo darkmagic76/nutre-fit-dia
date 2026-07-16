@@ -1,5 +1,6 @@
 import type { CaloricTargetOutput } from './services/caloricTargetService'
 import { Card, PrimaryButton, StatCard, NumberField, SelectField } from '@shared/ui/primitives'
+import type { ValidationError } from '@shared/errors'
 import type { FormEvent } from 'react'
 
 interface MetabolicTrackerViewProps {
@@ -9,7 +10,7 @@ interface MetabolicTrackerViewProps {
   gender: 'male' | 'female'
   paf: string
   caloricTarget: CaloricTargetOutput | null
-  profileError: string | null
+  profileError: ValidationError | null
   setWeight: (v: string) => void
   setHeight: (v: string) => void
   setAge: (v: string) => void
@@ -71,7 +72,7 @@ export function MetabolicTrackerView({
 
       {profileError && (
         <p className="text-red-600 text-sm font-medium" role="alert">
-          {profileError}
+          {profileError.message}
         </p>
       )}
 
