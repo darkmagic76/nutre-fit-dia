@@ -32,6 +32,20 @@ export const FoodCategorySchema = z.enum([
   'water',
 ])
 
+/** Display names in Spanish for UI rendering */
+export const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
+  [FoodCategory.CEREALS]: 'Cereales',
+  [FoodCategory.VEGETABLES]: 'Hortalizas',
+  [FoodCategory.FRUITS]: 'Frutas',
+  [FoodCategory.OLIVE_OIL]: 'AOVE',
+  [FoodCategory.DAIRY]: 'Lácteos',
+  [FoodCategory.LEGUMES]: 'Legumbres',
+  [FoodCategory.FISH]: 'Pescado',
+  [FoodCategory.EGGS]: 'Huevos',
+  [FoodCategory.WHITE_MEAT]: 'Carne blanca',
+  [FoodCategory.WATER]: 'Agua',
+}
+
 /** Groups that count toward animal protein (for NudgeEngine: "si Animal_Protein > 2, sugerir calcio vegetal") */
 export const ANIMAL_PROTEIN_CATEGORIES: FoodCategory[] = [
   FoodCategory.DAIRY,

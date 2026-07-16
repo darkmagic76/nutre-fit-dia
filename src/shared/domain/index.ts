@@ -1,4 +1,4 @@
-export { FoodCategory, FoodCategorySchema, ANIMAL_PROTEIN_CATEGORIES } from './foodCategory'
+export { FoodCategory, FoodCategorySchema, ANIMAL_PROTEIN_CATEGORIES, CATEGORY_DISPLAY_NAMES } from './foodCategory'
 export type { FoodCategory as FoodCategoryType } from './foodCategory'
 export { TrafficLightColor, TrafficLightColorSchema } from './trafficLight'
 export type { TrafficLightColor as TrafficLightColorType } from './trafficLight'
