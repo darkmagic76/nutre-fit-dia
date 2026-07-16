@@ -133,5 +133,17 @@ describe('classificationService', () => {
       expect(result.color).toBe(TrafficLightColor.GREEN)
       expect(result.reasons).toEqual([])
     })
+
+    it('warns about processed food with non-sugar harmful ingredients', () => {
+      const food = makeFood({
+        isProcessed: true,
+        harmfulIngredients: ['conservantes'],
+        hasTransFats: false,
+        category: FoodCategory.VEGETABLES,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.color).toBe(TrafficLightColor.GREEN)
+      expect(result.reasons).toContain('Producto procesado con ingredientes no recomendados')
+    })
   })
 })
