@@ -1,0 +1,287 @@
+# Guía de Instalación — NutreFitDia
+
+## Requisitos previos
+
+| Herramienta | Versión mínima | Verificación |
+|---|---|---|
+| **Node.js** | 22+ | `node --version` |
+| **pnpm** | 10+ | `pnpm --version` |
+| **Git** | 2.40+ | `git --version` |
+
+### Instalar Node.js
+
+```bash
+# Opción A: Node Version Manager (recomendado)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+nvm install 22
+nvm use 22
+
+# Opción B: Descarga directa
+# https://nodejs.org → LTS 22.x
+```
+
+### Instalar pnpm
+
+```bash
+npm install -g pnpm@latest
+```
+
+---
+
+## 1. Clonar el repositorio
+
+```bash
+git clone git@github.com:darkmagic76/tfm-nutre-fit-dia.git
+cd tfm-nutre-fit-dia
+```
+
+Ramas del proyecto:
+
+| Rama | Propósito |
+|---|---|
+| `main` | Producción |
+| `staging` | Pre-producción, pruebas de integración |
+| `develop` | Desarrollo activo |
+
+```bash
+git checkout develop  # rama de trabajo
+```
+
+---
+
+## 2. Instalar dependencias
+
+```bash
+pnpm install
+```
+
+Dependencias principales que se instalan:
+
+| Categoría | Paquetes |
+|---|---|
+| Frontend | React 19, Vite 8, Tailwind 4, Zustand 5 |
+| Validación | Zod 4 |
+| Backend (opcional) | Supabase JS |
+| Testing | Vitest 4, Testing Library 16, jsdom 29 |
+| Calidad | TypeScript 6, Oxlint |
+
+---
+
+## 3. Ejecutar en desarrollo
+
+```bash
+pnpm dev
+```
+
+Abre `http://localhost:5173` en el navegador.
+
+La aplicación tiene 4 pestañas:
+
+| Pestaña | Funcionalidad |
+|---|---|
+| 🔍 **Semáforo** | Clasificación de alimentos (Verde/Naranja/Rojo) + detección de azúcares ocultos |
+| 📝 **Hoy** | Registro diario de alimentos con validación de raciones AESAN 2022 |
+| 📊 **Perfil** | Cálculo de objetivo calórico personalizado (erMedDiet, PREDIMED-Plus) |
+| 📅 **Plan** | Generación de plan semanal con todos los grupos alimentarios |
+
+---
+
+## 4. Ejecutar tests
+
+```bash
+# Tests unitarios
+pnpm test:run
+
+# Tests en modo watch (desarrollo)
+pnpm test:watch
+
+# Con cobertura
+pnpm test:coverage
+```
+
+---
+
+## 5. Verificar calidad
+
+```bash
+# Lint + typecheck + tests
+pnpm quality
+
+# quality + build (para CI/CD)
+pnpm verify
+```
+
+Pipeline de calidad:
+
+```
+pnpm quality
+  ├── pnpm lint       → Oxlint (Rust, ultrarrápido)
+  ├── pnpm typecheck  → TypeScript 6 (erasableSyntaxOnly)
+  └── pnpm test:run   → Vitest (68 tests)
+```
+
+---
+
+## 6. Build de producción
+
+```bash
+pnpm build
+```
+
+Genera `dist/` con los archivos optimizados:
+
+```
+dist/
+├── index.html
+├── favicon.svg
+└── assets/
+    ├── index-*.css   (~14 KB)
+    └── index-*.js    (~277 KB)
+```
+
+---
+
+## 7. Despliegue
+
+### Opción A: Local (para demo/defensa TFM)
+
+```bash
+pnpm dev
+# Compartir con: http://localhost:5173
+```
+
+### Opción B: GitHub Pages (recomendado, cero dependencias externas)
+
+Crear `.github/workflows/deploy.yml`:
+
+```yaml
+name: Deploy to GitHub Pages
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+      - id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+Configurar en GitHub: `Settings → Pages → Source: GitHub Actions`.
+
+URL: `https://darkmagic76.github.io/tfm-nutre-fit-dia`
+
+### Opción C: Vercel
+
+```bash
+npx vercel --prod
+# Seguir instrucciones en pantalla
+```
+
+---
+
+## 8. Estructura del proyecto
+
+```
+tfm-nutre-fit-dia/
+├── src/
+│   ├── features/              ← Screaming Architecture (ADR-001)
+│   │   ├── nutritional-traffic-light/
+│   │   │   └── services/      ← classificationService, occultSugarDetector
+│   │   ├── metabolic-tracker/
+│   │   │   └── services/      ← caloricTargetService
+│   │   ├── med-diet-validator/
+│   │   │   └── services/      ← rationValidator
+│   │   ├── recipe-engine/
+│   │   │   └── services/      ← planGenerator
+│   │   ├── activity-tracker/  ← (V2)
+│   │   └── nudge-engine/      ← (V2)
+│   ├── shared/
+│   │   ├── domain/            ← FoodCategory, TrafficLightColor, Food (Zod)
+│   │   ├── data/              ← Catálogo de alimentos (40 items)
+│   │   ├── sustainability/    ← (V2) EnvironmentalScore
+│   │   ├── store/             ← Zustand store (estado global)
+│   │   └── ui/                ← Componentes atómicos
+│   ├── infrastructure/
+│   │   └── ml/                ← ScannerAdapter (ADR-003)
+│   └── test/
+│       └── setup.ts
+├── adr/                       ← 9 ADRs + matriz de trazabilidad
+├── docs/                      ← Especificaciones (INFORME_ADR, SPECS_RF, SPECS_TECH)
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+└── .oxlintrc.json
+```
+
+---
+
+## 9. Stack tecnológico
+
+| Capa | Tecnología | Decisión |
+|---|---|---|
+| UI | React 19 + Tailwind 4 | ADR-009 |
+| Build | Vite 8 | ADR-009 |
+| Tipos | TypeScript 6 (erasableSyntaxOnly) | ADR-002 |
+| Validación | Zod 4 | ADR-002 |
+| Estado | Zustand 5 | ADR-009 |
+| Backend | Supabase (PostgreSQL + Auth) | ADR-009 |
+| Tests | Vitest 4 + Testing Library 16 | ADR-009 |
+| Lint | Oxlint (Rust) | ADR-009 |
+| Arquitectura | Screaming Architecture | ADR-001 |
+| Dominio | 10 FoodCategory groups | ADR-005 |
+| Déficit | 600 kcal condicional (IMC > 25) | ADR-004 |
+| Scanner | Mock → ONNX (V2) | ADR-003 |
+| Actividad | GoalTracker manual V1 | ADR-006 |
+| Sostenibilidad | EnvironmentalScore V2 | ADR-007 |
+| Notificaciones | SafetyAlert / SystemAction / BehavioralNudge | ADR-008 |
+
+---
+
+## 10. Solución de problemas
+
+### `pnpm: command not found`
+
+```bash
+npm install -g pnpm@latest
+```
+
+### `Error: Cannot find module '@shared/domain'`
+
+```bash
+pnpm install   # reinstalar dependencias
+pnpm typecheck # verificar que TypeScript resuelve los paths
+```
+
+### Tests fallan con `ReferenceError: document is not defined`
+
+```bash
+# Asegurarse que src/test/setup.ts importa @testing-library/jest-dom
+pnpm test:run -- --environment jsdom
+```
+
+### Puerto 5173 en uso
+
+```bash
+pnpm dev -- --port 3000
+```
