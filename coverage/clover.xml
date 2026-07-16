@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1784233842977" clover="3.2.0">
+  <project timestamp="1784233842978" name="All files">
+    <metrics statements="269" coveredstatements="269" conditionals="173" coveredconditionals="168" methods="100" coveredmethods="100" elements="542" coveredelements="537" complexity="0" loc="269" ncloc="269" packages="17" files="38" classes="38"/>
+    <package name="src">
+      <metrics statements="17" coveredstatements="17" conditionals="17" coveredconditionals="17" methods="7" coveredmethods="7"/>
+      <file name="App.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/App.tsx">
+        <metrics statements="17" coveredstatements="17" conditionals="17" coveredconditionals="17" methods="7" coveredmethods="7"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="18" count="28" type="stmt"/>
+        <line num="20" count="28" type="stmt"/>
+        <line num="21" count="4" type="cond" truecount="5" falsecount="0"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="23" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="32" count="28" type="stmt"/>
+        <line num="33" count="28" type="stmt"/>
+        <line num="34" count="28" type="stmt"/>
+        <line num="37" count="28" type="stmt"/>
+        <line num="50" count="112" type="stmt"/>
+        <line num="53" count="14" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.med-diet-validator">
+      <metrics statements="8" coveredstatements="8" conditionals="23" coveredconditionals="18" methods="6" coveredmethods="6"/>
+      <file name="DailyLogContainer.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/med-diet-validator/DailyLogContainer.tsx">
+        <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <line num="6" count="5" type="stmt"/>
+        <line num="7" count="15" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="11" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="5" type="stmt"/>
+      </file>
+      <file name="DailyLogView.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/med-diet-validator/DailyLogView.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="21" coveredconditionals="16" methods="3" coveredmethods="3"/>
+        <line num="27" count="5" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.med-diet-validator.store">
+      <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+      <file name="index.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/med-diet-validator/store/index.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="logStore.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/med-diet-validator/store/logStore.ts">
+        <metrics statements="17" coveredstatements="17" conditionals="0" coveredconditionals="0" methods="5" coveredmethods="5"/>
+        <line num="19" count="2" type="stmt"/>
+        <line num="24" count="10" type="stmt"/>
+        <line num="25" count="10" type="stmt"/>
+        <line num="26" count="10" type="stmt"/>
+        <line num="27" count="10" type="stmt"/>
+        <line num="28" count="10" type="stmt"/>
+        <line num="29" count="10" type="stmt"/>
+        <line num="33" count="3" type="stmt"/>
+        <line num="34" count="4" type="stmt"/>
+        <line num="35" count="3" type="stmt"/>
+        <line num="36" count="3" type="stmt"/>
+        <line num="37" count="3" type="stmt"/>
+        <line num="38" count="3" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="45" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.metabolic-tracker">
+      <metrics statements="6" coveredstatements="6" conditionals="8" coveredconditionals="8" methods="3" coveredmethods="3"/>
+      <file name="MetabolicTrackerContainer.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/metabolic-tracker/MetabolicTrackerContainer.tsx">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="9" count="10" type="stmt"/>
+        <line num="11" count="10" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="16" count="10" type="stmt"/>
+      </file>
+      <file name="MetabolicTrackerView.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/metabolic-tracker/MetabolicTrackerView.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="8" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="29" count="10" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.metabolic-tracker.services">
+      <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+      <file name="caloricTargetService.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/metabolic-tracker/services/caloricTargetService.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <line num="29" count="19" type="stmt"/>
+        <line num="30" count="19" type="cond" truecount="2" falsecount="0"/>
+        <line num="33" count="5" type="stmt"/>
+        <line num="35" count="5" type="stmt"/>
+        <line num="37" count="5" type="stmt"/>
+        <line num="40" count="19" type="stmt"/>
+        <line num="42" count="19" type="stmt"/>
+        <line num="43" count="19" type="stmt"/>
+        <line num="46" count="19" type="stmt"/>
+        <line num="49" count="19" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="19" type="stmt"/>
+        <line num="56" count="19" type="stmt"/>
+        <line num="57" count="19" type="stmt"/>
+        <line num="59" count="19" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.metabolic-tracker.store">
+      <metrics statements="22" coveredstatements="22" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="8"/>
+      <file name="index.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/metabolic-tracker/store/index.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="trackerStore.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/metabolic-tracker/store/trackerStore.ts">
+        <metrics statements="22" coveredstatements="22" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="8"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="31" count="4" type="stmt"/>
+        <line num="41" count="10" type="stmt"/>
+        <line num="42" count="6" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="48" count="2" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="3" type="stmt"/>
+        <line num="63" count="11" type="stmt"/>
+        <line num="66" count="11" type="stmt"/>
+        <line num="67" count="11" type="stmt"/>
+        <line num="68" count="11" type="stmt"/>
+        <line num="69" count="11" type="stmt"/>
+        <line num="70" count="11" type="stmt"/>
+        <line num="72" count="4" type="stmt"/>
+        <line num="78" count="4" type="stmt"/>
+        <line num="81" count="7" type="stmt"/>
+        <line num="82" count="7" type="stmt"/>
+        <line num="90" count="7" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.nutritional-traffic-light">
+      <metrics statements="18" coveredstatements="18" conditionals="12" coveredconditionals="12" methods="9" coveredmethods="9"/>
+      <file name="ScannerContainer.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/nutritional-traffic-light/ScannerContainer.tsx">
+        <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="6" methods="6" coveredmethods="6"/>
+        <line num="8" count="23" type="stmt"/>
+        <line num="9" count="23" type="stmt"/>
+        <line num="10" count="70" type="stmt"/>
+        <line num="12" count="828" type="stmt"/>
+        <line num="17" count="23" type="cond" truecount="2" falsecount="0"/>
+        <line num="19" count="23" type="stmt"/>
+        <line num="20" count="2" type="stmt"/>
+        <line num="23" count="23" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="27" count="23" type="stmt"/>
+        <line num="28" count="4" type="stmt"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="32" count="23" type="stmt"/>
+      </file>
+      <file name="ScannerView.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/nutritional-traffic-light/ScannerView.tsx">
+        <metrics statements="5" coveredstatements="5" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="3"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="37" count="23" type="stmt"/>
+        <line num="43" count="4" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.nutritional-traffic-light.services">
+      <metrics statements="28" coveredstatements="28" conditionals="16" coveredconditionals="16" methods="9" coveredmethods="9"/>
+      <file name="classificationService.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/nutritional-traffic-light/services/classificationService.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="16" coveredconditionals="16" methods="2" coveredmethods="2"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="35" count="15" type="stmt"/>
+        <line num="38" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="43" count="11" type="cond" truecount="4" falsecount="0"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="48" count="9" type="stmt"/>
+        <line num="57" count="6" type="stmt"/>
+        <line num="58" count="6" type="stmt"/>
+        <line num="60" count="6" type="cond" truecount="2" falsecount="0"/>
+        <line num="61" count="2" type="stmt"/>
+        <line num="62" count="2" type="stmt"/>
+        <line num="65" count="4" type="cond" truecount="4" falsecount="0"/>
+        <line num="66" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="70" count="3" type="cond" truecount="4" falsecount="0"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="74" count="3" type="stmt"/>
+        <line num="75" count="3" type="stmt"/>
+      </file>
+      <file name="occultSugarDetector.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/nutritional-traffic-light/services/occultSugarDetector.ts">
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="29" count="3" type="stmt"/>
+        <line num="49" count="35" type="stmt"/>
+        <line num="51" count="33" type="stmt"/>
+        <line num="52" count="548" type="stmt"/>
+        <line num="55" count="33" type="stmt"/>
+        <line num="56" count="138" type="stmt"/>
+        <line num="59" count="33" type="stmt"/>
+        <line num="71" count="21" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.recipe-engine">
+      <metrics statements="11" coveredstatements="11" conditionals="14" coveredconditionals="14" methods="8" coveredmethods="8"/>
+      <file name="PlanContainer.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/recipe-engine/PlanContainer.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="7" count="6" type="stmt"/>
+        <line num="9" count="6" type="stmt"/>
+      </file>
+      <file name="PlanView.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/recipe-engine/PlanView.tsx">
+        <metrics statements="8" coveredstatements="8" conditionals="14" coveredconditionals="14" methods="7" coveredmethods="7"/>
+        <line num="18" count="10" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="50" count="31" type="cond" truecount="2" falsecount="0"/>
+        <line num="53" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="60" count="2" type="stmt"/>
+        <line num="71" count="34" type="stmt"/>
+        <line num="72" count="34" type="stmt"/>
+        <line num="80" count="192" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.recipe-engine.services">
+      <metrics statements="32" coveredstatements="32" conditionals="8" coveredconditionals="8" methods="14" coveredmethods="14"/>
+      <file name="planGenerator.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/recipe-engine/services/planGenerator.ts">
+        <metrics statements="32" coveredstatements="32" conditionals="8" coveredconditionals="8" methods="14" coveredmethods="14"/>
+        <line num="41" count="14" type="stmt"/>
+        <line num="42" count="14" type="stmt"/>
+        <line num="43" count="14" type="stmt"/>
+        <line num="44" count="14" type="stmt"/>
+        <line num="46" count="14" type="stmt"/>
+        <line num="47" count="490" type="stmt"/>
+        <line num="53" count="1274" type="stmt"/>
+        <line num="54" count="182" type="stmt"/>
+        <line num="59" count="98" type="stmt"/>
+        <line num="62" count="98" type="stmt"/>
+        <line num="63" count="672" type="stmt"/>
+        <line num="66" count="98" type="stmt"/>
+        <line num="69" count="98" type="stmt"/>
+        <line num="70" count="98" type="stmt"/>
+        <line num="71" count="1827" type="stmt"/>
+        <line num="73" count="98" type="stmt"/>
+        <line num="76" count="98" type="stmt"/>
+        <line num="77" count="98" type="cond" truecount="2" falsecount="0"/>
+        <line num="79" count="14" type="stmt"/>
+        <line num="88" count="14" type="cond" truecount="2" falsecount="0"/>
+        <line num="89" count="14" type="stmt"/>
+        <line num="103" count="14" type="stmt"/>
+        <line num="127" count="21696" type="cond" truecount="2" falsecount="0"/>
+        <line num="128" count="672" type="cond" truecount="2" falsecount="0"/>
+        <line num="130" count="960" type="stmt"/>
+        <line num="131" count="96" type="stmt"/>
+        <line num="133" count="576" type="stmt"/>
+        <line num="140" count="1" type="stmt"/>
+        <line num="141" count="1" type="stmt"/>
+        <line num="142" count="7" type="stmt"/>
+        <line num="143" count="48" type="stmt"/>
+        <line num="146" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.features.recipe-engine.store">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <file name="index.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/recipe-engine/store/index.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="planStore.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/features/recipe-engine/store/planStore.ts">
+        <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="14" count="2" type="stmt"/>
+        <line num="18" count="6" type="stmt"/>
+        <line num="19" count="6" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.shared">
+      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <file name="errors.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/errors.ts">
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+        <line num="7" count="22" type="stmt"/>
+        <line num="8" count="22" type="stmt"/>
+        <line num="9" count="22" type="stmt"/>
+        <line num="10" count="22" type="stmt"/>
+        <line num="17" count="18" type="stmt"/>
+        <line num="18" count="18" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.shared.data">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="foods.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/data/foods.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="504" count="144" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.shared.domain">
+      <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="food.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/domain/food.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="4" count="8" type="stmt"/>
+        <line num="40" count="144" type="stmt"/>
+      </file>
+      <file name="foodCategory.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/domain/foodCategory.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="7" count="8" type="stmt"/>
+        <line num="22" count="8" type="stmt"/>
+        <line num="36" count="8" type="stmt"/>
+        <line num="50" count="8" type="stmt"/>
+      </file>
+      <file name="index.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/domain/index.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="notification.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/domain/notification.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="11" count="8" type="stmt"/>
+      </file>
+      <file name="trafficLight.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/domain/trafficLight.ts">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="3" count="8" type="stmt"/>
+        <line num="11" count="8" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.shared.services">
+      <metrics statements="35" coveredstatements="35" conditionals="27" coveredconditionals="27" methods="6" coveredmethods="6"/>
+      <file name="rationValidator.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/services/rationValidator.ts">
+        <metrics statements="35" coveredstatements="35" conditionals="27" coveredconditionals="27" methods="6" coveredmethods="6"/>
+        <line num="20" count="6" type="stmt"/>
+        <line num="82" count="146" type="stmt"/>
+        <line num="98" count="114" type="stmt"/>
+        <line num="99" count="114" type="stmt"/>
+        <line num="100" count="1875" type="stmt"/>
+        <line num="102" count="114" type="stmt"/>
+        <line num="110" count="124" type="stmt"/>
+        <line num="112" count="124" type="stmt"/>
+        <line num="113" count="1240" type="stmt"/>
+        <line num="116" count="1240" type="cond" truecount="2" falsecount="0"/>
+        <line num="119" count="744" type="stmt"/>
+        <line num="120" count="744" type="cond" truecount="4" falsecount="0"/>
+        <line num="121" count="28" type="stmt"/>
+        <line num="124" count="744" type="cond" truecount="4" falsecount="0"/>
+        <line num="125" count="6" type="stmt"/>
+        <line num="136" count="744" type="cond" truecount="4" falsecount="0"/>
+        <line num="137" count="95" type="stmt"/>
+        <line num="148" count="124" type="stmt"/>
+        <line num="149" count="496" type="stmt"/>
+        <line num="153" count="124" type="stmt"/>
+        <line num="158" count="20" type="stmt"/>
+        <line num="159" count="20" type="stmt"/>
+        <line num="166" count="20" type="stmt"/>
+        <line num="167" count="80" type="stmt"/>
+        <line num="168" count="80" type="stmt"/>
+        <line num="170" count="80" type="cond" truecount="4" falsecount="0"/>
+        <line num="171" count="4" type="stmt"/>
+        <line num="181" count="80" type="cond" truecount="4" falsecount="0"/>
+        <line num="182" count="3" type="stmt"/>
+        <line num="194" count="20" type="stmt"/>
+        <line num="195" count="20" type="cond" truecount="5" falsecount="0"/>
+        <line num="196" count="1" type="stmt"/>
+        <line num="206" count="20" type="stmt"/>
+        <line num="207" count="80" type="stmt"/>
+        <line num="211" count="20" type="stmt"/>
+      </file>
+    </package>
+    <package name="src.shared.ui">
+      <metrics statements="15" coveredstatements="15" conditionals="24" coveredconditionals="24" methods="11" coveredmethods="11"/>
+      <file name="Card.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/Card.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="10" count="51" type="stmt"/>
+      </file>
+      <file name="NumberField.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/NumberField.tsx">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="11" count="33" type="stmt"/>
+        <line num="20" count="3" type="stmt"/>
+      </file>
+      <file name="PrimaryButton.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/PrimaryButton.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="8" count="45" type="stmt"/>
+      </file>
+      <file name="SelectField.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/SelectField.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <line num="11" count="46" type="stmt"/>
+        <line num="19" count="5" type="stmt"/>
+        <line num="25" count="904" type="stmt"/>
+      </file>
+      <file name="StatCard.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/StatCard.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="11" coveredconditionals="11" methods="1" coveredmethods="1"/>
+        <line num="9" count="42" type="cond" truecount="4" falsecount="0"/>
+        <line num="10" count="42" type="cond" truecount="4" falsecount="0"/>
+        <line num="12" count="42" type="stmt"/>
+      </file>
+      <file name="TabButton.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/TabButton.tsx">
+        <metrics statements="1" coveredstatements="1" conditionals="2" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="9" count="116" type="stmt"/>
+      </file>
+      <file name="ViolationList.tsx" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/ViolationList.tsx">
+        <metrics statements="4" coveredstatements="4" conditionals="7" coveredconditionals="7" methods="2" coveredmethods="2"/>
+        <line num="7" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="10" type="stmt"/>
+        <line num="24" count="26" type="stmt"/>
+      </file>
+      <file name="index.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/ui/index.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+    </package>
+    <package name="src.shared.utils">
+      <metrics statements="23" coveredstatements="23" conditionals="18" coveredconditionals="18" methods="5" coveredmethods="5"/>
+      <file name="imc.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/utils/imc.ts">
+        <metrics statements="6" coveredstatements="6" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="3"/>
+        <line num="6" count="10" type="stmt"/>
+        <line num="10" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="12" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+      </file>
+      <file name="index.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/utils/index.ts">
+        <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      </file>
+      <file name="sanitize.ts" path="/home/darkmagic/bigschool/TFM/tfm-nutre-fit-dia/src/shared/utils/sanitize.ts">
+        <metrics statements="17" coveredstatements="17" conditionals="12" coveredconditionals="12" methods="2" coveredmethods="2"/>
+        <line num="3" count="5" type="stmt"/>
+        <line num="6" count="45" type="stmt"/>
+        <line num="8" count="45" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="10" type="stmt"/>
+        <line num="10" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="8" type="stmt"/>
+        <line num="13" count="2" type="stmt"/>
+        <line num="16" count="35" type="stmt"/>
+        <line num="17" count="35" type="cond" truecount="4" falsecount="0"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="21" count="31" type="stmt"/>
+        <line num="25" count="6" type="stmt"/>
+        <line num="26" count="6" type="stmt"/>
+        <line num="28" count="5" type="stmt"/>
+        <line num="29" count="5" type="stmt"/>
+        <line num="30" count="5" type="cond" truecount="2" falsecount="0"/>
+        <line num="31" count="3" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

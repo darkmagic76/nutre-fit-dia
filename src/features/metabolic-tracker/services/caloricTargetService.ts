@@ -1,3 +1,5 @@
+import type { UserMetrics } from '@shared/domain'
+
 /**
  * Caloric target calculation per ADR-004 (Mifflin-St Jeor + PREDIMED-Plus).
  *
@@ -6,16 +8,7 @@
  * SPECS_TECH §2: "Trigger automático ante IMC > 25"
  */
 
-export interface CaloricTargetInput {
-  weight: number            // kg
-  height: number            // cm
-  age: number               // years
-  gender: 'male' | 'female'
-  /** WHO/FAO physical activity factor (1.2–1.9) */
-  physicalActivityFactor: number
-  /** kg/m² — pre-computed by caller (weight / height² in meters) */
-  imc: number
-}
+export type CaloricTargetInput = UserMetrics
 
 export interface CaloricTargetOutput {
   bmr: number               // kcal/day
@@ -25,7 +18,7 @@ export interface CaloricTargetOutput {
   restrictionActive: boolean // true when deficit > 0
 }
 
-function bmrMifflinStJeor(weight: number, height: number, age: number, gender: 'male' | 'female'): number {
+function bmrMifflinStJeor({ weight, height, age, gender }: UserMetrics): number {
   const base = 10 * weight + 6.25 * height - 5 * age
   return Math.round(gender === 'male' ? base + 5 : base - 161)
 }
@@ -37,9 +30,9 @@ const PREDIMED_PLUS_DEFICIT_KCAL = 600
 const DEFICIT_CAP_RATIO = 0.3
 
 export function computeCaloricTarget(input: CaloricTargetInput): CaloricTargetOutput {
-  const { weight, height, age, gender, physicalActivityFactor, imc } = input
+  const { physicalActivityFactor, imc } = input
 
-  const bmr = bmrMifflinStJeor(weight, height, age, gender)
+  const bmr = bmrMifflinStJeor(input)
   const tdee = Math.round(bmr * physicalActivityFactor)
 
   // SPECS_RF RF-02: deficit ONLY when IMC > 25

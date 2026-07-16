@@ -1,29 +1,20 @@
 import type { CaloricTargetOutput } from './services/caloricTargetService'
 import { Card, PrimaryButton, StatCard, NumberField, SelectField } from '@shared/ui'
 import type { ValidationError } from '@shared/errors'
+import type { UserMetricsFormState } from '@shared/domain'
 import type { FormEvent } from 'react'
 
 interface MetabolicTrackerViewProps {
-  weight: string
-  height: string
-  age: string
-  gender: 'male' | 'female'
-  paf: string
+  form: UserMetricsFormState
   caloricTarget: CaloricTargetOutput | null
   profileError: ValidationError | null
-  setWeight: (v: string) => void
-  setHeight: (v: string) => void
-  setAge: (v: string) => void
-  setGender: (v: string) => void
-  setPaf: (v: string) => void
   onCalculate: (e: FormEvent) => void
 }
 
 export function MetabolicTrackerView({
-  weight, height, age, gender, paf,
+  form: { weight, height, age, gender, paf, setWeight, setHeight, setAge, setGender, setPaf },
   caloricTarget,
   profileError,
-  setWeight, setHeight, setAge, setGender, setPaf,
   onCalculate,
 }: MetabolicTrackerViewProps) {
   return (

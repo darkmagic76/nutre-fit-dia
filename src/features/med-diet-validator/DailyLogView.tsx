@@ -1,18 +1,13 @@
 import { CATEGORY_DISPLAY_NAMES } from '@shared/domain'
 import type { Food } from '@shared/domain'
+import type { CaloricTargetOutput } from '@features/metabolic-tracker/services/caloricTargetService'
 import { Card, ViolationList, StatCard } from '@shared/ui'
 import type { ValidationResult } from '@shared/services/rationValidator'
-
-interface CaloricDisplay {
-  target: number
-  deficit: number
-  restrictionActive: boolean
-}
 
 interface DailyLogViewProps {
   todayLog: Food[]
   todayValidation: ValidationResult | null
-  caloricTarget: CaloricDisplay | null
+  caloricTarget: CaloricTargetOutput | null
   totalKcal: number
   onRemoveFood: (index: number) => void
 }

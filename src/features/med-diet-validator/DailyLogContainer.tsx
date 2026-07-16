@@ -8,19 +8,11 @@ export function DailyLogContainer() {
 
   const totalKcal = todayLog.reduce((sum, f) => sum + f.kcalPer100g * (f.gramsPerRation / 100), 0)
 
-  const caloricDisplay = caloricTarget
-    ? {
-        target: caloricTarget.target,
-        deficit: caloricTarget.deficit,
-        restrictionActive: caloricTarget.restrictionActive,
-      }
-    : null
-
   return (
     <DailyLogView
       todayLog={todayLog}
       todayValidation={todayValidation}
-      caloricTarget={caloricDisplay}
+      caloricTarget={caloricTarget}
       totalKcal={totalKcal}
       onRemoveFood={removeFoodFromLog}
     />

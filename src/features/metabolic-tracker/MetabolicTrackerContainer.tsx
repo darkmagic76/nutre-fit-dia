@@ -15,19 +15,10 @@ export function MetabolicTrackerContainer() {
 
   return (
     <MetabolicTrackerView
-      weight={weight}
-      height={height}
-      age={age}
-      gender={gender}
-      paf={paf}
+      form={{ weight, height, age, gender, paf, setWeight, setHeight, setAge, setGender, setPaf }}
       caloricTarget={caloricTarget}
-      setWeight={setWeight}
-      setHeight={setHeight}
-      setAge={setAge}
-      setGender={setGender}
-      setPaf={setPaf}
-      onCalculate={handleCalculate}
       profileError={profileError}
+      onCalculate={handleCalculate}
     />
   )
 }
