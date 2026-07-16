@@ -1,20 +1,23 @@
 /** ADR-008: Nudge taxonomy — canonical notification model */
 
-export const NotificationType = {
+import { defineEnum } from '@shared/utils'
+import type { ValuesOf } from '@shared/utils'
+
+export const NotificationType = defineEnum({
   SAFETY_ALERT: 'safety_alert',
   SYSTEM_ACTION: 'system_action',
   BEHAVIORAL_NUDGE: 'behavioral_nudge',
-} as const
+})
 
-export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+export type NotificationType = ValuesOf<typeof NotificationType>
 
-export const NotificationSeverity = {
+export const NotificationSeverity = defineEnum({
   HARD_BLOCK: 'hard_block',
   SOFT_WARN: 'soft_warn',
   INFO: 'info',
-} as const
+})
 
-export type NotificationSeverity = (typeof NotificationSeverity)[keyof typeof NotificationSeverity]
+export type NotificationSeverity = ValuesOf<typeof NotificationSeverity>
 
 export interface SystemNotification {
   id: string

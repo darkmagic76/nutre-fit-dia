@@ -1,28 +1,31 @@
 /** ADR-007: Sustainability scoring — domain types aligned with EAT-Lancet and ODS 2030 */
 
-export const Seasonality = {
+import { defineEnum } from '@shared/utils'
+import type { ValuesOf } from '@shared/utils'
+
+export const Seasonality = defineEnum({
   IN_SEASON: 'in_season',
   GREENHOUSE: 'greenhouse',
   OUT_OF_SEASON: 'out_of_season',
-} as const
+})
 
-export type Seasonality = (typeof Seasonality)[keyof typeof Seasonality]
+export type Seasonality = ValuesOf<typeof Seasonality>
 
-export const Proximity = {
+export const Proximity = defineEnum({
   LOCAL_KM0: 'km0',
   NATIONAL: 'national',
   IMPORTED: 'imported',
-} as const
+})
 
-export type Proximity = (typeof Proximity)[keyof typeof Proximity]
+export type Proximity = ValuesOf<typeof Proximity>
 
-export const PackagingLevel = {
+export const PackagingLevel = defineEnum({
   BULK: 'bulk',
   RECYCLABLE: 'recyclable',
   SINGLE_USE: 'single_use',
-} as const
+})
 
-export type PackagingLevel = (typeof PackagingLevel)[keyof typeof PackagingLevel]
+export type PackagingLevel = ValuesOf<typeof PackagingLevel>
 
 export interface EnvironmentalScore {
   /** kg CO2e per kg of food (AESAN 2022 reference values) */

@@ -1,3 +1,5 @@
+import { formInputBase } from './formStyles'
+
 interface NumberFieldProps {
   label: string
   value: string
@@ -20,7 +22,7 @@ export function NumberField({ label, value, onChange, id, min, step }: NumberFie
         onChange={e => onChange(e.target.value)}
         min={min}
         step={step}
-        className="w-full min-h-[44px] p-2 border border-stone-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
+        className={formInputBase}
         aria-label={label}
         inputMode="decimal"
       />

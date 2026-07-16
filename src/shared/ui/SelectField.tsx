@@ -1,3 +1,5 @@
+import { formInputBase } from './formStyles'
+
 interface SelectFieldProps {
   label: string
   value: string
@@ -17,7 +19,7 @@ export function SelectField({ label, value, onChange, options, placeholder, id }
         id={id}
         value={value}
         onChange={e => onChange(e.target.value)}
-        className="w-full min-h-[44px] p-2 border border-stone-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
+        className={`${formInputBase} bg-white`}
         aria-label={label}
       >
         {placeholder && <option value="">{placeholder}</option>}

@@ -1,10 +1,12 @@
 import { z } from 'zod'
+import { defineEnum } from '@shared/utils'
+import type { ValuesOf } from '@shared/utils'
 
 /**
  * Canonical food categories per ADR-005 (10 groups from INFORME_ADR).
  * SPECS_RF (5 groups) and SPECS_TECH (~7) are UI simplifications, not domain replacements.
  */
-export const FoodCategory = {
+export const FoodCategory = defineEnum({
   CEREALS: 'cereals',
   VEGETABLES: 'vegetables',
   FRUITS: 'fruits',
@@ -15,9 +17,9 @@ export const FoodCategory = {
   EGGS: 'eggs',
   WHITE_MEAT: 'white_meat',
   WATER: 'water',
-} as const
+})
 
-export type FoodCategory = (typeof FoodCategory)[keyof typeof FoodCategory]
+export type FoodCategory = ValuesOf<typeof FoodCategory>
 
 export const FoodCategorySchema = z.enum([
   'cereals',
