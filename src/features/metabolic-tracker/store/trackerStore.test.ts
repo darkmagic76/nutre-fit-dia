@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { useTrackerStore } from './trackerStore'
 import { ValidationError } from '@shared/errors'
+import * as utils from '@shared/utils'
 
 describe('trackerStore', () => {
   it('has default values', () => {
@@ -29,6 +30,11 @@ describe('trackerStore', () => {
     it('updates age', () => {
       useTrackerStore.getState().setAge('45')
       expect(useTrackerStore.getState().age).toBe('45')
+    })
+
+    it('updates paf', () => {
+      useTrackerStore.getState().setPaf('1.725')
+      expect(useTrackerStore.getState().paf).toBe('1.725')
     })
 
     it('accepts valid gender', () => {
@@ -96,6 +102,18 @@ describe('trackerStore', () => {
       useTrackerStore.getState().calculateTarget()
       expect(useTrackerStore.getState().restrictionActive).toBe(false)
       expect(useTrackerStore.getState().caloricTarget!.deficit).toBe(0)
+    })
+
+    it('handles non-ValidationError from parseNumeric gracefully', () => {
+      vi.spyOn(utils, 'parseNumeric').mockImplementationOnce(() => {
+        throw new Error('runtime error')
+      })
+      useTrackerStore.getState().setWeight('80')
+      useTrackerStore.getState().setHeight('170')
+      useTrackerStore.getState().calculateTarget()
+      const state = useTrackerStore.getState()
+      expect(state.profileError).toBeInstanceOf(ValidationError)
+      expect(state.profileError!.message).toContain('Error al procesar')
     })
   })
 })

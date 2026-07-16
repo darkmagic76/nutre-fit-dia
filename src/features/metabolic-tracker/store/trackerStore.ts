@@ -47,10 +47,12 @@ export const useTrackerStore = create<TrackerState>((set, get) => ({
       const parsed = genderSchema.parse(v)
       set({ gender: parsed, profileError: null })
     } catch (e) {
-      const message = e instanceof Error
-        ? `Género no válido: ${e.message}`
-        : 'Género no válido'
-      set({ profileError: new ValidationError(message, { value: v }) })
+      set({
+        profileError: new ValidationError(
+          `Género no válido: ${(e as Error).message}`,
+          { value: v },
+        ),
+      })
     }
   },
 
@@ -67,11 +69,12 @@ export const useTrackerStore = create<TrackerState>((set, get) => ({
       a = parseNumeric(age, 120, 18)
       p = parseNumeric(paf, 2.5, 1.0)
     } catch (e) {
-      if (e instanceof ValidationError) {
-        set({ profileError: e })
-      } else {
-        set({ profileError: new ValidationError('Error al procesar los datos del perfil') })
-      }
+      set({
+        profileError:
+          e instanceof ValidationError
+            ? e
+            : new ValidationError(`Error al procesar: ${(e as Error).message}`),
+      })
       return
     }
 
