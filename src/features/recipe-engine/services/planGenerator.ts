@@ -8,7 +8,7 @@ import {
   emptyCounts,
   type CountByCategory,
   type ValidationResult,
-} from '@features/med-diet-validator/services/rationValidator'
+} from '@shared/services/rationValidator'
 
 /**
  * Simplified meal plan entry.
