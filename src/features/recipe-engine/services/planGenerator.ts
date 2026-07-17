@@ -84,8 +84,11 @@ interface TemplateSlot {
   rations: number
 }
 
+const CEREAL_DAILY_NORMAL = 5
+const CEREAL_DAILY_RESTRICTED = 4
+
 function buildDailyTemplate(restrictionActive: boolean): TemplateSlot[] {
-  const cerealMax = restrictionActive ? 4 : 5
+  const cerealMax = restrictionActive ? CEREAL_DAILY_RESTRICTED : CEREAL_DAILY_NORMAL
   return [
     { category: FoodCategory.CEREALS, rations: cerealMax },
     { category: FoodCategory.VEGETABLES, rations: RATION_LIMITS[FoodCategory.VEGETABLES].min! },

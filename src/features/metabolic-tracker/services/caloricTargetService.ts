@@ -1,4 +1,5 @@
 import type { UserMetrics } from '@shared/domain'
+import { isRestrictionCandidate } from '@shared/utils'
 
 /**
  * Caloric target calculation per ADR-004 (Mifflin-St Jeor + PREDIMED-Plus).
@@ -18,9 +19,15 @@ export interface CaloricTargetOutput {
   restrictionActive: boolean // true when deficit > 0
 }
 
+const MSJ_WEIGHT_COEFF = 10
+const MSJ_HEIGHT_COEFF = 6.25
+const MSJ_AGE_COEFF = 5
+const MSJ_MALE_OFFSET = 5
+const MSJ_FEMALE_OFFSET = 161
+
 function bmrMifflinStJeor({ weight, height, age, gender }: UserMetrics): number {
-  const base = 10 * weight + 6.25 * height - 5 * age
-  return Math.round(gender === 'male' ? base + 5 : base - 161)
+  const base = MSJ_WEIGHT_COEFF * weight + MSJ_HEIGHT_COEFF * height - MSJ_AGE_COEFF * age
+  return Math.round(gender === 'male' ? base + MSJ_MALE_OFFSET : base - MSJ_FEMALE_OFFSET)
 }
 
 const SAFETY_FLOOR = 1200
@@ -36,7 +43,7 @@ export function computeCaloricTarget(input: CaloricTargetInput): CaloricTargetOu
   const tdee = Math.round(bmr * physicalActivityFactor)
 
   // SPECS_RF RF-02: deficit ONLY when IMC > 25
-  const restrictionActive = imc > 25
+  const restrictionActive = isRestrictionCandidate(imc)
 
   // PREDIMED-Plus: 600 kcal deficit, capped at 30% of TDEE for safety
   const rawDeficit = restrictionActive

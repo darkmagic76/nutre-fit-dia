@@ -16,6 +16,12 @@ interface LogState {
   validateToday: () => void
 }
 
+function evaluateLog(log: Food[]) {
+  const { restrictionActive } = useTrackerStore.getState()
+  const counts = countRations(log)
+  return validateRations(counts, restrictionActive)
+}
+
 export const useLogStore = create<LogState>((set, get) => ({
   todayLog: [],
   todayValidation: null,
@@ -23,25 +29,17 @@ export const useLogStore = create<LogState>((set, get) => ({
   addFoodToLog: food => {
     const { todayLog } = get()
     const log = [...todayLog, food]
-    const { restrictionActive } = useTrackerStore.getState()
-    const counts = countRations(log)
-    const validation = validateRations(counts, restrictionActive)
-    set({ todayLog: log, todayValidation: validation })
+    set({ todayLog: log, todayValidation: evaluateLog(log) })
   },
 
   removeFoodFromLog: index => {
     const { todayLog } = get()
     const log = todayLog.filter((_, i) => i !== index)
-    const { restrictionActive } = useTrackerStore.getState()
-    const counts = countRations(log)
-    const validation = validateRations(counts, restrictionActive)
-    set({ todayLog: log, todayValidation: validation })
+    set({ todayLog: log, todayValidation: evaluateLog(log) })
   },
 
   validateToday: () => {
     const { todayLog } = get()
-    const { restrictionActive } = useTrackerStore.getState()
-    const counts = countRations(todayLog)
-    set({ todayValidation: validateRations(counts, restrictionActive) })
+    set({ todayValidation: evaluateLog(todayLog) })
   },
 }))
