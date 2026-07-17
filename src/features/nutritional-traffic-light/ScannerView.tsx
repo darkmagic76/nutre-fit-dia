@@ -1,7 +1,8 @@
 import { TrafficLightColor, CATEGORY_DISPLAY_NAMES } from '@shared/domain'
 import type { Food } from '@shared/domain'
-import { Card, SelectField, PrimaryButton } from '@shared/ui'
+import { Card, SelectField, PrimaryButton, SafetyAlertDisplay } from '@shared/ui'
 import type { ClassificationResult } from './services/classificationService'
+import type { SafetyAlert } from '@shared/services/rationValidator'
 
 const TRAFFIC_COLORS: Record<string, string> = {
   [TrafficLightColor.GREEN]: 'bg-emerald-500',
@@ -20,9 +21,11 @@ interface ScannerViewProps {
   options: Array<{ value: string; label: string }>
   selected: Food | null
   result: ClassificationResult | null
+  safetyAlerts: SafetyAlert[]
   onSelect: (id: string) => void
   onClassify: () => void
   onAddToLog: () => void
+  onAcknowledgeAlert: (index: number) => void
 }
 
 export function ScannerView({
@@ -30,9 +33,11 @@ export function ScannerView({
   options,
   selected,
   result,
+  safetyAlerts,
   onSelect,
   onClassify,
   onAddToLog,
+  onAcknowledgeAlert,
 }: ScannerViewProps) {
   return (
     <Card title="🔍 Semáforo Nutricional" description="Modelo Hospital Rey Juan Carlos. Azúcares ocultos o grasas trans → ROJO automático.">
@@ -82,6 +87,8 @@ export function ScannerView({
           ))}
         </div>
       )}
+
+      <SafetyAlertDisplay alerts={safetyAlerts} onAcknowledge={onAcknowledgeAlert} />
     </Card>
   )
 }

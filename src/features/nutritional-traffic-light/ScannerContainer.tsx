@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { foodsById } from '@shared/data/foods'
 import { classifyFoodWithReasons } from './services/classificationService'
+import { checkSafetyAlerts } from './services/safetyCheck'
 import { useLogStore } from '@features/med-diet-validator/store'
 import { ScannerView } from './ScannerView'
+import type { SafetyAlert } from '@shared/services/rationValidator'
 
 export function ScannerContainer() {
   const [selectedId, setSelectedId] = useState('')
   const [result, setResult] = useState<ReturnType<typeof classifyFoodWithReasons> | null>(null)
+  const [safetyAlerts, setSafetyAlerts] = useState<SafetyAlert[]>([])
   const addFoodToLog = useLogStore(s => s.addFoodToLog)
 
   const options = Array.from(foodsById.entries()).map(([id, food]) => ({
@@ -17,7 +20,9 @@ export function ScannerContainer() {
   const selected = selectedId ? foodsById.get(selectedId) : null
 
   const handleClassify = () => {
-    setResult(classifyFoodWithReasons(selected!))
+    const food = selected!
+    setResult(classifyFoodWithReasons(food))
+    setSafetyAlerts(checkSafetyAlerts(food))
   }
 
   const handleAddToLog = () => {
@@ -27,6 +32,11 @@ export function ScannerContainer() {
   const handleSelect = (id: string) => {
     setSelectedId(id)
     setResult(null)
+    setSafetyAlerts([])
+  }
+
+  const handleAcknowledge = (index: number) => {
+    setSafetyAlerts(prev => prev.filter((_, i) => i !== index))
   }
 
   return (
@@ -35,9 +45,11 @@ export function ScannerContainer() {
       options={options}
       selected={selected ?? null}
       result={result}
+      safetyAlerts={safetyAlerts}
       onSelect={handleSelect}
       onClassify={handleClassify}
       onAddToLog={handleAddToLog}
+      onAcknowledgeAlert={handleAcknowledge}
     />
   )
 }
