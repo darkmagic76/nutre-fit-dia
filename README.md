@@ -30,7 +30,7 @@ Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y 
 ```bash
 # Instalacion
 git clone <repo-url>
-cd tfm-nutre-fit-dia
+cd nutre-fit-dia
 pnpm install
 
 # Desarrollo

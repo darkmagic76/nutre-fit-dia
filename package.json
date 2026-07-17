@@ -1,5 +1,5 @@
 {
-  "name": "tfm-nutre-fit-dia",
+  "name": "nutre-fit-dia",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -16,8 +16,6 @@
     "verify": "pnpm quality && pnpm build"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.87.3",
-    "_supabase_note": "⬆️ Reservado V2 (BaaS: auth, storage, real-time). Sin imports en V1.",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "zod": "^4.4.3",

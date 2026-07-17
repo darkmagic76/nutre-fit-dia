@@ -3,7 +3,7 @@
 ## Requisitos previos
 
 | Herramienta | Versión mínima | Verificación |
-|---|---|---|
+| --- | --- | --- |
 | **Node.js** | 22+ | `node --version` |
 | **pnpm** | 10+ | `pnpm --version` |
 | **Git** | 2.40+ | `git --version` |
@@ -31,14 +31,14 @@ npm install -g pnpm@latest
 ## 1. Clonar el repositorio
 
 ```bash
-git clone git@github.com:darkmagic76/tfm-nutre-fit-dia.git
-cd tfm-nutre-fit-dia
+git clone git@github.com:darkmagic76/nutre-fit-dia.git
+cd nutre-fit-dia
 ```
 
 Ramas del proyecto:
 
 | Rama | Propósito |
-|---|---|
+| --- | --- |
 | `main` | Producción |
 | `staging` | Pre-producción, pruebas de integración |
 | `develop` | Desarrollo activo |
@@ -58,7 +58,7 @@ pnpm install
 Dependencias principales que se instalan:
 
 | Categoría | Paquetes |
-|---|---|
+| --- | --- |
 | Frontend | React 19, Vite 8, Tailwind 4, Zustand 5 |
 | Validación | Zod 4 |
 | Backend (opcional) | Supabase JS |
@@ -113,7 +113,7 @@ pnpm verify
 
 Pipeline de calidad:
 
-```
+```text
 pnpm quality
   ├── pnpm lint       → Oxlint (Rust, ultrarrápido)
   ├── pnpm typecheck  → TypeScript 6 (erasableSyntaxOnly)
@@ -130,7 +130,7 @@ pnpm build
 
 Genera `dist/` con los archivos optimizados:
 
-```
+```text
 dist/
 ├── index.html
 ├── favicon.svg
@@ -189,7 +189,7 @@ jobs:
 
 Configurar en GitHub: `Settings → Pages → Source: GitHub Actions`.
 
-URL: `https://darkmagic76.github.io/tfm-nutre-fit-dia`
+URL: `https://darkmagic76.github.io/nutre-fit-dia`
 
 ### Opción C: Vercel
 
@@ -202,8 +202,8 @@ npx vercel --prod
 
 ## 8. Estructura del proyecto
 
-```
-tfm-nutre-fit-dia/
+```text
+nutre-fit-dia/
 ├── src/
 │   ├── features/              ← Screaming Architecture (ADR-001)
 │   │   ├── nutritional-traffic-light/
@@ -239,7 +239,7 @@ tfm-nutre-fit-dia/
 ## 9. Stack tecnológico
 
 | Capa | Tecnología | Decisión |
-|---|---|---|
+| --- | --- | --- |
 | UI | React 19 + Tailwind 4 | ADR-009 |
 | Build | Vite 8 | ADR-009 |
 | Tipos | TypeScript 6 (erasableSyntaxOnly) | ADR-002 |
