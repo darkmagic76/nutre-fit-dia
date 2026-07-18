@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "quality": "pnpm lint && pnpm typecheck && pnpm test:run",
-    "verify": "pnpm quality && pnpm build"
+    "verify": "pnpm quality && pnpm build",
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^19.2.7",
@@ -30,6 +31,7 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
     "@vitest/coverage-v8": "^4.1.10",
+    "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "oxlint": "^1.71.0",
     "tailwindcss": "^4.3.2",
