@@ -26,8 +26,6 @@ export interface NudgeContext {
   restrictionActive: boolean
   /** Total animal protein servings consumed today */
   animalProteinCount: number
-  /** Minutes since last hydration nudge */
-  minutesSinceHydration: number
   /** Whether the current day's log is valid */
   isTodayValid: boolean
   /** Ration counts per category for today */
@@ -36,6 +34,16 @@ export interface NudgeContext {
   containsHighGlycemicFruit: boolean
   /** Current hour (0–23) from Date.now() */
   currentHour: number
+
+  // PR2: biomarker + activity context
+  /** Latest glucose reading value (mg/dL), null if none */
+  latestGlucose: number | null
+  /** Timestamp of last glucose reading, null if none */
+  lastGlucoseTimestamp: number | null
+  /** Timestamp of last weight reading, null if none */
+  lastWeightTimestamp: number | null
+  /** Total water rations consumed today */
+  waterRations: number
 }
 
 export interface NudgeEvaluation {

@@ -72,11 +72,14 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      minutesSinceHydration: 0,
       isTodayValid: true,
       counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
+      latestGlucose: null,
+      lastGlucoseTimestamp: Date.now(),
+      lastWeightTimestamp: Date.now(),
+      waterRations: 4,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
@@ -95,11 +98,14 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      minutesSinceHydration: 0,
       isTodayValid: true,
       counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
+      latestGlucose: null,
+      lastGlucoseTimestamp: Date.now(),
+      lastWeightTimestamp: Date.now(),
+      waterRations: 4,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
@@ -111,11 +117,14 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: false,
       animalProteinCount: 0,
-      minutesSinceHydration: 0,
       isTodayValid: true,
       counts: emptyCounts(),
       containsHighGlycemicFruit: false,
       currentHour: 12,
+      latestGlucose: null,
+      lastGlucoseTimestamp: Date.now(),
+      lastWeightTimestamp: Date.now(),
+      waterRations: 4,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
@@ -127,11 +136,14 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      minutesSinceHydration: 0,
       isTodayValid: true,
       counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
+      latestGlucose: null,
+      lastGlucoseTimestamp: Date.now(),
+      lastWeightTimestamp: Date.now(),
+      waterRations: 4,
     }
 
     const results = evaluateRules(ctx, [], cooldown)
@@ -143,11 +155,14 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      minutesSinceHydration: 0,
       isTodayValid: true,
       counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
+      latestGlucose: null,
+      lastGlucoseTimestamp: Date.now(),
+      lastWeightTimestamp: Date.now(),
+      waterRations: 4,
     }
     const rulesCount = SAFETY_RULES.length
 
@@ -164,17 +179,21 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      minutesSinceHydration: 0,
       isTodayValid: true,
       counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 6, [FoodCategory.VEGETABLES]: 1 },
       containsHighGlycemicFruit: true,
       currentHour: 22,
+      latestGlucose: null,
+      lastGlucoseTimestamp: null,
+      lastWeightTimestamp: null,
+      waterRations: 0,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
 
     // Should match: CEREALS_RESTRICTION, FRUITS_GLYCEMIC_ALERT, VEGETABLES_DEFICIT
-    expect(results).toHaveLength(3)
+    // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION
+    expect(results).toHaveLength(6)
     const matchedIds = results.map(r => r.rule.id)
     expect(matchedIds).toContain('CEREALS_RESTRICTION')
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT')

@@ -41,4 +41,58 @@ export const SAFETY_RULES: SafetyRule[] = [
     condition: ctx =>
       ctx.counts[FoodCategory.VEGETABLES] < 3 && ctx.currentHour >= 20,
   },
+
+  // ─── PR2: BehavioralNudge rules ───
+
+  {
+    id: 'DAIRY_CALCIUM_NUDGE',
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
+    cooldown: 12 * 60, // 12 hours
+    title: 'Proteína animal elevada',
+    body: 'Has consumido más de 2 raciones de proteína animal hoy. Considera fuentes de calcio vegetal (brócoli, almendras, sardinas).',
+    condition: ctx => ctx.animalProteinCount > 2,
+  },
+  {
+    id: 'WATER_HYDRATION',
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
+    cooldown: 3 * 60, // 3 hours
+    title: 'Recordatorio de hidratación',
+    body: 'Recuerda beber agua. Objetivo: 4-8 vasos al día.',
+    condition: ctx => ctx.waterRations < 4,
+  },
+  {
+    id: 'HYPERGLYCEMIA_NUDGE',
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
+    cooldown: 3 * 60, // 3 hours
+    title: 'Glucosa elevada',
+    body: 'Tu última lectura de glucosa es elevada. Considera una caminata de 15 minutos o una receta rica en fibra soluble.',
+    condition: ctx => ctx.latestGlucose !== null && ctx.latestGlucose > 180,
+  },
+  {
+    id: 'ADHERENCE_GLUCOSE',
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
+    cooldown: 4 * 60, // 4 hours
+    title: 'Registra tu glucosa',
+    body: 'No has registrado tu glucosa en las últimas 4 horas. Mantener el registro ayuda a tu control metabólico.',
+    condition: ctx => {
+      if (ctx.lastGlucoseTimestamp === null) return true
+      return (Date.now() - ctx.lastGlucoseTimestamp) > 4 * 60 * 60 * 1000
+    },
+  },
+  {
+    id: 'ADHERENCE_WEIGHT',
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
+    cooldown: 4 * 60, // 4 hours
+    title: 'Registra tu peso',
+    body: 'No has registrado tu peso en las últimas 4 horas. El seguimiento regular permite ajustar tu plan.',
+    condition: ctx => {
+      if (ctx.lastWeightTimestamp === null) return true
+      return (Date.now() - ctx.lastWeightTimestamp) > 4 * 60 * 60 * 1000
+    },
+  },
 ]

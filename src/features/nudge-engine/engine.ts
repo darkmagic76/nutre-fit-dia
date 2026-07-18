@@ -1,7 +1,8 @@
 import { useTrackerStore } from '@features/metabolic-tracker/store'
 import { useLogStore } from '@features/med-diet-validator/store'
 import { countRations } from '@shared/services/rationValidator'
-import { FoodCategory, type SystemNotification } from '@shared/domain'
+import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES, type SystemNotification } from '@shared/domain'
+import { getTrend } from '@features/metabolic-tracker/services/biomarkerTrackingService'
 import { HIGH_GLYCEMIC_FRUITS } from './rules'
 import type { NudgeContext, NudgeEvaluation, SafetyRule } from './types'
 import type { CooldownTracker } from './cooldownTracker'
@@ -15,6 +16,7 @@ import type { CooldownTracker } from './cooldownTracker'
 export function buildNudgeContext(): NudgeContext {
   const { restrictionActive } = useTrackerStore.getState()
   const { todayLog } = useLogStore.getState()
+  const trends = getTrend()
 
   const counts = countRations(todayLog)
 
@@ -22,16 +24,26 @@ export function buildNudgeContext(): NudgeContext {
     f => f.category === FoodCategory.FRUITS && HIGH_GLYCEMIC_FRUITS.has(f.name),
   )
 
+  const animalProteinCount = ANIMAL_PROTEIN_CATEGORIES.reduce(
+    (sum, cat) => sum + counts[cat],
+    0,
+  )
+
+  const waterRations = counts[FoodCategory.WATER]
+
   const currentHour = new Date().getHours()
 
   return {
     restrictionActive,
-    animalProteinCount: 0, // PR2: will be computed
-    minutesSinceHydration: 0, // PR2: will be computed
-    isTodayValid: true, // PR2: will check validation state
+    animalProteinCount,
+    isTodayValid: true,
     counts,
     containsHighGlycemicFruit,
     currentHour,
+    latestGlucose: trends.glucoseLatest?.value ?? null,
+    lastGlucoseTimestamp: trends.glucoseLatest?.timestamp ?? null,
+    lastWeightTimestamp: trends.weightLatest?.timestamp ?? null,
+    waterRations,
   }
 }
 

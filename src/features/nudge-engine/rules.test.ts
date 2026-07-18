@@ -8,11 +8,14 @@ function makeContext(overrides: Partial<NudgeContext> = {}): NudgeContext {
   return {
     restrictionActive: false,
     animalProteinCount: 0,
-    minutesSinceHydration: 0,
     isTodayValid: true,
     counts: emptyCounts(),
     containsHighGlycemicFruit: false,
     currentHour: 12,
+    latestGlucose: null,
+    lastGlucoseTimestamp: null,
+    lastWeightTimestamp: null,
+    waterRations: 0,
     ...overrides,
   }
 }
@@ -109,5 +112,52 @@ describe('HIGH_GLYCEMIC_FRUITS set', () => {
 
   it('does not contain low-glycemic fruits like manzana', () => {
     expect(HIGH_GLYCEMIC_FRUITS.has('manzana')).toBe(false)
+  })
+})
+
+describe('DAIRY_CALCIUM_NUDGE', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'DAIRY_CALCIUM_NUDGE')
+  it('fires when animalProteinCount > 2', () => {
+    expect(rule!.condition(makeContext({ animalProteinCount: 3 }))).toBe(true)
+  })
+  it('does not fire when animalProteinCount = 2', () => {
+    expect(rule!.condition(makeContext({ animalProteinCount: 2 }))).toBe(false)
+  })
+})
+
+describe('WATER_HYDRATION', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'WATER_HYDRATION')
+  it('fires when waterRations < 4', () => {
+    expect(rule!.condition(makeContext({ waterRations: 2 }))).toBe(true)
+  })
+  it('does not fire when waterRations = 4', () => {
+    expect(rule!.condition(makeContext({ waterRations: 4 }))).toBe(false)
+  })
+})
+
+describe('HYPERGLYCEMIA_NUDGE', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'HYPERGLYCEMIA_NUDGE')
+  it('fires when glucose > 180', () => {
+    expect(rule!.condition(makeContext({ latestGlucose: 200 }))).toBe(true)
+  })
+  it('does not fire when glucose is null', () => {
+    expect(rule!.condition(makeContext({ latestGlucose: null }))).toBe(false)
+  })
+})
+
+describe('ADHERENCE_GLUCOSE', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'ADHERENCE_GLUCOSE')
+  it('fires when lastGlucoseTimestamp is null', () => {
+    expect(rule!.condition(makeContext({ lastGlucoseTimestamp: null }))).toBe(true)
+  })
+  it('does not fire when glucose was recorded recently', () => {
+    expect(rule!.condition(makeContext({ lastGlucoseTimestamp: Date.now() }))).toBe(false)
+  })
+})
+
+describe('ADHERENCE_WEIGHT', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'ADHERENCE_WEIGHT')
+  it('fires when lastWeightTimestamp is null', () => {
+    expect(rule!.condition(makeContext({ lastWeightTimestamp: null }))).toBe(true)
   })
 })
