@@ -75,9 +75,10 @@ describe('Nudge Engine Integration', () => {
 
     const cooldown = new CooldownTracker(() => 0)
 
-    // First evaluation — should match
+    // First evaluation — should match. Pin hour to daytime to avoid VEGETABLES_DEFICIT.
     const ctx = buildNudgeContext()
-    const firstPass = evaluateRules(ctx, NUDGE_RULES, cooldown)
+    const daytimeCtx = { ...ctx, currentHour: 12 }
+    const firstPass = evaluateRules(daytimeCtx, NUDGE_RULES, cooldown)
     expect(firstPass).toHaveLength(7) // CEREALS + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY
     expect(firstPass[0].rule.id).toBe('CEREALS_RESTRICTION')
 
@@ -85,7 +86,7 @@ describe('Nudge Engine Integration', () => {
     cooldown.register('CEREALS_RESTRICTION')
 
     // Second evaluation — CEREALS_RESTRICTION now on cooldown
-    const secondPass = evaluateRules(ctx, NUDGE_RULES, cooldown)
+    const secondPass = evaluateRules(daytimeCtx, NUDGE_RULES, cooldown)
     expect(secondPass).toHaveLength(6) // ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY
   })
 

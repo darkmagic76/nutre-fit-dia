@@ -75,7 +75,7 @@ src/
 │   │   ├── hooks/useActivityTracker.ts     # Hook: compliance %, streak, weeklyGoal
 │   │   ├── store/activityStore.ts          # weeklyMinutes + entries (Zustand)
 │   │   └── types.ts                        # ActivityEntry, WeeklyGoal, ComplianceReport
-│   ├── nudge-engine/                      # ADR-008 — Nudge Engine 🔶 (PR1 ✅, PR2/3 pendientes)
+│   ├── nudge-engine/                      # ADR-008 — Nudge Engine ✅ (14 reglas completas)
 │   │   ├── engine.ts                       # buildNudgeContext + evaluateRules (puro)
 │   │   ├── rules.ts                        # SafetyAlert rules (CEREALS, FRUITS, VEGETABLES)
 │   │   ├── cooldownTracker.ts             # CooldownTracker (in-memory)
@@ -90,7 +90,7 @@ src/
 │   ├── domain/                           # FoodCategory, TrafficLight, Notification, Zod schemas
 │   ├── data/foods.ts                     # Catálogo 34 alimentos
 │   ├── services/rationValidator.ts       # Validación diaria/semanal (cross-feature)
-│   ├── sustainability/                   # [scaffolded] ADR-007 — EnvironmentalScore, Seasonality
+│   ├── sustainability/                   # ADR-007 ✅ — EnvironmentalScore, Seasonality, Proximity
 │   ├── ui/primitives.tsx                 # Card, SelectField, TabButton, StatCard
 │   └── utils/                            # sanitizeNumeric, computeIMC
 ├── infrastructure/
@@ -105,8 +105,8 @@ src/
 - **Validador Dieta Mediterránea**: Valida frecuencias diarias y semanales según matriz AESAN 2022. Gramos exactos por ración (AESAN 2022 pág. 52). SafetyAlert type para alertas clínicas.
 - **Recipe Engine**: Genera planes semanales con restricción calórica. Aviso legal dietista (RNF-01) visible en Dashboard y Plan.
 - **Activity Goal Tracker** ✅: Seguimiento WHO/OMS 150-300 min/semana + ≥2 días fuerza. Compliance % y streak. Tab en dashboard.
-- **Nudge Engine** 🔶: Core engine + 3 SafetyAlert rules (PR1 ✅). CooldownTracker anti-fatiga. BehavioralNudges y SystemActions pendientes (PR2/PR3).
-- **Sustainability Scoring** `[scaffolded]`: EnvironmentalScore con huella de carbono, estacionalidad y proximidad. ADR-007.
+- **Nudge Engine** ✅: 14 reglas: 3 SafetyAlert + 5 BehavioralNudge + 6 SystemAction. CooldownTracker, NudgeStore. 255 tests.
+- **Sustainability Scoring** ✅: `computeEnvironmentalScore()` con constantes AESAN/EAT-Lancet. Pesos 50/30/20. Integrado en RecipeEngine (ranking dual).
 
 ## Especificación Técnica y Arquitectónica: Ecosistema de Autocuidado Integral (DT2 y Salud Sostenible)
 
@@ -229,7 +229,7 @@ src/
 │   │   ├── hooks/useActivityTracker.ts     # Hook: compliance %, streak, weeklyGoal
 │   │   ├── store/activityStore.ts          # weeklyMinutes + entries (Zustand)
 │   │   └── types.ts                        # ActivityEntry, WeeklyGoal, ComplianceReport
-│   ├── nudge-engine/                      # ADR-008 — Nudge Engine 🔶 (PR1 ✅, PR2/3 pendientes)
+│   ├── nudge-engine/                      # ADR-008 — Nudge Engine ✅ (14 reglas completas)
 │   │   ├── engine.ts                       # buildNudgeContext + evaluateRules (puro)
 │   │   ├── rules.ts                        # SafetyAlert rules (CEREALS, FRUITS, VEGETABLES)
 │   │   ├── cooldownTracker.ts             # CooldownTracker (in-memory)
@@ -245,7 +245,7 @@ src/
 │   ├── data/foods.ts                     # Catálogo 34 alimentos
 │   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
 │   ├── services/rationValidator.ts       # Validación diaria/semanal (cross-feature)
-│   ├── sustainability/                   # [scaffolded] ADR-007 — EnvironmentalScore, Seasonality
+│   ├── sustainability/                   # ADR-007 ✅ — EnvironmentalScore, Seasonality, Proximity
 │   ├── ui/primitives.tsx                 # Card, SelectField, TabButton, StatCard
 │   └── utils/                            # parseNumeric, sanitizeNumeric, computeIMC
 ├── infrastructure/

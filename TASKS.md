@@ -47,7 +47,7 @@ Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 273 �
 | **H3** | **Sustainability Scoring Core** | ADR-007, FR-2.2 | ✅ **Completado** — `computeEnvironmentalScore()` con constantes AESAN/EAT-Lancet, pesos 50/30/20, integrado en `pickSustainableFood()` del RecipeEngine para ranking dual (salud + sostenibilidad). 14 tests. | M | Ninguna |
 | **H4** | **Dual Qualification Scanner** | ADR-003 + ADR-007 | ✅ **Completado** — `ScanResult.environmentalScore?` (ADR-003), `ClassificationResult.environmentalScore?` integrado en `classifyFoodWithReasons`. Backward-compatible. 3 tests. | S | H3 ✅ |
 | **H5** | **Metadata Cultural UNESCO** | FR-5.2 | ✅ **Completado** — `CulturalMetadataSchema` en `Food` (optional): traditionalCuisine, socialEating, cookingTechnique, geographicOrigin, proteinBiologicalValue, erMedDiet. 6 platos tradicionales poblados. Badges en PlanView (🏺👥🌿). 1 test. | S | Ninguna |
-| **H6** | **NudgeEngine: SPECS_TECH Rules** | ADR-008, SPECS_TECH | Añadir reglas SPECS_TECH: nudge de hiperglucemia (caminata/receta fibra), ajuste HC por inactividad. Dependen de datos de actividad y glucosa. | S | H1, H2, C5 |
+| **H6** | **NudgeEngine: SPECS_TECH Rules** | ADR-008, SPECS_TECH | ✅ **Completado** — Implementado dentro de H2 PR2/PR3: `HYPERGLYCEMIA_NUDGE` (glucosa > 180 → caminata/fibra) + `HC_INACTIVITY_ADJUST` (< 150 min/semana → reducir HC). 4 tests combinados. | S | H1, H2, C5 ✅ |
 | **H7** | **BehavioralNudge UI** | ADR-008 | Implementar panel de nudges en dashboard: lista de `BehavioralNudge` activos con dismiss. Badge de contador. Historial de engagement. | M | H2 |
 
 ### MEDIUM — Completitud funcional
@@ -59,6 +59,8 @@ Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 273 �
 | **M3** | **Convivialidad (RNF-02)** | SPECS_RF RNF-02 | Añadir metadata de "comer en compañía" y técnicas culinarias a recetas. Mostrar sugerencias de preparación en RecipePlanDisplay. | S | H5 |
 | **M4** | **Zero-Waste Module** | SPECS_TECH | Etiquetar ingredientes con "defectos estéticos" y productos locales/temporada. Extender `Food` schema con `isUglyProduce`, `isZeroWaste`. | S | H3 |
 | **M5** | **FR-MATRIX Sync** | FR-MATRIX | Actualizar matriz de trazabilidad: marcar RF-02 como ✅ (ya implementado con condicional IMC > 25), reflejar estado real de cada feature. | XS | Ninguna |
+| **M6** | **Fortalecimiento Muscular 2d/semana** | SPECS_TECH §6, RF-03 | Extender `useActivityTracker` con contador de días de fortalecimiento muscular. El objetivo son ≥2 días/semana. Mostrar en pestaña Actividad. | S | H1 |
+| **M7** | **Fraccionamiento 3-6 tomas diarias** | SPECS_TECH §5 | Extender `planGenerator` para distribuir alimentos diarios en 3-6 tomas. Mostrar estructura de comidas en `PlanView` (desayuno, almuerzo, cena, snacks). | M | H4 |
 
 ### LOW — Pulido y experiencia
 
@@ -80,11 +82,11 @@ Fase 1 — Seguridad Clínica (CRITICAL)
   (UserProfile → ErMedDietValidator → SafetyAlert UI → Aviso Legal → Biomarcadores)
 
 Fase 2 — Valor Principal (HIGH)
-  H1 → H3 → H4 → H5 → H2 → H7 → H6
-  (Activity → Sustainability → Dual Scan → UNESCO → Nudge Engine → Nudge UI → SPECS_TECH)
+  H1 → H3 → H4 → H5 → H2 → H7
+  (Activity → Sustainability → Dual Scan → UNESCO → Nudge Engine → Nudge UI)
 
 Fase 3 — Completitud (MEDIUM)
-  M1 → M2 → M3 → M4 → M5
+  M1 → M2 → M3 → M4 → M5 → M6 → M7
 
 Fase 4 — Pulido (LOW)
   L1 → L2 → L3 → L4 → L5
