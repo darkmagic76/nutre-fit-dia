@@ -63,7 +63,8 @@ describe('Nudge Engine Integration', () => {
 
     // CEREALS_RESTRICTION + FRUITS_GLYCEMIC_ALERT + VEGETABLES_DEFICIT
     // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION
-    expect(results).toHaveLength(6)
+    // + AOVE_TAGGING + HC_INACTIVITY_ADJUST
+    expect(results).toHaveLength(9) // +LEGUMES_GLYCEMIC_BASE
     const matchedIds = results.map(r => r.rule.id)
     expect(matchedIds).toContain('CEREALS_RESTRICTION')
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT')
@@ -79,7 +80,7 @@ describe('Nudge Engine Integration', () => {
     // First evaluation — should match
     const ctx = buildNudgeContext()
     const firstPass = evaluateRules(ctx, SAFETY_RULES, cooldown)
-    expect(firstPass).toHaveLength(4) // CEREALS + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER
+    expect(firstPass).toHaveLength(7) // CEREALS + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + HC_INACTIVITY
     expect(firstPass[0].rule.id).toBe('CEREALS_RESTRICTION')
 
     // Simulate caller registering cooldown
@@ -87,7 +88,7 @@ describe('Nudge Engine Integration', () => {
 
     // Second evaluation — CEREALS_RESTRICTION now on cooldown
     const secondPass = evaluateRules(ctx, SAFETY_RULES, cooldown)
-    expect(secondPass).toHaveLength(3) // ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER still fire
+    expect(secondPass).toHaveLength(6) // ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + HC_INACTIVITY
   })
 
   it('does not match when no rules trigger', () => {
@@ -100,6 +101,6 @@ describe('Nudge Engine Integration', () => {
     const morningCtx = { ...ctx, currentHour: 12 }
 
     const results = evaluateRules(morningCtx, SAFETY_RULES, cooldown)
-    expect(results).toHaveLength(3) // ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER
+    expect(results).toHaveLength(6) // ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + HC_INACTIVITY
   })
 })

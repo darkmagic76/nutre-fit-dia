@@ -44,6 +44,16 @@ export interface NudgeContext {
   lastWeightTimestamp: number | null
   /** Total water rations consumed today */
   waterRations: number
+
+  // PR3: SystemAction context
+  /** Whether today's log contains bacalao */
+  hasBacalao: boolean
+  /** Whether today's log contains eggs */
+  hasEggs: boolean
+  /** Total weekly activity minutes from activityStore */
+  weeklyActivityMinutes: number
+  /** Day of week (0=Sun, 6=Sat) */
+  dayOfWeek: number
 }
 
 export interface NudgeEvaluation {

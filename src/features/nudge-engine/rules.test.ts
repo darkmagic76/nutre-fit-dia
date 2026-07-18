@@ -16,6 +16,10 @@ function makeContext(overrides: Partial<NudgeContext> = {}): NudgeContext {
     lastGlucoseTimestamp: null,
     lastWeightTimestamp: null,
     waterRations: 0,
+    hasBacalao: false,
+    hasEggs: false,
+    weeklyActivityMinutes: 0,
+    dayOfWeek: 3,
     ...overrides,
   }
 }
@@ -159,5 +163,46 @@ describe('ADHERENCE_WEIGHT', () => {
   const rule = SAFETY_RULES.find(r => r.id === 'ADHERENCE_WEIGHT')
   it('fires when lastWeightTimestamp is null', () => {
     expect(rule!.condition(makeContext({ lastWeightTimestamp: null }))).toBe(true)
+  })
+})
+
+describe('AOVE_TAGGING', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'AOVE_TAGGING')
+  it('fires when olive_oil count is 0', () => {
+    expect(rule!.condition(makeContext())).toBe(true)
+  })
+})
+
+describe('LEGUMES_GLYCEMIC_BASE', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'LEGUMES_GLYCEMIC_BASE')
+  it('fires on day >= 4 with legumes < 1', () => {
+    expect(rule!.condition(makeContext({ dayOfWeek: 5, counts: { ...emptyCounts(), [FoodCategory.LEGUMES]: 0 } }))).toBe(true)
+  })
+  it('does not fire on Monday (day=1)', () => {
+    expect(rule!.condition(makeContext({ dayOfWeek: 1 }))).toBe(false)
+  })
+})
+
+describe('FISH_COD_TAG', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'FISH_COD_TAG')
+  it('fires when hasBacalao is true', () => {
+    expect(rule!.condition(makeContext({ hasBacalao: true }))).toBe(true)
+  })
+})
+
+describe('EGGS_RED_MEAT_ALT', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'EGGS_RED_MEAT_ALT')
+  it('fires when whiteMeat > 0 and no eggs', () => {
+    expect(rule!.condition(makeContext({ hasEggs: false, counts: { ...emptyCounts(), [FoodCategory.WHITE_MEAT]: 1 } }))).toBe(true)
+  })
+})
+
+describe('HC_INACTIVITY_ADJUST', () => {
+  const rule = SAFETY_RULES.find(r => r.id === 'HC_INACTIVITY_ADJUST')
+  it('fires when weeklyActivityMinutes < 150', () => {
+    expect(rule!.condition(makeContext({ weeklyActivityMinutes: 100 }))).toBe(true)
+  })
+  it('does not fire when weeklyActivityMinutes >= 150', () => {
+    expect(rule!.condition(makeContext({ weeklyActivityMinutes: 200 }))).toBe(false)
   })
 })

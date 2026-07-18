@@ -73,13 +73,17 @@ describe('evaluateRules', () => {
       restrictionActive: true,
       animalProteinCount: 0,
       isTodayValid: true,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
+      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
       lastGlucoseTimestamp: Date.now(),
       lastWeightTimestamp: Date.now(),
       waterRations: 4,
+      hasBacalao: false,
+      hasEggs: false,
+      weeklyActivityMinutes: 200,
+      dayOfWeek: 3,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
@@ -99,13 +103,17 @@ describe('evaluateRules', () => {
       restrictionActive: true,
       animalProteinCount: 0,
       isTodayValid: true,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
+      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
       lastGlucoseTimestamp: Date.now(),
       lastWeightTimestamp: Date.now(),
       waterRations: 4,
+      hasBacalao: false,
+      hasEggs: false,
+      weeklyActivityMinutes: 200,
+      dayOfWeek: 3,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
@@ -118,13 +126,17 @@ describe('evaluateRules', () => {
       restrictionActive: false,
       animalProteinCount: 0,
       isTodayValid: true,
-      counts: emptyCounts(),
+      counts: { ...emptyCounts(), [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
       lastGlucoseTimestamp: Date.now(),
       lastWeightTimestamp: Date.now(),
       waterRations: 4,
+      hasBacalao: false,
+      hasEggs: false,
+      weeklyActivityMinutes: 200,
+      dayOfWeek: 3,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
@@ -137,13 +149,17 @@ describe('evaluateRules', () => {
       restrictionActive: true,
       animalProteinCount: 0,
       isTodayValid: true,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
+      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
       lastGlucoseTimestamp: Date.now(),
       lastWeightTimestamp: Date.now(),
       waterRations: 4,
+      hasBacalao: false,
+      hasEggs: false,
+      weeklyActivityMinutes: 200,
+      dayOfWeek: 3,
     }
 
     const results = evaluateRules(ctx, [], cooldown)
@@ -156,13 +172,17 @@ describe('evaluateRules', () => {
       restrictionActive: true,
       animalProteinCount: 0,
       isTodayValid: true,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
+      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
       lastGlucoseTimestamp: Date.now(),
       lastWeightTimestamp: Date.now(),
       waterRations: 4,
+      hasBacalao: false,
+      hasEggs: false,
+      weeklyActivityMinutes: 200,
+      dayOfWeek: 3,
     }
     const rulesCount = SAFETY_RULES.length
 
@@ -187,13 +207,17 @@ describe('evaluateRules', () => {
       lastGlucoseTimestamp: null,
       lastWeightTimestamp: null,
       waterRations: 0,
+      hasBacalao: false,
+      hasEggs: false,
+      weeklyActivityMinutes: 200,
+      dayOfWeek: 3,
     }
 
     const results = evaluateRules(ctx, SAFETY_RULES, cooldown)
 
     // Should match: CEREALS_RESTRICTION, FRUITS_GLYCEMIC_ALERT, VEGETABLES_DEFICIT
-    // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION
-    expect(results).toHaveLength(6)
+    // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION + AOVE_TAGGING
+    expect(results).toHaveLength(7)
     const matchedIds = results.map(r => r.rule.id)
     expect(matchedIds).toContain('CEREALS_RESTRICTION')
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT')

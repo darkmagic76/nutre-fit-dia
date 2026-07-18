@@ -1,5 +1,6 @@
 import { useTrackerStore } from '@features/metabolic-tracker/store'
 import { useLogStore } from '@features/med-diet-validator/store'
+import { useActivityStore } from '@features/activity-tracker'
 import { countRations } from '@shared/services/rationValidator'
 import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES, type SystemNotification } from '@shared/domain'
 import { getTrend } from '@features/metabolic-tracker/services/biomarkerTrackingService'
@@ -16,6 +17,7 @@ import type { CooldownTracker } from './cooldownTracker'
 export function buildNudgeContext(): NudgeContext {
   const { restrictionActive } = useTrackerStore.getState()
   const { todayLog } = useLogStore.getState()
+  const { weeklyMinutes } = useActivityStore.getState()
   const trends = getTrend()
 
   const counts = countRations(todayLog)
@@ -30,8 +32,11 @@ export function buildNudgeContext(): NudgeContext {
   )
 
   const waterRations = counts[FoodCategory.WATER]
+  const hasBacalao = todayLog.some(f => f.name.toLowerCase().includes('bacalao'))
+  const hasEggs = counts[FoodCategory.EGGS] > 0
 
   const currentHour = new Date().getHours()
+  const dayOfWeek = new Date().getDay()
 
   return {
     restrictionActive,
@@ -44,6 +49,10 @@ export function buildNudgeContext(): NudgeContext {
     lastGlucoseTimestamp: trends.glucoseLatest?.timestamp ?? null,
     lastWeightTimestamp: trends.weightLatest?.timestamp ?? null,
     waterRations,
+    hasBacalao,
+    hasEggs,
+    weeklyActivityMinutes: weeklyMinutes,
+    dayOfWeek,
   }
 }
 

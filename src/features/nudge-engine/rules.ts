@@ -95,4 +95,63 @@ export const SAFETY_RULES: SafetyRule[] = [
       return (Date.now() - ctx.lastWeightTimestamp) > 4 * 60 * 60 * 1000
     },
   },
+
+  // ─── PR3: SystemAction rules ───
+
+  {
+    id: 'AOVE_TAGGING',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: 24 * 60,
+    title: 'AOVE requerido',
+    body: 'El AOVE debe estar presente en cada comida principal.',
+    condition: ctx => ctx.counts[FoodCategory.OLIVE_OIL] === 0,
+  },
+  {
+    id: 'LEGUMES_GLYCEMIC_BASE',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: 24 * 60,
+    title: 'Legumbres insuficientes esta semana',
+    body: 'Las legumbres son requisito base para el control glucémico. Objetivo: ≥4 raciones/semana.',
+    condition: ctx => ctx.dayOfWeek >= 4 && ctx.counts[FoodCategory.LEGUMES] < 1,
+  },
+  {
+    id: 'FISH_COD_TAG',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: 0,
+    title: 'Bacalao — High Protein Low Fat',
+    body: 'El bacalao es una proteína de alta prioridad (0.7% grasa).',
+    condition: ctx => ctx.hasBacalao,
+  },
+  {
+    id: 'EGGS_RED_MEAT_ALT',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: 0,
+    title: 'Huevos como alternativa',
+    body: 'Los huevos son alternativa preferente a carnes rojas.',
+    condition: ctx =>
+      ctx.counts[FoodCategory.WHITE_MEAT] > 0 && !ctx.hasEggs,
+  },
+  {
+    id: 'WHITE_MEAT_RESTRICT',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: 7 * 24 * 60, // weekly
+    title: 'Restringir carnes blancas',
+    body: 'Se han superado las raciones de pescado. Considera reducir carnes blancas.',
+    condition: ctx =>
+      ctx.counts[FoodCategory.FISH] > 7 && ctx.counts[FoodCategory.WHITE_MEAT] > 0,
+  },
+  {
+    id: 'HC_INACTIVITY_ADJUST',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: 24 * 60,
+    title: 'Actividad física insuficiente',
+    body: 'No has alcanzado los 150 min/semana de actividad moderada. Considera reducir carga de HC.',
+    condition: ctx => ctx.weeklyActivityMinutes < 150,
+  },
 ]
