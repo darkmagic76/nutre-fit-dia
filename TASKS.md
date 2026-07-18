@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 323 ✅ | Lint: 0 | Typecheck: limpio
+Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 332 ✅ | Lint: 0 | Typecheck: limpio
 
 ---
 
@@ -55,7 +55,7 @@ Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 323 �
 | # | Tarea | ADR / Fuente | Descripción | Esfuerzo | Dependencias |
 |---|---|---|---|---|---|
 | **M1** | **Substitution Service** | ADR-007, SPECS_RF | ✅ **Completado** — `suggestAlternative(food)`: WHITE_MEAT → LEGUMES + blue FISH (BLUE_FISH_IDS validado por AESAN 2.4.2.1). Ranking por environmental score descendente, top 3. 13 tests, 100% coverage. | S | H3 ✅ |
-| **M2** | **Nudge: Sustitución Inteligente** | ADR-007 + ADR-008 | Integrar `substitutionService` con `NudgeEngine`: si `environmentalScore < 30` → disparar `BehavioralNudge` con alternativas sostenibles. | S | M1, H2 |
+| **M2** | **Nudge: Sustitución Inteligente** | ADR-007 + ADR-008 | ✅ **Completado** — `SUSTAINABLE_SUBSTITUTION` rule en NudgeEngine: si environmentalScore < 30 → BehavioralNudge con alternativas de `suggestAlternative()`. Dynamic body, cooldown 4h. 6 tests, 100% coverage. | S | M1 ✅, H2 ✅ |
 | **M3** | **Convivialidad (RNF-02)** | SPECS_RF RNF-02 | Añadir metadata de "comer en compañía" y técnicas culinarias a recetas. Mostrar sugerencias de preparación en RecipePlanDisplay. | S | H5 |
 | **M4** | **Zero-Waste Module** | SPECS_TECH | Etiquetar ingredientes con "defectos estéticos" y productos locales/temporada. Extender `Food` schema con `isUglyProduce`, `isZeroWaste`. | S | H3 |
 | **M5** | **FR-MATRIX Sync** | FR-MATRIX | Actualizar matriz de trazabilidad: marcar RF-02 como ✅ (ya implementado con condicional IMC > 25), reflejar estado real de cada feature. | XS | Ninguna |
@@ -97,7 +97,7 @@ Fase 4 — Pulido (LOW)
 ## Notas
 
 - **FR-MATRIX desactualizada**: RF-02 (déficit 600 kcal condicional a IMC > 25) ya está implementado en `caloricTargetService.ts` con tests. La matriz lo marca como ⚠️ Pendiente. Corregir en M5.
-- **323 tests verdes**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
+- **332 tests verdes**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
 - **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module.
 - **NudgeEngine wiring**: `evaluateAndEnqueue()` se dispara en `ScannerContainer.handleClassify` y `handleAddToLog`. Singleton `CooldownTracker` previene notificaciones duplicadas.
 - **Activity form**: `NumberField` usa estado local (`useState`) — bug de `value=""` fijo corregido.
