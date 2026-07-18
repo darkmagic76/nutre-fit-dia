@@ -165,5 +165,29 @@ describe('classificationService', () => {
       expect(es.packaging).toBe(PackagingLevel.BULK)
       expect(es.score).toBeGreaterThanOrEqual(80)
     })
+
+    it('skips environmentalScore for RED foods (occult sugars return early)', () => {
+      const food = makeFood({
+        category: FoodCategory.VEGETABLES,
+        harmfulIngredients: ['sacarosa'],
+        carbonFootprint: 0.3,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.color).toBe(TrafficLightColor.RED)
+      expect(result.environmentalScore).toBeUndefined()
+    })
+
+    it('skips environmentalScore for RED foods (trans fats return early)', () => {
+      const food = makeFood({
+        category: FoodCategory.VEGETABLES,
+        hasTransFats: true,
+        carbonFootprint: 0.3,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.color).toBe(TrafficLightColor.RED)
+      expect(result.environmentalScore).toBeUndefined()
+    })
   })
 })

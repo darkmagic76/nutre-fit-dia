@@ -104,4 +104,23 @@ describe('PlanView', () => {
     expect(screen.getByLabelText('Comida en compañía')).toBeInTheDocument()
     expect(screen.getByLabelText('erMedDiet')).toBeInTheDocument()
   })
+
+  it('does not render cultural badges when food has no metadata', () => {
+    const plainFood = food({
+      id: 'veg-brocoli', name: 'Brócoli', category: FoodCategory.VEGETABLES,
+      gramsPerRation: 150, kcalPer100g: 34, proteinPer100g: 2.8,
+      carbsPer100g: 7, fiberPer100g: 2.6, fatPer100g: 0.4,
+      carbonFootprint: 0.3, isSeasonal: true,
+    })
+    const plainPlan: WeeklyPlan = {
+      days: [{ day: 1, entries: [{ food: plainFood, rations: 1 }] }],
+      dailyResults: [{ valid: true, violations: [], animalProteinCount: 0 }],
+      weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
+      valid: true,
+    }
+    render(<PlanView {...defaultProps} weeklyPlan={plainPlan} />)
+    expect(screen.queryByLabelText('Cocina tradicional')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('Comida en compañía')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('erMedDiet')).not.toBeInTheDocument()
+  })
 })
