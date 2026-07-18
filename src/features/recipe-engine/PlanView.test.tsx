@@ -1,8 +1,15 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { PlanView } from './PlanView'
-import { FoodCategory } from '@shared/domain'
+import { FoodCategory, food } from '@shared/domain'
 import type { WeeklyPlan } from './services/planGenerator'
+
+const lentejas = food({
+  id: 'legume-lentejas', name: 'Lentejas', category: FoodCategory.LEGUMES,
+  gramsPerRation: 60, kcalPer100g: 340, proteinPer100g: 24, carbsPer100g: 54,
+  fiberPer100g: 11, fatPer100g: 1.5, carbonFootprint: 0.8, isSeasonal: true,
+  culturalMetadata: { traditionalCuisine: true, socialEating: true, cookingTechnique: 'stew' as const, erMedDiet: true },
+})
 
 const invalidPlan: WeeklyPlan = {
   days: [{ day: 1, entries: [] }, { day: 2, entries: [] }],
@@ -82,5 +89,19 @@ describe('PlanView', () => {
     render(<PlanView {...defaultProps} weeklyPlan={invalidPlan} />)
     expect(screen.getByText('Día 1: 1 violaciones')).toBeInTheDocument()
     expect(screen.getByText('cereals: 10 raciones (máx 6/día)')).toBeInTheDocument()
+  })
+
+  it('shows cultural badges for foods with UNESCO metadata', () => {
+    const culturalPlan: WeeklyPlan = {
+      days: [{ day: 1, entries: [{ food: lentejas, rations: 1 }] }],
+      dailyResults: [{ valid: true, violations: [], animalProteinCount: 0 }],
+      weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
+      valid: true,
+    }
+    render(<PlanView {...defaultProps} weeklyPlan={culturalPlan} />)
+    // Badges should appear for traditional cuisine, social eating, and erMedDiet
+    expect(screen.getByLabelText('Cocina tradicional')).toBeInTheDocument()
+    expect(screen.getByLabelText('Comida en compañía')).toBeInTheDocument()
+    expect(screen.getByLabelText('erMedDiet')).toBeInTheDocument()
   })
 })

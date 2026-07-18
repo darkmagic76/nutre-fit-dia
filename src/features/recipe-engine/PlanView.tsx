@@ -1,6 +1,17 @@
 import { CATEGORY_DISPLAY_NAMES } from '@shared/domain'
+import type { CulturalMetadata } from '@shared/domain'
 import { Card, PrimaryButton, ViolationList, LegalDisclaimer } from '@shared/ui'
 import type { WeeklyPlan } from './services/planGenerator'
+
+function CulturalBadges({ meta }: { meta: CulturalMetadata }) {
+  return (
+    <span className="inline-flex gap-1 ml-1" aria-label="Metadata cultural UNESCO">
+      {meta.traditionalCuisine && <span title="Cocina tradicional" aria-label="Cocina tradicional">🏺</span>}
+      {meta.socialEating && <span title="Comida en compañía" aria-label="Comida en compañía">👥</span>}
+      {meta.erMedDiet && <span title="erMedDiet" aria-label="erMedDiet">🌿</span>}
+    </span>
+  )
+}
 
 interface PlanViewProps {
   restrictionActive: boolean
@@ -80,7 +91,10 @@ export function PlanView({
                   <ul className="px-3 pb-2 space-y-1 text-sm">
                     {day.entries.map((e, i) => (
                       <li key={i} className="flex justify-between py-1 border-t border-stone-200">
-                        <span>{e.rations}× {e.food.name}</span>
+                        <span>
+                          {e.rations}× {e.food.name}
+                          {e.food.culturalMetadata && <CulturalBadges meta={e.food.culturalMetadata} />}
+                        </span>
                         <span className="text-stone-400">{CATEGORY_DISPLAY_NAMES[e.food.category]}</span>
                       </li>
                     ))}
