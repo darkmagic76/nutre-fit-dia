@@ -1,3 +1,5 @@
+import type { EnvironmentalScore } from '@shared/sustainability'
+
 /** ADR-003: ML pipeline abstraction — scanner adapter contract */
 
 export interface ScanInput {
@@ -18,6 +20,8 @@ export interface ScanResult {
   ingredients: string[]
   /** Added sugars found in the ingredient list */
   detectedAddedSugars: string[]
+  /** Environmental sustainability score (ADR-007). Optional — degrades gracefully when unavailable. */
+  environmentalScore?: EnvironmentalScore
 }
 
 export interface ModelInfo {

@@ -3,6 +3,7 @@ import { classifyFood, classifyFoodWithReasons } from './classificationService'
 import { TrafficLightColor, FoodCategory } from '@shared/domain'
 import { foodsById } from '@shared/data/foods'
 import { makeFood } from '@/test/fixtures'
+import { Seasonality, Proximity, PackagingLevel } from '@shared/sustainability'
 
 describe('classificationService', () => {
   describe('classifyFood', () => {
@@ -123,6 +124,46 @@ describe('classificationService', () => {
       const result = classifyFoodWithReasons(food)
       expect(result.color).toBe(TrafficLightColor.GREEN)
       expect(result.reasons).toContain('Producto procesado con ingredientes no recomendados')
+    })
+
+    // ─── H4: Dual qualification — environmental score ───
+
+    it('includes environmentalScore for food with carbonFootprint data', () => {
+      const food = makeFood({
+        category: FoodCategory.LEGUMES,
+        carbonFootprint: 0.8,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.environmentalScore).toBeDefined()
+      expect(result.environmentalScore!.carbonFootprint).toBe(0.8)
+      expect(result.environmentalScore!.seasonality).toBe(Seasonality.IN_SEASON)
+      expect(result.environmentalScore!.proximity).toBe(Proximity.LOCAL_KM0)
+      expect(result.environmentalScore!.score).toBeGreaterThan(0)
+    })
+
+    it('includes environmentalScore with neutral carbon when carbonFootprint is missing', () => {
+      const food = makeFood({ category: FoodCategory.VEGETABLES, isSeasonal: true })
+      const result = classifyFoodWithReasons(food)
+      expect(result.environmentalScore).toBeDefined()
+      expect(result.environmentalScore!.carbonFootprint).toBe(0)
+      expect(result.environmentalScore!.seasonality).toBe(Seasonality.IN_SEASON)
+    })
+
+    it('preserves health classification correctness alongside environmentalScore', () => {
+      const food = makeFood({
+        category: FoodCategory.VEGETABLES,
+        carbonFootprint: 0.3,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      // Health classification unchanged
+      expect(result.color).toBe(TrafficLightColor.GREEN)
+      // Environmental score present
+      expect(result.environmentalScore).toBeDefined()
+      const es = result.environmentalScore!
+      expect(es.packaging).toBe(PackagingLevel.BULK)
+      expect(es.score).toBeGreaterThanOrEqual(80)
     })
   })
 })

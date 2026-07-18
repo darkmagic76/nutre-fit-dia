@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 269 ✅ | Lint: 0 | Typecheck: limpio
+Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 272 ✅ | Lint: 0 | Typecheck: limpio
 
 ---
 
@@ -45,7 +45,7 @@ Generado: 2026-07-17 | Actualizado: 2026-07-18 | Rama: `develop` | Tests: 269 �
 | **H1** | **Activity Goal Tracker V1** | ADR-006, RF-03 | ✅ **Completado** — `useActivityTracker` hook, compliance %, streak, tab "🏃 Actividad" | M | — |
 | **H2** | **Nudge Engine: Reglas Core** | ADR-008 | ✅ **Completado** — 14 reglas: 3 SafetyAlert + 5 BehavioralNudge + 6 SystemAction, CooldownTracker, NudgeStore (255 tests). | L | C1 ✅ |
 | **H3** | **Sustainability Scoring Core** | ADR-007, FR-2.2 | ✅ **Completado** — `computeEnvironmentalScore()` con constantes AESAN/EAT-Lancet, pesos 50/30/20, integrado en `pickSustainableFood()` del RecipeEngine para ranking dual (salud + sostenibilidad). 14 tests. | M | Ninguna |
-| **H4** | **Dual Qualification Scanner** | ADR-003 + ADR-007 | Extender `ScanResult` con `environmentalScore` opcional. Modificar `classificationService` para devolver ambas puntuaciones. Backward-compatible: si no hay datos ambientales, solo clasificación de salud. | S | H3 |
+| **H4** | **Dual Qualification Scanner** | ADR-003 + ADR-007 | ✅ **Completado** — `ScanResult.environmentalScore?` (ADR-003), `ClassificationResult.environmentalScore?` integrado en `classifyFoodWithReasons`. Backward-compatible. 3 tests. | S | H3 ✅ |
 | **H5** | **Metadata Cultural UNESCO** | FR-5.2 | Añadir campos `culturalMetadata` a `RecipeSchema`: valor biológico proteico, huella de carbono/hídrica, flag erMedDiet, procedencia geográfica. Mostrar badges informativos en RecipePlanDisplay. | S | Ninguna |
 | **H6** | **NudgeEngine: SPECS_TECH Rules** | ADR-008, SPECS_TECH | Añadir reglas SPECS_TECH: nudge de hiperglucemia (caminata/receta fibra), ajuste HC por inactividad. Dependen de datos de actividad y glucosa. | S | H1, H2, C5 |
 | **H7** | **BehavioralNudge UI** | ADR-008 | Implementar panel de nudges en dashboard: lista de `BehavioralNudge` activos con dismiss. Badge de contador. Historial de engagement. | M | H2 |
@@ -95,7 +95,7 @@ Fase 4 — Pulido (LOW)
 ## Notas
 
 - **FR-MATRIX desactualizada**: RF-02 (déficit 600 kcal condicional a IMC > 25) ya está implementado en `caloricTargetService.ts` con tests. La matriz lo marca como ⚠️ Pendiente. Corregir en M5.
-- **269 tests verdes**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
+- **272 tests verdes**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
 - **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module.
 - **ADR-003 ScannerAdapter**: la interfaz ya existe. `MockScannerAdapter` implementado. La extensión para Dual Qualification (H4) es backward-compatible.
 - **Supabase reservado V2**: sin imports en V1. La app funciona completamente offline con datos estáticos del catálogo.
