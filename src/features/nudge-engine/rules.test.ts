@@ -19,6 +19,8 @@ function makeContext(overrides: Partial<NudgeContext> = {}): NudgeContext {
     hasEggs: false,
     weeklyActivityMinutes: 0,
     dayOfWeek: 3,
+    environmentalScore: null,
+    alternatives: null,
     ...overrides,
   }
 }
@@ -217,5 +219,69 @@ describe('HC_INACTIVITY_ADJUST', () => {
   })
   it('does not fire when weeklyActivityMinutes >= 150', () => {
     expect(rule!.condition(makeContext({ weeklyActivityMinutes: 200 }))).toBe(false)
+  })
+})
+
+describe('SUSTAINABLE_SUBSTITUTION', () => {
+  const rule = () => NUDGE_RULES.find(r => r.id === 'SUSTAINABLE_SUBSTITUTION')
+
+  it('exists with correct id', () => {
+    expect(rule()).toBeDefined()
+  })
+
+  it('fires when environmentalScore < 30 and alternatives exist', () => {
+    const ctx = makeContext({
+      environmentalScore: 20,
+      alternatives: ['lentejas', 'garbanzos', 'caballa'],
+    })
+    expect(rule()!.condition(ctx)).toBe(true)
+  })
+
+  it('does NOT fire when environmentalScore >= 30', () => {
+    const ctx = makeContext({
+      environmentalScore: 45,
+      alternatives: ['lentejas'],
+    })
+    expect(rule()!.condition(ctx)).toBe(false)
+  })
+
+  it('does NOT fire when alternatives is null', () => {
+    const ctx = makeContext({
+      environmentalScore: 20,
+      alternatives: null,
+    })
+    expect(rule()!.condition(ctx)).toBe(false)
+  })
+
+  it('does NOT fire when alternatives is empty array', () => {
+    const ctx = makeContext({
+      environmentalScore: 12,
+      alternatives: [],
+    })
+    expect(rule()!.condition(ctx)).toBe(false)
+  })
+
+  it('body includes alternative names when rule fires', () => {
+    const ctx = makeContext({
+      environmentalScore: 20,
+      alternatives: ['lentejas', 'garbanzos', 'sardinas'],
+    })
+    const bodyFn = rule()!.body
+    expect(typeof bodyFn).toBe('function')
+    const body = bodyFn(ctx)
+    expect(body).toContain('lentejas')
+    expect(body).toContain('garbanzos')
+    expect(body).toContain('sardinas')
+  })
+
+  it('body handles empty alternatives gracefully', () => {
+    const ctx = makeContext({
+      environmentalScore: 20,
+      alternatives: [],
+    })
+    const bodyFn = rule()!.body
+    expect(typeof bodyFn).toBe('function')
+    const body = bodyFn(ctx)
+    expect(body).toBe('Considera alternativas más sostenibles: ')
   })
 })
