@@ -3,6 +3,7 @@ import type { CulturalMetadata, Food } from '@shared/domain'
 import { Card, PrimaryButton, ViolationList, LegalDisclaimer } from '@shared/ui'
 import { MealType, type MealEntry, type WeeklyPlan } from './services/planGenerator'
 import { useTrackerStore } from '@features/metabolic-tracker/store'
+import { useT } from '@shared/i18n'
 
 function computeMealKcal(entries: MealEntry[]): number {
   return entries.reduce((sum, e) => {
@@ -65,12 +66,14 @@ export function PlanView({
   onToggleRestriction,
   onGeneratePlan,
 }: PlanViewProps) {
+  const t = useT()
+
   return (
     <Card
-      title="📅 Plan Semanal erMedDiet"
-      description="7 días con todos los grupos alimentarios. Cumple AESAN 2022."
+      title={t['plan.title']}
+      description={t['plan.description']}
     >
-      <LegalDisclaimer />
+      <LegalDisclaimer text={t['legal.disclaimer']} />
       <div className="h-2" />
       <label className="flex items-center gap-2 text-sm cursor-pointer min-h-[44px]">
         <input
@@ -78,25 +81,28 @@ export function PlanView({
           checked={restrictionActive}
           onChange={e => onToggleRestriction(e.target.checked)}
           className="rounded w-5 h-5 text-emerald-700 focus:ring-emerald-500"
-          aria-label="Activar restricción calórica"
+          aria-label={t['ui.activateRestriction']}
         />
-        <span>Restricción calórica (máx 4 cereales/día)</span>
+        <span>{t['ui.activateRestriction']}</span>
       </label>
 
       <PrimaryButton onClick={onGeneratePlan}>
-        Generar plan
+        {t['ui.generatePlan']}
       </PrimaryButton>
 
       {weeklyPlan && (
         <div aria-live="polite">
           <p className={`text-sm font-medium mb-3 ${weeklyPlan.valid ? 'text-emerald-600' : 'text-red-600'}`} role="status">
             {weeklyPlan.valid
-              ? '✅ Plan válido — cumple todas las restricciones'
-              : '⚠️ Violaciones detectadas'}
+              ? t['ui.planValid']
+              : t['ui.planViolations']}
           </p>
 
           {!weeklyPlan.valid && (
-            <ViolationList violations={weeklyPlan.weeklyResult.violations} />
+            <ViolationList
+              violations={weeklyPlan.weeklyResult.violations}
+              errorLabel={t['ui.violations']}
+            />
           )}
 
           {weeklyPlan.dailyResults.some(r => r.violations.length > 0) && (
@@ -105,7 +111,7 @@ export function PlanView({
                 r.violations.length > 0 ? (
                   <details key={d} className="text-sm text-red-600 bg-red-50 p-2 rounded">
                     <summary className="cursor-pointer font-medium">
-                      Día {d + 1}: {r.violations.length} violaciones
+                      {t['ui.day']} {d + 1}: {r.violations.length} {t['ui.violationsCount']}
                     </summary>
                     <ul className="list-disc list-inside mt-1 ml-2">
                       {r.violations.map((v, i) => (
@@ -118,10 +124,9 @@ export function PlanView({
             </div>
           )}
 
-          <div className="space-y-2 max-h-96 overflow-y-auto mt-3" role="list" aria-label="Plan semanal">
+          <div className="space-y-2 max-h-96 overflow-y-auto mt-3" role="list" aria-label={t['plan.title']}>
             {weeklyPlan.days.map(day => {
               const dayValid = weeklyPlan.dailyResults[day.day - 1]?.valid !== false
-              // Group entries by mealType (default BREAKFAST for backward compat)
               const groups = new Map<MealType, MealEntry[]>()
               for (const meal of MEAL_ORDER) groups.set(meal, [])
               for (const entry of day.entries) {
@@ -135,8 +140,8 @@ export function PlanView({
               return (
                 <details key={day.day} className="bg-stone-50 rounded-lg">
                   <summary className="font-medium cursor-pointer text-sm p-2 min-h-[44px] flex items-center">
-                    <span>Día {day.day} — {day.entries.length} alimentos</span>
-                    {!dayValid && <span className="ml-2" aria-label="Violaciones detectadas">⚠️</span>}
+                    <span>{t['ui.day']} {day.day} — {day.entries.length} {t['ui.foods']}</span>
+                    {!dayValid && <span className="ml-2" aria-label={t['ui.planViolations']}>⚠️</span>}
                   </summary>
                   <div className="px-3 pb-2 space-y-3 text-sm">
                     {MEAL_ORDER.map(meal => {

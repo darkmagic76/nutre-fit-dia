@@ -2,28 +2,38 @@ import { useState, useCallback, useEffect } from 'react'
 
 export type Tab = 'scanner' | 'log' | 'metabolic' | 'plan' | 'activity' | 'nudges' | 'sustainability'
 
-export const TABS: Array<{ id: Tab; label: string; icon: string }> = [
-  { id: 'scanner', label: 'Semáforo', icon: '🔍' },
-  { id: 'log', label: 'Hoy', icon: '📝' },
-  { id: 'metabolic', label: 'Perfil', icon: '📊' },
-  { id: 'plan', label: 'Plan', icon: '📅' },
-  { id: 'activity', label: 'Actividad', icon: '🏃' },
-  { id: 'nudges', label: 'Nudges', icon: '🔔' },
-  { id: 'sustainability', label: 'Eco', icon: '🌍' },
+export const TAB_IDS: Tab[] = [
+  'scanner',
+  'log',
+  'metabolic',
+  'plan',
+  'activity',
+  'nudges',
+  'sustainability',
 ]
+
+export const TAB_ICONS: Record<Tab, string> = {
+  scanner: '🔍',
+  log: '📝',
+  metabolic: '📊',
+  plan: '📅',
+  activity: '🏃',
+  nudges: '🔔',
+  sustainability: '🌍',
+}
 
 export function useTabNavigation() {
   const [tab, setTab] = useState<Tab>('scanner')
 
   const handleKeyNav = useCallback((e: KeyboardEvent) => {
     if (e.altKey || e.ctrlKey || e.metaKey) return
-    const currentIndex = TABS.findIndex(t => t.id === tab)
+    const currentIndex = TAB_IDS.indexOf(tab)
     if (e.key === 'ArrowRight') {
       e.preventDefault()
-      setTab(TABS[(currentIndex + 1) % TABS.length].id)
+      setTab(TAB_IDS[(currentIndex + 1) % TAB_IDS.length])
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault()
-      setTab(TABS[(currentIndex - 1 + TABS.length) % TABS.length].id)
+      setTab(TAB_IDS[(currentIndex - 1 + TAB_IDS.length) % TAB_IDS.length])
     }
   }, [tab])
 

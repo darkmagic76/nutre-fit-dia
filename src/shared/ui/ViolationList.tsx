@@ -1,9 +1,16 @@
 interface ViolationListProps {
   violations: Array<{ message: string }>
   type?: 'error' | 'warning'
+  errorLabel?: string
+  warningLabel?: string
 }
 
-export function ViolationList({ violations, type = 'error' }: ViolationListProps) {
+export function ViolationList({
+  violations,
+  type = 'error',
+  errorLabel = '⚠️ Violaciones detectadas:',
+  warningLabel = '💡 Sugerencias:',
+}: ViolationListProps) {
   if (violations.length === 0) return null
 
   const styles = type === 'error'
@@ -17,7 +24,7 @@ export function ViolationList({ violations, type = 'error' }: ViolationListProps
       aria-live="polite"
     >
       <p className="font-medium">
-        {type === 'error' ? '⚠️ Violaciones detectadas:' : '💡 Sugerencias:'}
+        {type === 'error' ? errorLabel : warningLabel}
       </p>
       <ul className="list-disc list-inside">
         {violations.map((v, i) => (

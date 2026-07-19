@@ -12,10 +12,15 @@ import {
 } from '@testing-library/react'
 
 import App from './App'
+import { I18nProvider } from '@shared/i18n'
+
+function renderApp() {
+  return render(<I18nProvider><App /></I18nProvider>)
+}
 
 describe('App integration', () => {
   beforeEach(() => {
-    render(<App />)
+    renderApp()
   })
 
   const selectTab = (name: string) => {

@@ -1,5 +1,6 @@
 import { Card } from '@shared/ui'
 import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability'
+import { useT } from '@shared/i18n'
 
 interface SustainabilityViewProps {
   zeroWasteCount: number
@@ -7,41 +8,37 @@ interface SustainabilityViewProps {
 }
 
 export function SustainabilityView({ zeroWasteCount, totalFoods }: SustainabilityViewProps) {
+  const t = useT()
+
   return (
     <Card
-      title="🌍 Sostenibilidad"
-      description="Impacto ambiental según AESAN 2022 y ODS 2030"
+      title={t['sustainability.title']}
+      description={t['sustainability.description']}
     >
-      <div className="space-y-4 text-sm" role="region" aria-label="Información de sostenibilidad">
+      <div className="space-y-4 text-sm" role="region" aria-label={t['sustainability.title']}>
         <section>
-          <h3 className="font-semibold text-emerald-700 mb-1">Puntuación Ambiental</h3>
-          <p className="text-stone-600">
-            Cada alimento recibe una puntuación de 0–100 basada en:
-          </p>
+          <h3 className="font-semibold text-emerald-700 mb-1">{t['sustainability.scoring']}</h3>
+          <p className="text-stone-600">{t['sustainability.scoringDesc']}</p>
           <ul className="list-disc list-inside ml-2 mt-1 text-stone-500 space-y-0.5">
-            <li>Huella de carbono — {SCORING_WEIGHTS.carbon * 100}% del peso</li>
-            <li>Temporalidad (producto de temporada) — {SCORING_WEIGHTS.seasonality * 100}%</li>
-            <li>Proximidad (origen local/KM0) — {SCORING_WEIGHTS.proximity * 100}%</li>
+            <li>{t['sustainability.carbon']} — {SCORING_WEIGHTS.carbon * 100}%</li>
+            <li>{t['sustainability.seasonality']} — {SCORING_WEIGHTS.seasonality * 100}%</li>
+            <li>{t['sustainability.proximity']} — {SCORING_WEIGHTS.proximity * 100}%</li>
           </ul>
         </section>
 
         <section>
-          <h3 className="font-semibold text-emerald-700 mb-1">Zero-Waste</h3>
+          <h3 className="font-semibold text-emerald-700 mb-1">{t['sustainability.zeroWaste']}</h3>
           <p className="text-stone-600">
-            Productos con defectos estéticos pero perfectamente comestibles:{' '}
+            {t['sustainability.zeroWasteDesc']}{' '}
             <span className="font-medium text-emerald-600">{zeroWasteCount}</span> de{' '}
-            <span className="font-medium">{totalFoods}</span> alimentos
+            <span className="font-medium">{totalFoods}</span>
           </p>
-          <p className="text-stone-400 text-xs mt-1">
-            ♻️ Zero-Waste · 🥕 KM0 / Defectos estéticos
-          </p>
+          <p className="text-stone-400 text-xs mt-1">{t['sustainability.zeroWasteFooter']}</p>
         </section>
 
         <section>
-          <h3 className="font-semibold text-emerald-700 mb-1">Emisiones Comparativas</h3>
-          <p className="text-stone-600 text-xs mb-2">
-            kg CO₂eq por kg de alimento (EAT-Lancet)
-          </p>
+          <h3 className="font-semibold text-emerald-700 mb-1">{t['sustainability.emissions']}</h3>
+          <p className="text-stone-600 text-xs mb-2">{t['sustainability.emissionsDesc']}</p>
           <div className="grid grid-cols-2 gap-1 text-xs">
             {Object.entries(PROTEIN_EMISSION_RATIOS).map(([key, value]) => (
               <div key={key} className="flex justify-between bg-stone-50 px-2 py-1 rounded">

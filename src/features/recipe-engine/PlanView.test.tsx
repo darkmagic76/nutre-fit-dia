@@ -1,9 +1,15 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, type RenderOptions } from '@testing-library/react'
 import { PlanView } from './PlanView'
 import { FoodCategory, food } from '@shared/domain'
 import { MealType, type WeeklyPlan } from './services/planGenerator'
 import { useTrackerStore } from '@features/metabolic-tracker/store'
+import { I18nProvider } from '@shared/i18n'
+import { type ReactElement } from 'react'
+
+function renderPlan(ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) {
+  return render(ui, { wrapper: ({ children }) => <I18nProvider>{children}</I18nProvider>, ...options })
+}
 
 const lentejas = food({
   id: 'legume-lentejas', name: 'Lentejas', category: FoodCategory.LEGUMES,
@@ -61,7 +67,7 @@ describe('PlanView', () => {
   }
 
   it('renders checkbox and generate button', () => {
-    render(<PlanView {...defaultProps} />)
+    renderPlan(<PlanView {...defaultProps} />)
     expect(screen.getByLabelText(/activar restricción calórica/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /generar plan/i })).toBeInTheDocument()
   })
@@ -73,13 +79,13 @@ describe('PlanView', () => {
       weeklyResult: { ...invalidPlan.weeklyResult, valid: true, violations: [] },
       dailyResults: [{ ...invalidPlan.dailyResults[0], valid: true, violations: [] }],
     }
-    render(<PlanView {...defaultProps} weeklyPlan={validPlan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={validPlan} />)
     const status = screen.getByRole('status')
     expect(status.textContent).toContain('Plan válido')
   })
 
   it('displays weekly violations for invalid plan', () => {
-    render(<PlanView {...defaultProps} weeklyPlan={invalidPlan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={invalidPlan} />)
     const alerts = screen.getAllByRole('alert')
     const alertTexts = alerts.map(a => a.textContent).join(' ')
     expect(alertTexts).toContain('Violaciones detectadas')
@@ -87,7 +93,7 @@ describe('PlanView', () => {
   })
 
   it('displays daily violation details', () => {
-    render(<PlanView {...defaultProps} weeklyPlan={invalidPlan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={invalidPlan} />)
     expect(screen.getByText('Día 1: 1 violaciones')).toBeInTheDocument()
     expect(screen.getByText('cereals: 10 raciones (máx 6/día)')).toBeInTheDocument()
   })
@@ -99,7 +105,7 @@ describe('PlanView', () => {
       weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
       valid: true,
     }
-    render(<PlanView {...defaultProps} weeklyPlan={culturalPlan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={culturalPlan} />)
     // Badges should appear for traditional cuisine, social eating, and erMedDiet
     expect(screen.getByLabelText('Cocina tradicional')).toBeInTheDocument()
     expect(screen.getByLabelText('Comida en compañía')).toBeInTheDocument()
@@ -113,7 +119,7 @@ describe('PlanView', () => {
       weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
       valid: true,
     }
-    render(<PlanView {...defaultProps} weeklyPlan={culturalPlan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={culturalPlan} />)
     expect(screen.getByText('Ideal para comer en compañía')).toBeInTheDocument()
   })
 
@@ -124,7 +130,7 @@ describe('PlanView', () => {
       weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
       valid: true,
     }
-    render(<PlanView {...defaultProps} weeklyPlan={culturalPlan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={culturalPlan} />)
     expect(screen.getByText('Preparación: guiso tradicional')).toBeInTheDocument()
   })
 
@@ -147,7 +153,7 @@ describe('PlanView', () => {
       weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
       valid: true,
     }
-    render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
     expect(screen.getByText(`Preparación: ${label}`)).toBeInTheDocument()
   })
 
@@ -165,7 +171,7 @@ describe('PlanView', () => {
       weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
       valid: true,
     }
-    render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
     // Emoji for traditional cuisine still renders
     expect(screen.getByLabelText('Cocina tradicional')).toBeInTheDocument()
     // Text spans must NOT appear
@@ -200,13 +206,13 @@ describe('PlanView', () => {
     }
 
     it('renders ♻️ badge when isZeroWaste is true', () => {
-      render(<PlanView {...defaultProps} weeklyPlan={buildPlan(zeroWasteFood)} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={buildPlan(zeroWasteFood)} />)
       expect(screen.getByLabelText('Zero Waste')).toBeInTheDocument()
       expect(screen.getByTitle('Zero Waste')).toBeInTheDocument()
     })
 
     it('renders 🥕 badge when isUglyProduce is true', () => {
-      render(<PlanView {...defaultProps} weeklyPlan={buildPlan(uglyProduceFood)} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={buildPlan(uglyProduceFood)} />)
       expect(screen.getByLabelText('KM0')).toBeInTheDocument()
       expect(screen.getByTitle('KM0 / Defectos estéticos')).toBeInTheDocument()
     })
@@ -218,7 +224,7 @@ describe('PlanView', () => {
         carbsPer100g: 42, fiberPer100g: 7, fatPer100g: 2,
         carbonFootprint: 0.8, isSeasonal: true,
       })
-      render(<PlanView {...defaultProps} weeklyPlan={buildPlan(plainFood)} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={buildPlan(plainFood)} />)
       expect(screen.queryByLabelText('Zero Waste')).not.toBeInTheDocument()
       expect(screen.queryByLabelText('KM0')).not.toBeInTheDocument()
     })
@@ -237,7 +243,7 @@ describe('PlanView', () => {
       weeklyResult: { valid: true, violations: [], animalProteinCount: 0 },
       valid: true,
     }
-    render(<PlanView {...defaultProps} weeklyPlan={plainPlan} />)
+    renderPlan(<PlanView {...defaultProps} weeklyPlan={plainPlan} />)
     expect(screen.queryByLabelText('Cocina tradicional')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('Comida en compañía')).not.toBeInTheDocument()
     expect(screen.queryByLabelText('erMedDiet')).not.toBeInTheDocument()
@@ -267,7 +273,7 @@ describe('PlanView', () => {
         { food: baseFood('f3', 'Fruta', FoodCategory.FRUITS), rations: 1, mealType: MealType.BREAKFAST },
         { food: baseFood('f4', 'Yogur', FoodCategory.DAIRY), rations: 1, mealType: MealType.SNACK },
       ])
-      render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
 
       const headers = screen.getAllByRole('heading', { level: 3 })
       expect(headers).toHaveLength(4)
@@ -282,7 +288,7 @@ describe('PlanView', () => {
         { food: baseFood('f1', 'Fruta', FoodCategory.FRUITS), rations: 1, mealType: MealType.BREAKFAST },
         { food: baseFood('f2', 'Arroz', FoodCategory.CEREALS), rations: 1, mealType: MealType.LUNCH },
       ])
-      render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
 
       const headers = screen.getAllByRole('heading', { level: 3 })
       expect(headers).toHaveLength(2)
@@ -301,7 +307,7 @@ describe('PlanView', () => {
       const plan = groupedPlan([
         { food: culturalFood, rations: 1, mealType: MealType.LUNCH },
       ])
-      render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
       // Cultural badge still renders
       expect(screen.getByLabelText('Cocina tradicional')).toBeInTheDocument()
       expect(screen.getByLabelText('erMedDiet')).toBeInTheDocument()
@@ -336,7 +342,7 @@ describe('PlanView', () => {
         { food: kcalFood('a', 'FoodA', FoodCategory.CEREALS, 100, 50), rations: 2, mealType: MealType.LUNCH },
         { food: kcalFood('b', 'FoodB', FoodCategory.VEGETABLES, 200, 100), rations: 1, mealType: MealType.LUNCH },
       ])
-      render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
       const header = screen.getByRole('heading', { level: 3, name: /almuerzo/i })
       expect(header).toHaveTextContent(/3\d{2}.*kcal/i)
       expect(header).toHaveTextContent(/1[5-9]%/i) // 15%
@@ -347,7 +353,7 @@ describe('PlanView', () => {
       const plan = kcalPlan([
         { food: kcalFood('a', 'FoodA', FoodCategory.CEREALS, 100, 50), rations: 1, mealType: MealType.BREAKFAST },
       ])
-      render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
       const header = screen.getByRole('heading', { level: 3, name: /desayuno/i })
       expect(header).toHaveTextContent(/—/)
     })
@@ -359,7 +365,7 @@ describe('PlanView', () => {
       const plan = kcalPlan([
         { food: kcalFood('a', 'FoodA', FoodCategory.CEREALS, 100, 50), rations: 1, mealType: MealType.BREAKFAST },
       ])
-      render(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
       const header = screen.getByRole('heading', { level: 3, name: /desayuno/i })
       expect(header).toHaveTextContent(/—/)
     })

@@ -1,5 +1,6 @@
 import { TabButton, LegalDisclaimer } from '@shared/ui'
-import { useTabNavigation, TABS } from '@shared/hooks/useTabNavigation'
+import { useTabNavigation, TAB_IDS, TAB_ICONS, type Tab } from '@shared/hooks/useTabNavigation'
+import { useT } from '@shared/i18n'
 import { ScannerContainer } from '@features/nutritional-traffic-light/ScannerContainer'
 import { DailyLogContainer } from '@features/med-diet-validator/DailyLogContainer'
 import { MetabolicTrackerContainer } from '@features/metabolic-tracker/MetabolicTrackerContainer'
@@ -8,71 +9,80 @@ import { ActivityTrackerContainer } from '@features/activity-tracker'
 import { NudgePanelContainer } from '@features/nudge-engine/NudgePanelContainer'
 import { SustainabilityContainer } from '@features/sustainability/SustainabilityContainer'
 
+const TAB_LABEL_KEYS: Record<Tab, keyof ReturnType<typeof useT>> = {
+  scanner: 'tab.scanner',
+  log: 'tab.log',
+  metabolic: 'tab.metabolic',
+  plan: 'tab.plan',
+  activity: 'tab.activity',
+  nudges: 'tab.nudges',
+  sustainability: 'tab.sustainability',
+}
+
 export default function App() {
   const { tab, setTab } = useTabNavigation()
+  const t = useT()
 
   return (
     <div className="min-h-screen bg-stone-100 text-stone-900">
       <header className="bg-emerald-800 text-white p-4 sm:p-6" role="banner">
-        <h1 className="text-2xl sm:text-3xl font-bold text-center">NutreFitDia</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-center">{t['app.title']}</h1>
         <p className="text-center text-emerald-200 text-xs sm:text-sm mt-1">
-          Ecosistema de Autocuidado Integral para Diabetes Tipo 2
+          {t['app.subtitle']}
         </p>
         <nav
           className="flex justify-center gap-1 sm:gap-2 mt-4 flex-wrap overflow-x-auto px-2"
           role="tablist"
-          aria-label="Navegación principal"
+          aria-label={t['app.title']}
         >
-          {TABS.map(t => (
+          {TAB_IDS.map(id => (
             <TabButton
-              key={t.id}
-              active={tab === t.id}
-              onClick={() => setTab(t.id)}
-              aria-controls={`panel-${t.id}`}
+              key={id}
+              active={tab === id}
+              onClick={() => setTab(id)}
+              aria-controls={`panel-${id}`}
             >
-              <span className="sm:hidden" aria-hidden="true">{t.icon}</span>
-              <span className="hidden sm:inline">{t.icon} {t.label}</span>
+              <span className="sm:hidden" aria-hidden="true">{TAB_ICONS[id]}</span>
+              <span className="hidden sm:inline">{TAB_ICONS[id]} {t[TAB_LABEL_KEYS[id]]}</span>
             </TabButton>
           ))}
         </nav>
         <p className="text-center text-emerald-300 text-[10px] mt-2">
-          Usá ← → para navegar entre pestañas
+          {t['app.keyboardHint']}
         </p>
       </header>
 
       <main className="max-w-3xl mx-auto p-3 sm:p-6" id="main-content">
-        <LegalDisclaimer />
+        <LegalDisclaimer text={t['legal.disclaimer']} />
         <div className="h-2" />
-        <div role="tabpanel" id="panel-scanner" hidden={tab !== 'scanner'} aria-label="Semáforo nutricional">
+        <div role="tabpanel" id="panel-scanner" hidden={tab !== 'scanner'} aria-label={t['tab.scanner']}>
           {tab === 'scanner' && <ScannerContainer />}
         </div>
-        <div role="tabpanel" id="panel-log" hidden={tab !== 'log'} aria-label="Registro diario">
+        <div role="tabpanel" id="panel-log" hidden={tab !== 'log'} aria-label={t['tab.log']}>
           {tab === 'log' && <DailyLogContainer />}
         </div>
-        <div role="tabpanel" id="panel-metabolic" hidden={tab !== 'metabolic'} aria-label="Perfil metabólico">
+        <div role="tabpanel" id="panel-metabolic" hidden={tab !== 'metabolic'} aria-label={t['tab.metabolic']}>
           {tab === 'metabolic' && <MetabolicTrackerContainer />}
         </div>
-        <div role="tabpanel" id="panel-plan" hidden={tab !== 'plan'} aria-label="Plan semanal">
+        <div role="tabpanel" id="panel-plan" hidden={tab !== 'plan'} aria-label={t['tab.plan']}>
           {tab === 'plan' && <PlanContainer />}
         </div>
-        <div role="tabpanel" id="panel-activity" hidden={tab !== 'activity'} aria-label="Actividad física">
+        <div role="tabpanel" id="panel-activity" hidden={tab !== 'activity'} aria-label={t['tab.activity']}>
           {tab === 'activity' && <ActivityTrackerContainer />}
         </div>
-        <div role="tabpanel" id="panel-nudges" hidden={tab !== 'nudges'} aria-label="Nudges y notificaciones">
+        <div role="tabpanel" id="panel-nudges" hidden={tab !== 'nudges'} aria-label={t['tab.nudges']}>
           {tab === 'nudges' && <NudgePanelContainer />}
         </div>
-        <div role="tabpanel" id="panel-sustainability" hidden={tab !== 'sustainability'} aria-label="Sostenibilidad">
+        <div role="tabpanel" id="panel-sustainability" hidden={tab !== 'sustainability'} aria-label={t['tab.sustainability']}>
           {tab === 'sustainability' && <SustainabilityContainer />}
         </div>
       </main>
 
       <footer className="text-center text-stone-400 text-xs p-4 border-t border-stone-200" role="contentinfo">
-        <p>TFM · NutreFitDia · erMedDiet + AESAN 2022</p>
+        <p>{t['app.footer.tfm']}</p>
+        <p className="mt-1">{t['app.footer.disclaimer']}</p>
         <p className="mt-1">
-          ⚕️ Toda recomendación debe ser validada por un dietista-nutricionista colegiado
-        </p>
-        <p className="mt-1">
-          <a href="/.well-known/security.txt" className="underline hover:text-stone-600">Seguridad</a>
+          <a href="/.well-known/security.txt" className="underline hover:text-stone-600">{t['app.footer.security']}</a>
         </p>
       </footer>
     </div>

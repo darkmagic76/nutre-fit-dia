@@ -70,7 +70,7 @@ Generado: 2026-07-17 | Actualizado: 2026-07-19 | Rama: `develop` | Tests: 383 �
 |---|---|---|---|---|---|
 | **L1** | **Bacalao Priority Tag** | SPECS_TECH | ✅ **Completado** — `isHighPriority: true` en FoodSchema + Bacalao. `pickSustainableFood()` prioriza high-priority foods sobre environmental score. 2 tests nuevos. | XS | Ninguna |
 | **L2** | **Dashboard Unificado** | — | ✅ **Completado** — Nueva feature `sustainability/` con Container/Presentational (emisiones, zero-waste, scoring). Tab "🌍 Eco" integrado. Nav responsive: iconos en mobile, icono+label en desktop. `overflow-x-auto` + `flex-wrap`. 4 tests. | L | H1, H4, H7 |
-| **L3** | **i18n ES/EN** | — | Extraer todos los strings de UI a archivos de traducción. Inglés por defecto, español como locale principal. | L | Ninguna |
+| **L3** | **i18n ES/EN** | — | ✅ **Completado** — Infraestructura i18n con React Context tipado (`useT()`). Archivos `es.ts` + `en.ts` con 60+ claves. App shell, PlanView, SustainabilityView, LegalDisclaimer y ViolationList traducidos. Nav responsive con labels i18n. 4 tests. | L | Ninguna |
 | **L4** | **E2E Smoke Tests** | — | Tests end-to-end con Playwright: flujo completo de escaneo → clasificación → registro → plan semanal. | M | L2 |
 | **L5** | **A11y Audit** | RNF-03 | Auditoría de accesibilidad WCAG 2.1 AA: focus management, aria labels, contraste, navegación por teclado. | M | Ninguna |
 
