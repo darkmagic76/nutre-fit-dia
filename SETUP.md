@@ -3,7 +3,7 @@
 ## Requisitos previos
 
 | Herramienta | Versión mínima | Verificación |
-|---|---|---|
+| --- | --- | --- |
 | **Node.js** | 22+ | `node --version` |
 | **pnpm** | 10+ | `pnpm --version` |
 | **Git** | 2.40+ | `git --version` |
@@ -31,14 +31,14 @@ npm install -g pnpm@latest
 ## 1. Clonar el repositorio
 
 ```bash
-git clone git@github.com:darkmagic76/tfm-nutre-fit-dia.git
-cd tfm-nutre-fit-dia
+git clone git@github.com:darkmagic76/nutre-fit-dia.git
+cd nutre-fit-dia
 ```
 
 Ramas del proyecto:
 
 | Rama | Propósito |
-|---|---|
+| --- | --- |
 | `main` | Producción |
 | `staging` | Pre-producción, pruebas de integración |
 | `develop` | Desarrollo activo |
@@ -58,7 +58,7 @@ pnpm install
 Dependencias principales que se instalan:
 
 | Categoría | Paquetes |
-|---|---|
+| --- | --- |
 | Frontend | React 19, Vite 8, Tailwind 4, Zustand 5 |
 | Validación | Zod 4 |
 | Backend (opcional) | Supabase JS |
@@ -75,14 +75,17 @@ pnpm dev
 
 Abre `http://localhost:5173` en el navegador.
 
-La aplicación tiene 4 pestañas:
+La aplicación tiene 7 pestañas:
 
 | Pestaña | Funcionalidad |
 |---|---|
-| 🔍 **Semáforo** | Clasificación de alimentos (Verde/Naranja/Rojo) + detección de azúcares ocultos |
-| 📝 **Hoy** | Registro diario de alimentos con validación de raciones AESAN 2022 |
-| 📊 **Perfil** | Cálculo de objetivo calórico personalizado (erMedDiet, PREDIMED-Plus) |
-| 📅 **Plan** | Generación de plan semanal con todos los grupos alimentarios |
+| 🔍 **Semáforo** | Clasificación dual (salud + sostenibilidad) + detección de azúcares ocultos |
+| 📝 **Hoy** | Registro diario con validación de raciones AESAN 2022 |
+| 📊 **Perfil** | Cálculo de objetivo calórico erMedDiet + biomarcadores + perfil fenotípico |
+| 📅 **Plan** | Plan semanal con ranking dual, fraccionamiento 3-6 tomas, kcal por comida, badges UNESCO 🏺👥🌿 + ZeroWaste ♻️🥕 |
+| 🏃 **Actividad** | Seguimiento WHO/OMS 150-300 min + sesiones de fuerza |
+| 🔔 **Nudges** | Panel de notificaciones con badge contador + historial de engagement |
+| 🌍 **Eco** | Puntuación ambiental (carbono 50%, temporalidad 30%, proximidad 20%), Zero-Waste, emisiones comparativas EAT-Lancet |
 
 ---
 
@@ -113,11 +116,11 @@ pnpm verify
 
 Pipeline de calidad:
 
-```
+```text
 pnpm quality
   ├── pnpm lint       → Oxlint (Rust, ultrarrápido)
   ├── pnpm typecheck  → TypeScript 6 (erasableSyntaxOnly)
-  └── pnpm test:run   → Vitest (68 tests)
+  └── pnpm test:run   → Vitest (383 tests)
 ```
 
 ---
@@ -130,7 +133,7 @@ pnpm build
 
 Genera `dist/` con los archivos optimizados:
 
-```
+```text
 dist/
 ├── index.html
 ├── favicon.svg
@@ -189,7 +192,7 @@ jobs:
 
 Configurar en GitHub: `Settings → Pages → Source: GitHub Actions`.
 
-URL: `https://darkmagic76.github.io/tfm-nutre-fit-dia`
+URL: `https://darkmagic76.github.io/nutre-fit-dia`
 
 ### Opción C: Vercel
 
@@ -202,30 +205,26 @@ npx vercel --prod
 
 ## 8. Estructura del proyecto
 
-```
-tfm-nutre-fit-dia/
+```text
+nutre-fit-dia/
 ├── src/
 │   ├── features/              ← Screaming Architecture (ADR-001)
-│   │   ├── nutritional-traffic-light/
-│   │   │   └── services/      ← classificationService, occultSugarDetector
-│   │   ├── metabolic-tracker/
-│   │   │   └── services/      ← caloricTargetService
-│   │   ├── med-diet-validator/
-│   │   │   └── services/      ← rationValidator
-│   │   ├── recipe-engine/
-│   │   │   └── services/      ← planGenerator
-│   │   ├── activity-tracker/  ← (V2)
-│   │   └── nudge-engine/      ← (V2)
+│   │   ├── nutritional-traffic-light/  ← Scanner + clasificación dual (H4)
+│   │   ├── metabolic-tracker/          ← Perfil fenotípico + biomarcadores
+│   │   ├── med-diet-validator/         ← Validación AESAN 2022
+│   │   ├── recipe-engine/              ← Plan semanal + badges UNESCO + ZeroWaste
+│   │   ├── activity-tracker/           ← WHO/OMS 150-300 min (H1)
+│   │   └── nudge-engine/               ← 15 reglas + panel UI (H2, H6, H7, M2)
 │   ├── shared/
-│   │   ├── domain/            ← FoodCategory, TrafficLightColor, Food (Zod)
-│   │   ├── data/              ← Catálogo de alimentos (40 items)
-│   │   ├── sustainability/    ← (V2) EnvironmentalScore
-│   │   ├── store/             ← Zustand store (estado global)
-│   │   └── ui/                ← Componentes atómicos
+│   │   ├── domain/            ← FoodCategory, Food (Zod), CulturalMetadata, Notification
+│   │   ├── data/              ← Catálogo 34 alimentos con datos AESAN
+│   │   ├── sustainability/    ← EnvironmentalScore, substitutionService, ZeroWaste
+│   │   ├── services/          ← rationValidator cross-feature
+│   │   └── ui/                ← Componentes atómicos (Card, TabButton, etc.)
 │   ├── infrastructure/
-│   │   └── ml/                ← ScannerAdapter (ADR-003)
+│   │   └── ml/                ← ScannerAdapter (ADR-003) + ScanResult
 │   └── test/
-│       └── setup.ts
+│       └── fixtures.ts        ← makeFood factory
 ├── adr/                       ← 9 ADRs + matriz de trazabilidad
 ├── docs/                      ← Especificaciones (INFORME_ADR, SPECS_RF, SPECS_TECH)
 ├── package.json
@@ -239,7 +238,7 @@ tfm-nutre-fit-dia/
 ## 9. Stack tecnológico
 
 | Capa | Tecnología | Decisión |
-|---|---|---|
+| --- | --- | --- |
 | UI | React 19 + Tailwind 4 | ADR-009 |
 | Build | Vite 8 | ADR-009 |
 | Tipos | TypeScript 6 (erasableSyntaxOnly) | ADR-002 |
@@ -253,8 +252,8 @@ tfm-nutre-fit-dia/
 | Déficit | 600 kcal condicional (IMC > 25) | ADR-004 |
 | Scanner | Mock → ONNX (V2) | ADR-003 |
 | Actividad | GoalTracker manual V1 | ADR-006 |
-| Sostenibilidad | EnvironmentalScore V2 | ADR-007 |
-| Notificaciones | SafetyAlert / SystemAction / BehavioralNudge | ADR-008 |
+| Sostenibilidad | EnvironmentalScore + substitutionService V1 | ADR-007 |
+| Notificaciones | 15 reglas: SafetyAlert/SystemAction/BehavioralNudge | ADR-008 |
 
 ---
 

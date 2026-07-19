@@ -11,6 +11,13 @@ node_modules
 dist
 dist-ssr
 *.local
+coverage
+
+# Environment
+.env
+.env.*
+!.env.example
+AGENTS.md
 
 # Editor directories and files
 .vscode/*
@@ -26,3 +33,9 @@ dist-ssr
 # Engram generated
 .atl/.skill-registry.cache.json
 .atl/skill-registry.md
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

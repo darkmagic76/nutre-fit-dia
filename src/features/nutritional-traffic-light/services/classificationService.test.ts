@@ -1,29 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import { classifyFood, classifyFoodWithReasons } from './classificationService'
 import { TrafficLightColor, FoodCategory } from '@shared/domain'
-import type { Food } from '@shared/domain'
 import { foodsById } from '@shared/data/foods'
-
-function makeFood(overrides: Partial<Food> = {}): Food {
-  return {
-    id: 'test-food',
-    name: 'Test Food',
-    category: FoodCategory.VEGETABLES,
-    gramsPerRation: 100,
-    kcalPer100g: 50,
-    proteinPer100g: 2,
-    carbsPer100g: 5,
-    fiberPer100g: 2,
-    fatPer100g: 1,
-    saturatedFatPer100g: 0.2,
-    addedSugarsPer100g: 0,
-    harmfulIngredients: [],
-    hasTransFats: false,
-    isProcessed: false,
-    isSeasonal: false,
-    ...overrides,
-  }
-}
+import { makeFood } from '@/test/fixtures'
+import { Seasonality, Proximity, PackagingLevel } from '@shared/sustainability'
 
 describe('classificationService', () => {
   describe('classifyFood', () => {
@@ -132,6 +112,82 @@ describe('classificationService', () => {
       const result = classifyFoodWithReasons(food)
       expect(result.color).toBe(TrafficLightColor.GREEN)
       expect(result.reasons).toEqual([])
+    })
+
+    it('warns about processed food with non-sugar harmful ingredients', () => {
+      const food = makeFood({
+        isProcessed: true,
+        harmfulIngredients: ['conservantes'],
+        hasTransFats: false,
+        category: FoodCategory.VEGETABLES,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.color).toBe(TrafficLightColor.GREEN)
+      expect(result.reasons).toContain('Producto procesado con ingredientes no recomendados')
+    })
+
+    // ─── H4: Dual qualification — environmental score ───
+
+    it('includes environmentalScore for food with carbonFootprint data', () => {
+      const food = makeFood({
+        category: FoodCategory.LEGUMES,
+        carbonFootprint: 0.8,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.environmentalScore).toBeDefined()
+      expect(result.environmentalScore!.carbonFootprint).toBe(0.8)
+      expect(result.environmentalScore!.seasonality).toBe(Seasonality.IN_SEASON)
+      expect(result.environmentalScore!.proximity).toBe(Proximity.LOCAL_KM0)
+      expect(result.environmentalScore!.score).toBeGreaterThan(0)
+    })
+
+    it('includes environmentalScore with neutral carbon when carbonFootprint is missing', () => {
+      const food = makeFood({ category: FoodCategory.VEGETABLES, isSeasonal: true })
+      const result = classifyFoodWithReasons(food)
+      expect(result.environmentalScore).toBeDefined()
+      expect(result.environmentalScore!.carbonFootprint).toBe(0)
+      expect(result.environmentalScore!.seasonality).toBe(Seasonality.IN_SEASON)
+    })
+
+    it('preserves health classification correctness alongside environmentalScore', () => {
+      const food = makeFood({
+        category: FoodCategory.VEGETABLES,
+        carbonFootprint: 0.3,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      // Health classification unchanged
+      expect(result.color).toBe(TrafficLightColor.GREEN)
+      // Environmental score present
+      expect(result.environmentalScore).toBeDefined()
+      const es = result.environmentalScore!
+      expect(es.packaging).toBe(PackagingLevel.BULK)
+      expect(es.score).toBeGreaterThanOrEqual(80)
+    })
+
+    it('skips environmentalScore for RED foods (occult sugars return early)', () => {
+      const food = makeFood({
+        category: FoodCategory.VEGETABLES,
+        harmfulIngredients: ['sacarosa'],
+        carbonFootprint: 0.3,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.color).toBe(TrafficLightColor.RED)
+      expect(result.environmentalScore).toBeUndefined()
+    })
+
+    it('skips environmentalScore for RED foods (trans fats return early)', () => {
+      const food = makeFood({
+        category: FoodCategory.VEGETABLES,
+        hasTransFats: true,
+        carbonFootprint: 0.3,
+        isSeasonal: true,
+      })
+      const result = classifyFoodWithReasons(food)
+      expect(result.color).toBe(TrafficLightColor.RED)
+      expect(result.environmentalScore).toBeUndefined()
     })
   })
 })

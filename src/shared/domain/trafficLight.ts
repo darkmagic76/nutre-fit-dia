@@ -1,11 +1,13 @@
 import { z } from 'zod'
+import { defineEnum } from '@shared/utils'
+import type { ValuesOf } from '@shared/utils'
 
-export const TrafficLightColor = {
+export const TrafficLightColor = defineEnum({
   GREEN: 'green',
   ORANGE: 'orange',
   RED: 'red',
-} as const
+})
 
-export type TrafficLightColor = (typeof TrafficLightColor)[keyof typeof TrafficLightColor]
+export type TrafficLightColor = ValuesOf<typeof TrafficLightColor>
 
 export const TrafficLightColorSchema = z.enum(['green', 'orange', 'red'])

@@ -1,6 +1,8 @@
 import type { Food } from '@shared/domain'
 import { FoodCategory, TrafficLightColor } from '@shared/domain'
 import { detectOccultFromFood } from './occultSugarDetector'
+import { computeEnvironmentalScore } from '@shared/sustainability'
+import type { EnvironmentalScore } from '@shared/sustainability'
 
 /**
  * Classifies a food into Green/Orange/Red per FR-3.1 (Semáforo Nutricional, Modelo Hospital Rey Juan Carlos)
@@ -51,6 +53,8 @@ export function classifyFood(food: Food): TrafficLightColor {
 export interface ClassificationResult {
   color: TrafficLightColor
   reasons: string[]
+  /** Environmental sustainability score (ADR-007). Optional — degrades gracefully when carbon data is missing. */
+  environmentalScore?: EnvironmentalScore
 }
 
 export function classifyFoodWithReasons(food: Food): ClassificationResult {
@@ -72,5 +76,6 @@ export function classifyFoodWithReasons(food: Food): ClassificationResult {
   }
 
   const color = CATEGORY_DEFAULTS[food.category]
-  return { color, reasons }
+  const environmentalScore = computeEnvironmentalScore(food)
+  return { color, reasons, environmentalScore }
 }

@@ -10,6 +10,7 @@ describe('caloricTargetService', () => {
     gender: 'male',
     physicalActivityFactor: 1.2,
     imc: 27.7, // overweight
+    diagnosisAge: 50,
   }
 
   describe('BMR (Mifflin-St Jeor)', () => {
