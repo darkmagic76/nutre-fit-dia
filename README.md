@@ -24,6 +24,8 @@ Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y 
 | Oxlint | 1.71.0 | Linting basado en Rust |
 | jsdom | 29.1.1 | Entorno browser para tests |
 | Playwright | 1.61.1 | Tests E2E — flujo completo de usuario |
+| PWA | Manifest | Instalable como app en móvil (offline-ready) |
+| GitHub Actions | CI/CD | Lint → Typecheck → Tests → Build → E2E → Deploy |
 | pnpm | — | Gestor de paquetes rápido y eficiente en disco |
 
 ## Información sobre su instalación y ejecución
@@ -316,3 +318,44 @@ export function ScannerContainer() {
 Este ***Ecosistema de Autocuidado Integral para la DT2 y Salud Sostenible***, NO es una simple aplicación de bienestar; **es una herramienta de ingeniería médica de alta precisión**. La adopción de **Screaming Architecture** y la **Regla del Alcance** garantiza que ***la lógica de la Dieta Mediterránea y las restricciones de la AESAN 2022 sean inalterables y mantenibles***.
 
 Al implementar **un motor que penaliza los azúcares ocultos y restringe los cereales integrales a 4 raciones bajo régimen erMedDiet**, aseguramos ***la fidelidad absoluta a la evidencia científica***. Esta arquitectura no solo optimiza la eficiencia del desarrollo, sino que **posiciona al sistema como un estándar en la reducción de la HbA1c y la promoción de una salud sostenible tanto para el paciente como para el planeta**.
+
+## 9. PWA — Instalación en Dispositivos Móviles
+
+La aplicación es una **Progressive Web App (PWA)**. Se instala directamente desde el navegador sin necesidad de stores:
+
+1. Abrí `https://nutrefitdia.dev` en Chrome/Safari móvil
+2. Tocá **"Añadir a pantalla de inicio"** (Chrome) o **"Compartir → Añadir a inicio"** (Safari)
+3. La app se abre en modo standalone (sin barra del navegador)
+
+**Archivos PWA:** `public/manifest.json` | `public/favicon.svg` | `index.html` (theme-color + apple-touch-icon)
+
+## 10. CI/CD — Integración y Entrega Continua
+
+Pipeline automático en **GitHub Actions** (`.github/workflows/ci.yml`):
+
+```
+Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
+              │                    │
+              ├ pnpm audit         ├ lint + typecheck
+              └ gitleaks           ├ unit tests (387)
+                                   └ build (vite)
+```
+
+**Ramas protegidas:** `staging` (pre-producción) ← `develop` ← features
+
+## 11. Seguridad OWASP 2025
+
+| Control | Implementación |
+|---------|---------------|
+| CSP (Content-Security-Policy) | `default-src 'self'`, sin inline scripts, frame-ancestors 'none' |
+| X-Content-Type-Options | `nosniff` — previene MIME sniffing |
+| Referrer-Policy | `strict-origin-when-cross-origin` |
+| Permissions-Policy | Cámara, geolocalización, micrófono deshabilitados |
+| Base-uri | `'self'` — previene <base> injection |
+| Form-action | `'self'` — previene form hijacking |
+| Dependency audit | `pnpm audit --audit-level=high` en CI |
+| Secret scanning | Gitleaks en CI |
+| Security.txt | `/.well-known/security.txt` (RFC 9116) |
+| Runtime validation | Zod schemas en todas las entradas |
+| HTML sanitation | Sin `dangerouslySetInnerHTML`, sin `eval()` |
+| HTTPS | Requerido por CSP + PWA |
