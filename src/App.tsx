@@ -1,6 +1,6 @@
 import { TabButton, LegalDisclaimer } from '@shared/ui'
 import { useTabNavigation, TAB_IDS, TAB_ICONS, type Tab } from '@shared/hooks/useTabNavigation'
-import { useT } from '@shared/i18n'
+import { useT, useLocale } from '@shared/i18n'
 import { ScannerContainer } from '@features/nutritional-traffic-light/ScannerContainer'
 import { DailyLogContainer } from '@features/med-diet-validator/DailyLogContainer'
 import { MetabolicTrackerContainer } from '@features/metabolic-tracker/MetabolicTrackerContainer'
@@ -22,6 +22,7 @@ const TAB_LABEL_KEYS: Record<Tab, keyof ReturnType<typeof useT>> = {
 export default function App() {
   const { tab, setTab } = useTabNavigation()
   const t = useT()
+  const { locale, setLocale } = useLocale()
 
   return (
     <div className="min-h-screen bg-stone-100 text-stone-900">
@@ -30,6 +31,15 @@ export default function App() {
         <p className="text-center text-emerald-200 text-xs sm:text-sm mt-1">
           {t['app.subtitle']}
         </p>
+        <div className="flex justify-center mt-2">
+          <button
+            onClick={() => setLocale(locale === 'es' ? 'en' : 'es')}
+            className="text-xs bg-emerald-700 hover:bg-emerald-600 text-emerald-200 px-3 py-1 rounded-full transition-colors"
+            aria-label={locale === 'es' ? 'Switch to English' : 'Cambiar a Español'}
+          >
+            {locale === 'es' ? '🇬🇧 EN' : '🇪🇸 ES'}
+          </button>
+        </div>
         <nav
           className="flex justify-center gap-1 sm:gap-2 mt-4 flex-wrap overflow-x-auto px-2"
           role="tablist"

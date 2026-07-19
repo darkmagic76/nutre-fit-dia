@@ -58,4 +58,24 @@ test.describe('NutreFitDia E2E Smoke', () => {
     await expect(page.getByText(/BMR/i)).toBeVisible()
     await expect(page.getByText(/TDEE/i)).toBeVisible()
   })
+
+  test('switches to English and verifies translations', async ({ page }) => {
+    await page.goto('/')
+
+    // Click language toggle to switch to English
+    await page.getByRole('button', { name: /switch to english/i }).click()
+
+    // Verify English text appears
+    await expect(page.locator('h1')).toContainText('NutreFitDia')
+    await expect(page.getByText(/Comprehensive Self-Care/i)).toBeVisible()
+
+    // Verify tab labels are in English
+    await expect(page.getByRole('tab', { name: /traffic light/i })).toBeVisible()
+    await expect(page.getByRole('tab', { name: /today/i })).toBeVisible()
+    await expect(page.getByRole('tab', { name: /profile/i })).toBeVisible()
+
+    // Switch back to Spanish
+    await page.getByRole('button', { name: /cambiar a español/i }).click()
+    await expect(page.getByRole('tab', { name: /semáforo/i })).toBeVisible()
+  })
 })
