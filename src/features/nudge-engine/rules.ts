@@ -10,15 +10,6 @@ import {
 } from './cooldownDurations'
 import type { SafetyRule } from './types'
 
-/** High-glycemic fruits that trigger a safety alert when consumed */
-export const HIGH_GLYCEMIC_FRUITS: ReadonlySet<string> = new Set([
-  'uva',
-  'dátil',
-  'higo',
-  'pasa',
-  'plátano maduro',
-])
-
 /** All nudge rules evaluated by the engine */
 export const NUDGE_RULES: SafetyRule[] = [
   {

@@ -1,4 +1,4 @@
-import type { CaloricTargetOutput } from './services/caloricTargetService'
+import type { CaloricTargetOutput } from '@shared/services/caloricTargetService'
 import { Card } from '@shared/ui'
 import type { ValidationError } from '@shared/errors'
 import type { UserMetricsFormState } from '@shared/domain'

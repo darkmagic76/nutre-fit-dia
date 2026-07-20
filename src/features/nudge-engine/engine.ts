@@ -1,11 +1,10 @@
-import { useTrackerStore } from '@features/metabolic-tracker/store'
-import { useLogStore } from '@features/med-diet-validator/store'
-import { useActivityStore } from '@features/activity-tracker'
+import { useTrackerStore, useLogStore, useActivityStore } from '@shared/stores'
 import { countRations } from '@shared/services/rationValidator'
 import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES, type Food, type SystemNotification } from '@shared/domain'
 import { computeEnvironmentalScore, suggestAlternative } from '@shared/sustainability'
-import { getTrend } from '@features/metabolic-tracker/services/biomarkerTrackingService'
-import { HIGH_GLYCEMIC_FRUITS, NUDGE_RULES } from './rules'
+import { getTrend } from '@shared/services/biomarkerTrackingService'
+import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits'
+import { NUDGE_RULES } from './rules'
 import { CooldownTracker } from './cooldownTracker'
 import { useNudgeStore } from './store'
 import type { NudgeContext, NudgeEvaluation, SafetyRule } from './types'
@@ -28,7 +27,7 @@ export function buildNudgeContext(food?: Food): NudgeContext {
   const counts = countRations(todayLog)
 
   const containsHighGlycemicFruit = todayLog.some(
-    f => f.category === FoodCategory.FRUITS && HIGH_GLYCEMIC_FRUITS.has(f.name),
+    f => f.category === FoodCategory.FRUITS && HIGH_GLYCEMIC_FRUIT_NAMES.has(f.name.toLowerCase()),
   )
 
   const animalProteinCount = ANIMAL_PROTEIN_CATEGORIES.reduce(

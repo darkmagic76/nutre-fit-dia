@@ -2,8 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { buildNudgeContext, evaluateRules } from './engine'
 import { CooldownTracker } from './cooldownTracker'
 import { NUDGE_RULES } from './rules'
-import { useTrackerStore } from '@features/metabolic-tracker/store'
-import { useLogStore } from '@features/med-diet-validator/store'
+import { useTrackerStore, useLogStore } from '@shared/stores'
 import { FoodCategory } from '@shared/domain'
 import { makeFood } from '@/test/fixtures'
 
@@ -15,7 +14,7 @@ const cerealFood = makeFood({
 
 const glycemicFruitFood = makeFood({
   id: 'gf1',
-  name: 'uva',
+  name: 'Uvas',
   category: FoodCategory.FRUITS,
 })
 

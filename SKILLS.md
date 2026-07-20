@@ -1,12 +1,9 @@
 # SKILLS PROMPTS
 
-## DDD
+## DDD INSTRUCCIONES
 
 ```text
-Actúa con un Arquitecto de Software experto en Domain Driven Development DDD. 
-Analiza el texto de requisitos para una aplicación orientada a la nutrición. 
-Identifica posibles Bounded Contexts y señálame que terminos son polisémicos 
-(significan cosas distintas según quien los lea.)
+Actúa como un Arquitecto de Software experto en Domain Driven Development (DDD). Analiza el texto de requisitos [[INFORME_ADR.md]] para una aplicación orientada a la nutrición. Identifica posibles Bounded Contexts y señálame que terminos son polisémicos (significan cosas distintas según quien los lea.)
 
 1. Analizar requisitos crudos y ambiguos.
 2. Detectar conflictos de lengua y polisemia.
@@ -186,3 +183,47 @@ function calculateBulkDiscount(item, quantity) {
 ├── Data Class (clase de datos)
 ├── Temporary Field (campo temporal)
 └── Magic Numbers (números mágicos)```
+```
+
+## METODOLOGÍA DE TRABAJO para recordar en una nueva sesion
+
+1. TDD (Test-Driven Development):
+   - Siempre escribir el test PRIMERO
+   - Verificar que FALLA (Red)
+   - Implementar código MÍNIMO para pasar (Green)
+   - Refactorizar si es necesario
+
+2. Scope Rule para organización de carpetas:
+   - GLOBAL SCOPE (src/shared/): Código usado en múltiples features
+     → types/, utils/, constants/, components/, strategies/, hooks/
+   - LOCAL SCOPE (src/features/X/): Código específico de una feature
+     → activity-tracker/, med-diet-validator/, metabolic-tracker/, nudge-tracker/, nutritional-traffic-light/, recipe-engine/, sustainability/
+   - Context global: src/context/
+   - Infraestructura: src/infrastructure/
+
+3. Verificación continua:
+   - Después de cada feature: pnpm test:run && pnpm build
+   - Después de E2E: agregar pnpm test:e2e
+   - Al final: pnpm verify (lint + typecheck + tests + e2e + build)
+
+4. Roles:
+   - MI ROL COMO DESARROLLADOR:
+     - Te daré los REQUISITOS de lo que necesito
+     - Tú generas el código basándote en esos requisitos
+     - Yo ejecuto, verifico que funciona, y continuamos
+
+   - TU ROL COMO ASISTENTE:
+     - NO me des código que no te pida
+     - Cuando pida un TEST, genera SOLO el test
+     - Cuando pida la IMPLEMENTACIÓN, genera SOLO la implementación
+     - Sigue las convenciones del proyecto (Scope Rule, TDD, etc.)
+     - Si algo no está claro, pregunta antes de generar
+
+- REGLAS DE CÓDIGO:
+  - TypeScript estricto
+  - Tailwind CSS para estilos
+  - Testing Library con queries accesibles (getByRole > getByTestId)
+  - Componentes funcionales con hooks
+  - Nombres descriptivos en inglés
+  - APLICA Lenguaje Ubicuo:
+    - SI el experto dice "Generate Plan", el código dice .generatePlan(). NO .insertRow()

@@ -1,16 +1,6 @@
 import type { Food } from '@shared/domain'
 import type { SafetyAlert } from '@shared/services/rationValidator'
-
-/**
- * FR-4.1 / INFORME_ADR: Fruits with high glycemic load that trigger a soft warning.
- * Uvas, dátiles, higos per INFORME_ADR §2 (Frutas — Alerta: Alta carga glucémica).
- */
-const HIGH_GLYCEMIC_FRUIT_NAMES = new Set([
-  'uvas',
-  'dátiles',
-  'higos',
-  'uvas pasas',
-])
+import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits'
 
 /**
  * Check a scanned food for safety concerns.

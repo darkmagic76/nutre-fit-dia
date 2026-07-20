@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { NUDGE_RULES, HIGH_GLYCEMIC_FRUITS } from './rules'
+import { NUDGE_RULES } from './rules'
+import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits'
 import { emptyCounts } from '@shared/services/rationValidator'
 import { FoodCategory } from '@shared/domain'
 import type { NudgeContext } from './types'
@@ -106,17 +107,17 @@ describe('NUDGE_RULES', () => {
   })
 })
 
-describe('HIGH_GLYCEMIC_FRUITS set', () => {
+describe('HIGH_GLYCEMIC_FRUIT_NAMES set', () => {
   it('contains known high-glycemic fruits', () => {
-    expect(HIGH_GLYCEMIC_FRUITS.has('uva')).toBe(true)
-    expect(HIGH_GLYCEMIC_FRUITS.has('dátil')).toBe(true)
-    expect(HIGH_GLYCEMIC_FRUITS.has('higo')).toBe(true)
-    expect(HIGH_GLYCEMIC_FRUITS.has('pasa')).toBe(true)
-    expect(HIGH_GLYCEMIC_FRUITS.has('plátano maduro')).toBe(true)
+    expect(HIGH_GLYCEMIC_FRUIT_NAMES.has('uvas')).toBe(true)
+    expect(HIGH_GLYCEMIC_FRUIT_NAMES.has('dátiles')).toBe(true)
+    expect(HIGH_GLYCEMIC_FRUIT_NAMES.has('higos')).toBe(true)
+    expect(HIGH_GLYCEMIC_FRUIT_NAMES.has('uvas pasas')).toBe(true)
+    expect(HIGH_GLYCEMIC_FRUIT_NAMES.has('plátano maduro')).toBe(true)
   })
 
   it('does not contain low-glycemic fruits like manzana', () => {
-    expect(HIGH_GLYCEMIC_FRUITS.has('manzana')).toBe(false)
+    expect(HIGH_GLYCEMIC_FRUIT_NAMES.has('manzana')).toBe(false)
   })
 })
 

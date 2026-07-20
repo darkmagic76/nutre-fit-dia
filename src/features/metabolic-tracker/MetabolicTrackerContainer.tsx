@@ -1,4 +1,4 @@
-import { useTrackerStore } from './store'
+import { useTrackerStore } from '@shared/stores'
 import { MetabolicTrackerView } from './MetabolicTrackerView'
 import type { FormEvent } from 'react'
 

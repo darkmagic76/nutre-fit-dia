@@ -1,5 +1,4 @@
-import { useLogStore } from './store'
-import { useTrackerStore } from '@features/metabolic-tracker/store'
+import { useLogStore, useTrackerStore } from '@shared/stores'
 import { DailyLogView } from './DailyLogView'
 
 export function DailyLogContainer() {

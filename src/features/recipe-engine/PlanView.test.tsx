@@ -3,7 +3,6 @@ import { render, screen, type RenderOptions } from '@testing-library/react'
 import { PlanView } from './PlanView'
 import { FoodCategory, food } from '@shared/domain'
 import { MealType, type WeeklyPlan } from './services/planGenerator'
-import { useTrackerStore } from '@features/metabolic-tracker/store'
 import { I18nProvider } from '@shared/i18n'
 import { type ReactElement } from 'react'
 
@@ -61,6 +60,7 @@ const invalidPlan: WeeklyPlan = {
 describe('PlanView', () => {
   const defaultProps = {
     restrictionActive: false,
+    caloricTarget: null as { target: number; bmr: number; tdee: number; deficit: number; restrictionActive: boolean } | null,
     weeklyPlan: null as WeeklyPlan | null,
     onToggleRestriction: vi.fn(),
     onGeneratePlan: vi.fn(),
@@ -335,37 +335,30 @@ describe('PlanView', () => {
       // 2× foodA (100kcal/100g, 50g) each → (100*50/100)*2 = 100 kcal
       // 1× foodB (200kcal/100g, 100g) → (200*100/100)*1 = 200 kcal
       // Total LUNCH: 300 kcal, % = 300/2000*100 = 15%
-      useTrackerStore.setState({
-        caloricTarget: { target: 2000, bmr: 1500, tdee: 2000, deficit: 0, restrictionActive: false },
-      })
       const plan = kcalPlan([
         { food: kcalFood('a', 'FoodA', FoodCategory.CEREALS, 100, 50), rations: 2, mealType: MealType.LUNCH },
         { food: kcalFood('b', 'FoodB', FoodCategory.VEGETABLES, 200, 100), rations: 1, mealType: MealType.LUNCH },
       ])
-      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} caloricTarget={{ target: 2000, bmr: 1500, tdee: 2000, deficit: 0, restrictionActive: false }} />)
       const header = screen.getByRole('heading', { level: 3, name: /almuerzo/i })
       expect(header).toHaveTextContent(/3\d{2}.*kcal/i)
       expect(header).toHaveTextContent(/1[5-9]%/i) // 15%
     })
 
     it('shows — when caloricTarget is null', () => {
-      useTrackerStore.setState({ caloricTarget: null })
       const plan = kcalPlan([
         { food: kcalFood('a', 'FoodA', FoodCategory.CEREALS, 100, 50), rations: 1, mealType: MealType.BREAKFAST },
       ])
-      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} caloricTarget={null} />)
       const header = screen.getByRole('heading', { level: 3, name: /desayuno/i })
       expect(header).toHaveTextContent(/—/)
     })
 
     it('shows — when caloricTarget.target is zero', () => {
-      useTrackerStore.setState({
-        caloricTarget: { target: 0, bmr: 0, tdee: 0, deficit: 0, restrictionActive: false },
-      })
       const plan = kcalPlan([
         { food: kcalFood('a', 'FoodA', FoodCategory.CEREALS, 100, 50), rations: 1, mealType: MealType.BREAKFAST },
       ])
-      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} />)
+      renderPlan(<PlanView {...defaultProps} weeklyPlan={plan} caloricTarget={{ target: 0, bmr: 0, tdee: 0, deficit: 0, restrictionActive: false }} />)
       const header = screen.getByRole('heading', { level: 3, name: /desayuno/i })
       expect(header).toHaveTextContent(/—/)
     })

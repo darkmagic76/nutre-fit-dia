@@ -1,5 +1,5 @@
 import { StatCard } from '@shared/ui'
-import type { CaloricTargetOutput } from '@features/metabolic-tracker/services/caloricTargetService'
+import type { CaloricTargetOutput } from '@shared/services/caloricTargetService'
 
 interface CaloricSummaryProps {
   caloricTarget: CaloricTargetOutput

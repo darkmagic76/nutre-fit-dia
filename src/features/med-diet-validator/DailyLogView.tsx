@@ -1,6 +1,6 @@
 import { Card } from '@shared/ui'
 import type { Food } from '@shared/domain'
-import type { CaloricTargetOutput } from '@features/metabolic-tracker/services/caloricTargetService'
+import type { CaloricTargetOutput } from '@shared/services/caloricTargetService'
 import type { ValidationResult } from '@shared/services/rationValidator'
 import { CaloricSummary } from './components/CaloricSummary'
 import { FoodList } from './components/FoodList'

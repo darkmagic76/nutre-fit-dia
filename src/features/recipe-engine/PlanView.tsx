@@ -2,8 +2,8 @@ import { CATEGORY_DISPLAY_NAMES } from '@shared/domain'
 import type { CulturalMetadata, Food } from '@shared/domain'
 import { Card, PrimaryButton, ViolationList, LegalDisclaimer } from '@shared/ui'
 import { MealType, type MealEntry, type WeeklyPlan } from './services/planGenerator'
-import { useTrackerStore } from '@features/metabolic-tracker/store'
 import { useT } from '@shared/i18n'
+import type { CaloricTargetOutput } from '@shared/services/caloricTargetService'
 
 function computeMealKcal(entries: MealEntry[]): number {
   return entries.reduce((sum, e) => {
@@ -46,6 +46,7 @@ function CulturalBadges({ meta }: { meta: CulturalMetadata }) {
 
 interface PlanViewProps {
   restrictionActive: boolean
+  caloricTarget: CaloricTargetOutput | null
   weeklyPlan: WeeklyPlan | null
   onToggleRestriction: (active: boolean) => void
   onGeneratePlan: () => void
@@ -62,6 +63,7 @@ function ZeroWasteBadges({ food }: { food: Food }) {
 
 export function PlanView({
   restrictionActive,
+  caloricTarget,
   weeklyPlan,
   onToggleRestriction,
   onGeneratePlan,
@@ -134,8 +136,6 @@ export function PlanView({
                 const list = groups.get(meal)
                 if (list) list.push(entry)
               }
-
-              const caloricTarget = useTrackerStore.getState().caloricTarget
 
               return (
                 <details key={day.day} className="bg-stone-50 rounded-lg">

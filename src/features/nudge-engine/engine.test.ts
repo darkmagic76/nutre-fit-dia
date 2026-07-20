@@ -2,8 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest'
 import { buildNudgeContext, evaluateRules } from './engine'
 import { CooldownTracker } from './cooldownTracker'
 import { NUDGE_RULES } from './rules'
-import { useTrackerStore } from '@features/metabolic-tracker/store'
-import { useLogStore } from '@features/med-diet-validator/store'
+import { useTrackerStore, useLogStore } from '@shared/stores'
 import { FoodCategory } from '@shared/domain'
 import { makeFood } from '@/test/fixtures'
 import { emptyCounts } from '@shared/services/rationValidator'
@@ -17,7 +16,7 @@ const cerealFood = makeFood({
 
 const glycemicFruit = makeFood({
   id: 'gf1',
-  name: 'uva',
+  name: 'Uvas',
   category: FoodCategory.FRUITS,
 })
 
@@ -38,7 +37,7 @@ describe('buildNudgeContext', () => {
     expect(typeof ctx.currentHour).toBe('number')
   })
 
-  it('detects high-glycemic fruit when food is FRUITS and name in HIGH_GLYCEMIC_FRUITS', () => {
+  it('detects high-glycemic fruit when food is FRUITS and name in glycemic set', () => {
     useLogStore.setState({ todayLog: [glycemicFruit] })
 
     const ctx = buildNudgeContext()
@@ -53,10 +52,10 @@ describe('buildNudgeContext', () => {
     expect(ctx.counts[FoodCategory.FRUITS]).toBe(0)
   })
 
-  it('category gate: uva in non-FRUITS category does NOT set containsHighGlycemicFruit', () => {
+  it('category gate: Uvas in non-FRUITS category does NOT set containsHighGlycemicFruit', () => {
     const nonFruitGlycemic = makeFood({
       id: 'gf2',
-      name: 'uva',
+      name: 'Uvas',
       category: FoodCategory.VEGETABLES,
     })
     useLogStore.setState({ todayLog: [nonFruitGlycemic] })

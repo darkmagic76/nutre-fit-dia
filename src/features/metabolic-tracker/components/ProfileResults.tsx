@@ -1,5 +1,5 @@
 import { StatCard } from '@shared/ui'
-import type { CaloricTargetOutput } from '../services/caloricTargetService'
+import type { CaloricTargetOutput } from '@shared/services/caloricTargetService'
 import { useT } from '@shared/i18n'
 
 interface ProfileResultsProps {
