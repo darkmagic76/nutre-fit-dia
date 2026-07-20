@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { ThemeProvider } from '@shared/theme'
 import { I18nProvider } from '@shared/i18n'
 import App from './App'
 
@@ -47,14 +46,11 @@ describe('App', () => {
 
   it('renders and shows controls bar with locale toggle', () => {
     render(
-      <ThemeProvider>
-        <I18nProvider>
-          <App />
-        </I18nProvider>
-      </ThemeProvider>
+      <I18nProvider>
+        <App />
+      </I18nProvider>
     )
 
     expect(screen.getByText('🇬🇧 EN')).toBeInTheDocument()
-    expect(screen.getByTestId('theme-toggle')).toBeInTheDocument()
   })
 })

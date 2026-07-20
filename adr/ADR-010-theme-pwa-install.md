@@ -1,50 +1,16 @@
-# ADR-010: Dark Theme & PWA Install Strategy
+# ADR-010: PWA Install Strategy
 
-**Status:** Accepted  
-**Date:** 2026-07-20  
+**Status:** Superseded — Dark theme removed 2026-07-20 (no clinical value for DT2 app)
+**Date:** 2026-07-20
 **Deciders:** darkmagic76, gentle-orchestrator
 
 ## Context
 
-The application needs light/dark/system theme toggling and a PWA install prompt. Two design questions arise:
+The `beforeinstallprompt` event allows PWA installation on Chromium-based browsers. We must capture it, defer it, and provide a UI affordance without blocking the user.
 
-1. **Theme strategy**: Tailwind v4 removed `darkMode: 'class'` from config. The v4 approach uses `@custom-variant dark`. We must decide how to apply `.dark` and how to prevent a flash of light mode on cold load.
-2. **PWA install**: The `beforeinstallprompt` event is non-standard and fires only in Chromium-based browsers. We must capture it, defer it, and provide a UI affordance without blocking the user.
+**Dark theme decision (removed)**: A manual light/dark/system toggle was implemented initially but later removed. The toggle provided no clinical value for a Type 2 Diabetes management application. Tailwind v4 respects `prefers-color-scheme` natively via media query — no JavaScript needed.
 
 ## Decision
-
-### Dark Theme: CSS Class Strategy with `@custom-variant dark`
-
-| Option | Tradeoffs | Decision |
-|--------|-----------|----------|
-| `prefers-color-scheme` media only | Ignores user override; cannot toggle independently of OS | ❌ Rejected |
-| CSS class `.dark` on `<html>` | Enables user choice; matches Tailwind v4's recommended `@custom-variant` approach | ✅ **Adopted** |
-| Zustand store for theme state | Adds dependency for a single boolean; existing codebase uses Context for i18n | ✅ **React Context** (mirrors I18nProvider pattern) |
-
-The theme system mirrors `I18nProvider`:
-- `ThemeContextValue.ts` — `createContext<ThemeContextValue | null>(null)`
-- `ThemeContext.tsx` — provider: reads `localStorage('nutrefitdia-theme')`, listens to `matchMedia('prefers-color-scheme: dark')`, toggles `.dark` on `<html>`
-- `useTheme.ts` — guarded hook with descriptive error
-
-**3-state cycle**: `light → dark → system → light`. The `NEXT` map is a `Record<Theme, Theme>` inline constant. `'system'` resolves the effective mode via `matchMedia`, so the user's OS setting is respected as the middle-ground state.
-
-**Dark flash prevention**: An inline `<script>` before `<div id="root">` reads localStorage synchronously and applies `.dark` before React hydrates. The script is exempted from CSP via a SHA-256 hash, not `'unsafe-inline'`.
-
-### Separate ThemeProvider (NOT merged with I18nProvider)
-
-| Option | Tradeoffs | Decision |
-|--------|-----------|----------|
-| Combine ThemeProvider into I18nProvider | Couples theme to i18n; violates Scope Rule — theme is used by UI, i18n is used by everything | ❌ Rejected |
-| Separate ThemeProvider wrapping I18nProvider | Clean separation; theme does not need i18n and vice versa | ✅ **Adopted** |
-
-The component tree becomes:
-```
-<ThemeProvider>
-  <I18nProvider>
-    <App>...</App>
-  </I18nProvider>
-</ThemeProvider>
-```
 
 ### PWA Install: `beforeinstallprompt` Event Capture
 
@@ -58,39 +24,18 @@ The `useInstallPrompt` hook:
 
 The cooldown is read on mount — if 7 days have not passed since dismissal, `isInstallable` stays `false` even if the event fires again.
 
-### CSP Hash Exemption
-
-The current CSP has `script-src 'self'` — no `'unsafe-inline'`. Adding an inline `<script>` for dark flash prevention requires a SHA-256 hash exemption:
-
-```html
-<meta http-equiv="Content-Security-Policy"
-  content="... script-src 'self' 'sha256-<COMPUTED>'; ..." />
-```
-
-The hash is computed at implementation time from the minified script body.
-
 ## Consequences
 
-- ✅ User can override OS theme preference with an explicit light or dark choice
-- ✅ `'system'` mode respects OS setting and reacts to live changes via `matchMedia` listener
-- ✅ `localStorage` persistence means theme survives page reloads without network
-- ✅ No flash of light theme on cold load when user prefers dark (inline script runs before React)
-- ✅ CSP remains secure — no `'unsafe-inline'`, only a specific hash for the known inline script
 - ✅ PWA install is deferred, non-blocking, and respects user dismissal for 7 days
-- ❌ Theme context adds a second provider wrapper (minor nesting increase)
+- ✅ `manifest.json` includes `dark_theme_color: "#0c0a09"` for browser chrome
+- ✅ `prefers-color-scheme` media query handles dark mode automatically — no JS, no toggle
 - ❌ `beforeinstallprompt` only works in Chromium — other browsers never show the install button
 
 ## Traceability
 
 | Requirement | Covered by |
 |---|---|
-| Spec: ThemeProvider renders children | ThemeContext.tsx wraps children |
-| Spec: Missing provider guard | useTheme throws descriptive error |
-| Spec: Theme resolution 3-state | NEXT map: light→dark→system→light |
-| Spec: Persistence to localStorage | Read on mount, write on setTheme |
-| Spec: Cold start defaults to system | Default `'system'` if no localStorage key |
-| Spec: Dark flash prevention | Inline script + CSP SHA-256 hash |
-| Spec: ThemeToggle 3-state cycle | Presentational component, parent calls setTheme |
-| Spec: Manifest dark_theme_color | manifest.json `dark_theme_color: "#0c0a09"` |
-| Design: React Context | Mirror of I18nProvider pattern |
-| Design: Tailwind v4 @custom-variant dark | `src/index.css` line after `@import "tailwindcss"` |
+| Spec: beforeinstallprompt capture | useInstallPrompt hook |
+| Spec: InstallPrompt conditional render | App.tsx renders when isInstallable=true |
+| Spec: 7-day dismiss cooldown | localStorage nutrefitdia-install-dismissed |
+| Design: Non-blocking install | Deferred prompt, user initiates |

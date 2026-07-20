@@ -14,7 +14,6 @@ import {
 
 import App from './App'
 import { I18nProvider } from '@shared/i18n'
-import { ThemeProvider } from '@shared/theme'
 
 function createLocalStorage() {
   const store: Record<string, string> = {}
@@ -48,9 +47,7 @@ function createMatchMedia(matches: boolean) {
 
 function renderApp() {
   return render(
-    <ThemeProvider>
-      <I18nProvider><App /></I18nProvider>
-    </ThemeProvider>
+    <I18nProvider><App /></I18nProvider>
   )
 }
 

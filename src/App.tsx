@@ -1,7 +1,6 @@
-import { TabButton, LegalDisclaimer, ThemeToggle, InstallPrompt } from '@shared/ui'
+import { TabButton, LegalDisclaimer, InstallPrompt } from '@shared/ui'
 import { useTabNavigation, TAB_IDS, TAB_ICONS, type Tab } from '@shared/hooks/useTabNavigation'
 import { useT, useLocale } from '@shared/i18n'
-import { useTheme } from '@shared/theme'
 import { useInstallPrompt } from '@shared/hooks/useInstallPrompt'
 import { NutritionalTrafficLightContainer } from '@features/nutritional-traffic-light/NutritionalTrafficLightContainer'
 import { MedDietValidatorContainer } from '@features/med-diet-validator/MedDietValidatorContainer'
@@ -25,7 +24,6 @@ export default function App() {
   const { tab, setTab } = useTabNavigation()
   const t = useT()
   const { locale, setLocale } = useLocale()
-  const { theme, toggleTheme } = useTheme()
   const { isInstallable, install, dismiss } = useInstallPrompt()
 
   return (
@@ -43,7 +41,6 @@ export default function App() {
           >
             {locale === 'es' ? '🇬🇧 EN' : '🇪🇸 ES'}
           </button>
-          <ThemeToggle theme={theme} onToggle={toggleTheme} t={t} />
           {isInstallable && <InstallPrompt isInstallable={isInstallable} onInstall={install} onDismiss={dismiss} t={t} />}
         </div>
         <nav
