@@ -84,6 +84,14 @@ export const en: Translations = {
   'sustainability.emissions': 'Comparative Emissions',
   'sustainability.emissionsDesc': 'kg CO₂eq per kg of food (EAT-Lancet)',
 
+  'theme.system': 'System',
+  'theme.light': 'Light',
+  'theme.dark': 'Dark',
+  'theme.toggle': 'Toggle theme',
+
+  'install.title': 'Install app',
+  'install.dismiss': 'Dismiss',
+
   'legal.disclaimer': '⚕️ All recommendations, quantities and nutritional plans must be validated by a registered dietitian-nutritionist.',
 
   'form.weight': 'Weight (kg)',

@@ -1,6 +1,8 @@
-import { TabButton, LegalDisclaimer } from '@shared/ui'
+import { TabButton, LegalDisclaimer, ThemeToggle, InstallPrompt } from '@shared/ui'
 import { useTabNavigation, TAB_IDS, TAB_ICONS, type Tab } from '@shared/hooks/useTabNavigation'
 import { useT, useLocale } from '@shared/i18n'
+import { useTheme } from '@shared/theme'
+import { useInstallPrompt } from '@shared/hooks/useInstallPrompt'
 import { ScannerContainer } from '@features/nutritional-traffic-light/ScannerContainer'
 import { DailyLogContainer } from '@features/med-diet-validator/DailyLogContainer'
 import { MetabolicTrackerContainer } from '@features/metabolic-tracker/MetabolicTrackerContainer'
@@ -23,15 +25,17 @@ export default function App() {
   const { tab, setTab } = useTabNavigation()
   const t = useT()
   const { locale, setLocale } = useLocale()
+  const { theme, toggleTheme } = useTheme()
+  const { isInstallable, install, dismiss } = useInstallPrompt()
 
   return (
-    <div className="min-h-screen bg-stone-100 text-stone-900">
+    <div className="min-h-screen bg-stone-100 text-stone-900 dark:bg-stone-900 dark:text-stone-100">
       <header className="bg-emerald-800 text-white p-4 sm:p-6" role="banner">
         <h1 className="text-2xl sm:text-3xl font-bold text-center">{t['app.title']}</h1>
         <p className="text-center text-emerald-200 text-xs sm:text-sm mt-1">
           {t['app.subtitle']}
         </p>
-        <div className="flex justify-center mt-2">
+        <div className="flex gap-2 justify-center mt-2">
           <button
             onClick={() => setLocale(locale === 'es' ? 'en' : 'es')}
             className="text-xs bg-emerald-700 hover:bg-emerald-600 text-emerald-200 px-3 py-1 rounded-full transition-colors"
@@ -39,6 +43,8 @@ export default function App() {
           >
             {locale === 'es' ? '🇬🇧 EN' : '🇪🇸 ES'}
           </button>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} t={t} />
+          {isInstallable && <InstallPrompt isInstallable={isInstallable} onInstall={install} onDismiss={dismiss} t={t} />}
         </div>
         <nav
           className="flex justify-center gap-1 sm:gap-2 mt-4 flex-wrap overflow-x-auto px-2"

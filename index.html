@@ -5,12 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Ecosistema de Autocuidado Integral para Diabetes Tipo 2 y Salud Sostenible basado en la Dieta Mediterránea erMedDiet" />
-    <meta name="theme-color" content="#065f46" />
+    <meta name="theme-color" content="#f5f5f4" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0c0a09" media="(prefers-color-scheme: dark)">
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+      content="default-src 'self'; script-src 'self' 'sha256-Ydpqv/H4xoBMbjHG+TAEwxDl4CTdljfxQmbF1FqFDTI='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
     />
     <meta http-equiv="Permissions-Policy" content="camera=(), geolocation=(), microphone=()" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
@@ -18,6 +19,7 @@
     <title>NutreFitDia — Salud Metabólica y Sostenibilidad</title>
   </head>
   <body>
+    <script>(function(){try{var t=JSON.parse(localStorage.getItem('nutrefitdia-theme'));if(t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark')}catch(e){}})()</script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

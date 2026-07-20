@@ -1,10 +1,60 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { ThemeProvider } from '@shared/theme'
+import { I18nProvider } from '@shared/i18n'
+import App from './App'
 
-describe('App smoke test', () => {
-  it('renders without crashing', () => {
-    const root = document.createElement('div')
-    root.id = 'root'
-    document.body.appendChild(root)
-    expect(document.getElementById('root')).toBeTruthy()
+function createLocalStorage() {
+  const store: Record<string, string> = {}
+  return {
+    getItem: vi.fn((key: string) => store[key] ?? null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key]
+    }),
+    clear: vi.fn(() => {
+      Object.keys(store).forEach((k) => delete store[k])
+    }),
+    get length() {
+      return Object.keys(store).length
+    },
+    key: vi.fn(() => null),
+  }
+}
+
+function createMatchMedia(matches: boolean) {
+  return {
+    matches,
+    media: '(prefers-color-scheme: dark)',
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }
+}
+
+describe('App', () => {
+  beforeEach(() => {
+    vi.stubGlobal('localStorage', createLocalStorage())
+    vi.stubGlobal('matchMedia', vi.fn(() => createMatchMedia(false)))
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+    vi.unstubAllGlobals()
+  })
+
+  it('renders and shows controls bar with locale toggle', () => {
+    render(
+      <ThemeProvider>
+        <I18nProvider>
+          <App />
+        </I18nProvider>
+      </ThemeProvider>
+    )
+
+    expect(screen.getByText('🇬🇧 EN')).toBeInTheDocument()
+    expect(screen.getByTestId('theme-toggle')).toBeInTheDocument()
   })
 })

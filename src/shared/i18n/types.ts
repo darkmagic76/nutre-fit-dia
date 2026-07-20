@@ -96,6 +96,16 @@ export interface Translations {
   // Legal
   'legal.disclaimer': string
 
+  // Theme (light/dark/system)
+  'theme.system': string
+  'theme.light': string
+  'theme.dark': string
+  'theme.toggle': string
+
+  // PWA Install
+  'install.title': string
+  'install.dismiss': string
+
   // Form labels
   'form.weight': string
   'form.height': string
