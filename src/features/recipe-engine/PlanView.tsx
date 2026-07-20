@@ -29,6 +29,7 @@ const COOKING_LABELS: Record<string, string> = {
 }
 
 function CulturalBadges({ meta }: { meta: CulturalMetadata }) {
+  const t = useT()
   return (
     <>
       <span className="inline-flex gap-1 ml-1" aria-label="Metadata cultural UNESCO">
@@ -36,9 +37,9 @@ function CulturalBadges({ meta }: { meta: CulturalMetadata }) {
         {meta.socialEating && <span title="Comida en compañía" aria-label="Comida en compañía"><span aria-hidden="true">👥</span></span>}
         {meta.erMedDiet && <span title="erMedDiet" aria-label="erMedDiet"><span aria-hidden="true">🌿</span></span>}
       </span>
-      {meta.socialEating && <span className="text-xs text-emerald-700 ml-1">Ideal para comer en compañía</span>}
+      {meta.socialEating && <span className="text-xs text-emerald-700 ml-1">{t['cultural.socialEating']}</span>}
       {meta.cookingTechnique && COOKING_LABELS[meta.cookingTechnique] && (
-        <span className="text-xs text-stone-500 ml-1">Preparación: {COOKING_LABELS[meta.cookingTechnique]}</span>
+        <span className="text-xs text-stone-500 ml-1">{t['cultural.preparation']}: {COOKING_LABELS[meta.cookingTechnique]}</span>
       )}
     </>
   )

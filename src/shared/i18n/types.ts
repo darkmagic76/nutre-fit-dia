@@ -41,6 +41,9 @@ export interface Translations {
   'scanner.description': string
   'scanner.emptySelection': string
   'scanner.noFoodSelected': string
+  'scanner.trafficGreen': string
+  'scanner.trafficOrange': string
+  'scanner.trafficRed': string
 
   // DailyLog
   'log.title': string
@@ -92,6 +95,10 @@ export interface Translations {
   'sustainability.zeroWasteFooter': string
   'sustainability.emissions': string
   'sustainability.emissionsDesc': string
+
+  // Cultural / UNESCO
+  'cultural.socialEating': string
+  'cultural.preparation': string
 
   // Legal
   'legal.disclaimer': string

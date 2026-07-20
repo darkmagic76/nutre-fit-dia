@@ -38,6 +38,9 @@ export const en: Translations = {
   'scanner.description': 'Dual classification (health + sustainability)',
   'scanner.emptySelection': '—',
   'scanner.noFoodSelected': 'Select a food to begin',
+  'scanner.trafficGreen': 'Recommended',
+  'scanner.trafficOrange': 'Moderate',
+  'scanner.trafficRed': 'Avoid',
 
   'log.title': '📝 Daily Log',
   'log.description': 'Ration validation per AESAN 2022',
@@ -106,4 +109,7 @@ export const en: Translations = {
   'form.glucoseContext': 'Glucose context',
   'form.glucoseFasting': 'Fasting',
   'form.glucosePostprandial': 'Postprandial',
+
+  'cultural.socialEating': 'Ideal for sharing',
+  'cultural.preparation': 'Preparation',
 }

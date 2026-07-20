@@ -12,12 +12,6 @@ const TRAFFIC_COLORS: Record<string, string> = {
   [TrafficLightColor.RED]: 'bg-red-500',
 }
 
-const TRAFFIC_LABELS: Record<string, string> = {
-  [TrafficLightColor.GREEN]: 'Recomendable',
-  [TrafficLightColor.ORANGE]: 'Moderación',
-  [TrafficLightColor.RED]: 'Evitar',
-}
-
 interface ScannerViewProps {
   selectedId: string
   options: Array<{ value: string; label: string }>
@@ -42,6 +36,12 @@ export function ScannerView({
   onAcknowledgeAlert,
 }: ScannerViewProps) {
   const t = useT()
+
+  const trafficLabel = (color: string) => {
+    if (color === TrafficLightColor.GREEN) return t['scanner.trafficGreen']
+    if (color === TrafficLightColor.ORANGE) return t['scanner.trafficOrange']
+    return t['scanner.trafficRed']
+  }
 
   return (
     <Card title={t['scanner.title']} description={t['scanner.description']}>
@@ -83,9 +83,9 @@ export function ScannerView({
           className={`p-4 rounded-lg text-white ${TRAFFIC_COLORS[result.color]}`}
           role="status"
           aria-live="polite"
-          aria-label={`Clasificación: ${TRAFFIC_LABELS[result.color]}`}
+          aria-label={`Clasificación: ${trafficLabel(result.color)}`}
         >
-          <p className="text-xl font-bold">{TRAFFIC_LABELS[result.color]}</p>
+          <p className="text-xl font-bold">{trafficLabel(result.color)}</p>
           {result.reasons.map((r, i) => (
             <p key={i} className="text-sm mt-1 opacity-90">{r}</p>
           ))}
