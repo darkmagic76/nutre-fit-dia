@@ -4,7 +4,6 @@ interface NudgePanelViewProps {
   pending: SystemNotification[]
   history: SystemNotification[]
   onDismiss: (id: string) => void
-  onAcknowledge: (id: string) => void
 }
 
 export function NudgePanelView({

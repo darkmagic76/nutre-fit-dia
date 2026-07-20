@@ -13,7 +13,6 @@ interface LogState {
 
   addFoodToLog: (food: Food) => void
   removeFoodFromLog: (index: number) => void
-  validateToday: () => void
 }
 
 function evaluateLog(log: Food[]) {
@@ -36,10 +35,5 @@ export const useLogStore = create<LogState>((set, get) => ({
     const { todayLog } = get()
     const log = todayLog.filter((_, i) => i !== index)
     set({ todayLog: log, todayValidation: evaluateLog(log) })
-  },
-
-  validateToday: () => {
-    const { todayLog } = get()
-    set({ todayValidation: evaluateLog(todayLog) })
   },
 }))

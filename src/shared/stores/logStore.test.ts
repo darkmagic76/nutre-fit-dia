@@ -60,14 +60,6 @@ describe('logStore', () => {
     expect(useLogStore.getState().todayValidation).not.toBeNull()
   })
 
-  it('validateToday recomputes validation', () => {
-    useLogStore.setState({ todayValidation: null })
-    useLogStore.getState().validateToday()
-
-    const state = useLogStore.getState()
-    expect(state.todayValidation).not.toBeNull()
-  })
-
   it('reads restrictionActive from trackerStore cross-feature', () => {
     useTrackerStore.setState({ restrictionActive: true })
 

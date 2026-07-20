@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { computeIMC, imcClassification, isRestrictionCandidate } from './imc'
+import { computeIMC, isRestrictionCandidate } from './imc'
 
 describe('computeIMC', () => {
   it('computes IMC correctly (80kg, 170cm)', () => {
@@ -16,24 +16,6 @@ describe('computeIMC', () => {
     const imc = computeIMC(70, 175)
     const decimalPart = imc.toString().split('.')[1]
     expect(decimalPart?.length).toBeLessThanOrEqual(1)
-  })
-})
-
-describe('imcClassification', () => {
-  it('classifies underweight (IMC < 18.5)', () => {
-    expect(imcClassification(17)).toBe('underweight')
-  })
-
-  it('classifies normal (18.5 ≤ IMC < 25)', () => {
-    expect(imcClassification(22)).toBe('normal')
-  })
-
-  it('classifies overweight (25 ≤ IMC < 30)', () => {
-    expect(imcClassification(27)).toBe('overweight')
-  })
-
-  it('classifies obese (IMC ≥ 30)', () => {
-    expect(imcClassification(35)).toBe('obese')
   })
 })
 

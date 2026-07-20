@@ -1,6 +1,7 @@
 import { TrafficLightColor, CATEGORY_DISPLAY_NAMES } from '@shared/domain'
 import type { Food } from '@shared/domain'
-import { Card, SelectField, PrimaryButton, SafetyAlertDisplay } from '@shared/ui'
+import { Card, SelectField, PrimaryButton } from '@shared/ui'
+import { SafetyAlertDisplay } from './components/SafetyAlertDisplay'
 import type { ClassificationResult } from './services/classificationService'
 import type { SafetyAlert } from '@shared/services/rationValidator'
 import { useT } from '@shared/i18n'

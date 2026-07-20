@@ -11,7 +11,6 @@ export function NudgeEngineContainer() {
       pending={pending}
       history={history}
       onDismiss={dismiss}
-      onAcknowledge={() => {}}
     />
   )
 }

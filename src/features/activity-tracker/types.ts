@@ -22,18 +22,3 @@ export const DEFAULT_WEEKLY_GOAL = {
   moderateMinutesMax: 300,
   strengthSessionsMin: 2,
 } as const satisfies WeeklyGoal
-
-export interface ComplianceReport {
-  /** ISO week start date */
-  weekStart: string
-  /** Total moderate minutes accumulated */
-  totalModerateMinutes: number
-  /** Total strength sessions completed */
-  totalStrengthSessions: number
-  /** 150 ≤ minutes ≤ 300 */
-  meetsModerateTarget: boolean
-  /** sessions ≥ 2 */
-  meetsStrengthTarget: boolean
-  /** Both targets met */
-  isCompliant: boolean
-}
