@@ -19,14 +19,14 @@ export function SelectField({
 }: SelectFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-stone-700 mb-1">
+      <label htmlFor={id} className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
         {label}
       </label>
       <select
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`${formInputBase} bg-white`}
+        className={`${formInputBase} bg-white dark:bg-zinc-700 dark:text-zinc-100`}
         aria-label={label}
       >
         {placeholder && <option value="">{placeholder}</option>}
