@@ -1,4 +1,5 @@
-import { useTrackerStore, useLogStore, useActivityStore } from '@shared/stores'
+import { useTrackerStore, useLogStore } from '@shared/stores'
+import { useActivityStore } from '@features/activity-tracker/activityStore'
 import { countRations } from '@shared/services/rationValidator'
 import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES, type Food, type SystemNotification } from '@shared/domain'
 import { computeEnvironmentalScore, suggestAlternative } from '@shared/sustainability'

@@ -19,10 +19,10 @@ export const BLUE_FISH_IDS = ['fish-sardinas', 'fish-salmon'] as const
 
 /**
  * Determine whether a food item should trigger substitution.
- * Trigger when the food is WHITE_MEAT or has a high carbon footprint (≥ 4.0).
+ * Trigger only when the food is RED_MEAT (category-based gate).
  */
 function isTriggerFood(food: Food): boolean {
-  return food.category === FoodCategory.WHITE_MEAT || (food.carbonFootprint ?? 0) >= 4.0
+  return food.category === FoodCategory.RED_MEAT
 }
 
 /**

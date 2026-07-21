@@ -16,6 +16,7 @@ export const FoodCategory = defineEnum({
   FISH: 'fish',
   EGGS: 'eggs',
   WHITE_MEAT: 'white_meat',
+  RED_MEAT: 'red_meat',
   WATER: 'water',
 })
 
@@ -31,6 +32,7 @@ export const FoodCategorySchema = z.enum([
   'fish',
   'eggs',
   'white_meat',
+  'red_meat',
   'water',
 ])
 
@@ -45,6 +47,7 @@ export const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
   [FoodCategory.FISH]: 'Pescado',
   [FoodCategory.EGGS]: 'Huevos',
   [FoodCategory.WHITE_MEAT]: 'Carne blanca',
+  [FoodCategory.RED_MEAT]: 'Carne roja',
   [FoodCategory.WATER]: 'Agua',
 }
 
@@ -54,4 +57,5 @@ export const ANIMAL_PROTEIN_CATEGORIES: FoodCategory[] = [
   FoodCategory.FISH,
   FoodCategory.EGGS,
   FoodCategory.WHITE_MEAT,
+  FoodCategory.RED_MEAT,
 ]

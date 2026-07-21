@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Canonical Spanish display names for all 10 FoodCategory groups, extracted from duplicated constants across 3 containers.
+Canonical Spanish display names for all 11 FoodCategory groups, extracted from duplicated constants across 3 containers.
 
 ## Requirements
 
@@ -10,12 +10,13 @@ Canonical Spanish display names for all 10 FoodCategory groups, extracted from d
 
 The module MUST export a `Record<FoodCategory, string>` constant mapping each category key to its Spanish display name.
 
-#### Scenario: All 10 categories present
+#### Scenario: All 11 categories present
 
 - GIVEN the module is imported
-- THEN `CATEGORY_DISPLAY_NAMES` SHALL have entries for all 10 `FoodCategory` values
+- THEN `CATEGORY_DISPLAY_NAMES` SHALL have entries for all 11 `FoodCategory` values
 - AND `CATEGORY_DISPLAY_NAMES[FoodCategory.CEREALS]` SHALL be `"Cereales"`
 - AND `CATEGORY_DISPLAY_NAMES[FoodCategory.WATER]` SHALL be `"Agua"`
+- AND `CATEGORY_DISPLAY_NAMES[FoodCategory.RED_MEAT]` SHALL be `"Carne roja"`
 
 ### Requirement: Single Source of Truth
 

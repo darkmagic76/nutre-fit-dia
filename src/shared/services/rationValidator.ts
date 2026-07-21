@@ -45,6 +45,9 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
   [FoodCategory.WHITE_MEAT]: {
     max: 3, unit: 'week',
   },
+  [FoodCategory.RED_MEAT]: {
+    max: 3, unit: 'week',
+  },
   [FoodCategory.WATER]: {
     min: 4, max: 8, unit: 'day',
   },
@@ -75,6 +78,7 @@ export interface CountByCategory {
   [FoodCategory.FISH]: number
   [FoodCategory.EGGS]: number
   [FoodCategory.WHITE_MEAT]: number
+  [FoodCategory.RED_MEAT]: number
   [FoodCategory.WATER]: number
 }
 
@@ -89,6 +93,7 @@ export function emptyCounts(): CountByCategory {
     [FoodCategory.FISH]: 0,
     [FoodCategory.EGGS]: 0,
     [FoodCategory.WHITE_MEAT]: 0,
+    [FoodCategory.RED_MEAT]: 0,
     [FoodCategory.WATER]: 0,
   }
 }
@@ -173,6 +178,7 @@ export function validateWeeklyRations(counts: CountByCategory): ValidationResult
     FoodCategory.FISH,
     FoodCategory.EGGS,
     FoodCategory.WHITE_MEAT,
+    FoodCategory.RED_MEAT,
   ]
 
   for (const category of weeklyCategories) {
@@ -213,6 +219,7 @@ export const AESAN_GRAM_STANDARDS: Record<FoodCategoryType, { min: number; max: 
   [FoodCategory.FISH]: { min: 150, max: 200 },
   [FoodCategory.EGGS]: { min: 50, max: 100 },
   [FoodCategory.WHITE_MEAT]: { min: 100, max: 150 },
+  [FoodCategory.RED_MEAT]: { min: 100, max: 150 },
   [FoodCategory.WATER]: { min: 200, max: 250 },
 }
 

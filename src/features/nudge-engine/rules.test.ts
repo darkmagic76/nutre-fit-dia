@@ -194,8 +194,16 @@ describe('FISH_COD_TAG', () => {
 
 describe('EGGS_RED_MEAT_ALT', () => {
   const rule = NUDGE_RULES.find(r => r.id === 'EGGS_RED_MEAT_ALT')
-  it('fires when whiteMeat > 0 and no eggs', () => {
-    expect(rule!.condition(makeContext({ hasEggs: false, counts: { ...emptyCounts(), [FoodCategory.WHITE_MEAT]: 1 } }))).toBe(true)
+  it('fires when RED_MEAT > 0 and no eggs', () => {
+    expect(rule!.condition(makeContext({ hasEggs: false, counts: { ...emptyCounts(), [FoodCategory.RED_MEAT]: 1 } }))).toBe(true)
+  })
+
+  it('does NOT fire on white meat alone (no RED_MEAT)', () => {
+    expect(rule!.condition(makeContext({ hasEggs: false, counts: { ...emptyCounts(), [FoodCategory.WHITE_MEAT]: 1 } }))).toBe(false)
+  })
+
+  it('does NOT fire when eggs present even with RED_MEAT', () => {
+    expect(rule!.condition(makeContext({ hasEggs: true, counts: { ...emptyCounts(), [FoodCategory.RED_MEAT]: 1 } }))).toBe(false)
   })
 })
 

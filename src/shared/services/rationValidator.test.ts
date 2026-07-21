@@ -179,6 +179,27 @@ describe('rationValidator', () => {
       expect(result.valid).toBe(false)
       expect(result.violations.some(v => v.category === FoodCategory.WHITE_MEAT)).toBe(true)
     })
+
+    it('passes with RED_MEAT at limit (3/week)', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.RED_MEAT]: 3,
+      })
+      const result = validateWeeklyRations(counts)
+      expect(result.valid).toBe(true)
+    })
+
+    it('fails when RED_MEAT exceeds 3/week', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.RED_MEAT]: 5,
+      })
+      const result = validateWeeklyRations(counts)
+      expect(result.valid).toBe(false)
+      expect(result.violations.some(v => v.category === FoodCategory.RED_MEAT)).toBe(true)
+    })
   })
 
   describe('animalProteinCount', () => {
@@ -200,6 +221,18 @@ describe('rationValidator', () => {
     })
   })
 
+  describe('CountByCategory', () => {
+    it('includes RED_MEAT key defaulting to 0', () => {
+      const counts = emptyCounts()
+      expect(counts[FoodCategory.RED_MEAT]).toBe(0)
+    })
+
+    it('has RED_MEAT key in interface (type-level check verified at runtime)', () => {
+      const counts = emptyCounts()
+      expect(Object.keys(counts)).toContain(FoodCategory.RED_MEAT)
+    })
+  })
+
   describe('countRations', () => {
     it('counts entries per category', () => {
       const entries = [
@@ -212,11 +245,20 @@ describe('rationValidator', () => {
       expect(counts[FoodCategory.VEGETABLES]).toBe(4)
       expect(counts[FoodCategory.FISH]).toBe(2)
     })
+
+    it('counts RED_MEAT entries', () => {
+      const entries = [
+        ...makeEntries(FoodCategory.RED_MEAT, 2),
+        ...makeEntries(FoodCategory.CEREALS, 1),
+      ]
+      const counts = countRations(entries)
+      expect(counts[FoodCategory.RED_MEAT]).toBe(2)
+    })
   })
 
   describe('AESAN_GRAM_STANDARDS', () => {
-    it('covers all 10 food categories', () => {
-      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(10)
+    it('covers all 11 food categories', () => {
+      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(11)
     })
 
     it('has valid bread range (40-60g)', () => {
@@ -271,6 +313,43 @@ describe('rationValidator', () => {
       const max = makeFood({ category: FoodCategory.CEREALS, gramsPerRation: 60 })
       expect(validateFoodPortions([min])).toEqual([])
       expect(validateFoodPortions([max])).toEqual([])
+    })
+
+    it('returns no alert for ternera 125g within RED_MEAT range', () => {
+      const food = makeFood({ category: FoodCategory.RED_MEAT, gramsPerRation: 125 })
+      expect(validateFoodPortions([food])).toEqual([])
+    })
+
+    it('returns PORTION_TOO_SMALL for cerdo 80g below RED_MEAT min', () => {
+      const food = makeFood({ category: FoodCategory.RED_MEAT, gramsPerRation: 80 })
+      const alerts = validateFoodPortions([food])
+      expect(alerts).toHaveLength(1)
+      expect(alerts[0].code).toBe('PORTION_TOO_SMALL')
+      expect(alerts[0].severity).toBe('warning')
+    })
+
+    it('returns PORTION_TOO_LARGE for cordero 200g above RED_MEAT max', () => {
+      const food = makeFood({ category: FoodCategory.RED_MEAT, gramsPerRation: 200 })
+      const alerts = validateFoodPortions([food])
+      expect(alerts).toHaveLength(1)
+      expect(alerts[0].code).toBe('PORTION_TOO_LARGE')
+      expect(alerts[0].severity).toBe('critical')
+    })
+  })
+
+  describe('daily validation does NOT include RED_MEAT', () => {
+    it('RED_MEAT with 10 rations passes daily validation (weekly only)', () => {
+      const counts = countsWith({
+        [FoodCategory.RED_MEAT]: 10,
+        [FoodCategory.CEREALS]: 3,
+        [FoodCategory.VEGETABLES]: 3,
+        [FoodCategory.FRUITS]: 2,
+        [FoodCategory.OLIVE_OIL]: 3,
+        [FoodCategory.WATER]: 4,
+      })
+      const result = validateRations(counts, false)
+      // Should NOT have RED_MEAT violations in daily validation
+      expect(result.violations.filter(v => v.category === FoodCategory.RED_MEAT)).toHaveLength(0)
     })
   })
 })

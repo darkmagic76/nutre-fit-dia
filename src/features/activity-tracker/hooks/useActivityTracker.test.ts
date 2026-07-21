@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useActivityTracker } from './useActivityTracker'
-import { useActivityStore } from '@shared/stores'
+import { useActivityStore } from '../activityStore'
 
 describe('useActivityTracker', () => {
   beforeEach(() => {

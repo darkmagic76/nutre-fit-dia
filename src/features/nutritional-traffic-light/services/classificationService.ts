@@ -26,6 +26,7 @@ const CATEGORY_DEFAULTS: Record<FoodCategory, TrafficLightColor> = {
   [FoodCategory.FISH]: TrafficLightColor.GREEN,
   [FoodCategory.EGGS]: TrafficLightColor.GREEN,
   [FoodCategory.WHITE_MEAT]: TrafficLightColor.ORANGE,
+  [FoodCategory.RED_MEAT]: TrafficLightColor.ORANGE,
   [FoodCategory.WATER]: TrafficLightColor.GREEN,
 }
 

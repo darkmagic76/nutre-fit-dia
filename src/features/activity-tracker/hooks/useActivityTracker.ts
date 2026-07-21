@@ -1,5 +1,5 @@
 import { useCallback, useRef, useEffect } from 'react'
-import { useActivityStore, DEFAULT_WEEKLY_GOAL } from '@shared/stores'
+import { useActivityStore, DEFAULT_WEEKLY_GOAL } from '../activityStore'
 import type { ActivityEntry } from '../types'
 
 let streakCount = 0

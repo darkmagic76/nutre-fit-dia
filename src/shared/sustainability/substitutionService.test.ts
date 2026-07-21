@@ -48,7 +48,7 @@ describe('suggestAlternative', () => {
 
   // ─── Test 1: Non-trigger food returns empty ───
 
-  it('returns empty array for non-WHITE_MEAT food with low carbonFootprint', () => {
+  it('returns empty array for non-RED_MEAT food with low carbonFootprint', () => {
     testFoods.push(
       f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
     )
@@ -67,23 +67,23 @@ describe('suggestAlternative', () => {
       f({ id: 'cereal', name: 'Arroz', category: 'cereals', carbonFootprint: 0.8, isSeasonal: true }),
     )
 
-    const input = f({ id: 'pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true })
+    const input = f({ id: 'ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true })
     const result = suggestAlternative(input)
 
     expect(result).toEqual([])
   })
 
-  // ─── Test 3: White meat triggers legumes + blue fish ───
+  // ─── Test 3: Red meat triggers legumes + blue fish ───
 
-  it('returns legumes and blue fish for chicken (white_meat)', () => {
+  it('returns legumes and blue fish for ternera (red_meat)', () => {
     testFoods.push(
       f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
       f({ id: 'fish-salmon', name: 'Salmón', category: 'fish', carbonFootprint: 3.5, isSeasonal: true }),
       f({ id: 'fish-sardinas', name: 'Sardinas', category: 'fish', carbonFootprint: 1.5, isSeasonal: true }),
-      f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true }),
+      f({ id: 'meat-ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true }),
     )
 
-    const input = f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true })
+    const input = f({ id: 'meat-ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true })
     const result = suggestAlternative(input)
 
     expect(result.length).toBeGreaterThan(0)
@@ -100,31 +100,27 @@ describe('suggestAlternative', () => {
   it('excludes the input food from alternatives', () => {
     testFoods.push(
       f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
-      f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true }),
+      f({ id: 'meat-ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true }),
     )
 
-    const input = f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true })
+    const input = f({ id: 'meat-ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true })
     const result = suggestAlternative(input)
 
     const resultIds = result.map(r => r.id)
-    expect(resultIds).not.toContain('meat-pollo')
+    expect(resultIds).not.toContain('meat-ternera')
   })
 
   // ─── Test 5: Ranked by score descending ───
 
   it('returns alternatives ranked by environmental score descending', () => {
-    // Three alternatives with clearly different scores:
-    //   lentejas: CF=0.8, seasonal  → 100 (very_low) ×0.5 + 100 (in_season)×0.3 + 100 (km0)×0.2 = 100
-    //   garbanzos: CF=0.8, NOT seasonal → 100×0.5 + 30×0.3 + 60×0.2 = 71
-    //   salmon:   CF=3.5, seasonal  → 60 (moderate)×0.5 + 100×0.3 + 100×0.2 = 80
     testFoods.push(
-      f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true }),
+      f({ id: 'meat-ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true }),
       f({ id: 'lentejas', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
       f({ id: 'fish-salmon', name: 'Salmón', category: 'fish', carbonFootprint: 3.5, isSeasonal: true }),
       f({ id: 'garbanzos', name: 'Garbanzos', category: 'legumes', carbonFootprint: 0.8, isSeasonal: false }),
     )
 
-    const input = testFoods[0] // pollo
+    const input = testFoods[0] // ternera
     const result = suggestAlternative(input)
 
     expect(result.length).toBeGreaterThanOrEqual(2)
@@ -138,9 +134,8 @@ describe('suggestAlternative', () => {
   // ─── Test 6: Max 3 alternatives ───
 
   it('returns at most 3 alternatives even when more candidates exist', () => {
-    // 5 candidates: 3 legumes + 2 blue fish
     testFoods.push(
-      f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true }),
+      f({ id: 'meat-ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true }),
       f({ id: 'lentejas', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
       f({ id: 'garbanzos', name: 'Garbanzos', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
       f({ id: 'alubias', name: 'Alubias', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
@@ -148,7 +143,7 @@ describe('suggestAlternative', () => {
       f({ id: 'fish-sardinas', name: 'Sardinas', category: 'fish', carbonFootprint: 1.5, isSeasonal: true }),
     )
 
-    const input = testFoods[0] // pollo
+    const input = testFoods[0] // ternera
     const result = suggestAlternative(input)
 
     expect(result.length).toBeLessThanOrEqual(3)
@@ -159,7 +154,7 @@ describe('suggestAlternative', () => {
 
   it('includes sardinas and salmon but excludes bacalao and merluza', () => {
     testFoods.push(
-      f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true }),
+      f({ id: 'meat-ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true }),
       f({ id: 'fish-salmon', name: 'Salmón', category: 'fish', carbonFootprint: 3.5, isSeasonal: true }),
       f({ id: 'fish-sardinas', name: 'Sardinas', category: 'fish', carbonFootprint: 1.5, isSeasonal: true }),
       f({ id: 'fish-bacalao', name: 'Bacalao', category: 'fish', carbonFootprint: 2.2, isSeasonal: true }),
@@ -167,7 +162,7 @@ describe('suggestAlternative', () => {
       f({ id: 'lentejas', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
     )
 
-    const input = testFoods[0] // pollo
+    const input = testFoods[0] // ternera
     const result = suggestAlternative(input)
 
     const resultIds = result.map(r => r.id)
@@ -181,15 +176,15 @@ describe('suggestAlternative', () => {
 
   it('returns empty array when the food catalog is empty', () => {
     // testFoods is already empty via beforeEach
-    const input = f({ id: 'pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 5, isSeasonal: true })
+    const input = f({ id: 'ternera', name: 'Ternera', category: 'red_meat', carbonFootprint: 27, isSeasonal: true })
     const result = suggestAlternative(input)
 
     expect(result).toEqual([])
   })
 
-  // ─── Test 9: Food without carbonFootprint returns empty ───
+  // ─── Test 9: Food without carbonFootprint returns empty (non-trigger) ───
 
-  it('returns empty array for non-WHITE_MEAT food without carbonFootprint', () => {
+  it('returns empty array for non-RED_MEAT food without carbonFootprint', () => {
     testFoods.push(
       f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
     )
@@ -200,55 +195,56 @@ describe('suggestAlternative', () => {
     expect(result).toEqual([])
   })
 
-  // ─── TRIANGULATION: High-carbon non-meat triggers (spec Scenario 2) ───
+  // ─── NEW: Chorizo (RED_MEAT, CF 8.0) triggers correctly ───
 
-  it('triggers substitution for high-carbon non-meat food (dairy, CF=5.0)', () => {
+  it('triggers substitution for chorizo (RED_MEAT, CF 8.0) via category gate only', () => {
     testFoods.push(
       f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
+      f({ id: 'fish-sardinas', name: 'Sardinas', category: 'fish', carbonFootprint: 1.5, isSeasonal: true }),
     )
 
-    const input = f({ id: 'd1', name: 'Queso', category: 'dairy', carbonFootprint: 5.0, isSeasonal: true })
+    const input = f({ id: 'proc-embutido-chorizo', name: 'Chorizo', category: 'red_meat', carbonFootprint: 8.0, isSeasonal: true })
     const result = suggestAlternative(input)
 
     expect(result.length).toBeGreaterThan(0)
   })
 
-  // ─── TRIANGULATION: White meat without CF still triggers ───
+  // ─── NEW: Conejo (WHITE_MEAT, CF 4.0) does NOT trigger ───
 
-  it('triggers substitution for WHITE_MEAT food even without carbonFootprint', () => {
+  it('does NOT trigger for conejo (WHITE_MEAT, CF 4.0) — heuristic removed', () => {
     testFoods.push(
       f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
     )
 
-    const input = f({ id: 'pollo', name: 'Pollo', category: 'white_meat' })
-    const result = suggestAlternative(input)
-
-    expect(result.length).toBeGreaterThan(0)
-  })
-
-  // ─── TRIANGULATION: CF exactly 4.0 should trigger (borderline) ───
-
-  it('triggers substitution when carbonFootprint is exactly 4.0', () => {
-    testFoods.push(
-      f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
-    )
-
-    const input = f({ id: 'border', name: 'Borderline', category: 'eggs', carbonFootprint: 4.0, isSeasonal: true })
-    const result = suggestAlternative(input)
-
-    expect(result.length).toBeGreaterThan(0)
-  })
-
-  // ─── TRIANGULATION: CF just below 4.0 should NOT trigger (borderline) ───
-
-  it('does NOT trigger when carbonFootprint is just below 4.0', () => {
-    testFoods.push(
-      f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
-    )
-
-    const input = f({ id: 'below', name: 'Just below', category: 'eggs', carbonFootprint: 3.999, isSeasonal: true })
+    const input = f({ id: 'meat-conejo', name: 'Conejo', category: 'white_meat', carbonFootprint: 4.0, isSeasonal: true })
     const result = suggestAlternative(input)
 
     expect(result).toEqual([])
+  })
+
+  // ─── NEW: White meat with high CF no longer triggers ───
+
+  it('does NOT trigger for WHITE_MEAT food with high carbonFootprint', () => {
+    testFoods.push(
+      f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
+    )
+
+    const input = f({ id: 'meat-pollo', name: 'Pollo', category: 'white_meat', carbonFootprint: 8.0, isSeasonal: true })
+    const result = suggestAlternative(input)
+
+    expect(result).toEqual([])
+  })
+
+  // ─── NEW: Red meat without CF also triggers ───
+
+  it('triggers substitution for RED_MEAT food even without carbonFootprint', () => {
+    testFoods.push(
+      f({ id: 'l1', name: 'Lentejas', category: 'legumes', carbonFootprint: 0.8, isSeasonal: true }),
+    )
+
+    const input = f({ id: 'cerdo', name: 'Cerdo', category: 'red_meat' })
+    const result = suggestAlternative(input)
+
+    expect(result.length).toBeGreaterThan(0)
   })
 })

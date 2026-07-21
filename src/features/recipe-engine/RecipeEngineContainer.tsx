@@ -1,4 +1,5 @@
-import { usePlanStore, useTrackerStore } from '@shared/stores'
+import { usePlanStore } from './planStore'
+import { useTrackerStore } from '@shared/stores'
 import { PlanView } from './PlanView'
 
 export function RecipeEngineContainer() {

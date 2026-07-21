@@ -133,7 +133,7 @@ export const NUDGE_RULES: SafetyRule[] = [
     title: 'Huevos como alternativa',
     body: 'Los huevos son alternativa preferente a carnes rojas.',
     condition: ctx =>
-      ctx.counts[FoodCategory.WHITE_MEAT] > 0 && !ctx.hasEggs,
+      ctx.counts[FoodCategory.RED_MEAT] > 0 && !ctx.hasEggs,
   },
   {
     id: 'WHITE_MEAT_RESTRICT',

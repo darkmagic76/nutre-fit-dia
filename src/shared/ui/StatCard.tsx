@@ -10,7 +10,7 @@ export function StatCard({ label, value, sub, variant = 'default' }: StatCardPro
   const textColor = variant === 'danger' ? 'text-red-600' : variant === 'success' ? 'text-emerald-700' : 'text-emerald-700'
 
   return (
-    <div className={`${bg} p-3 rounded-lg`} role="status" aria-label={`${label}: ${value}`}>
+    <div className={`${bg} p-3 rounded-lg`} role="status" aria-label={`${label}: ${value}`} data-variant={variant}>
       <strong className="text-xs text-stone-500">{label}</strong>
       <p className={`text-lg sm:text-xl font-bold ${textColor}`}>{value}</p>
       {sub && <p className="text-xs text-stone-400">{sub}</p>}

@@ -1,5 +1,2 @@
 export { useTrackerStore } from './trackerStore'
 export { useLogStore } from './logStore'
-export { useActivityStore } from './activityStore'
-export { DEFAULT_WEEKLY_GOAL } from './activityStore'
-export { usePlanStore } from './planStore'
