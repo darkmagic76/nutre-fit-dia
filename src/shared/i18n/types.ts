@@ -100,6 +100,12 @@ export interface Translations {
   'cultural.socialEating': string
   'cultural.preparation': string
 
+  // Error boundary
+  'error.boundary.title': string
+  'error.boundary.description': string
+  'error.boundary.retry': string
+  'error.boundary.globalReload': string
+
   // Legal
   'legal.disclaimer': string
 

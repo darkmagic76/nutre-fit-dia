@@ -1,4 +1,4 @@
-import { TabButton, LegalDisclaimer, InstallPrompt } from '@shared/ui'
+import { TabButton, LegalDisclaimer, InstallPrompt, ErrorBoundary, ErrorFallback } from '@shared/ui'
 import { useTabNavigation, TAB_IDS, TAB_ICONS, type Tab } from '@shared/hooks/useTabNavigation'
 import { useT, useLocale } from '@shared/i18n'
 import { useInstallPrompt } from '@shared/hooks/useInstallPrompt'
@@ -69,25 +69,116 @@ export default function App() {
         <LegalDisclaimer text={t['legal.disclaimer']} />
         <div className="h-2" />
         <div role="tabpanel" id="panel-scanner" hidden={tab !== 'scanner'} aria-label={t['tab.scanner']}>
-          {tab === 'scanner' && <NutritionalTrafficLightContainer />}
+          {tab === 'scanner' && (
+            <ErrorBoundary
+              fallback={(retry) => (
+                <ErrorFallback
+                  title={t['error.boundary.title']}
+                  description={t['error.boundary.description']}
+                  buttonLabel={t['error.boundary.retry']}
+                  onRetry={retry}
+                />
+              )}
+            >
+              <NutritionalTrafficLightContainer />
+            </ErrorBoundary>
+          )}
         </div>
         <div role="tabpanel" id="panel-log" hidden={tab !== 'log'} aria-label={t['tab.log']}>
-          {tab === 'log' && <MedDietValidatorContainer />}
+          {tab === 'log' && (
+            <ErrorBoundary
+              fallback={(retry) => (
+                <ErrorFallback
+                  title={t['error.boundary.title']}
+                  description={t['error.boundary.description']}
+                  buttonLabel={t['error.boundary.retry']}
+                  onRetry={retry}
+                />
+              )}
+            >
+              <MedDietValidatorContainer />
+            </ErrorBoundary>
+          )}
         </div>
         <div role="tabpanel" id="panel-metabolic" hidden={tab !== 'metabolic'} aria-label={t['tab.metabolic']}>
-          {tab === 'metabolic' && <MetabolicTrackerContainer />}
+          {tab === 'metabolic' && (
+            <ErrorBoundary
+              fallback={(retry) => (
+                <ErrorFallback
+                  title={t['error.boundary.title']}
+                  description={t['error.boundary.description']}
+                  buttonLabel={t['error.boundary.retry']}
+                  onRetry={retry}
+                />
+              )}
+            >
+              <MetabolicTrackerContainer />
+            </ErrorBoundary>
+          )}
         </div>
         <div role="tabpanel" id="panel-plan" hidden={tab !== 'plan'} aria-label={t['tab.plan']}>
-          {tab === 'plan' && <RecipeEngineContainer />}
+          {tab === 'plan' && (
+            <ErrorBoundary
+              fallback={(retry) => (
+                <ErrorFallback
+                  title={t['error.boundary.title']}
+                  description={t['error.boundary.description']}
+                  buttonLabel={t['error.boundary.retry']}
+                  onRetry={retry}
+                />
+              )}
+            >
+              <RecipeEngineContainer />
+            </ErrorBoundary>
+          )}
         </div>
         <div role="tabpanel" id="panel-activity" hidden={tab !== 'activity'} aria-label={t['tab.activity']}>
-          {tab === 'activity' && <ActivityTrackerContainer />}
+          {tab === 'activity' && (
+            <ErrorBoundary
+              fallback={(retry) => (
+                <ErrorFallback
+                  title={t['error.boundary.title']}
+                  description={t['error.boundary.description']}
+                  buttonLabel={t['error.boundary.retry']}
+                  onRetry={retry}
+                />
+              )}
+            >
+              <ActivityTrackerContainer />
+            </ErrorBoundary>
+          )}
         </div>
         <div role="tabpanel" id="panel-nudges" hidden={tab !== 'nudges'} aria-label={t['tab.nudges']}>
-          {tab === 'nudges' && <NudgeEngineContainer />}
+          {tab === 'nudges' && (
+            <ErrorBoundary
+              fallback={(retry) => (
+                <ErrorFallback
+                  title={t['error.boundary.title']}
+                  description={t['error.boundary.description']}
+                  buttonLabel={t['error.boundary.retry']}
+                  onRetry={retry}
+                />
+              )}
+            >
+              <NudgeEngineContainer />
+            </ErrorBoundary>
+          )}
         </div>
         <div role="tabpanel" id="panel-sustainability" hidden={tab !== 'sustainability'} aria-label={t['tab.sustainability']}>
-          {tab === 'sustainability' && <SustainabilityContainer />}
+          {tab === 'sustainability' && (
+            <ErrorBoundary
+              fallback={(retry) => (
+                <ErrorFallback
+                  title={t['error.boundary.title']}
+                  description={t['error.boundary.description']}
+                  buttonLabel={t['error.boundary.retry']}
+                  onRetry={retry}
+                />
+              )}
+            >
+              <SustainabilityContainer />
+            </ErrorBoundary>
+          )}
         </div>
       </main>
 

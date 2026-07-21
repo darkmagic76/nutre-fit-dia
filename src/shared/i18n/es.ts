@@ -92,6 +92,11 @@ export const es: Translations = {
 
   'legal.disclaimer': '⚕️ Toda recomendación, cantidad y plan nutricional debe ser validado por un dietista-nutricionista colegiado.',
 
+  'error.boundary.title': 'Algo salió mal',
+  'error.boundary.description': 'Ocurrió un error inesperado al renderizar esta sección.',
+  'error.boundary.retry': 'Reintentar',
+  'error.boundary.globalReload': 'Recargar aplicación',
+
   'form.weight': 'Peso (kg)',
   'form.height': 'Altura (cm)',
   'form.age': 'Edad',

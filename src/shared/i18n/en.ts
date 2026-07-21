@@ -92,6 +92,11 @@ export const en: Translations = {
 
   'legal.disclaimer': '⚕️ All recommendations, quantities and nutritional plans must be validated by a registered dietitian-nutritionist.',
 
+  'error.boundary.title': 'Something went wrong',
+  'error.boundary.description': 'An unexpected error occurred while rendering this section.',
+  'error.boundary.retry': 'Retry',
+  'error.boundary.globalReload': 'Reload application',
+
   'form.weight': 'Weight (kg)',
   'form.height': 'Height (cm)',
   'form.age': 'Age',
