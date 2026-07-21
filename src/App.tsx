@@ -33,7 +33,7 @@ export default function App() {
   const { isInstallable, install, dismiss } = useInstallPrompt();
 
   return (
-    <div className="min-h-screen bg-stone-100 text-stone-900 dark:bg-stone-900 dark:text-stone-100">
+    <div className="min-h-screen bg-stone-100 text-stone-900 dark:bg-zinc-800 dark:text-zinc-100">
       <header className="bg-emerald-800 text-white p-4 sm:p-6" role="banner">
         <h1 className="text-2xl sm:text-3xl font-bold text-center">{t['app.title']}</h1>
         <p className="text-center text-emerald-200 text-xs sm:text-sm mt-1">{t['app.subtitle']}</p>

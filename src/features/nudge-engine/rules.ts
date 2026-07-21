@@ -46,7 +46,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     cooldown: COOLDOWN_24H,
     title: 'Límite de cereales excedido',
     body: 'Has superado las 4 raciones de cereales permitidas durante la restricción calórica.',
-    condition: (ctx) => ctx.restrictionActive && ctx.counts[FoodCategory.CEREALS] > CEREAL_RESTRICTED_MAX,
+    condition: (ctx) =>
+      ctx.restrictionActive && ctx.counts[FoodCategory.CEREALS] > CEREAL_RESTRICTED_MAX,
   },
   {
     id: 'FRUITS_GLYCEMIC_ALERT',
@@ -64,7 +65,9 @@ export const NUDGE_RULES: SafetyRule[] = [
     cooldown: COOLDOWN_6H,
     title: '¿Has comido suficientes verduras?',
     body: 'Llevas menos de 3 raciones de verduras hoy. Intenta incluir una ración en la cena.',
-    condition: (ctx) => ctx.counts[FoodCategory.VEGETABLES] < VEGETABLE_MIN_RATIONS && ctx.currentHour >= VEGETABLE_NUDGE_HOUR_THRESHOLD,
+    condition: (ctx) =>
+      ctx.counts[FoodCategory.VEGETABLES] < VEGETABLE_MIN_RATIONS &&
+      ctx.currentHour >= VEGETABLE_NUDGE_HOUR_THRESHOLD,
   },
 
   // ─── PR2: BehavioralNudge rules ───
@@ -94,7 +97,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     cooldown: COOLDOWN_3H,
     title: 'Glucosa elevada',
     body: 'Tu última lectura de glucosa es elevada. Considera una caminata de 15 minutos o una receta rica en fibra soluble.',
-    condition: (ctx) => ctx.latestGlucose !== null && ctx.latestGlucose > HYPERGLYCEMIA_THRESHOLD_MG_DL,
+    condition: (ctx) =>
+      ctx.latestGlucose !== null && ctx.latestGlucose > HYPERGLYCEMIA_THRESHOLD_MG_DL,
   },
   {
     id: 'ADHERENCE_GLUCOSE',
@@ -139,7 +143,9 @@ export const NUDGE_RULES: SafetyRule[] = [
     cooldown: COOLDOWN_24H,
     title: 'Legumbres insuficientes esta semana',
     body: 'Las legumbres son requisito base para el control glucémico. Objetivo: ≥4 raciones/semana.',
-    condition: (ctx) => ctx.dayOfWeek >= LEGUMES_CHECK_DAY_THRESHOLD && ctx.counts[FoodCategory.LEGUMES] < LEGUMES_MIN_WEEKLY_CHECK,
+    condition: (ctx) =>
+      ctx.dayOfWeek >= LEGUMES_CHECK_DAY_THRESHOLD &&
+      ctx.counts[FoodCategory.LEGUMES] < LEGUMES_MIN_WEEKLY_CHECK,
   },
   {
     id: 'FISH_COD_TAG',
@@ -167,7 +173,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     title: 'Restringir carnes blancas',
     body: 'Se han superado las raciones de pescado. Considera reducir carnes blancas.',
     condition: (ctx) =>
-      ctx.counts[FoodCategory.FISH] > FISH_EXCESS_THRESHOLD && ctx.counts[FoodCategory.WHITE_MEAT] > 0,
+      ctx.counts[FoodCategory.FISH] > FISH_EXCESS_THRESHOLD &&
+      ctx.counts[FoodCategory.WHITE_MEAT] > 0,
   },
   {
     id: 'HC_INACTIVITY_ADJUST',
