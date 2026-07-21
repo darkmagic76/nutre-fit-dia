@@ -1,4 +1,4 @@
-import { formInputBase } from './formStyles';
+import { formInputBase, formLabelBase } from './formStyles';
 
 interface NumberFieldProps {
   label: string;
@@ -12,7 +12,7 @@ interface NumberFieldProps {
 export function NumberField({ label, value, onChange, id, min, step }: NumberFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-stone-700 mb-1">
+      <label htmlFor={id} className={formLabelBase}>
         {label}
       </label>
       <input

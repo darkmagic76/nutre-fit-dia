@@ -1,4 +1,4 @@
-import { formInputBase } from './formStyles';
+import { formInputBase, formLabelBase } from './formStyles';
 
 interface SelectFieldProps {
   label: string;
@@ -19,14 +19,14 @@ export function SelectField({
 }: SelectFieldProps) {
   return (
     <div>
-      <label htmlFor={id} className="block text-sm font-medium text-stone-700 dark:text-stone-300 mb-1">
+      <label htmlFor={id} className={formLabelBase}>
         {label}
       </label>
       <select
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`${formInputBase} bg-white dark:bg-zinc-700 dark:text-zinc-100`}
+        className={formInputBase}
         aria-label={label}
       >
         {placeholder && <option value="">{placeholder}</option>}
