@@ -205,4 +205,44 @@ export interface Translations {
 
   // Metabolic — extended
   'metabolic.formAriaLabel': string;
+
+  // Nudge rule titles (17 rules)
+  'nudge.title.cerealsRestriction': string;
+  'nudge.title.cerealsDeficit': string;
+  'nudge.title.fruitsGlycemicAlert': string;
+  'nudge.title.fruitsDeficit': string;
+  'nudge.title.vegetablesDeficit': string;
+  'nudge.title.dairyCalcium': string;
+  'nudge.title.waterHydration': string;
+  'nudge.title.hyperglycemia': string;
+  'nudge.title.adherenceGlucose': string;
+  'nudge.title.adherenceWeight': string;
+  'nudge.title.aoveTagging': string;
+  'nudge.title.legumesGlycemicBase': string;
+  'nudge.title.fishCodTag': string;
+  'nudge.title.eggsRedMeatAlt': string;
+  'nudge.title.whiteMeatRestrict': string;
+  'nudge.title.hcInactivityAdjust': string;
+  'nudge.title.sustainableSubstitution': string;
+
+  // Nudge rule bodies (static)
+  'nudge.body.cerealsRestriction': string;
+  'nudge.body.cerealsDeficit': string;
+  'nudge.body.fruitsGlycemicAlert': string;
+  'nudge.body.fruitsDeficit': string;
+  'nudge.body.vegetablesDeficit': string;
+  'nudge.body.dairyCalcium': string;
+  'nudge.body.waterHydration': string;
+  'nudge.body.hyperglycemia': string;
+  'nudge.body.adherenceGlucose': string;
+  'nudge.body.adherenceWeight': string;
+  'nudge.body.aoveTagging': string;
+  'nudge.body.legumesGlycemicBase': string;
+  'nudge.body.fishCodTag': string;
+  'nudge.body.eggsRedMeatAlt': string;
+  'nudge.body.whiteMeatRestrict': string;
+  'nudge.body.hcInactivityAdjust': string;
+
+  // Nudge rule bodies (dynamic — key used as format string with {names} placeholder)
+  'nudge.body.sustainableSubstitution': string;
 }

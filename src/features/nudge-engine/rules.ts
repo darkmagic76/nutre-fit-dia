@@ -40,15 +40,15 @@ const MAX_ALTERNATIVES_TO_SHOW = 3;
 /** Environmental score below this triggers sustainable substitution nudge */
 const LOW_ENVIRONMENTAL_SCORE_THRESHOLD = 30;
 
-/** All nudge rules evaluated by the engine */
+/** All nudge rules evaluated by the engine. Titles and bodies use i18n keys resolved at display time. */
 export const NUDGE_RULES: SafetyRule[] = [
   {
     id: 'CEREALS_RESTRICTION',
     type: NotificationType.SAFETY_ALERT,
     severity: NotificationSeverity.HARD_BLOCK,
     cooldown: COOLDOWN_24H,
-    title: 'Límite de cereales excedido',
-    body: 'Has superado las 4 raciones de cereales permitidas durante la restricción calórica.',
+    title: 'nudge.title.cerealsRestriction',
+    body: 'nudge.body.cerealsRestriction',
     condition: (ctx) =>
       ctx.restrictionActive && ctx.counts[FoodCategory.CEREALS] > CEREAL_RESTRICTED_MAX,
   },
@@ -57,8 +57,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_6H,
-    title: 'Cereales insuficientes',
-    body: 'Llevas menos de 3 raciones de cereales hoy. Los cereales integrales son la base energética de la dieta mediterránea.',
+    title: 'nudge.title.cerealsDeficit',
+    body: 'nudge.body.cerealsDeficit',
     condition: (ctx) => ctx.counts[FoodCategory.CEREALS] < CEREAL_MIN_RATIONS,
   },
   {
@@ -66,8 +66,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.SAFETY_ALERT,
     severity: NotificationSeverity.SOFT_WARN,
     cooldown: COOLDOWN_24H,
-    title: 'Fruta de alto índice glucémico',
-    body: 'Has registrado una fruta con alto índice glucémico. Considera alternativas como manzana o pera.',
+    title: 'nudge.title.fruitsGlycemicAlert',
+    body: 'nudge.body.fruitsGlycemicAlert',
     condition: (ctx) => ctx.containsHighGlycemicFruit,
   },
   {
@@ -75,8 +75,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_6H,
-    title: 'Frutas insuficientes',
-    body: 'Llevas menos de 2 raciones de fruta hoy. La fruta fresca aporta fibra y antioxidantes esenciales.',
+    title: 'nudge.title.fruitsDeficit',
+    body: 'nudge.body.fruitsDeficit',
     condition: (ctx) => ctx.counts[FoodCategory.FRUITS] < FRUIT_MIN_RATIONS,
   },
   {
@@ -84,8 +84,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_6H,
-    title: '¿Has comido suficientes hortalizas?',
-    body: 'Llevas menos de 3 raciones de hortalizas hoy. Intenta incluir una ración en la cena.',
+    title: 'nudge.title.vegetablesDeficit',
+    body: 'nudge.body.vegetablesDeficit',
     condition: (ctx) =>
       ctx.counts[FoodCategory.VEGETABLES] < VEGETABLE_MIN_RATIONS &&
       ctx.currentHour >= VEGETABLE_NUDGE_HOUR_THRESHOLD,
@@ -98,8 +98,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_12H,
-    title: 'Proteína animal elevada',
-    body: 'Has consumido más de 2 raciones de proteína animal hoy. Considera fuentes de calcio vegetal (brócoli, almendras, sardinas).',
+    title: 'nudge.title.dairyCalcium',
+    body: 'nudge.body.dairyCalcium',
     condition: (ctx) => ctx.animalProteinCount > ANIMAL_PROTEIN_NUDGE_THRESHOLD,
   },
   {
@@ -107,8 +107,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_3H,
-    title: 'Recordatorio de hidratación',
-    body: 'Recuerda beber agua. Objetivo: 4-8 vasos al día.',
+    title: 'nudge.title.waterHydration',
+    body: 'nudge.body.waterHydration',
     condition: (ctx) => ctx.waterRations < WATER_MIN_RATIONS,
   },
   {
@@ -116,8 +116,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_3H,
-    title: 'Glucosa elevada',
-    body: 'Tu última lectura de glucosa es elevada. Considera una caminata de 15 minutos o una receta rica en fibra soluble.',
+    title: 'nudge.title.hyperglycemia',
+    body: 'nudge.body.hyperglycemia',
     condition: (ctx) =>
       ctx.latestGlucose !== null && ctx.latestGlucose > HYPERGLYCEMIA_THRESHOLD_MG_DL,
   },
@@ -126,8 +126,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_4H,
-    title: 'Registra tu glucosa',
-    body: 'No has registrado tu glucosa en las últimas 4 horas. Mantener el registro ayuda a tu control metabólico.',
+    title: 'nudge.title.adherenceGlucose',
+    body: 'nudge.body.adherenceGlucose',
     condition: (ctx) => {
       if (ctx.lastGlucoseTimestamp === null) return true;
       return ctx.now - ctx.lastGlucoseTimestamp > COOLDOWN_4H * 60 * 1000;
@@ -138,8 +138,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_4H,
-    title: 'Registra tu peso',
-    body: 'No has registrado tu peso en las últimas 4 horas. El seguimiento regular permite ajustar tu plan.',
+    title: 'nudge.title.adherenceWeight',
+    body: 'nudge.body.adherenceWeight',
     condition: (ctx) => {
       if (ctx.lastWeightTimestamp === null) return true;
       return ctx.now - ctx.lastWeightTimestamp > COOLDOWN_4H * 60 * 1000;
@@ -153,8 +153,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.SYSTEM_ACTION,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_24H,
-    title: 'AOVE requerido',
-    body: 'El AOVE debe estar presente en cada comida principal.',
+    title: 'nudge.title.aoveTagging',
+    body: 'nudge.body.aoveTagging',
     condition: (ctx) => ctx.counts[FoodCategory.OLIVE_OIL] === 0,
   },
   {
@@ -162,8 +162,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.SYSTEM_ACTION,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_24H,
-    title: 'Legumbres insuficientes esta semana',
-    body: 'Las legumbres son requisito base para el control glucémico. Objetivo: ≥4 raciones/semana.',
+    title: 'nudge.title.legumesGlycemicBase',
+    body: 'nudge.body.legumesGlycemicBase',
     condition: (ctx) =>
       ctx.dayOfWeek >= LEGUMES_CHECK_DAY_THRESHOLD &&
       ctx.counts[FoodCategory.LEGUMES] < LEGUMES_MIN_WEEKLY_CHECK,
@@ -173,8 +173,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.SYSTEM_ACTION,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_NONE,
-    title: 'Bacalao — High Protein Low Fat',
-    body: 'El bacalao es una proteína de alta prioridad (0.7% grasa).',
+    title: 'nudge.title.fishCodTag',
+    body: 'nudge.body.fishCodTag',
     condition: (ctx) => ctx.hasBacalao,
   },
   {
@@ -182,8 +182,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.SYSTEM_ACTION,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_NONE,
-    title: 'Huevos como alternativa',
-    body: 'Los huevos son alternativa preferente a carnes rojas.',
+    title: 'nudge.title.eggsRedMeatAlt',
+    body: 'nudge.body.eggsRedMeatAlt',
     condition: (ctx) => ctx.counts[FoodCategory.RED_MEAT] > 0 && !ctx.hasEggs,
   },
   {
@@ -191,8 +191,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.SYSTEM_ACTION,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_7D,
-    title: 'Restringir carnes blancas',
-    body: 'Se han superado las raciones de pescado. Considera reducir carnes blancas.',
+    title: 'nudge.title.whiteMeatRestrict',
+    body: 'nudge.body.whiteMeatRestrict',
     condition: (ctx) =>
       ctx.counts[FoodCategory.FISH] > FISH_EXCESS_THRESHOLD &&
       ctx.counts[FoodCategory.WHITE_MEAT] > 0,
@@ -202,8 +202,8 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.SYSTEM_ACTION,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_24H,
-    title: 'Actividad física insuficiente',
-    body: 'No has alcanzado los 150 min/semana de actividad moderada. Considera reducir carga de HC.',
+    title: 'nudge.title.hcInactivityAdjust',
+    body: 'nudge.body.hcInactivityAdjust',
     condition: (ctx) => ctx.weeklyActivityMinutes < WEEKLY_ACTIVITY_MINUTES_TARGET,
   },
 
@@ -214,10 +214,10 @@ export const NUDGE_RULES: SafetyRule[] = [
     type: NotificationType.BEHAVIORAL_NUDGE,
     severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_4H,
-    title: 'Sustitución inteligente',
+    title: 'nudge.title.sustainableSubstitution',
     body: (ctx) => {
       const names = ctx.alternatives?.slice(0, MAX_ALTERNATIVES_TO_SHOW).join(', ') ?? '';
-      return `Considera alternativas más sostenibles: ${names}`;
+      return `nudge.body.sustainableSubstitution|${names}`;
     },
     condition: (ctx) =>
       ctx.environmentalScore !== null &&

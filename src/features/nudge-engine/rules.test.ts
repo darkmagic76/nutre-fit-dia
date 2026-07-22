@@ -328,6 +328,6 @@ describe('SUSTAINABLE_SUBSTITUTION', () => {
     const bodyFn = rule()!.body;
     expect(typeof bodyFn).toBe('function');
     const body = bodyFn(ctx);
-    expect(body).toBe('Considera alternativas más sostenibles: ');
+    expect(body).toBe('nudge.body.sustainableSubstitution|');
   });
 });
