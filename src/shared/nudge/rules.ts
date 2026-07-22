@@ -1,4 +1,5 @@
 import { NotificationType, NotificationSeverity, FoodCategory } from '@shared/domain';
+import { CEREAL_RESTRICTED_MAX } from '@shared/constants/clinical';
 import {
   COOLDOWN_24H,
   COOLDOWN_12H,
@@ -12,8 +13,6 @@ import type { SafetyRule } from './types';
 
 // ─── Threshold constants ───
 
-/** Cereal max under caloric restriction (matches rationValidator) */
-const CEREAL_RESTRICTED_MAX = 4;
 /** Minimum vegetable rations before nudge triggers */
 const VEGETABLE_MIN_RATIONS = 3;
 /** Evening hour after which vegetable deficit nudge fires (8PM) */

@@ -1,4 +1,5 @@
 import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES } from '@shared/domain';
+import { CEREAL_RESTRICTED_MAX } from '@shared/constants/clinical';
 import type { FoodCategory as FoodCategoryType } from '@shared/domain';
 import type { Food } from '@shared/domain';
 
@@ -8,9 +9,6 @@ import type { Food } from '@shared/domain';
  * Daily limits: per-day constraints (most groups)
  * Weekly limits: per-week constraints (legumes, fish, eggs, white meat)
  */
-
-/** Cereal max when caloric restriction is active (overrides RATION_LIMITS max) */
-const CEREAL_RESTRICTED_MAX = 4;
 
 export interface RationLimit {
   min?: number;

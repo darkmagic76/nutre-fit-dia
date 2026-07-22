@@ -3,7 +3,7 @@ import { defineEnum } from '@shared/utils';
 import type { ValuesOf } from '@shared/utils';
 
 /**
- * Canonical food categories per ADR-005 (10 groups from INFORME_ADR).
+ * Canonical food categories per ADR-005 (11 groups from INFORME_ADR + RED_MEAT amendment 2026-07-21).
  * SPECS_RF (5 groups) and SPECS_TECH (~7) are UI simplifications, not domain replacements.
  */
 export const FoodCategory = defineEnum({
