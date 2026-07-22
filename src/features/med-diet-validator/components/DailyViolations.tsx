@@ -15,7 +15,7 @@ export function DailyViolations({ validation, hasFoods }: DailyViolationsProps) 
       {!validation.valid && <ViolationList violations={validation.violations} />}
 
       {validation.valid && hasFoods && (
-        <p className="text-emerald-600 text-sm font-medium" role="status">
+        <p className="text-emerald-600 dark:text-emerald-400 text-sm font-medium" role="status">
           {t['validation.allClear']}
         </p>
       )}

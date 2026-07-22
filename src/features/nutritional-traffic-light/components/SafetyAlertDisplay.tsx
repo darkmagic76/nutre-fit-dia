@@ -34,7 +34,7 @@ export function SafetyAlertDisplay({ alerts, onAcknowledge }: SafetyAlertDisplay
           {alert.acknowledgeRequired && onAcknowledge && (
             <button
               onClick={() => onAcknowledge(i)}
-              className="shrink-0 px-2 py-1 text-xs rounded bg-white/50 hover:bg-white/80 transition min-h-[32px] min-w-[32px]"
+              className="shrink-0 px-2 py-1 text-xs rounded bg-white/50 dark:bg-zinc-700/50 hover:bg-white/80 dark:hover:bg-zinc-600/80 transition min-h-[32px] min-w-[32px]"
               aria-label={`${t['alert.acknowledge']}: ${alert.message}`}
             >
               {t['alert.understood']}

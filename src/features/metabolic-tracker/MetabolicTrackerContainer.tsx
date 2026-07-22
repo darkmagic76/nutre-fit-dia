@@ -30,6 +30,8 @@ export function MetabolicTrackerContainer() {
     calculateTarget();
   };
 
+  const canCalculate = glucose.trim().length > 0;
+
   return (
     <MetabolicTrackerView
       form={{
@@ -52,6 +54,7 @@ export function MetabolicTrackerContainer() {
       }}
       caloricTarget={caloricTarget}
       profileError={profileError}
+      canCalculate={canCalculate}
       onCalculate={handleCalculate}
     />
   );

@@ -6,6 +6,7 @@ import { useT } from '@shared/i18n';
 interface ProfileFormProps {
   form: UserMetricsFormState;
   onSubmit: (e: FormEvent) => void;
+  canSubmit?: boolean;
 }
 
 export function ProfileForm({
@@ -28,6 +29,7 @@ export function ProfileForm({
     setPaf,
   },
   onSubmit,
+  canSubmit = true,
 }: ProfileFormProps) {
   const t = useT();
 
@@ -102,7 +104,9 @@ export function ProfileForm({
           { value: 'postprandial', label: t['form.glucosePostprandial'] },
         ]}
       />
-      <PrimaryButton type="submit">{t['ui.calculate']}</PrimaryButton>
+      <PrimaryButton type="submit" disabled={!canSubmit}>
+        {t['ui.calculate']}
+      </PrimaryButton>
     </form>
   );
 }

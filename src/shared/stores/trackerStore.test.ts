@@ -81,9 +81,14 @@ describe('trackerStore', () => {
   });
 
   describe('calculateTarget', () => {
-    it('calculates caloric target with default values', () => {
+    const setDefaults = () => {
       useTrackerStore.getState().setWeight('80');
       useTrackerStore.getState().setHeight('170');
+      useTrackerStore.getState().setGlucose('100');
+    };
+
+    it('calculates caloric target with default values', () => {
+      setDefaults();
       useTrackerStore.getState().calculateTarget();
       const state = useTrackerStore.getState();
       expect(state.caloricTarget).not.toBeNull();
@@ -95,6 +100,7 @@ describe('trackerStore', () => {
     it('sets profileError when weight is invalid', () => {
       useTrackerStore.getState().setWeight('abc');
       useTrackerStore.getState().setHeight('170');
+      useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(ValidationError);
@@ -102,6 +108,7 @@ describe('trackerStore', () => {
 
     it('clears profileError on successful recalculate', () => {
       useTrackerStore.getState().setWeight('abc');
+      useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
       expect(useTrackerStore.getState().profileError).not.toBeNull();
 
@@ -113,6 +120,7 @@ describe('trackerStore', () => {
     it('activates restrictionActive when IMC > 25', () => {
       useTrackerStore.getState().setWeight('95');
       useTrackerStore.getState().setHeight('170');
+      useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
       expect(useTrackerStore.getState().restrictionActive).toBe(true);
       expect(useTrackerStore.getState().caloricTarget!.deficit).toBeGreaterThan(0);
@@ -121,6 +129,7 @@ describe('trackerStore', () => {
     it('does not activate restrictionActive when IMC <= 25', () => {
       useTrackerStore.getState().setWeight('65');
       useTrackerStore.getState().setHeight('170');
+      useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
       expect(useTrackerStore.getState().restrictionActive).toBe(false);
       expect(useTrackerStore.getState().caloricTarget!.deficit).toBe(0);
@@ -132,6 +141,7 @@ describe('trackerStore', () => {
       });
       useTrackerStore.getState().setWeight('80');
       useTrackerStore.getState().setHeight('170');
+      useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(ValidationError);
@@ -143,6 +153,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setAge('40');
       useTrackerStore.getState().setDiagnosisAge('45');
+      useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(ValidationError);
@@ -154,6 +165,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setAge('50');
       useTrackerStore.getState().setDiagnosisAge('50');
+      useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
       const state = useTrackerStore.getState();
       expect(state.caloricTarget).not.toBeNull();

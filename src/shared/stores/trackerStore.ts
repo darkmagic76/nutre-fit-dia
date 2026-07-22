@@ -123,14 +123,24 @@ export const useTrackerStore = create<TrackerState>((set, get) => ({
       return;
     }
 
-    // FR-5.1: record glucose if provided
+    // FR-5.1: glucose is required for metabolic profile calculation
     const glucoseTrimmed = glucose.trim();
-    if (glucoseTrimmed !== '') {
-      const g = parseFloat(glucoseTrimmed);
-      if (!Number.isNaN(g) && g > 0) {
-        recordGlucose({ value: g, timestamp: Date.now(), context: glucoseContext });
-      }
+    if (glucoseTrimmed === '') {
+      set({
+        profileError: new ValidationError('La glucosa es obligatoria para calcular el perfil metabólico'),
+      });
+      return;
     }
+
+    const g = parseFloat(glucoseTrimmed);
+    if (Number.isNaN(g) || g <= 0) {
+      set({
+        profileError: new ValidationError('La glucosa debe ser un valor positivo (mg/dL)'),
+      });
+      return;
+    }
+
+    recordGlucose({ value: g, timestamp: Date.now(), context: glucoseContext });
 
     const imc = computeIMC(w, h);
     const target = computeCaloricTarget({

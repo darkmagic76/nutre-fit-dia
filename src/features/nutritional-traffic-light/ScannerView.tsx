@@ -59,7 +59,7 @@ export function ScannerView({
 
       {selected && (
         <div
-          className="p-3 bg-stone-50 rounded-lg text-sm space-y-1"
+          className="p-3 bg-stone-50 dark:bg-zinc-700/60 rounded-lg text-sm space-y-1 dark:text-zinc-100"
           aria-label={`Detalles de ${displayName}`}
         >
           <p>
@@ -70,7 +70,7 @@ export function ScannerView({
             HC | {selected.fatPer100g}g grasa
           </p>
           {selected.harmfulIngredients.length > 0 && (
-            <p className="text-red-600" role="alert">
+            <p className="text-red-600 dark:text-red-400" role="alert">
               ⚠️ {selected.harmfulIngredients.join(', ')}
             </p>
           )}

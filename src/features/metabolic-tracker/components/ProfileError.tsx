@@ -7,7 +7,7 @@ interface ProfileErrorProps {
 export function ProfileError({ error }: ProfileErrorProps) {
   if (!error) return null;
   return (
-    <p className="text-red-600 text-sm font-medium" role="alert">
+    <p className="text-red-600 dark:text-red-400 text-sm font-medium" role="alert">
       {error.message}
     </p>
   );

@@ -12,6 +12,7 @@ interface MetabolicTrackerViewProps {
   form: UserMetricsFormState;
   caloricTarget: CaloricTargetOutput | null;
   profileError: ValidationError | null;
+  canCalculate: boolean;
   onCalculate: (e: FormEvent) => void;
 }
 
@@ -19,12 +20,13 @@ export function MetabolicTrackerView({
   form,
   caloricTarget,
   profileError,
+  canCalculate,
   onCalculate,
 }: MetabolicTrackerViewProps) {
   const t = useT();
   return (
     <Card title={t['metabolic.title']} description={t['metabolic.descriptionDetail']}>
-      <ProfileForm form={form} onSubmit={onCalculate} />
+      <ProfileForm form={form} onSubmit={onCalculate} canSubmit={canCalculate} />
       <ProfileError error={profileError} />
       {caloricTarget && <ProfileResults caloricTarget={caloricTarget} />}
     </Card>

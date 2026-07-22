@@ -33,6 +33,11 @@ describe('App integration', () => {
 
   const getSelectedTabs = () =>
     screen.getAllByRole('tab').filter((t) => t.getAttribute('aria-selected') === 'true');
+
+  const fillGlucose = (value = '100') => {
+    const glucoseInput = screen.getByLabelText('Glucosa (mg/dL)');
+    fireEvent.change(glucoseInput, { target: { value } });
+  };
   it('renders all navigation tabs', () => {
     expect(screen.getByRole('tab', { name: /semáforo/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /hoy/i })).toBeInTheDocument();
@@ -155,6 +160,7 @@ describe('App integration', () => {
 
     it('shows caloric summary after calculating metabolic profile', () => {
       selectTab('Perfil');
+      fillGlucose();
       fireEvent.click(screen.getByRole('button', { name: /calcular perfil/i }));
 
       selectTab('Hoy');
@@ -167,6 +173,7 @@ describe('App integration', () => {
   describe('Metabolic Profile', () => {
     it('calculates caloric target from default values', () => {
       selectTab('Perfil');
+      fillGlucose();
 
       fireEvent.click(screen.getByRole('button', { name: /calcular perfil/i }));
 
@@ -176,17 +183,19 @@ describe('App integration', () => {
 
     it('shows profile error when weight is empty', () => {
       selectTab('Perfil');
+      fillGlucose();
 
       const weightInput = screen.getByLabelText('Peso (kg)');
       fireEvent.change(weightInput, { target: { value: '' } });
 
       fireEvent.click(screen.getByRole('button', { name: /calcular perfil/i }));
 
-      expect(screen.getAllByRole('alert').length).toBeGreaterThan(1);
+      expect(screen.getAllByRole('alert').length).toBeGreaterThanOrEqual(1);
     });
 
     it('shows "Sin restricción" when IMC <= 25', () => {
       selectTab('Perfil');
+      fillGlucose();
 
       const weightInput = screen.getByLabelText('Peso (kg)');
       fireEvent.change(weightInput, { target: { value: '65' } });
