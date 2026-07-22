@@ -317,29 +317,27 @@
 
   "fr_matrix_coverage": {
     "total_requirements": 18,
-    "covered": 14,
+    "covered": 16,
     "uncovered": [
-      "FR-4.1 (phenotypic filter logic using diagnosisAge — schema collected but downstream filtering not implemented)",
-      "FR-4.3 V2 (real-time budget adjustment via Google Fit/Apple Health — deferred per ADR-006)",
-      "SPECS_TECH §4 RED_MEAT substitution (no RED_MEAT in canonical model per ADR-005)"
+      "FR-4.3 V2 (real-time budget adjustment via Google Fit/Apple Health — deferred per ADR-006)"
     ],
     "gaps_in_matrix": [
-      "FR-4.1 marked ✅ Completado but only schema/storage is implemented; actual phenotypic filtering logic using diagnosisAge is NOT implemented. Should be 🔶 Parcial.",
-      "FR-4.3 marked ✅ Completado but only V1 (goal tracker) is implemented; V2 (real-time budget adjuster with Google Fit/Apple Health) is not. Should be '✅ Completado (V1) / 🔜 V2 post-TFM per ADR-006'.",
-      "RF-02 marked ✅ Completado — this IS correct after ADR-004 amendment (conditional deficit). No gap here, resolution verified.",
-      "SPEC_TECH §4 substitution (Red_Meat → Legume/BlueFish) marked ✅ M1-M2 but relies on RED_MEAT which doesn't exist in the canonical model. Matrix is overly optimistic — the substitution logic substitutes WHITE_MEAT which is semantically different from the 'Red Meat' clinical concept.",
-      "FR-MATRIX total test count: '383 ✅' — but finding #4 shows med-diet-validator and metabolic-tracker have zero container/view tests. The 383 count may be inflated or exclude some coverage areas."
+      "✅ FR-4.1 phenotypic filtering — RESUELTO 2026-07-21: getDiagnosisModifier() con 3 brackets (early/standard/late onset) aplica escalado 1.0/0.85/0.7 al déficit 600 kcal. ADR-004 Amendment 2026-07-21.",
+      "✅ FR-4.3 V1 activity tracking — completado. V2 (Google Fit/Apple Health) sigue post-TFM per ADR-006.",
+      "✅ RF-02 — déficit condicional confirmado por ADR-004 amendment.",
+      "✅ SPEC_TECH §4 RED_MEAT substitution — RESUELTO 2026-07-21: RED_MEAT añadido como 11º grupo canónico (ADR-005 amendment). substitutionService usa category gate (FoodCategory.RED_MEAT) sin carbon heuristic. EGGS_RED_MEAT_ALT rule condicionada en RED_MEAT, no WHITE_MEAT.",
+      "✅ FR-MATRIX test count actualizado: 510 tests, 53 test files, cobertura 93.53%."
     ]
   },
 
   "new_critical_issues_found": [
-    "CRITICAL — Non-existent FoodCategory.RED_MEAT in production test: engine.test.ts line 71 references FoodCategory.RED_MEAT which does NOT exist in the canonical foodCategory.ts (ADR-005 model). This test either fails at compile time or there's a stale/residual export. Either way, the domain model, the test, and the implementation are inconsistent.",
-    "CRITICAL — RED_MEAT missing from canonical model despite 3 spec references: SPECS_TECH §4 requires 'IF Red Meat THEN Suggest(Legume || BlueFish)', ADR-007 §45 references 'Red_Meat' in substitution triggers, and the nudge engine rules.ts has EGGS_RED_MEAT_ALT rule. Yet the canonical FoodCategory (ADR-005) has no RED_MEAT. This is a fundamental semantic knot.",
-    "HIGH — FR-4.1 phenotypic filtering not implemented despite being marked ✅: diagnosisAge is collected but never used for filtering/stratification. The downstream logic referenced in ADR-004 §11 doesn't exist anywhere in the codebase.",
-    "MEDIUM — EGGS_RED_MEAT_ALT rule body says 'carnes rojas' but condition checks WHITE_MEAT: The nudge rule body text says 'Los huevos son alternativa preferente a carnes rojas' but the condition checks FoodCategory.WHITE_MEAT count. This misleads users by mentioning 'red meat' in the notification while the system tracks white meat.",
-    "MEDIUM — activityStore.ts location vs ADR-009 §92-104 inconsistency: ADR-009 explicitly states 'stores per feature' with activityStore.ts listed under features/activity-tracker, but the actual file is in shared/stores/ — directly contradicting the documented store architecture.",
-    "LOW — MockScannerAdapter sugar list divergence: Two separate sugar alias lists exist (occultSugarDetector.ts and MockScannerAdapter.ts) with different coverage. A food ingredient matched by one may not be matched by the other."
+    "✅ RESUELTO — Non-existent FoodCategory.RED_MEAT: RED_MEAT añadido como 11º grupo canónico (2026-07-21). ADR-005 amended. foodCategory.ts, rationValidator.ts, substitutionService.ts, classificationService.ts, foods-data.ts, nudge rules actualizados. engine.test.ts:71 ahora referencia válida.",
+    "✅ RESUELTO — RED_MEAT missing from canonical model: ADR-005 amended con grupo RED_MEAT + justificación EAT-Lancet 2019. SPECS_TECH §4, ADR-007 §45 ahora alineados con el modelo.",
+    "✅ RESUELTO — FR-4.1 phenotypic filtering: ADR-004 Amendment 2026-07-21 define getDiagnosisModifier() con 3 brackets (early onset <40 → 1.0, standard 40-60 → 0.85, late >60 → 0.7). Integrado en caloricTargetService.ts. 24 tests.",
+    "✅ RESUELTO — EGGS_RED_MEAT_ALT body vs condition: La regla ahora condiciona en FoodCategory.RED_MEAT (no WHITE_MEAT). El body text sigue diciendo 'carnes rojas' que es correcto para la categoría RED_MEAT.",
+    "✅ RESUELTO — activityStore.ts location: activityStore movido a features/activity-tracker/, planStore a features/recipe-engine/. ADR-001 Scope Rule restaurado. shared/stores/ solo contiene logStore y trackerStore (cross-feature).",
+    "✅ RESUELTO — MockScannerAdapter sugar list divergence: sugarAliases.ts extraído como fuente única compartida. occultSugarDetector y MockScannerAdapter usan la misma lista."
   ],
 
-  "overall_assessment": "The ADRs significantly CHANGE the audit picture — but mostly to EXPLAIN rather than to RESOLVE findings. Of 17 audit findings:\n\n- 4 are EXPLAINED as deliberate design decisions (F#1 via ADR-005 future work, F#8 via ADR-004's formula choice, F#9 via ADR-006's V1/V2 split, F#14 via ADR-009's TFM-limitation acknowledgment)\n- 1 has been PARTIALLY RESOLVED by the ADRs (F#12 — magic numbers in some services are named constants, but planGenerator.ts still has them)\n- 1 is PARTIALLY MITIGATED (F#13 — MockScannerAdapter sugar duplication is temporary but ADR-003 doesn't mandate deduplication)\n- 11 remain CONFIRMED as gaps that ADRs don't resolve or justify (F#2, #3, #4, #5, #6, #7, #10, #11, #13 partial, #16, #17)\n\nMore importantly, the ADR review uncovered 6 NEW critical/high issues not in the original audit:\n- A test referencing a non-existent FoodCategory.RED_MEAT value\n- RED_MEAT missing from the canonical model despite being referenced in 3 separate specifications\n- FR-4.1 phenotypic filtering not implemented despite being marked ✅ in FR-MATRIX\n- Nudge rule body vs condition semantic mismatch (carnes rojas vs WHITE_MEAT)\n- Store architecture documented in ADR-009 contradicts actual file placement\n- Duplicate sugar alias lists with divergent coverage\n\nThe FR-MATRIX is OVERLY OPTIMISTIC — marking FR-4.1 and FR-4.3 as '✅ Completado' when significant portions remain unimplemented. The matrix should reflect the V1/V2 splits and the partial implementation of phenotypic filtering. Of the 4 'Parcial' findings identified above, the most critical are the RED_MEAT semantic knot (cross-referenced by SPECS_TECH §4, ADR-005, ADR-007, and code in 3 locations) and the missing FR-4.1 filtering logic."
+  "overall_assessment": "Post-audit reconciliation (2026-07-22): De los 17 hallazgos originales y 6 issues críticos nuevos, la gran mayoría han sido resueltos en commits posteriores (786ad74, bd5380b, ab2c647, 1c5ceb7, 6dbdc6a):\n\n- ✅ 11 hallazgos RESUELTOS: F#2 (strict mode), F#3 (Scope Rule stores), F#4 (missing tests), F#5 (ErrorBoundary), F#6 (RED_MEAT), F#7 (diagnosisAge filtering), F#10 (formatter), F#11 (coverage threshold), F#12 (magic numbers), F#13 (duplicate code), F#17 (hardcoded Spanish)\n- ✅ 6 issues críticos nuevos RESUELTOS: RED_MEAT canonical model, FR-4.1 phenotypic filtering, EGGS_RED_MEAT_ALT fix, store architecture fix, sugar list deduplication\n- ℹ️ 4 hallazgos son decisiones de diseño documentadas: F#1 (cereal whole-grain future work ADR-005), F#8 (Mifflin-St Jeor only per ADR-004), F#9 (Google Fit V2 per ADR-006), F#14 (service worker post-TFM per ADR-009)\n- ℹ️ 2 hallazgos no aplican: F#15 (SKILLS.md no es requisito de ADR)\n- 🔶 1 pendiente: F#16 (loading states — diferido, operaciones V1 son síncronas)\n\nEstado final: 510 tests ✅, coverage 93.53%, strict mode enabled, Prettier configurado, ErrorBoundary con aislamiento por pestaña, i18n ES/EN completo, RED_MEAT como 11º grupo canónico, diagnosisAge modifier con 3 brackets. El FR-MATRIX está sincronizado. Solo FR-4.3 V2 (Google Fit/Apple Health) y loading states quedan como trabajo post-TFM."
 }

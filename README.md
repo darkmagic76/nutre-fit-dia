@@ -22,6 +22,7 @@ Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y 
 | Vitest                | 4.1.10   | Test runner unitario y de componentes           |
 | Testing Library React | 16.3.2   | Testing conductual de componentes               |
 | Oxlint                | 1.71.0   | Linting basado en Rust                          |
+| Prettier              | 3.7.4    | Formateador de código                           |
 | jsdom                 | 29.1.1   | Entorno browser para tests                      |
 | Playwright            | 1.61.1   | Tests E2E — flujo completo de usuario           |
 | PWA                   | Manifest | Instalable como app en móvil (offline-ready)    |
@@ -46,7 +47,7 @@ pnpm test:e2e        # Tests end-to-end con Playwright
 pnpm test:e2e:ui     # E2E en modo interactivo
 
 # Calidad
-pnpm quality         # lint + typecheck + tests
+pnpm quality         # format:check + lint + typecheck + tests
 pnpm verify          # quality + build
 ```
 
@@ -213,7 +214,7 @@ Cada objeto `Recipe` en nuestra base de datos debe cumplir con un esquema de met
 1. **Fase 1: Domain Modeling** ✅ — Definición de tipos estrictos para perfiles metabólicos, raciones AESAN, tipos de alimentos, notification taxonomy.
 2. **Fase 2: Domain Services & Containers** ✅ — Implementación de lógica erMedDiet, Container/Presentational split, per-feature Zustand stores.
 3. **Fase 3: ADR Scaffolding** ✅ — ScannerAdapter (ADR-003), Activity Tracker (ADR-006), Sustainability (ADR-007), Nudge Engine (ADR-008).
-4. **Fase 4: Tests & Error Handling** ✅ — 387 tests (38 unitarios + 3 E2E). Cero errores silenciosos. `ValidationError` y `NotFoundError` tipados.
+4. **Fase 4: Tests & Error Handling** ✅ — 510 tests (53 test files + 3 E2E). Cobertura 93.53% líneas / 92.38% statements. `ErrorBoundary` con aislamiento por pestaña. `ValidationError` y `NotFoundError` tipados.
 5. **Fase 5: E2E & Accesibilidad** ✅ — Playwright smoke tests (scan→classify→plan). WCAG 2.1 AA: roles ARIA, aria-labels, keyboard nav, skip links.
 
 ### Ejemplo: Patrón Contenedor/Presentacional
@@ -289,8 +290,8 @@ Pipeline automático en **GitHub Actions** (`.github/workflows/ci.yml`):
 ```
 Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
               │                    │
-              ├ pnpm audit         ├ lint + typecheck
-              └ gitleaks           ├ unit tests (387)
+               ├ pnpm audit         ├ format:check + lint + typecheck
+               └ gitleaks           ├ unit tests (510)
                                    └ build (vite)
 ```
 

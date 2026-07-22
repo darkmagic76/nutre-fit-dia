@@ -118,9 +118,10 @@ Pipeline de calidad:
 
 ```text
 pnpm quality
-  ├── pnpm lint       → Oxlint (Rust, ultrarrápido)
-  ├── pnpm typecheck  → TypeScript 6 (erasableSyntaxOnly)
-  └── pnpm test:run   → Vitest (387 tests)
+  ├── pnpm format:check → Prettier
+  ├── pnpm lint         → Oxlint (Rust, ultrarrápido)
+  ├── pnpm typecheck    → TypeScript 6 (erasableSyntaxOnly)
+  └── pnpm test:run     → Vitest (510 tests)
 ```
 
 ---
@@ -225,7 +226,7 @@ nutre-fit-dia/
 │   │   └── ml/                ← ScannerAdapter (ADR-003) + ScanResult
 │   └── test/
 │       └── fixtures.ts        ← makeFood factory
-├── adr/                       ← 9 ADRs + matriz de trazabilidad
+├── adr/                       ← 11 ADRs + matriz de trazabilidad + reconciliation
 ├── docs/                      ← Especificaciones (INFORME_ADR, SPECS_RF, SPECS_TECH)
 ├── package.json
 ├── tsconfig.json
@@ -248,7 +249,7 @@ nutre-fit-dia/
 | Tests          | Vitest 4 + Testing Library 16                       | ADR-009  |
 | Lint           | Oxlint (Rust)                                       | ADR-009  |
 | Arquitectura   | Screaming Architecture                              | ADR-001  |
-| Dominio        | 10 FoodCategory groups                              | ADR-005  |
+| Dominio        | 11 FoodCategory groups                              | ADR-005  |
 | Déficit        | 600 kcal condicional (IMC > 25)                     | ADR-004  |
 | Scanner        | Mock → ONNX (V2)                                    | ADR-003  |
 | Actividad      | GoalTracker manual V1                               | ADR-006  |
