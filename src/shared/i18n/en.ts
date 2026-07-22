@@ -150,6 +150,19 @@ export const en: Translations = {
   'cooking.grilled': 'grilled',
   'cooking.raw': 'raw',
 
+  // Food categories
+  'category.cereals': 'Cereals',
+  'category.vegetables': 'Vegetables',
+  'category.fruits': 'Fruits',
+  'category.olive_oil': 'Olive Oil',
+  'category.dairy': 'Dairy',
+  'category.legumes': 'Legumes',
+  'category.fish': 'Fish',
+  'category.eggs': 'Eggs',
+  'category.white_meat': 'White Meat',
+  'category.red_meat': 'Red Meat',
+  'category.water': 'Water',
+
   'alert.severityCritical': 'Critical',
   'alert.severityWarning': 'Warning',
   'alert.acknowledge': 'Acknowledge alert',

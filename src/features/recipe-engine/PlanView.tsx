@@ -1,6 +1,5 @@
 import { useT } from '@shared/i18n';
 import { useFoodName } from '@shared/hooks/useFoodName';
-import { CATEGORY_DISPLAY_NAMES } from '@shared/domain';
 import type { CulturalMetadata, Food } from '@shared/domain';
 import { Card, PrimaryButton, ViolationList, LegalDisclaimer } from '@shared/ui';
 import { MealType, type MealEntry, type WeeklyPlan } from './services/planGenerator';
@@ -220,7 +219,8 @@ export function PlanView({
                                   <ZeroWasteBadges food={e.food} />
                                 </span>
                                 <span className="text-stone-400 dark:text-zinc-500">
-                                  {CATEGORY_DISPLAY_NAMES[e.food.category]}
+                                  {t[`category.${e.food.category}` as keyof typeof t] ??
+                                    e.food.category}
                                 </span>
                               </li>
                             ))}

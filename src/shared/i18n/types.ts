@@ -84,6 +84,19 @@ export interface Translations {
   'cooking.grilled': string;
   'cooking.raw': string;
 
+  // Food categories (used in PlanView)
+  'category.cereals': string;
+  'category.vegetables': string;
+  'category.fruits': string;
+  'category.olive_oil': string;
+  'category.dairy': string;
+  'category.legumes': string;
+  'category.fish': string;
+  'category.eggs': string;
+  'category.white_meat': string;
+  'category.red_meat': string;
+  'category.water': string;
+
   // Activity
   'activity.title': string;
   'activity.description': string;

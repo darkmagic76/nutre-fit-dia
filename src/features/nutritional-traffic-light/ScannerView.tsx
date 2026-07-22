@@ -1,4 +1,4 @@
-import { TrafficLightColor, CATEGORY_DISPLAY_NAMES } from '@shared/domain';
+import { TrafficLightColor } from '@shared/domain';
 import type { Food } from '@shared/domain';
 import { Card, SelectField, PrimaryButton } from '@shared/ui';
 import { SafetyAlertDisplay } from './components/SafetyAlertDisplay';
@@ -63,7 +63,8 @@ export function ScannerView({
           aria-label={t['scanner.detailsAria'].replace('{name}', displayName)}
         >
           <p>
-            <strong>{displayName}</strong> — {CATEGORY_DISPLAY_NAMES[selected.category]}
+            <strong>{displayName}</strong> —{' '}
+            {t[`category.${selected.category}` as keyof typeof t] ?? selected.category}
           </p>
           <p>
             {t['scanner.macrosFormat']

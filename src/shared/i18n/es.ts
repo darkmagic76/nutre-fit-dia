@@ -151,6 +151,19 @@ export const es: Translations = {
   'cooking.grilled': 'a la plancha',
   'cooking.raw': 'en crudo',
 
+  // Food categories
+  'category.cereals': 'Cereales',
+  'category.vegetables': 'Hortalizas',
+  'category.fruits': 'Frutas',
+  'category.olive_oil': 'AOVE',
+  'category.dairy': 'Lácteos',
+  'category.legumes': 'Legumbres',
+  'category.fish': 'Pescado',
+  'category.eggs': 'Huevos',
+  'category.white_meat': 'Carne blanca',
+  'category.red_meat': 'Carne roja',
+  'category.water': 'Agua',
+
   'alert.severityCritical': 'Crítico',
   'alert.severityWarning': 'Advertencia',
   'alert.acknowledge': 'Reconocer alerta',
