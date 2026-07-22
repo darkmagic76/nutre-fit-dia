@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-22 | Rama: `develop` | Tests: 510 ✅ | Lint: 0 | Typecheck: limpio | Coverage: 93.53% | Formatter: Prettier
+Generado: 2026-07-17 | Actualizado: 2026-07-22 | Rama: `develop` | Tests: 544 ✅ (56 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.64% Stmts / 100% Funcs / 99.31% Lines | Formatter: Prettier
 
 ---
 
@@ -98,7 +98,7 @@ Fase 4 — Pulido (LOW)
 
 ## Notas
 
-- **510 tests verdes**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
+- **544 tests verdes (56 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
 - **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module.
 - **NudgeEngine wiring**: `evaluateAndEnqueue()` se dispara en `ScannerContainer.handleClassify` y `handleAddToLog`. Singleton `CooldownTracker` previene notificaciones duplicadas.
 - **Activity form**: `NumberField` usa estado local (`useState`) — bug de `value=""` fijo corregido.

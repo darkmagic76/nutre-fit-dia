@@ -6,7 +6,7 @@ Documentos fuente:
 - `SPECS_TECH.md` — Manual Técnico erMedDiet
 - `SPECS_RF.md` — Requisitos Funcionales y No Funcionales (RF-01 → RF-03, RNF-01 → RNF-03)
 
-Generada: 2026-07-12 | Actualizada: 2026-07-22 | Rama: `develop` | Tests: 510 ✅ | Coverage: 93.53%
+Generada: 2026-07-12 | Actualizada: 2026-07-22 | Rama: `develop` | Tests: 544 ✅ (56 files) | Coverage: 98.64% Stmts / 93.49% Branches / 100% Funcs / 99.31% Lines
 
 ## Estado por Requisito
 
