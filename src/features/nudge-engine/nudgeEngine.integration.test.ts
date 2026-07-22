@@ -113,7 +113,10 @@ describe('Nudge Engine Integration', () => {
     it('clears WATER_HYDRATION nudge when water rations reach minimum', () => {
       // Given: only 2 water rations → WATER_HYDRATION triggers
       useLogStore.setState({
-        todayLog: [makeFood({ id: 'w1', name: 'Agua', category: FoodCategory.WATER }), makeFood({ id: 'w2', name: 'Agua', category: FoodCategory.WATER })],
+        todayLog: [
+          makeFood({ id: 'w1', name: 'Agua', category: FoodCategory.WATER }),
+          makeFood({ id: 'w2', name: 'Agua', category: FoodCategory.WATER }),
+        ],
       });
       evaluateAndEnqueue();
 
@@ -134,7 +137,9 @@ describe('Nudge Engine Integration', () => {
 
       // Then: water nudge should be auto-cleared
       const afterResolution = useNudgeStore.getState();
-      expect(afterResolution.pending.find((n) => n.ruleSource === 'WATER_HYDRATION')).toBeUndefined();
+      expect(
+        afterResolution.pending.find((n) => n.ruleSource === 'WATER_HYDRATION'),
+      ).toBeUndefined();
     });
 
     it('clears VEGETABLES_DEFICIT nudge when vegetables reach minimum', () => {
@@ -169,7 +174,9 @@ describe('Nudge Engine Integration', () => {
 
       // Then: vegetable nudge should be auto-cleared
       const afterResolution = useNudgeStore.getState();
-      expect(afterResolution.pending.find((n) => n.ruleSource === 'VEGETABLES_DEFICIT')).toBeUndefined();
+      expect(
+        afterResolution.pending.find((n) => n.ruleSource === 'VEGETABLES_DEFICIT'),
+      ).toBeUndefined();
       expect(afterResolution.history).toHaveLength(1);
     });
 

@@ -127,7 +127,9 @@ export const useTrackerStore = create<TrackerState>((set, get) => ({
     const glucoseTrimmed = glucose.trim();
     if (glucoseTrimmed === '') {
       set({
-        profileError: new ValidationError('La glucosa es obligatoria para calcular el perfil metabólico'),
+        profileError: new ValidationError(
+          'La glucosa es obligatoria para calcular el perfil metabólico',
+        ),
       });
       return;
     }
