@@ -12,7 +12,7 @@ export const PROTEIN_EMISSION_RATIOS = {
   beef: 50,
   fish_white: 4,
   fish_blue: 5,
-} as const
+} as const;
 
 /**
  * Carbon footprint thresholds for categorization (kg CO2eq per kg of food).
@@ -23,7 +23,7 @@ export const CARBON_THRESHOLDS = {
   LOW: 1.5,
   MODERATE: 3.0,
   HIGH: 5.0,
-} as const
+} as const;
 
 /** Score assigned to each carbon category. Higher = more sustainable. */
 export const CARBON_CATEGORY_SCORES = {
@@ -33,7 +33,7 @@ export const CARBON_CATEGORY_SCORES = {
   high: 40,
   very_high: 20,
   unknown: 50,
-} as const
+} as const;
 
 /**
  * Scoring weights for the composite environmental score.
@@ -44,21 +44,21 @@ export const CARBON_CATEGORY_SCORES = {
  * Proximity third (20%) — complements seasonality for food miles.
  */
 export const SCORING_WEIGHTS = {
-  carbon: 0.50,
-  seasonality: 0.30,
-  proximity: 0.20,
-} as const
+  carbon: 0.5,
+  seasonality: 0.3,
+  proximity: 0.2,
+} as const;
 
 /** Seasonality score mapping */
 export const SEASONALITY_SCORES = {
   in_season: 100,
   greenhouse: 60,
   out_of_season: 30,
-} as const
+} as const;
 
 /** Proximity score mapping */
 export const PROXIMITY_SCORES = {
   km0: 100,
   national: 60,
   imported: 30,
-} as const
+} as const;

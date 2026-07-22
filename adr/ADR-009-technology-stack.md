@@ -34,46 +34,49 @@ This ADR ratifies the declared frontend stack and fills the gaps with decisions 
 
 ### Frontend (Ratified from README)
 
-| Technology | Version | Role |
-|---|---|---|
-| React | 19.2.7 | UI components (Container/Presentational per ADR-001) |
-| TypeScript | 6.0.2 | Type safety, erasableSyntaxOnly |
-| Vite | 8.1.1 | Dev server, build, PWA plugin |
-| Tailwind CSS | 4.3.2 | Utility-first styling |
-| Zod | 4.4.3 | Runtime validation (ADR-002) |
-| Vitest | 4.1.10 | Unit and component testing |
-| Testing Library | 16.3.2 | Behavioral component testing |
-| Oxlint | 1.71.0 | Rust-based linting |
-| jsdom | 29.1.1 | Browser environment for tests |
-| pnpm | — | Package manager |
+| Technology      | Version | Role                                                 |
+| --------------- | ------- | ---------------------------------------------------- |
+| React           | 19.2.7  | UI components (Container/Presentational per ADR-001) |
+| TypeScript      | 6.0.2   | Type safety, erasableSyntaxOnly                      |
+| Vite            | 8.1.1   | Dev server, build, PWA plugin                        |
+| Tailwind CSS    | 4.3.2   | Utility-first styling                                |
+| Zod             | 4.4.3   | Runtime validation (ADR-002)                         |
+| Vitest          | 4.1.10  | Unit and component testing                           |
+| Testing Library | 16.3.2  | Behavioral component testing                         |
+| Oxlint          | 1.71.0  | Rust-based linting                                   |
+| jsdom           | 29.1.1  | Browser environment for tests                        |
+| pnpm            | —       | Package manager                                      |
 
 ### Backend: Supabase
 
 **Why Supabase over alternatives:**
 
-| Criterion | Supabase | Firebase | Custom Express | None (localStorage) |
-|---|---|---|---|---|
-| Database | ✅ PostgreSQL (relational) | ❌ Firestore (NoSQL) | ✅ | ❌ |
-| Auth built-in | ✅ Email + OAuth + roles | ✅ | ❌ | ❌ |
-| Row Level Security | ✅ Patient sees own data, dietitian sees patients | ⚠️ Complex rules | ❌ | ❌ |
-| Free tier | ✅ 500MB DB, 50K users | ✅ | ❌ (hosting cost) | ✅ |
-| Real-time | ✅ Subscriptions | ✅ | ❌ | ❌ |
-| TFM-appropriate | ✅ Quick setup, zero ops | ✅ | ❌ Overhead | ❌ No multi-user |
+| Criterion          | Supabase                                          | Firebase             | Custom Express    | None (localStorage) |
+| ------------------ | ------------------------------------------------- | -------------------- | ----------------- | ------------------- |
+| Database           | ✅ PostgreSQL (relational)                        | ❌ Firestore (NoSQL) | ✅                | ❌                  |
+| Auth built-in      | ✅ Email + OAuth + roles                          | ✅                   | ❌                | ❌                  |
+| Row Level Security | ✅ Patient sees own data, dietitian sees patients | ⚠️ Complex rules     | ❌                | ❌                  |
+| Free tier          | ✅ 500MB DB, 50K users                            | ✅                   | ❌ (hosting cost) | ✅                  |
+| Real-time          | ✅ Subscriptions                                  | ✅                   | ❌                | ❌                  |
+| TFM-appropriate    | ✅ Quick setup, zero ops                          | ✅                   | ❌ Overhead       | ❌ No multi-user    |
 
 **Why relational matters**: the domain model is inherently relational — users have profiles, profiles have glucose readings, plans contain recipes, recipes contain foods, foods belong to categories, dietitians validate plans. PostgreSQL models this naturally. Firestore's document model would force denormalization and compound queries for cross-feature operations.
 
 **Auth roles**:
+
 - `patient` — default role, self-registration
 - `dietitian` — assigned manually or via invite, validates plans
 - Both roles enforced via Supabase Row Level Security policies
 
 **Supabase services used**:
+
 - `supabase-js` SDK (client-side, anon key)
 - Auth (email/password, magic link)
 - PostgreSQL (data tables, RLS policies)
 - Storage (recipe images, food photos)
 
 **Services NOT used in V1**:
+
 - Edge Functions (no serverless compute needed for TFM)
 - Realtime (deferred to V2 for dietitian notifications)
 
@@ -81,13 +84,13 @@ This ADR ratifies the declared frontend stack and fills the gaps with decisions 
 
 **Why Zustand over alternatives:**
 
-| Criterion | Zustand | React Context | Redux Toolkit |
-|---|---|---|---|
-| Boilerplate | ✅ Minimal | ✅ Minimal | ❌ High |
-| Selector performance | ✅ Automatic | ⚠️ Re-renders whole tree | ✅ |
-| DevTools | ✅ Built-in | ❌ | ✅ |
-| Cross-feature stores | ✅ Multiple stores | ⚠️ Provider nesting | ✅ Single store |
-| Bundle size | ✅ ~1KB | ✅ 0KB | ❌ ~12KB |
+| Criterion            | Zustand            | React Context            | Redux Toolkit   |
+| -------------------- | ------------------ | ------------------------ | --------------- |
+| Boilerplate          | ✅ Minimal         | ✅ Minimal               | ❌ High         |
+| Selector performance | ✅ Automatic       | ⚠️ Re-renders whole tree | ✅              |
+| DevTools             | ✅ Built-in        | ❌                       | ✅              |
+| Cross-feature stores | ✅ Multiple stores | ⚠️ Provider nesting      | ✅ Single store |
+| Bundle size          | ✅ ~1KB            | ✅ 0KB                   | ❌ ~12KB        |
 
 **Store architecture** (one per feature, per ADR-001 Scope Rule):
 
@@ -108,12 +111,14 @@ Cross-feature reads (e.g., NudgeEngine reads from `trackerStore` + `planStore`) 
 ### Mobile Strategy: PWA V1
 
 **V1 (TFM): Progressive Web App**
+
 - Camera access via `navigator.mediaDevices.getUserMedia()` → feeds `ScannerAdapter`
 - Installable on home screen (manifest.json + service worker)
 - Offline-capable for food catalog and cached plans
 - Activity tracking: manual entry (ADR-006 V1 scope)
 
 **V2 (post-TFM): React Native deferred**
+
 - GoogleFit / AppleHealth native APIs (ADR-006 V2)
 - True offline-first with SQLite
 - Push notifications (dietitian alerts, hydration nudges)
@@ -133,12 +138,12 @@ This is a deliberate TFM tradeoff: static catalog avoids backend complexity for 
 
 ### CI/CD: GitHub Actions
 
-| Workflow | Trigger | Actions |
-|---|---|---|
-| `quality.yml` | Push to any branch | `pnpm lint`, `pnpm typecheck`, `pnpm test:run` |
-| `deploy-preview.yml` | PR to `develop` | Build + deploy to Vercel preview URL |
-| `deploy-staging.yml` | Push to `staging` | Build + deploy to staging environment |
-| `deploy-production.yml` | Push to `main` | Build + deploy to production |
+| Workflow                | Trigger            | Actions                                        |
+| ----------------------- | ------------------ | ---------------------------------------------- |
+| `quality.yml`           | Push to any branch | `pnpm lint`, `pnpm typecheck`, `pnpm test:run` |
+| `deploy-preview.yml`    | PR to `develop`    | Build + deploy to Vercel preview URL           |
+| `deploy-staging.yml`    | Push to `staging`  | Build + deploy to staging environment          |
+| `deploy-production.yml` | Push to `main`     | Build + deploy to production                   |
 
 **Hosting**: Vercel (free tier, optimal for Vite SPA, preview deployments per PR).
 
@@ -167,12 +172,12 @@ Per ADR-001 and conventional commits, feature branches follow Screaming Architec
 
 ## Traceability
 
-| Requirement | Covered by |
-|---|---|
-| ADR-001 (Screaming Architecture) | Zustand stores per feature, feature-branch naming |
-| ADR-002 (Zod + TS6) | Ratified in stack |
-| ADR-003 (ScannerAdapter) | PWA camera via `getUserMedia()` |
-| ADR-006 (Activity V1 manual) | PWA, no native Health APIs |
-| SPECS_TECH §5 (Human-in-the-loop) | Supabase Auth roles (patient/dietitian) |
-| SPECS_RF RNF-01 (validación profesional) | Dietitian role + RLS policies |
-| TFM deployability | Vercel + Supabase free tiers |
+| Requirement                              | Covered by                                        |
+| ---------------------------------------- | ------------------------------------------------- |
+| ADR-001 (Screaming Architecture)         | Zustand stores per feature, feature-branch naming |
+| ADR-002 (Zod + TS6)                      | Ratified in stack                                 |
+| ADR-003 (ScannerAdapter)                 | PWA camera via `getUserMedia()`                   |
+| ADR-006 (Activity V1 manual)             | PWA, no native Health APIs                        |
+| SPECS_TECH §5 (Human-in-the-loop)        | Supabase Auth roles (patient/dietitian)           |
+| SPECS_RF RNF-01 (validación profesional) | Dietitian role + RLS policies                     |
+| TFM deployability                        | Vercel + Supabase free tiers                      |

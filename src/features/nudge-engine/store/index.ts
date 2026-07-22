@@ -1,1 +1,1 @@
-export { useNudgeStore } from './nudgeStore'
+export { useNudgeStore } from './nudgeStore';

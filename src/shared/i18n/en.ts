@@ -1,11 +1,12 @@
-import type { Translations } from './types'
+import type { Translations } from './types';
 
 export const en: Translations = {
   'app.title': 'NutreFitDia',
   'app.subtitle': 'Comprehensive Self-Care Ecosystem for Type 2 Diabetes',
   'app.keyboardHint': 'Use ← → to navigate between tabs',
   'app.footer.tfm': 'TFM · NutreFitDia · erMedDiet + AESAN 2022',
-  'app.footer.disclaimer': '⚕️ All recommendations must be validated by a registered dietitian-nutritionist',
+  'app.footer.disclaimer':
+    '⚕️ All recommendations must be validated by a registered dietitian-nutritionist',
   'app.footer.security': 'Security',
 
   'tab.scanner': 'Traffic Light',
@@ -38,10 +39,16 @@ export const en: Translations = {
   'scanner.description': 'Dual classification (health + sustainability)',
   'scanner.emptySelection': '—',
   'scanner.noFoodSelected': 'Select a food to begin',
+  'scanner.trafficGreen': 'Recommended',
+  'scanner.trafficOrange': 'Moderate',
+  'scanner.trafficRed': 'Avoid',
 
   'log.title': '📝 Daily Log',
   'log.description': 'Ration validation per AESAN 2022',
   'log.emptyProfile': 'Set up your metabolic profile to see caloric target',
+  'log.emptyFoods': 'No foods registered.',
+  'log.foodListLabel': 'Foods registered today',
+  'log.removeAria': 'Remove {food} from log',
   'log.dailyObjective': 'Daily objective',
   'log.noRestriction': 'No restriction',
 
@@ -68,8 +75,15 @@ export const en: Translations = {
 
   'nudges.title': '🔔 Nudges',
   'nudges.description': 'Personalized notifications and recommendations',
-  'nudges.empty': 'No pending nudges',
+  'nudges.empty': 'No active nudges',
   'nudges.dismiss': 'Dismiss',
+  'nudges.active': 'active nudges',
+  'nudges.panelLabel': 'Nudge panel',
+  'nudges.pendingLabel': 'Pending nudges',
+  'nudges.history': 'Engagement history',
+  'nudges.dismissed': 'dismissed',
+  'nudges.acknowledged': 'acknowledged',
+  'nudges.dismissAria': 'Dismiss: {title}',
 
   'sustainability.title': '🌍 Sustainability',
   'sustainability.description': 'Environmental impact per AESAN 2022 and SDG 2030',
@@ -84,7 +98,16 @@ export const en: Translations = {
   'sustainability.emissions': 'Comparative Emissions',
   'sustainability.emissionsDesc': 'kg CO₂eq per kg of food (EAT-Lancet)',
 
-  'legal.disclaimer': '⚕️ All recommendations, quantities and nutritional plans must be validated by a registered dietitian-nutritionist.',
+  'install.title': 'Install app',
+  'install.dismiss': 'Dismiss',
+
+  'legal.disclaimer':
+    '⚕️ All recommendations, quantities and nutritional plans must be validated by a registered dietitian-nutritionist.',
+
+  'error.boundary.title': 'Something went wrong',
+  'error.boundary.description': 'An unexpected error occurred while rendering this section.',
+  'error.boundary.retry': 'Retry',
+  'error.boundary.globalReload': 'Reload application',
 
   'form.weight': 'Weight (kg)',
   'form.height': 'Height (cm)',
@@ -103,4 +126,38 @@ export const en: Translations = {
   'form.glucoseContext': 'Glucose context',
   'form.glucoseFasting': 'Fasting',
   'form.glucosePostprandial': 'Postprandial',
-}
+
+  // Activity — extended
+  'activity.goalDescription': 'WHO target: 150–300 min/week moderate activity + 2 strength days',
+  'activity.formMinutes': 'Moderate minutes',
+  'activity.formSessions': 'Strength sessions',
+  'activity.formLabel': 'Physical activity log',
+  'activity.registerButton': 'Log activity',
+
+  'cultural.socialEating': 'Ideal for sharing',
+  'cultural.preparation': 'Preparation',
+  'cultural.traditionalCuisine': 'Traditional cuisine',
+  'cultural.socialEatingBadge': 'Shared meal',
+
+  'meal.breakfast': 'Breakfast',
+  'meal.lunch': 'Lunch',
+  'meal.dinner': 'Dinner',
+  'meal.snack': 'Snack',
+
+  'cooking.stew': 'traditional stew',
+  'cooking.steam': 'steamed',
+  'cooking.boiled': 'boiled',
+  'cooking.grilled': 'grilled',
+  'cooking.raw': 'raw',
+
+  'alert.severityCritical': 'Critical',
+  'alert.severityWarning': 'Warning',
+  'alert.acknowledge': 'Acknowledge alert',
+  'alert.safetyLabel': 'Clinical safety alerts',
+  'alert.understood': 'Understood',
+
+  'validation.allClear': "✅ Today's log meets all daily limits.",
+  'caloric.dailyObjective': 'Daily objective',
+  'metabolic.descriptionDetail':
+    'erMedDiet protocol (PREDIMED-Plus): conditional 600 kcal deficit for IMC > 25. Mifflin-St Jeor formula.',
+};

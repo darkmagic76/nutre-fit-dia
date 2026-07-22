@@ -1,4 +1,3 @@
-
 # Especificación Funcional: Plataforma Digital de Salud Metabólica basada en erMedDiet
 
 ## 1. Fundamentos Médicos y Objetivos Estratégicos
@@ -19,19 +18,19 @@ La presente especificación técnica define los requisitos funcionales para una 
 
 El motor de cálculo deberá procesar las raciones recomendadas por la AESAN y la Pirámide Mediterránea adaptada para DT2, transformándolas en un plan de alimentación dinámico.
 
-|   |   |   |   |
-|---|---|---|---|
-|Grupo de Alimento|Requisito Algorítmico|Parámetro Técnico / Tagging|Alerta de Sistema (Trigger)|
-|**Cereales Integrales**|3-6 raciones/día (Máx 4 en restricción)|Priorizar grano entero (bajo IG).|**ALERT:** Si `Caloric_Restriction == TRUE` y `Rations > 4`.|
-|**Hortalizas**|≥ 3 raciones/día|Variedad cromática (fitoquímicos).|**SYSTEM:** Sugerir receta si `Count < 3` a las 20:00h.|
-|**Frutas**|2-3 raciones/día|Piezas enteras, local y temporada.|**ALERT:** Alta carga glucémica en uvas, dátiles e higos.|
-|**AOVE**|3-6 raciones/día|Fuente lipídica principal única.|**SYSTEM:** Tagging obligatorio en cada comida principal.|
-|**Lácteos**|Máx 3 raciones/día|Naturales, kéfir o quesos frescos.|**NUDGE:** Si `Animal_Protein > 2`, sugerir fuente calcio vegetal.|
-|**Legumbres**|4 raciones/semana hasta diario|Proteína vegetal + fibra.|**SYSTEM:** Requisito base para control glucémico postprandial.|
-|**Pescado**|≥ 3 raciones/semana|Alternar blanco y azul (Omega-3).|**TAG:** `High_Protein_Low_Fat` para Bacalao (0.7% grasa).|
-|**Huevos**|Máximo 4/semana|Proteína de alta calidad.|**SYSTEM:** Alternativa preferente a carnes rojas.|
-|**Carnes Blancas**|Máx 3 raciones/semana|Aves y conejo.|**LIMIT:** Restringir si se han superado raciones de pescado.|
-|**Agua**|1.5 - 2 Litros (4-8 vasos)|Bebida de elección única.|**NUDGE:** Recordatorio hídrico cada 3 horas.|
+|                         |                                         |                                    |                                                                    |
+| ----------------------- | --------------------------------------- | ---------------------------------- | ------------------------------------------------------------------ |
+| Grupo de Alimento       | Requisito Algorítmico                   | Parámetro Técnico / Tagging        | Alerta de Sistema (Trigger)                                        |
+| **Cereales Integrales** | 3-6 raciones/día (Máx 4 en restricción) | Priorizar grano entero (bajo IG).  | **ALERT:** Si `Caloric_Restriction == TRUE` y `Rations > 4`.       |
+| **Hortalizas**          | ≥ 3 raciones/día                        | Variedad cromática (fitoquímicos). | **SYSTEM:** Sugerir receta si `Count < 3` a las 20:00h.            |
+| **Frutas**              | 2-3 raciones/día                        | Piezas enteras, local y temporada. | **ALERT:** Alta carga glucémica en uvas, dátiles e higos.          |
+| **AOVE**                | 3-6 raciones/día                        | Fuente lipídica principal única.   | **SYSTEM:** Tagging obligatorio en cada comida principal.          |
+| **Lácteos**             | Máx 3 raciones/día                      | Naturales, kéfir o quesos frescos. | **NUDGE:** Si `Animal_Protein > 2`, sugerir fuente calcio vegetal. |
+| **Legumbres**           | 4 raciones/semana hasta diario          | Proteína vegetal + fibra.          | **SYSTEM:** Requisito base para control glucémico postprandial.    |
+| **Pescado**             | ≥ 3 raciones/semana                     | Alternar blanco y azul (Omega-3).  | **TAG:** `High_Protein_Low_Fat` para Bacalao (0.7% grasa).         |
+| **Huevos**              | Máximo 4/semana                         | Proteína de alta calidad.          | **SYSTEM:** Alternativa preferente a carnes rojas.                 |
+| **Carnes Blancas**      | Máx 3 raciones/semana                   | Aves y conejo.                     | **LIMIT:** Restringir si se han superado raciones de pescado.      |
+| **Agua**                | 1.5 - 2 Litros (4-8 vasos)              | Bebida de elección única.          | **NUDGE:** Recordatorio hídrico cada 3 horas.                      |
 
 **[FR-2.1] Lógica de Cereales y Restricción Calórica:** El sistema aplicará un límite estricto de **4 raciones diarias** de cereales (siempre integrales) cuando el perfil del usuario requiera pérdida de peso. El algoritmo debe priorizar alimentos con alta densidad de fibra para mitigar la carga glucémica, siendo este el factor crítico para la estabilidad de la HbA1c.
 

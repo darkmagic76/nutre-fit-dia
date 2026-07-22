@@ -2,11 +2,11 @@
 
 ## Requisitos previos
 
-| Herramienta | Versión mínima | Verificación |
-| --- | --- | --- |
-| **Node.js** | 22+ | `node --version` |
-| **pnpm** | 10+ | `pnpm --version` |
-| **Git** | 2.40+ | `git --version` |
+| Herramienta | Versión mínima | Verificación     |
+| ----------- | -------------- | ---------------- |
+| **Node.js** | 22+            | `node --version` |
+| **pnpm**    | 10+            | `pnpm --version` |
+| **Git**     | 2.40+          | `git --version`  |
 
 ### Instalar Node.js
 
@@ -37,11 +37,11 @@ cd nutre-fit-dia
 
 Ramas del proyecto:
 
-| Rama | Propósito |
-| --- | --- |
-| `main` | Producción |
+| Rama      | Propósito                              |
+| --------- | -------------------------------------- |
+| `main`    | Producción                             |
 | `staging` | Pre-producción, pruebas de integración |
-| `develop` | Desarrollo activo |
+| `develop` | Desarrollo activo                      |
 
 ```bash
 git checkout develop  # rama de trabajo
@@ -57,13 +57,13 @@ pnpm install
 
 Dependencias principales que se instalan:
 
-| Categoría | Paquetes |
-| --- | --- |
-| Frontend | React 19, Vite 8, Tailwind 4, Zustand 5 |
-| Validación | Zod 4 |
-| Backend (opcional) | Supabase JS |
-| Testing | Vitest 4, Testing Library 16, jsdom 29 |
-| Calidad | TypeScript 6, Oxlint |
+| Categoría          | Paquetes                                |
+| ------------------ | --------------------------------------- |
+| Frontend           | React 19, Vite 8, Tailwind 4, Zustand 5 |
+| Validación         | Zod 4                                   |
+| Backend (opcional) | Supabase JS                             |
+| Testing            | Vitest 4, Testing Library 16, jsdom 29  |
+| Calidad            | TypeScript 6, Oxlint                    |
 
 ---
 
@@ -77,15 +77,15 @@ Abre `http://localhost:5173` en el navegador.
 
 La aplicación tiene 7 pestañas:
 
-| Pestaña | Funcionalidad |
-|---|---|
-| 🔍 **Semáforo** | Clasificación dual (salud + sostenibilidad) + detección de azúcares ocultos |
-| 📝 **Hoy** | Registro diario con validación de raciones AESAN 2022 |
-| 📊 **Perfil** | Cálculo de objetivo calórico erMedDiet + biomarcadores + perfil fenotípico |
-| 📅 **Plan** | Plan semanal con ranking dual, fraccionamiento 3-6 tomas, kcal por comida, badges UNESCO 🏺👥🌿 + ZeroWaste ♻️🥕 |
-| 🏃 **Actividad** | Seguimiento WHO/OMS 150-300 min + sesiones de fuerza |
-| 🔔 **Nudges** | Panel de notificaciones con badge contador + historial de engagement |
-| 🌍 **Eco** | Puntuación ambiental (carbono 50%, temporalidad 30%, proximidad 20%), Zero-Waste, emisiones comparativas EAT-Lancet |
+| Pestaña          | Funcionalidad                                                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| 🔍 **Semáforo**  | Clasificación dual (salud + sostenibilidad) + detección de azúcares ocultos                                         |
+| 📝 **Hoy**       | Registro diario con validación de raciones AESAN 2022                                                               |
+| 📊 **Perfil**    | Cálculo de objetivo calórico erMedDiet + biomarcadores + perfil fenotípico                                          |
+| 📅 **Plan**      | Plan semanal con ranking dual, fraccionamiento 3-6 tomas, kcal por comida, badges UNESCO 🏺👥🌿 + ZeroWaste ♻️🥕    |
+| 🏃 **Actividad** | Seguimiento WHO/OMS 150-300 min + sesiones de fuerza                                                                |
+| 🔔 **Nudges**    | Panel de notificaciones con badge contador + historial de engagement                                                |
+| 🌍 **Eco**       | Puntuación ambiental (carbono 50%, temporalidad 30%, proximidad 20%), Zero-Waste, emisiones comparativas EAT-Lancet |
 
 ---
 
@@ -118,9 +118,10 @@ Pipeline de calidad:
 
 ```text
 pnpm quality
-  ├── pnpm lint       → Oxlint (Rust, ultrarrápido)
-  ├── pnpm typecheck  → TypeScript 6 (erasableSyntaxOnly)
-  └── pnpm test:run   → Vitest (383 tests)
+  ├── pnpm format:check → Prettier
+  ├── pnpm lint         → Oxlint (Rust, ultrarrápido)
+  ├── pnpm typecheck    → TypeScript 6 (erasableSyntaxOnly)
+  └── pnpm test:run     → Vitest (510 tests)
 ```
 
 ---
@@ -225,7 +226,7 @@ nutre-fit-dia/
 │   │   └── ml/                ← ScannerAdapter (ADR-003) + ScanResult
 │   └── test/
 │       └── fixtures.ts        ← makeFood factory
-├── adr/                       ← 9 ADRs + matriz de trazabilidad
+├── adr/                       ← 11 ADRs + matriz de trazabilidad + reconciliation
 ├── docs/                      ← Especificaciones (INFORME_ADR, SPECS_RF, SPECS_TECH)
 ├── package.json
 ├── tsconfig.json
@@ -237,23 +238,23 @@ nutre-fit-dia/
 
 ## 9. Stack tecnológico
 
-| Capa | Tecnología | Decisión |
-| --- | --- | --- |
-| UI | React 19 + Tailwind 4 | ADR-009 |
-| Build | Vite 8 | ADR-009 |
-| Tipos | TypeScript 6 (erasableSyntaxOnly) | ADR-002 |
-| Validación | Zod 4 | ADR-002 |
-| Estado | Zustand 5 | ADR-009 |
-| Backend | Supabase (PostgreSQL + Auth) | ADR-009 |
-| Tests | Vitest 4 + Testing Library 16 | ADR-009 |
-| Lint | Oxlint (Rust) | ADR-009 |
-| Arquitectura | Screaming Architecture | ADR-001 |
-| Dominio | 10 FoodCategory groups | ADR-005 |
-| Déficit | 600 kcal condicional (IMC > 25) | ADR-004 |
-| Scanner | Mock → ONNX (V2) | ADR-003 |
-| Actividad | GoalTracker manual V1 | ADR-006 |
-| Sostenibilidad | EnvironmentalScore + substitutionService V1 | ADR-007 |
-| Notificaciones | 15 reglas: SafetyAlert/SystemAction/BehavioralNudge | ADR-008 |
+| Capa           | Tecnología                                          | Decisión |
+| -------------- | --------------------------------------------------- | -------- |
+| UI             | React 19 + Tailwind 4                               | ADR-009  |
+| Build          | Vite 8                                              | ADR-009  |
+| Tipos          | TypeScript 6 (erasableSyntaxOnly)                   | ADR-002  |
+| Validación     | Zod 4                                               | ADR-002  |
+| Estado         | Zustand 5                                           | ADR-009  |
+| Backend        | Supabase (PostgreSQL + Auth)                        | ADR-009  |
+| Tests          | Vitest 4 + Testing Library 16                       | ADR-009  |
+| Lint           | Oxlint (Rust)                                       | ADR-009  |
+| Arquitectura   | Screaming Architecture                              | ADR-001  |
+| Dominio        | 11 FoodCategory groups                              | ADR-005  |
+| Déficit        | 600 kcal condicional (IMC > 25)                     | ADR-004  |
+| Scanner        | Mock → ONNX (V2)                                    | ADR-003  |
+| Actividad      | GoalTracker manual V1                               | ADR-006  |
+| Sostenibilidad | EnvironmentalScore + substitutionService V1         | ADR-007  |
+| Notificaciones | 15 reglas: SafetyAlert/SystemAction/BehavioralNudge | ADR-008  |
 
 ---
 

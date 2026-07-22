@@ -1,4 +1,3 @@
-
 # Especificación Técnica: Ecosistema Digital de Nutrición Sostenible y Control de Diabetes Tipo 2 (erMedDiet)
 
 ## 1. Introducción y Marco de Referencia Estratégico
@@ -25,12 +24,12 @@ El escáner no se define como un simple lector de OCR/barras, sino como un **fil
 
 ### Clasificación por Semáforo Nutricional (Lógica Hospital Rey Juan Carlos)
 
-|   |   |   |
-|---|---|---|
-|Categoría|Alimentos Incluidos|Justificación Técnica|
-|**Verde (Recomendable)**|Cereales 100% integrales, legumbres, pescado blanco/azul, AOVE.|Alta densidad nutricional y fibra. El **bacalao** se clasifica aquí por ser "proteína pura" (**0,7% de contenido graso**).|
-|**Naranja (Moderación)**|Cereales refinados, patatas, carnes magras de cerdo, frutas de alta carga glucémica.|Carga glucémica intermedia; requiere control estricto de frecuencia y cantidad mediante lógica de **Nudges**.|
-|**Rojo (Evitar)**|Azúcares añadidos, grasas trans (margarinas), harinas refinadas, embutidos.|Productos con impacto directo en picos glucémicos y riesgo cardiovascular elevado.|
+|                          |                                                                                      |                                                                                                                            |
+| ------------------------ | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Categoría                | Alimentos Incluidos                                                                  | Justificación Técnica                                                                                                      |
+| **Verde (Recomendable)** | Cereales 100% integrales, legumbres, pescado blanco/azul, AOVE.                      | Alta densidad nutricional y fibra. El **bacalao** se clasifica aquí por ser "proteína pura" (**0,7% de contenido graso**). |
+| **Naranja (Moderación)** | Cereales refinados, patatas, carnes magras de cerdo, frutas de alta carga glucémica. | Carga glucémica intermedia; requiere control estricto de frecuencia y cantidad mediante lógica de **Nudges**.              |
+| **Rojo (Evitar)**        | Azúcares añadidos, grasas trans (margarinas), harinas refinadas, embutidos.          | Productos con impacto directo en picos glucémicos y riesgo cardiovascular elevado.                                         |
 
 ### Algoritmo de Detección de "Ocultos"
 
@@ -42,7 +41,7 @@ Para mitigar la fatiga de decisión y optimizar los resultados clínicos, el sis
 
 - **Alertas de Carga Glucémica:** El sistema emitirá notificaciones proactivas ante la intención de consumo de frutas con alta densidad de azúcares (uvas, dátiles, higos), basándose en el historial de glucosa del usuario.
 - **Lógica de Sustitución Inteligente (API-driven Environmental Mapping):** Basado en las directrices de la **AESAN 2022**, el sistema implementa el siguiente trigger:
-    - `IF Scan_Result == 'Red Meat' AND User_Profile == 'erMedDiet' THEN Suggest(Alternative_Legume || Alternative_BlueFish)`.
+  - `IF Scan_Result == 'Red Meat' AND User_Profile == 'erMedDiet' THEN Suggest(Alternative_Legume || Alternative_BlueFish)`.
 - **Ranking de Sostenibilidad:** Las alternativas se priorizan según su **baja huella hídrica y de carbono**, permitiendo que el usuario optimice su salud y su impacto ambiental de forma simultánea.
 
 ## 5. Especificaciones de Menús y Control de Raciones (RF-01)
@@ -54,11 +53,11 @@ La estabilidad metabólica se garantiza mediante un control riguroso de la frecu
 - **Fraccionamiento Metabólico:** Distribución obligatoria en un plan de **3 a 6 tomas diarias**.
 - **Control de Gramajes:** El sistema debe definir porciones precisas por receta (ej. pan integral: **40-60g**).
 - **Frecuencias Semanales y Restricciones:**
-    - **Cereales:** 3-6 raciones/día (**MÁXIMO 4 raciones** si existe restricción energética erMedDiet), exclusivamente **100% integrales**.
-    - **Legumbres:** Mínimo 4 raciones/semana (prioridad proteica vegetal).
-    - **Pescado:** **3 a 4 raciones por semana**, alternando blanco y azul.
-    - **Hortalizas y Frutas:** Mínimo 3 raciones de hortalizas y 2-3 de frutas frescas (excluyendo desecadas/almíbar).
-    - **Hidratación:** El sistema debe monitorizar una ingesta de **1,5 a 2 litros de agua diarios** (4-8 vasos).
+  - **Cereales:** 3-6 raciones/día (**MÁXIMO 4 raciones** si existe restricción energética erMedDiet), exclusivamente **100% integrales**.
+  - **Legumbres:** Mínimo 4 raciones/semana (prioridad proteica vegetal).
+  - **Pescado:** **3 a 4 raciones por semana**, alternando blanco y azul.
+  - **Hortalizas y Frutas:** Mínimo 3 raciones de hortalizas y 2-3 de frutas frescas (excluyendo desecadas/almíbar).
+  - **Hidratación:** El sistema debe monitorizar una ingesta de **1,5 a 2 litros de agua diarios** (4-8 vasos).
 
 ## 6. Requisitos Funcionales de Estilo de Vida e IA
 

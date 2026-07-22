@@ -1,5 +1,5 @@
-import { z } from 'zod'
-import { FoodCategorySchema } from './foodCategory'
+import { z } from 'zod';
+import { FoodCategorySchema } from './foodCategory';
 
 /**
  * FR-5.2: Cultural and social metadata per UNESCO Mediterranean diet values.
@@ -18,9 +18,9 @@ export const CulturalMetadataSchema = z.object({
   proteinBiologicalValue: z.number().min(0).max(100).optional(),
   /** Whether this preparation is a core erMedDiet staple */
   erMedDiet: z.boolean().default(false),
-})
+});
 
-export type CulturalMetadata = z.infer<typeof CulturalMetadataSchema>
+export type CulturalMetadata = z.infer<typeof CulturalMetadataSchema>;
 
 export const FoodSchema = z.object({
   id: z.string(),
@@ -60,11 +60,11 @@ export const FoodSchema = z.object({
   isSeasonal: z.boolean().default(false),
   /** Cultural and social metadata (FR-5.2, UNESCO). Present on traditional preparations, not raw ingredients. */
   culturalMetadata: CulturalMetadataSchema.optional(),
-})
+});
 
-export type Food = z.infer<typeof FoodSchema>
+export type Food = z.infer<typeof FoodSchema>;
 
 /** Factory: creates a Food with defaults filled in (avoids repeating defaults in data declarations) */
 export function food(input: z.input<typeof FoodSchema>): Food {
-  return FoodSchema.parse(input)
+  return FoodSchema.parse(input);
 }

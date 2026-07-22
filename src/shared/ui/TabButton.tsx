@@ -1,8 +1,8 @@
-import type { ReactNode, ButtonHTMLAttributes } from 'react'
+import type { ReactNode, ButtonHTMLAttributes } from 'react';
 
 interface TabButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  active: boolean
-  children: ReactNode
+  active: boolean;
+  children: ReactNode;
 }
 
 export function TabButton({ active, children, ...props }: TabButtonProps) {
@@ -19,5 +19,5 @@ export function TabButton({ active, children, ...props }: TabButtonProps) {
     >
       {children}
     </button>
-  )
+  );
 }

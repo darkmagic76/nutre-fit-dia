@@ -1,38 +1,35 @@
-import { TrafficLightColor, CATEGORY_DISPLAY_NAMES } from '@shared/domain'
-import type { Food } from '@shared/domain'
-import { Card, SelectField, PrimaryButton, SafetyAlertDisplay } from '@shared/ui'
-import type { ClassificationResult } from './services/classificationService'
-import type { SafetyAlert } from '@shared/services/rationValidator'
-import { useT } from '@shared/i18n'
+import { TrafficLightColor, CATEGORY_DISPLAY_NAMES } from '@shared/domain';
+import type { Food } from '@shared/domain';
+import { Card, SelectField, PrimaryButton } from '@shared/ui';
+import { SafetyAlertDisplay } from './components/SafetyAlertDisplay';
+import type { ClassificationResult } from './services/classificationService';
+import type { SafetyAlert } from '@shared/services/rationValidator';
+import { useT } from '@shared/i18n';
 
 const TRAFFIC_COLORS: Record<string, string> = {
   [TrafficLightColor.GREEN]: 'bg-emerald-500',
   [TrafficLightColor.ORANGE]: 'bg-amber-500',
   [TrafficLightColor.RED]: 'bg-red-500',
-}
-
-const TRAFFIC_LABELS: Record<string, string> = {
-  [TrafficLightColor.GREEN]: 'Recomendable',
-  [TrafficLightColor.ORANGE]: 'Moderación',
-  [TrafficLightColor.RED]: 'Evitar',
-}
+};
 
 interface ScannerViewProps {
-  selectedId: string
-  options: Array<{ value: string; label: string }>
-  selected: Food | null
-  result: ClassificationResult | null
-  safetyAlerts: SafetyAlert[]
-  onSelect: (id: string) => void
-  onClassify: () => void
-  onAddToLog: () => void
-  onAcknowledgeAlert: (index: number) => void
+  selectedId: string;
+  options: Array<{ value: string; label: string }>;
+  selected: Food | null;
+  selectedName?: string;
+  result: ClassificationResult | null;
+  safetyAlerts: SafetyAlert[];
+  onSelect: (id: string) => void;
+  onClassify: () => void;
+  onAddToLog: () => void;
+  onAcknowledgeAlert: (index: number) => void;
 }
 
 export function ScannerView({
   selectedId,
   options,
   selected,
+  selectedName,
   result,
   safetyAlerts,
   onSelect,
@@ -40,7 +37,14 @@ export function ScannerView({
   onAddToLog,
   onAcknowledgeAlert,
 }: ScannerViewProps) {
-  const t = useT()
+  const t = useT();
+  const displayName = selectedName ?? selected?.name ?? '';
+
+  const trafficLabel = (color: string) => {
+    if (color === TrafficLightColor.GREEN) return t['scanner.trafficGreen'];
+    if (color === TrafficLightColor.ORANGE) return t['scanner.trafficOrange'];
+    return t['scanner.trafficRed'];
+  };
 
   return (
     <Card title={t['scanner.title']} description={t['scanner.description']}>
@@ -48,17 +52,27 @@ export function ScannerView({
         id="food-select"
         label={t['ui.selectFood']}
         value={selectedId}
-        onChange={v => onSelect(v)}
+        onChange={(v) => onSelect(v)}
         options={options}
         placeholder={t['scanner.emptySelection']}
       />
 
       {selected && (
-        <div className="p-3 bg-stone-50 rounded-lg text-sm space-y-1" aria-label={`Detalles de ${selected.name}`}>
-          <p><strong>{selected.name}</strong> — {CATEGORY_DISPLAY_NAMES[selected.category]}</p>
-          <p>{selected.kcalPer100g} kcal | {selected.proteinPer100g}g prot | {selected.carbsPer100g}g HC | {selected.fatPer100g}g grasa</p>
+        <div
+          className="p-3 bg-stone-50 dark:bg-zinc-700/60 rounded-lg text-sm space-y-1 dark:text-zinc-100"
+          aria-label={`Detalles de ${displayName}`}
+        >
+          <p>
+            <strong>{displayName}</strong> — {CATEGORY_DISPLAY_NAMES[selected.category]}
+          </p>
+          <p>
+            {selected.kcalPer100g} kcal | {selected.proteinPer100g}g prot | {selected.carbsPer100g}g
+            HC | {selected.fatPer100g}g grasa
+          </p>
           {selected.harmfulIngredients.length > 0 && (
-            <p className="text-red-600" role="alert">⚠️ {selected.harmfulIngredients.join(', ')}</p>
+            <p className="text-red-600 dark:text-red-400" role="alert">
+              ⚠️ {selected.harmfulIngredients.join(', ')}
+            </p>
           )}
         </div>
       )}
@@ -82,16 +96,18 @@ export function ScannerView({
           className={`p-4 rounded-lg text-white ${TRAFFIC_COLORS[result.color]}`}
           role="status"
           aria-live="polite"
-          aria-label={`Clasificación: ${TRAFFIC_LABELS[result.color]}`}
+          aria-label={`Clasificación: ${trafficLabel(result.color)}`}
         >
-          <p className="text-xl font-bold">{TRAFFIC_LABELS[result.color]}</p>
+          <p className="text-xl font-bold">{trafficLabel(result.color)}</p>
           {result.reasons.map((r, i) => (
-            <p key={i} className="text-sm mt-1 opacity-90">{r}</p>
+            <p key={i} className="text-sm mt-1 opacity-90">
+              {r}
+            </p>
           ))}
         </div>
       )}
 
       <SafetyAlertDisplay alerts={safetyAlerts} onAcknowledge={onAcknowledgeAlert} />
     </Card>
-  )
+  );
 }

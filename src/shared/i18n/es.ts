@@ -1,11 +1,12 @@
-import type { Translations } from './types'
+import type { Translations } from './types';
 
 export const es: Translations = {
   'app.title': 'NutreFitDia',
   'app.subtitle': 'Ecosistema de Autocuidado Integral para Diabetes Tipo 2',
   'app.keyboardHint': 'Usá ← → para navegar entre pestañas',
   'app.footer.tfm': 'TFM · NutreFitDia · erMedDiet + AESAN 2022',
-  'app.footer.disclaimer': '⚕️ Toda recomendación debe ser validada por un dietista-nutricionista colegiado',
+  'app.footer.disclaimer':
+    '⚕️ Toda recomendación debe ser validada por un dietista-nutricionista colegiado',
   'app.footer.security': 'Seguridad',
 
   'tab.scanner': 'Semáforo',
@@ -38,10 +39,16 @@ export const es: Translations = {
   'scanner.description': 'Clasificación dual (salud + sostenibilidad)',
   'scanner.emptySelection': '—',
   'scanner.noFoodSelected': 'Seleccioná un alimento para empezar',
+  'scanner.trafficGreen': 'Recomendable',
+  'scanner.trafficOrange': 'Moderación',
+  'scanner.trafficRed': 'Evitar',
 
   'log.title': '📝 Registro Diario',
   'log.description': 'Validación de raciones según AESAN 2022',
   'log.emptyProfile': 'Configurá tu perfil metabólico para ver el objetivo calórico',
+  'log.emptyFoods': 'Sin alimentos registrados.',
+  'log.foodListLabel': 'Alimentos registrados hoy',
+  'log.removeAria': 'Eliminar {food} del registro',
   'log.dailyObjective': 'Objetivo diario',
   'log.noRestriction': 'Sin restricción',
 
@@ -68,8 +75,15 @@ export const es: Translations = {
 
   'nudges.title': '🔔 Nudges',
   'nudges.description': 'Notificaciones y recomendaciones personalizadas',
-  'nudges.empty': 'No hay nudges pendientes',
+  'nudges.empty': 'Sin nudges activos',
   'nudges.dismiss': 'Descartar',
+  'nudges.active': 'nudges activos',
+  'nudges.panelLabel': 'Panel de nudges',
+  'nudges.pendingLabel': 'Nudges pendientes',
+  'nudges.history': 'Historial de engagement',
+  'nudges.dismissed': 'descartado',
+  'nudges.acknowledged': 'reconocido',
+  'nudges.dismissAria': 'Descartar: {title}',
 
   'sustainability.title': '🌍 Sostenibilidad',
   'sustainability.description': 'Impacto ambiental según AESAN 2022 y ODS 2030',
@@ -79,12 +93,22 @@ export const es: Translations = {
   'sustainability.seasonality': 'Temporalidad (producto de temporada)',
   'sustainability.proximity': 'Proximidad (origen local/KM0)',
   'sustainability.zeroWaste': 'Zero-Waste',
-  'sustainability.zeroWasteDesc': 'Productos con defectos estéticos pero perfectamente comestibles:',
+  'sustainability.zeroWasteDesc':
+    'Productos con defectos estéticos pero perfectamente comestibles:',
   'sustainability.zeroWasteFooter': '♻️ Zero-Waste · 🥕 KM0 / Defectos estéticos',
   'sustainability.emissions': 'Emisiones Comparativas',
   'sustainability.emissionsDesc': 'kg CO₂eq por kg de alimento (EAT-Lancet)',
 
-  'legal.disclaimer': '⚕️ Toda recomendación, cantidad y plan nutricional debe ser validado por un dietista-nutricionista colegiado.',
+  'install.title': 'Instalar app',
+  'install.dismiss': 'Cerrar',
+
+  'legal.disclaimer':
+    '⚕️ Toda recomendación, cantidad y plan nutricional debe ser validado por un dietista-nutricionista colegiado.',
+
+  'error.boundary.title': 'Algo salió mal',
+  'error.boundary.description': 'Ocurrió un error inesperado al renderizar esta sección.',
+  'error.boundary.retry': 'Reintentar',
+  'error.boundary.globalReload': 'Recargar aplicación',
 
   'form.weight': 'Peso (kg)',
   'form.height': 'Altura (cm)',
@@ -103,4 +127,38 @@ export const es: Translations = {
   'form.glucoseContext': 'Contexto glucosa',
   'form.glucoseFasting': 'Ayunas',
   'form.glucosePostprandial': 'Postprandial',
-}
+
+  // Actividad — extendido
+  'activity.goalDescription': 'Objetivo OMS: 150–300 min/semana actividad moderada + 2 días fuerza',
+  'activity.formMinutes': 'Minutos moderados',
+  'activity.formSessions': 'Sesiones fuerza',
+  'activity.formLabel': 'Registro de actividad física',
+  'activity.registerButton': 'Registrar actividad',
+
+  'cultural.socialEating': 'Ideal para comer en compañía',
+  'cultural.preparation': 'Preparación',
+  'cultural.traditionalCuisine': 'Cocina tradicional',
+  'cultural.socialEatingBadge': 'Comida en compañía',
+
+  'meal.breakfast': 'Desayuno',
+  'meal.lunch': 'Almuerzo',
+  'meal.dinner': 'Cena',
+  'meal.snack': 'Snack',
+
+  'cooking.stew': 'guiso tradicional',
+  'cooking.steam': 'al vapor',
+  'cooking.boiled': 'hervido',
+  'cooking.grilled': 'a la plancha',
+  'cooking.raw': 'en crudo',
+
+  'alert.severityCritical': 'Crítico',
+  'alert.severityWarning': 'Advertencia',
+  'alert.acknowledge': 'Reconocer alerta',
+  'alert.safetyLabel': 'Alertas de seguridad clínica',
+  'alert.understood': 'Entendido',
+
+  'validation.allClear': '✅ El registro de hoy cumple con los límites diarios.',
+  'caloric.dailyObjective': 'Objetivo diario',
+  'metabolic.descriptionDetail':
+    'Protocolo erMedDiet (PREDIMED-Plus): déficit condicional de 600 kcal si IMC > 25. Fórmula Mifflin-St Jeor.',
+};

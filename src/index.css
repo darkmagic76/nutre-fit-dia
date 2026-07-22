@@ -1,8 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 /* Mobile safe areas */
 body {
-  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
 }
 
 /* Accessibility: visible focus for keyboard nav */
@@ -13,7 +14,9 @@ body {
 
 /* Reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
@@ -21,7 +24,9 @@ body {
 
 /* High contrast mode support */
 @media (forced-colors: active) {
-  button, select, input {
+  button,
+  select,
+  input {
     border: 2px solid ButtonText;
   }
 }

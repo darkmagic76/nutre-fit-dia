@@ -1,4 +1,4 @@
-export { useActivityStore, DEFAULT_WEEKLY_GOAL } from './store'
-export { useActivityTracker } from './hooks/useActivityTracker'
-export { ActivityTrackerContainer } from './ActivityTrackerContainer'
-export type { ActivityEntry, WeeklyGoal, ComplianceReport } from './types'
+export { useActivityStore, DEFAULT_WEEKLY_GOAL } from '@shared/stores/activityStore';
+export { useActivityTracker } from './hooks/useActivityTracker';
+export { ActivityTrackerContainer } from './ActivityTrackerContainer';
+export type { ActivityEntry, WeeklyGoal } from '@shared/domain/activity';

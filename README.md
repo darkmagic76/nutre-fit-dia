@@ -10,23 +10,24 @@ Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y 
 
 ## Stack tecnológico utilizado
 
-| Tecnología | Versión | Propósito |
-|---|---|---|
-| React | 19.2.7 | Componentes de UI (Container/Presentational) |
-| TypeScript | 6.0.2 | Type safety, erasableSyntaxOnly |
-| Vite | 8.1.1 | Servidor de desarrollo y builds |
-| Tailwind CSS | 4.3.2 | CSS utility-first (Vite plugin) |
-| Zod | 4.4.3 | Validación runtime con inferencia de tipos |
-| Zustand | 5.0.8 | State management — una store por feature |
-| Supabase JS | 2.87.3 | BaaS: PostgreSQL, Auth, Storage (V1) |
-| Vitest | 4.1.10 | Test runner unitario y de componentes |
-| Testing Library React | 16.3.2 | Testing conductual de componentes |
-| Oxlint | 1.71.0 | Linting basado en Rust |
-| jsdom | 29.1.1 | Entorno browser para tests |
-| Playwright | 1.61.1 | Tests E2E — flujo completo de usuario |
-| PWA | Manifest | Instalable como app en móvil (offline-ready) |
-| GitHub Actions | CI/CD | Lint → Typecheck → Tests → Build → E2E → Deploy |
-| pnpm | — | Gestor de paquetes rápido y eficiente en disco |
+| Tecnología            | Versión  | Propósito                                       |
+| --------------------- | -------- | ----------------------------------------------- |
+| React                 | 19.2.7   | Componentes de UI (Container/Presentational)    |
+| TypeScript            | 6.0.2    | Type safety, erasableSyntaxOnly                 |
+| Vite                  | 8.1.1    | Servidor de desarrollo y builds                 |
+| Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)                 |
+| Zod                   | 4.4.3    | Validación runtime con inferencia de tipos      |
+| Zustand               | 5.0.8    | State management — una store por feature        |
+| Supabase JS           | 2.87.3   | BaaS: PostgreSQL, Auth, Storage (V1)            |
+| Vitest                | 4.1.10   | Test runner unitario y de componentes           |
+| Testing Library React | 16.3.2   | Testing conductual de componentes               |
+| Oxlint                | 1.71.0   | Linting basado en Rust                          |
+| Prettier              | 3.7.4    | Formateador de código                           |
+| jsdom                 | 29.1.1   | Entorno browser para tests                      |
+| Playwright            | 1.61.1   | Tests E2E — flujo completo de usuario           |
+| PWA                   | Manifest | Instalable como app en móvil (offline-ready)    |
+| GitHub Actions        | CI/CD    | Lint → Typecheck → Tests → Build → E2E → Deploy |
+| pnpm                  | —        | Gestor de paquetes rápido y eficiente en disco  |
 
 ## Información sobre su instalación y ejecución
 
@@ -46,7 +47,7 @@ pnpm test:e2e        # Tests end-to-end con Playwright
 pnpm test:e2e:ui     # E2E en modo interactivo
 
 # Calidad
-pnpm quality         # lint + typecheck + tests
+pnpm quality         # format:check + lint + typecheck + tests
 pnpm verify          # quality + build
 ```
 
@@ -55,52 +56,59 @@ pnpm verify          # quality + build
 ```text
 src/
 ├── features/
-│   ├── nutritional-traffic-light/
+│   ├── nutritional-traffic-light/       # Semáforo Nutricional + Dual Scan (H4)
 │   │   ├── ScannerContainer.tsx          # Lógica: estado, store, handlers
 │   │   ├── ScannerView.tsx               # UI puro: props, sin store
 │   │   ├── store/scannerStore.ts         # Historial de escaneos (Zustand)
-│   │   └── services/                     # classificationService, occultSugarDetector
-│   ├── metabolic-tracker/
+│   │   └── services/                     # classificationService, occultSugarDetector, safetyCheck
+│   ├── metabolic-tracker/               # Perfil fenotípico + biomarcadores
 │   │   ├── MetabolicTrackerContainer.tsx # Lógica: perfil metabólico
 │   │   ├── MetabolicTrackerView.tsx      # UI: formulario + resultados
-│   │   ├── store/trackerStore.ts         # Perfil + objetivo calórico + restrictionActive
-│   │   └── services/                     # caloricTargetService
-│   ├── med-diet-validator/
+│   │   ├── components/                   # ProfileForm, ProfileResults, ProfileError
+│   │   ├── store/trackerStore.ts         # Perfil + objetivo calórico (Zustand)
+│   │   └── services/                     # caloricTargetService, biomarkerTrackingService
+│   ├── med-diet-validator/              # Validación AESAN 2022
 │   │   ├── DailyLogContainer.tsx         # Lógica: registro diario
 │   │   ├── DailyLogView.tsx              # UI: lista alimentos + validación
+│   │   ├── components/                   # FoodList, DailyViolations, CaloricSummary
 │   │   └── store/logStore.ts             # todayLog + validación (Zustand)
-│   ├── recipe-engine/
+│   ├── recipe-engine/                   # Plan semanal erMedDiet + fraccionamiento M7
 │   │   ├── PlanContainer.tsx             # Lógica: plan semanal
 │   │   ├── PlanView.tsx                  # UI: checkbox + plan generado
 │   │   ├── store/planStore.ts            # weeklyPlan (Zustand)
 │   │   └── services/                     # planGenerator
-│   ├── activity-tracker/                 # ADR-006 — Activity Goal Tracker V1 ✅
-│   │   ├── ActivityTrackerContainer.tsx    # Lógica: compliance + streak
-│   │   ├── ActivityTrackerView.tsx         # UI: metas OMS + formulario
-│   │   ├── hooks/useActivityTracker.ts     # Hook: compliance %, streak, weeklyGoal
-│   │   ├── store/activityStore.ts          # weeklyMinutes + entries (Zustand)
-│   │   └── types.ts                        # ActivityEntry, WeeklyGoal, ComplianceReport
-│   ├── nudge-engine/                      # ADR-008 — Nudge Engine ✅ (14 reglas completas)
-│   │   ├── engine.ts                       # buildNudgeContext + evaluateRules (puro)
-│   │   ├── rules.ts                        # SafetyAlert rules (CEREALS, FRUITS, VEGETABLES)
-│   │   ├── cooldownTracker.ts             # CooldownTracker (in-memory)
-│   │   ├── store/nudgeStore.ts            # pending + history (Zustand)
-│   │   └── types.ts                       # NudgeRule, NudgeContext, SafetyRule
-│   │   ├── types.ts                      # ActivityEntry, WeeklyGoal
-│   │   └── store/activityStore.ts        # weeklyMinutes, strengthSessions
-│   └── nudge-engine/                     # [scaffolded] ADR-008
-│       ├── types.ts                      # NudgeRule, NudgeContext
-│       └── store/nudgeStore.ts           # pending nudges queue
+│   ├── activity-tracker/                # WHO/OMS 150-300 min + fuerza (ADR-006) ✅
+│   │   ├── ActivityTrackerContainer.tsx  # Lógica: compliance + streak
+│   │   ├── ActivityTrackerView.tsx       # UI: metas OMS + formulario
+│   │   ├── hooks/useActivityTracker.ts   # Hook: compliance %, streak, weeklyGoal
+│   │   ├── store/activityStore.ts        # weeklyMinutes + entries (Zustand)
+│   │   └── types.ts                      # ActivityEntry, WeeklyGoal, ComplianceReport
+│   ├── nudge-engine/                    # 15 reglas + panel UI (ADR-008) ✅
+│   │   ├── NudgePanelContainer.tsx       # Lógica: nudges pendientes + historial
+│   │   ├── NudgePanelView.tsx            # UI: lista + dismiss + badge contador
+│   │   ├── engine.ts                     # buildNudgeContext + evaluateRules (puro)
+│   │   ├── rules.ts                      # SafetyAlert + BehavioralNudge + SystemAction
+│   │   ├── cooldownTracker.ts            # CooldownTracker (in-memory)
+│   │   ├── store/nudgeStore.ts           # pending + history (Zustand)
+│   │   └── types.ts                      # NudgeRule, NudgeContext, SafetyRule
+│   └── sustainability/                  # Dashboard Eco + scoring (ADR-007) ✅
+│       ├── SustainabilityContainer.tsx   # Lógica: scoring + zero-waste + emisiones
+│       └── SustainabilityView.tsx        # UI: tabs de sostenibilidad
 ├── shared/
-│   ├── domain/                           # FoodCategory, TrafficLight, Notification, Zod schemas
-│   ├── data/foods.ts                     # Catálogo 34 alimentos
-│   ├── services/rationValidator.ts       # Validación diaria/semanal (cross-feature)
-│   ├── sustainability/                   # ADR-007 ✅ — EnvironmentalScore, Seasonality, Proximity
-│   ├── ui/primitives.tsx                 # Card, SelectField, TabButton, StatCard
-│   └── utils/                            # sanitizeNumeric, computeIMC
+│   ├── data/foods.ts                     # Catálogo 34 alimentos AESAN
+│   ├── domain/                           # FoodCategory, Food (Zod), TrafficLight, Notification
+│   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
+│   ├── hooks/                            # Hooks cross-feature
+│   ├── i18n/                             # ES/EN (useT, I18nProvider, 80+ keys)
+│   ├── services/rationValidator.ts       # Validación diaria/semanal
+│   ├── sustainability/                   # EnvironmentalScore, substitutionService, constants
+│   ├── ui/                               # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
+│   └── utils/                            # sanitize, imc, enum helpers
 ├── infrastructure/
-│   └── ml/                               # ADR-003 — ScannerAdapter + MockScannerAdapter
-└── test/setup.ts                         # Testing Library + jsdom
+│   └── ml/                               # ScannerAdapter + MockScannerAdapter (ADR-003)
+└── test/
+    ├── setup.ts                          # Testing Library + jsdom
+    └── fixtures.ts                       # makeFood factory
 ```
 
 ## Funcionalidades principales
@@ -131,7 +139,7 @@ Como líderes técnicos, rechazamos las estructuras genéricas. Adoptamos **Scre
 
 ### Mandatos de Diseño Estructural
 
-1. **Directorio** `features/`: Cada carpeta debe representar una capacidad funcional única del ecosistema DT2. Es **obligatorio** que los `services`, `hooks` y `logic-utils` específicos de una funcionalidad estén **colocados (colocation)** dentro de su respectiva carpeta de funcionalidad. ***Prohibimos la fuga de lógica metabólica a carpetas globales***.
+1. **Directorio** `features/`: Cada carpeta debe representar una capacidad funcional única del ecosistema DT2. Es **obligatorio** que los `services`, `hooks` y `logic-utils` específicos de una funcionalidad estén **colocados (colocation)** dentro de su respectiva carpeta de funcionalidad. _**Prohibimos la fuga de lógica metabólica a carpetas globales**_.
 2. **Directorio** `shared/`: Reservado exclusivamente para componentes transversales (UI primitiva, wrappers de red) que sean utilizados por **dos o más** funcionalidades. Si una lógica metabólica se repite, no se mueve a `shared/` sin una refactorización previa en un `shared/metabolic-utils` bajo aprobación de arquitectura.
 
 ### Justificación de Funcionalidades
@@ -167,11 +175,11 @@ La personalización no es una opción estética; es una necesidad fenotípica. E
 
 ### Algoritmo de Semáforo Nutricional (Modelo Hospital Rey Juan Carlos)
 
-|Color|Criterios de Alimento (Input)|Acción del Sistema (Output)|
-|---|---|---|
-|**Verde**|Cereales integrales, legumbres, pescado (Bacalao), AOVE.|Promoción activa en planes de comida.|
-|**Naranja**|Arroz/pasta blanca, patatas, carnes magras.|Restricción de porción y advertencia de frecuencia.|
-|**Rojo**|Azúcares añadidos, harinas refinadas, grasas trans, refrescos.|Alerta de bloqueo y sugerencia de sustitución.|
+| Color       | Criterios de Alimento (Input)                                  | Acción del Sistema (Output)                         |
+| ----------- | -------------------------------------------------------------- | --------------------------------------------------- |
+| **Verde**   | Cereales integrales, legumbres, pescado (Bacalao), AOVE.       | Promoción activa en planes de comida.               |
+| **Naranja** | Arroz/pasta blanca, patatas, carnes magras.                    | Restricción de porción y advertencia de frecuencia. |
+| **Rojo**    | Azúcares añadidos, harinas refinadas, grasas trans, refrescos. | Alerta de bloqueo y sugerencia de sustitución.      |
 
 ### Detección de "Ocultos"
 
@@ -206,64 +214,10 @@ Cada objeto `Recipe` en nuestra base de datos debe cumplir con un esquema de met
 1. **Fase 1: Domain Modeling** ✅ — Definición de tipos estrictos para perfiles metabólicos, raciones AESAN, tipos de alimentos, notification taxonomy.
 2. **Fase 2: Domain Services & Containers** ✅ — Implementación de lógica erMedDiet, Container/Presentational split, per-feature Zustand stores.
 3. **Fase 3: ADR Scaffolding** ✅ — ScannerAdapter (ADR-003), Activity Tracker (ADR-006), Sustainability (ADR-007), Nudge Engine (ADR-008).
-4. **Fase 4: Tests & Error Handling** ✅ — 387 tests (38 unitarios + 3 E2E). Cero errores silenciosos. `ValidationError` y `NotFoundError` tipados.
+4. **Fase 4: Tests & Error Handling** ✅ — 510 tests (53 test files + 3 E2E). Cobertura 93.53% líneas / 92.38% statements. `ErrorBoundary` con aislamiento por pestaña. `ValidationError` y `NotFoundError` tipados.
 5. **Fase 5: E2E & Accesibilidad** ✅ — Playwright smoke tests (scan→classify→plan). WCAG 2.1 AA: roles ARIA, aria-labels, keyboard nav, skip links.
 
-## Estructura de Proyecto (Scope Rule & Colocation)
-
-```text
-src/
-├── features/
-│   ├── nutritional-traffic-light/
-│   │   ├── ScannerContainer.tsx          # Lógica: estado, store, handlers
-│   │   ├── ScannerView.tsx               # UI puro: props, sin store
-│   │   ├── store/scannerStore.ts         # Historial de escaneos (Zustand)
-│   │   └── services/                     # classificationService, occultSugarDetector
-│   ├── metabolic-tracker/
-│   │   ├── MetabolicTrackerContainer.tsx # Lógica: perfil metabólico
-│   │   ├── MetabolicTrackerView.tsx      # UI: formulario + resultados
-│   │   ├── store/trackerStore.ts         # Perfil + objetivo calórico + restrictionActive
-│   │   └── services/                     # caloricTargetService
-│   ├── med-diet-validator/
-│   │   ├── DailyLogContainer.tsx         # Lógica: registro diario
-│   │   ├── DailyLogView.tsx              # UI: lista alimentos + validación
-│   │   └── store/logStore.ts             # todayLog + validación (Zustand)
-│   ├── recipe-engine/
-│   │   ├── PlanContainer.tsx             # Lógica: plan semanal
-│   │   ├── PlanView.tsx                  # UI: checkbox + plan generado
-│   │   ├── store/planStore.ts            # weeklyPlan (Zustand)
-│   │   └── services/                     # planGenerator
-│   ├── activity-tracker/                 # ADR-006 — Activity Goal Tracker V1 ✅
-│   │   ├── ActivityTrackerContainer.tsx    # Lógica: compliance + streak
-│   │   ├── ActivityTrackerView.tsx         # UI: metas OMS + formulario
-│   │   ├── hooks/useActivityTracker.ts     # Hook: compliance %, streak, weeklyGoal
-│   │   ├── store/activityStore.ts          # weeklyMinutes + entries (Zustand)
-│   │   └── types.ts                        # ActivityEntry, WeeklyGoal, ComplianceReport
-│   ├── nudge-engine/                      # ADR-008 — Nudge Engine ✅ (14 reglas completas)
-│   │   ├── engine.ts                       # buildNudgeContext + evaluateRules (puro)
-│   │   ├── rules.ts                        # SafetyAlert rules (CEREALS, FRUITS, VEGETABLES)
-│   │   ├── cooldownTracker.ts             # CooldownTracker (in-memory)
-│   │   ├── store/nudgeStore.ts            # pending + history (Zustand)
-│   │   └── types.ts                       # NudgeRule, NudgeContext, SafetyRule
-│   │   ├── types.ts                      # ActivityEntry, WeeklyGoal
-│   │   └── store/activityStore.ts        # weeklyMinutes, strengthSessions
-│   └── nudge-engine/                     # [scaffolded] ADR-008
-│       ├── types.ts                      # NudgeRule, NudgeContext
-│       └── store/nudgeStore.ts           # pending nudges queue
-├── shared/
-│   ├── domain/                           # FoodCategory, TrafficLight, Notification, Zod schemas
-│   ├── data/foods.ts                     # Catálogo 34 alimentos
-│   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
-│   ├── services/rationValidator.ts       # Validación diaria/semanal (cross-feature)
-│   ├── sustainability/                   # ADR-007 ✅ — EnvironmentalScore, Seasonality, Proximity
-│   ├── ui/primitives.tsx                 # Card, SelectField, TabButton, StatCard
-│   └── utils/                            # parseNumeric, sanitizeNumeric, computeIMC
-├── infrastructure/
-│   └── ml/                               # ADR-003 — ScannerAdapter + MockScannerAdapter
-└── test/setup.ts                         # Testing Library + jsdom
-```
-
-### Componente Contenedor: ScannerContainer.tsx
+### Ejemplo: Patrón Contenedor/Presentacional
 
 ```typescript
 import { useState } from 'react'
@@ -315,9 +269,9 @@ export function ScannerContainer() {
 
 ## 8. Conclusión Técnica y Sostenibilidad de la App
 
-Este ***Ecosistema de Autocuidado Integral para la DT2 y Salud Sostenible***, NO es una simple aplicación de bienestar; **es una herramienta de ingeniería médica de alta precisión**. La adopción de **Screaming Architecture** y la **Regla del Alcance** garantiza que ***la lógica de la Dieta Mediterránea y las restricciones de la AESAN 2022 sean inalterables y mantenibles***.
+Este _**Ecosistema de Autocuidado Integral para la DT2 y Salud Sostenible**_, NO es una simple aplicación de bienestar; **es una herramienta de ingeniería médica de alta precisión**. La adopción de **Screaming Architecture** y la **Regla del Alcance** garantiza que _**la lógica de la Dieta Mediterránea y las restricciones de la AESAN 2022 sean inalterables y mantenibles**_.
 
-Al implementar **un motor que penaliza los azúcares ocultos y restringe los cereales integrales a 4 raciones bajo régimen erMedDiet**, aseguramos ***la fidelidad absoluta a la evidencia científica***. Esta arquitectura no solo optimiza la eficiencia del desarrollo, sino que **posiciona al sistema como un estándar en la reducción de la HbA1c y la promoción de una salud sostenible tanto para el paciente como para el planeta**.
+Al implementar **un motor que penaliza los azúcares ocultos y restringe los cereales integrales a 4 raciones bajo régimen erMedDiet**, aseguramos _**la fidelidad absoluta a la evidencia científica**_. Esta arquitectura no solo optimiza la eficiencia del desarrollo, sino que **posiciona al sistema como un estándar en la reducción de la HbA1c y la promoción de una salud sostenible tanto para el paciente como para el planeta**.
 
 ## 9. PWA — Instalación en Dispositivos Móviles
 
@@ -336,8 +290,8 @@ Pipeline automático en **GitHub Actions** (`.github/workflows/ci.yml`):
 ```
 Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
               │                    │
-              ├ pnpm audit         ├ lint + typecheck
-              └ gitleaks           ├ unit tests (387)
+               ├ pnpm audit         ├ format:check + lint + typecheck
+               └ gitleaks           ├ unit tests (510)
                                    └ build (vite)
 ```
 
@@ -345,17 +299,17 @@ Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deplo
 
 ## 11. Seguridad OWASP 2025
 
-| Control | Implementación |
-|---------|---------------|
+| Control                       | Implementación                                                   |
+| ----------------------------- | ---------------------------------------------------------------- |
 | CSP (Content-Security-Policy) | `default-src 'self'`, sin inline scripts, frame-ancestors 'none' |
-| X-Content-Type-Options | `nosniff` — previene MIME sniffing |
-| Referrer-Policy | `strict-origin-when-cross-origin` |
-| Permissions-Policy | Cámara, geolocalización, micrófono deshabilitados |
-| Base-uri | `'self'` — previene <base> injection |
-| Form-action | `'self'` — previene form hijacking |
-| Dependency audit | `pnpm audit --audit-level=high` en CI |
-| Secret scanning | Gitleaks en CI |
-| Security.txt | `/.well-known/security.txt` (RFC 9116) |
-| Runtime validation | Zod schemas en todas las entradas |
-| HTML sanitation | Sin `dangerouslySetInnerHTML`, sin `eval()` |
-| HTTPS | Requerido por CSP + PWA |
+| X-Content-Type-Options        | `nosniff` — previene MIME sniffing                               |
+| Referrer-Policy               | `strict-origin-when-cross-origin`                                |
+| Permissions-Policy            | Cámara, geolocalización, micrófono deshabilitados                |
+| Base-uri                      | `'self'` — previene <base> injection                             |
+| Form-action                   | `'self'` — previene form hijacking                               |
+| Dependency audit              | `pnpm audit --audit-level=high` en CI                            |
+| Secret scanning               | Gitleaks en CI                                                   |
+| Security.txt                  | `/.well-known/security.txt` (RFC 9116)                           |
+| Runtime validation            | Zod schemas en todas las entradas                                |
+| HTML sanitation               | Sin `dangerouslySetInnerHTML`, sin `eval()`                      |
+| HTTPS                         | Requerido por CSP + PWA                                          |

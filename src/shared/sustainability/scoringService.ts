@@ -1,21 +1,21 @@
 /** ADR-007: Sustainability scoring service — V1 simplified */
 
-import type { Food } from '@shared/domain'
-import { Seasonality, Proximity, PackagingLevel, type EnvironmentalScore } from './types'
+import type { Food } from '@shared/domain';
+import { Seasonality, Proximity, PackagingLevel, type EnvironmentalScore } from './types';
 import {
   CARBON_THRESHOLDS,
   CARBON_CATEGORY_SCORES,
   SCORING_WEIGHTS,
   SEASONALITY_SCORES,
   PROXIMITY_SCORES,
-} from './constants'
+} from './constants';
 
 function categorizeCarbon(value: number): number {
-  if (value < CARBON_THRESHOLDS.VERY_LOW) return CARBON_CATEGORY_SCORES.very_low
-  if (value < CARBON_THRESHOLDS.LOW) return CARBON_CATEGORY_SCORES.low
-  if (value < CARBON_THRESHOLDS.MODERATE) return CARBON_CATEGORY_SCORES.moderate
-  if (value < CARBON_THRESHOLDS.HIGH) return CARBON_CATEGORY_SCORES.high
-  return CARBON_CATEGORY_SCORES.very_high
+  if (value < CARBON_THRESHOLDS.VERY_LOW) return CARBON_CATEGORY_SCORES.very_low;
+  if (value < CARBON_THRESHOLDS.LOW) return CARBON_CATEGORY_SCORES.low;
+  if (value < CARBON_THRESHOLDS.MODERATE) return CARBON_CATEGORY_SCORES.moderate;
+  if (value < CARBON_THRESHOLDS.HIGH) return CARBON_CATEGORY_SCORES.high;
+  return CARBON_CATEGORY_SCORES.very_high;
 }
 
 /**
@@ -33,25 +33,22 @@ function categorizeCarbon(value: number): number {
  * Missing carbonFootprint → neutral score (50) for carbon dimension.
  */
 export function computeEnvironmentalScore(food: Food): EnvironmentalScore {
-  const carbonValue = food.carbonFootprint ?? 0
-  const carbonScore = food.carbonFootprint !== undefined
-    ? categorizeCarbon(food.carbonFootprint)
-    : CARBON_CATEGORY_SCORES.unknown
+  const carbonValue = food.carbonFootprint ?? 0;
+  const carbonScore =
+    food.carbonFootprint !== undefined
+      ? categorizeCarbon(food.carbonFootprint)
+      : CARBON_CATEGORY_SCORES.unknown;
 
-  const isSeasonal = food.isSeasonal === true
-  const seasonScore = isSeasonal
-    ? SEASONALITY_SCORES.in_season
-    : SEASONALITY_SCORES.out_of_season
+  const isSeasonal = food.isSeasonal === true;
+  const seasonScore = isSeasonal ? SEASONALITY_SCORES.in_season : SEASONALITY_SCORES.out_of_season;
 
-  const proximityScore = isSeasonal
-    ? PROXIMITY_SCORES.km0
-    : PROXIMITY_SCORES.national
+  const proximityScore = isSeasonal ? PROXIMITY_SCORES.km0 : PROXIMITY_SCORES.national;
 
   const score = Math.round(
     carbonScore * SCORING_WEIGHTS.carbon +
-    seasonScore * SCORING_WEIGHTS.seasonality +
-    proximityScore * SCORING_WEIGHTS.proximity,
-  )
+      seasonScore * SCORING_WEIGHTS.seasonality +
+      proximityScore * SCORING_WEIGHTS.proximity,
+  );
 
   return {
     carbonFootprint: carbonValue,
@@ -60,5 +57,5 @@ export function computeEnvironmentalScore(food: Food): EnvironmentalScore {
     proximity: isSeasonal ? Proximity.LOCAL_KM0 : Proximity.NATIONAL,
     packaging: PackagingLevel.BULK,
     score,
-  }
+  };
 }

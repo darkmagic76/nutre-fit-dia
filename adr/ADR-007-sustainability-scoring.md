@@ -8,16 +8,16 @@
 
 Sustainability is a first-class clinical requirement across all specification documents, not an afterthought:
 
-| Source | Requirement |
-|---|---|
+| Source               | Requirement                                                                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `INFORME_ADR` FR-1.1 | "Sostenibilidad y Salud Planetaria: Alineación con los ODS 2030, optimizando la huella hídrica y de carbono en la selección de recetas" |
-| `INFORME_ADR` FR-2.2 | "Environmental Weight: puntuación ambiental. El arroz tiene una huella de carbono 4× superior al trigo y 12× superior a la patata" |
-| `INFORME_ADR` FR-5.2 | "Productos de temporada y proximidad. Reducción de carnes rojas y lácteos por ODS 2030 y salud planetaria (EAT-Lancet)" |
-| `SPECS_RF` | "Calificación Dual: evaluación de salud metabólica + impacto ambiental" |
-| `SPECS_RF` | "Sustitución Inteligente: cambiar carne roja por legumbres o pescado azul" |
-| `SPECS_RF` RNF-03 | "Priorización de productos locales, de temporada y minimización de envases" |
-| `SPECS_TECH` §4 | "Ranking de Sostenibilidad: alternativas priorizadas según baja huella hídrica y de carbono" |
-| `SPECS_TECH` §7 | Comparative emissions: legumbres 50× menos que ternera, 11× menos que cerdo, 7× menos que pollo, 6× menos que huevos |
+| `INFORME_ADR` FR-2.2 | "Environmental Weight: puntuación ambiental. El arroz tiene una huella de carbono 4× superior al trigo y 12× superior a la patata"      |
+| `INFORME_ADR` FR-5.2 | "Productos de temporada y proximidad. Reducción de carnes rojas y lácteos por ODS 2030 y salud planetaria (EAT-Lancet)"                 |
+| `SPECS_RF`           | "Calificación Dual: evaluación de salud metabólica + impacto ambiental"                                                                 |
+| `SPECS_RF`           | "Sustitución Inteligente: cambiar carne roja por legumbres o pescado azul"                                                              |
+| `SPECS_RF` RNF-03    | "Priorización de productos locales, de temporada y minimización de envases"                                                             |
+| `SPECS_TECH` §4      | "Ranking de Sostenibilidad: alternativas priorizadas según baja huella hídrica y de carbono"                                            |
+| `SPECS_TECH` §7      | Comparative emissions: legumbres 50× menos que ternera, 11× menos que cerdo, 7× menos que pollo, 6× menos que huevos                    |
 
 Sustainability scoring touches 4+ features: Scanner (dual qualification), RecipeEngine (prioritization), NudgeEngine (intelligent substitution), MealPlan (environmental weight). Per ADR-001 Scope Rule, code used by 2+ features must live in `shared/`.
 
@@ -49,12 +49,12 @@ A feature in Screaming Architecture owns a complete user-facing capability. Sust
 
 ```ts
 export interface EnvironmentalScore {
-  carbonFootprint: CarbonFootprint      // kg CO2eq per kg of food
-  waterFootprint?: WaterFootprint       // liters per kg (V2)
-  seasonality: Seasonality              // current season match
-  proximity: Proximity                  // local vs imported
-  packagingLevel: PackagingLevel        // waste impact
-  overallScore: number                  // 0–100 weighted composite
+  carbonFootprint: CarbonFootprint; // kg CO2eq per kg of food
+  waterFootprint?: WaterFootprint; // liters per kg (V2)
+  seasonality: Seasonality; // current season match
+  proximity: Proximity; // local vs imported
+  packagingLevel: PackagingLevel; // waste impact
+  overallScore: number; // 0–100 weighted composite
 }
 ```
 
@@ -62,19 +62,19 @@ export interface EnvironmentalScore {
 
 ```ts
 export interface CarbonFootprint {
-  value: number            // kg CO2eq per kg
-  category: 'very_low' | 'low' | 'moderate' | 'high' | 'very_high'
-  source: 'AESAN_2022' | 'EAT_Lancet' | 'OPEN_FOOD_FACTS'
+  value: number; // kg CO2eq per kg
+  category: 'very_low' | 'low' | 'moderate' | 'high' | 'very_high';
+  source: 'AESAN_2022' | 'EAT_Lancet' | 'OPEN_FOOD_FACTS';
 }
 
 export type Seasonality = {
-  isSeasonal: boolean
-  months: number[]         // [1..12], empty if year-round
-  region: string           // e.g. 'iberian_peninsula'
-}
+  isSeasonal: boolean;
+  months: number[]; // [1..12], empty if year-round
+  region: string; // e.g. 'iberian_peninsula'
+};
 
-export type Proximity = 'local' | 'national' | 'eu' | 'imported'
-export type PackagingLevel = 'none' | 'minimal' | 'standard' | 'excessive'
+export type Proximity = 'local' | 'national' | 'eu' | 'imported';
+export type PackagingLevel = 'none' | 'minimal' | 'standard' | 'excessive';
 ```
 
 ### Reference Data: AESAN 2022 Emission Ratios
@@ -84,14 +84,14 @@ The comparative ratios from SPECS_TECH §7 are encoded as constants, not hardcod
 ```ts
 // src/shared/sustainability/constants.ts
 export const PROTEIN_EMISSION_RATIOS = {
-  legumes:    1,     // baseline (lowest)
-  eggs:       6,     // 6× legumes
-  poultry:    7,     // 7× legumes
-  pork:       11,    // 11× legumes
-  beef:       50,    // 50× legumes
-  fish_white: 4,     // estimated from EAT-Lancet
-  fish_blue:  5,     // estimated from EAT-Lancet
-} as const
+  legumes: 1, // baseline (lowest)
+  eggs: 6, // 6× legumes
+  poultry: 7, // 7× legumes
+  pork: 11, // 11× legumes
+  beef: 50, // 50× legumes
+  fish_white: 4, // estimated from EAT-Lancet
+  fish_blue: 5, // estimated from EAT-Lancet
+} as const;
 ```
 
 These ratios are **relative**, not absolute kg CO2eq. For V1, relative scoring is sufficient to rank alternatives. V2 can integrate absolute values from lifecycle assessment databases (Agribalyse, Ecoinvent).
@@ -103,12 +103,12 @@ The scanner (ADR-003 `ScannerAdapter`) currently returns `ScanResult` with healt
 ```ts
 // ADR-003 ScanResult extended (backward-compatible)
 interface ScanResult {
-  foodId: string
-  confidence: number
-  ingredients: string[]
-  detectedAddedSugars: string[]
-  healthScore: TrafficLightColor              // existing
-  environmentalScore?: EnvironmentalScore     // NEW — optional, populated when data available
+  foodId: string;
+  confidence: number;
+  ingredients: string[];
+  detectedAddedSugars: string[];
+  healthScore: TrafficLightColor; // existing
+  environmentalScore?: EnvironmentalScore; // NEW — optional, populated when data available
 }
 ```
 
@@ -118,18 +118,24 @@ The `?` means: a food with unknown environmental data still gets a health classi
 
 ```ts
 function computeEnvironmentalScore(food: Food): EnvironmentalScore {
-  const carbon = getCarbonFootprint(food)
-  const season = getSeasonality(food, currentMonth, userRegion)
-  const proximity = getProximity(food, userRegion)
+  const carbon = getCarbonFootprint(food);
+  const season = getSeasonality(food, currentMonth, userRegion);
+  const proximity = getProximity(food, userRegion);
 
   // Weighted composite (0–100)
   const overallScore = round(
-    carbon.weight * 0.50 +    // Carbon dominates (AESAN 2022 priority)
-    season.weight * 0.30 +    // Seasonality second
-    proximity.weight * 0.20   // Proximity third
-  )
+    carbon.weight * 0.5 + // Carbon dominates (AESAN 2022 priority)
+      season.weight * 0.3 + // Seasonality second
+      proximity.weight * 0.2, // Proximity third
+  );
 
-  return { carbonFootprint: carbon, seasonality: season, proximity, packagingLevel: 'standard', overallScore }
+  return {
+    carbonFootprint: carbon,
+    seasonality: season,
+    proximity,
+    packagingLevel: 'standard',
+    overallScore,
+  };
 }
 ```
 
@@ -137,22 +143,22 @@ Weights are initial defaults, not hardcoded magic numbers — they come from a c
 
 ### Integration Points
 
-| Consumer | How it uses sustainability |
-|---|---|
-| **Scanner** (`nutritional-traffic-light`) | Returns `environmentalScore` alongside `healthScore` in `ScanResult` |
-| **RecipeEngine** | Ranks recipes by weighted score: `healthWeight × healthScore + sustainabilityWeight × environmentalScore` |
-| **NudgeEngine** | Triggers `BehavioralNudge` when a scanned food has `environmentalScore.overallScore < 30` → suggests sustainable alternative via `substitutionService` |
-| **MealPlan** | Applies `EnvironmentalWeight` from INFORME_ADR FR-2.2: adjusts food frequency in weekly plans (e.g., rice limited because 12× potato's footprint) |
+| Consumer                                  | How it uses sustainability                                                                                                                             |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Scanner** (`nutritional-traffic-light`) | Returns `environmentalScore` alongside `healthScore` in `ScanResult`                                                                                   |
+| **RecipeEngine**                          | Ranks recipes by weighted score: `healthWeight × healthScore + sustainabilityWeight × environmentalScore`                                              |
+| **NudgeEngine**                           | Triggers `BehavioralNudge` when a scanned food has `environmentalScore.overallScore < 30` → suggests sustainable alternative via `substitutionService` |
+| **MealPlan**                              | Applies `EnvironmentalWeight` from INFORME_ADR FR-2.2: adjusts food frequency in weekly plans (e.g., rice limited because 12× potato's footprint)      |
 
 ### Data Sources Strategy
 
-| Data point | V1 source | V2 source |
-|---|---|---|
+| Data point                     | V1 source                                                  | V2 source                                              |
+| ------------------------------ | ---------------------------------------------------------- | ------------------------------------------------------ |
 | Carbon footprint (kg CO2eq/kg) | Static table from AESAN 2022 / EAT-Lancet reference values | Agribalyse API or Open Food Facts environmental fields |
-| Water footprint | ❌ Not in V1 | Water Footprint Network database |
-| Seasonality | Static calendar per region (Iberian peninsula) | Geolocation + seasonal produce API |
-| Proximity | Manual tag on food item or inferred from seasonality | Geolocation + supply chain data |
-| Packaging | ❌ Not in V1 | OCR detection from packaging material labels |
+| Water footprint                | ❌ Not in V1                                               | Water Footprint Network database                       |
+| Seasonality                    | Static calendar per region (Iberian peninsula)             | Geolocation + seasonal produce API                     |
+| Proximity                      | Manual tag on food item or inferred from seasonality       | Geolocation + supply chain data                        |
+| Packaging                      | ❌ Not in V1                                               | OCR detection from packaging material labels           |
 
 ## Consequences
 
@@ -168,13 +174,13 @@ Weights are initial defaults, not hardcoded magic numbers — they come from a c
 
 ## Traceability
 
-| Requirement | Covered by |
-|---|---|
-| INFORME_ADR FR-1.1 (ODS 2030 alignment) | `EnvironmentalScore` overall composite |
+| Requirement                                                 | Covered by                                       |
+| ----------------------------------------------------------- | ------------------------------------------------ |
+| INFORME_ADR FR-1.1 (ODS 2030 alignment)                     | `EnvironmentalScore` overall composite           |
 | INFORME_ADR FR-2.2 (Environmental Weight, arroz 12× patata) | `constants.ts` emission ratios, `scoringService` |
-| INFORME_ADR FR-5.2 (temporada, proximidad, ODS 2030) | `Seasonality` + `Proximity` sub-models |
-| SPECS_RF "Calificación Dual" | `ScanResult.environmentalScore` |
-| SPECS_RF "Sustitución Inteligente" | `substitutionService.ts` |
-| SPECS_RF RNF-03 (local, temporada, envases) | `Seasonality` + `Proximity` (packaging V2) |
-| SPECS_TECH §4 "Ranking de Sostenibilidad" | `scoringService.computeEnvironmentalScore()` |
-| SPECS_TECH §7 emission comparisons | `PROTEIN_EMISSION_RATIOS` constants |
+| INFORME_ADR FR-5.2 (temporada, proximidad, ODS 2030)        | `Seasonality` + `Proximity` sub-models           |
+| SPECS_RF "Calificación Dual"                                | `ScanResult.environmentalScore`                  |
+| SPECS_RF "Sustitución Inteligente"                          | `substitutionService.ts`                         |
+| SPECS_RF RNF-03 (local, temporada, envases)                 | `Seasonality` + `Proximity` (packaging V2)       |
+| SPECS_TECH §4 "Ranking de Sostenibilidad"                   | `scoringService.computeEnvironmentalScore()`     |
+| SPECS_TECH §7 emission comparisons                          | `PROTEIN_EMISSION_RATIOS` constants              |

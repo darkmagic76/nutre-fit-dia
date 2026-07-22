@@ -1,15 +1,37 @@
-import { PrimaryButton, NumberField, SelectField } from '@shared/ui'
-import type { UserMetricsFormState } from '@shared/domain'
-import type { FormEvent } from 'react'
-import { useT } from '@shared/i18n'
+import { PrimaryButton, NumberField, SelectField } from '@shared/ui';
+import type { UserMetricsFormState } from '@shared/domain';
+import type { FormEvent } from 'react';
+import { useT } from '@shared/i18n';
 
 interface ProfileFormProps {
-  form: UserMetricsFormState
-  onSubmit: (e: FormEvent) => void
+  form: UserMetricsFormState;
+  onSubmit: (e: FormEvent) => void;
+  canSubmit?: boolean;
 }
 
-export function ProfileForm({ form: { weight, height, age, diagnosisAge, glucose, glucoseContext, gender, paf, setWeight, setHeight, setAge, setDiagnosisAge, setGlucose, setGlucoseContext, setGender, setPaf }, onSubmit }: ProfileFormProps) {
-  const t = useT()
+export function ProfileForm({
+  form: {
+    weight,
+    height,
+    age,
+    diagnosisAge,
+    glucose,
+    glucoseContext,
+    gender,
+    paf,
+    setWeight,
+    setHeight,
+    setAge,
+    setDiagnosisAge,
+    setGlucose,
+    setGlucoseContext,
+    setGender,
+    setPaf,
+  },
+  onSubmit,
+  canSubmit = true,
+}: ProfileFormProps) {
+  const t = useT();
 
   return (
     <form
@@ -19,11 +41,35 @@ export function ProfileForm({ form: { weight, height, age, diagnosisAge, glucose
       noValidate
     >
       <div className="grid grid-cols-2 gap-3">
-        <NumberField id="weight" label={t['form.weight']} value={weight} onChange={setWeight} min={30} />
-        <NumberField id="height" label={t['form.height']} value={height} onChange={setHeight} min={100} />
+        <NumberField
+          id="weight"
+          label={t['form.weight']}
+          value={weight}
+          onChange={setWeight}
+          min={30}
+        />
+        <NumberField
+          id="height"
+          label={t['form.height']}
+          value={height}
+          onChange={setHeight}
+          min={100}
+        />
         <NumberField id="age" label={t['form.age']} value={age} onChange={setAge} min={18} />
-        <NumberField id="diagnosisAge" label={t['form.diagnosisAge']} value={diagnosisAge} onChange={setDiagnosisAge} min={0} />
-        <NumberField id="glucose" label={t['form.glucose']} value={glucose} onChange={setGlucose} min={0} />
+        <NumberField
+          id="diagnosisAge"
+          label={t['form.diagnosisAge']}
+          value={diagnosisAge}
+          onChange={setDiagnosisAge}
+          min={0}
+        />
+        <NumberField
+          id="glucose"
+          label={t['form.glucose']}
+          value={glucose}
+          onChange={setGlucose}
+          min={0}
+        />
         <SelectField
           id="gender"
           label={t['form.gender']}
@@ -58,9 +104,9 @@ export function ProfileForm({ form: { weight, height, age, diagnosisAge, glucose
           { value: 'postprandial', label: t['form.glucosePostprandial'] },
         ]}
       />
-      <PrimaryButton type="submit">
+      <PrimaryButton type="submit" disabled={!canSubmit}>
         {t['ui.calculate']}
       </PrimaryButton>
     </form>
-  )
+  );
 }

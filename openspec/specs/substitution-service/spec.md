@@ -10,27 +10,39 @@ Given a high-carbon-protein food, suggest protein-equivalent alternatives from L
 
 ### Requirement: Substitution Trigger
 
-The system SHALL provide `suggestAlternative(food: Food): Food[]` that returns alternatives when the input food is a high-carbon protein — defined as `category === 'white_meat'` OR `carbonFootprint >= 4.0`.
+The system SHALL provide `suggestAlternative(food: Food): Food[]` that returns alternatives when the input food belongs to `FoodCategory.RED_MEAT`. The `carbonFootprint >= 4.0` heuristic MUST be removed.
 
-#### Scenario: White meat triggers substitution
+#### Scenario: Red meat triggers substitution
 
-- GIVEN a food with `category = 'white_meat'`
+- GIVEN a food with `category = 'red_meat'`
 - WHEN `suggestAlternative` is called
 - THEN the food catalog SHALL be queried for LEGUMES and blue FISH alternatives
 
-#### Scenario: High-carbon non-meat triggers substitution
+#### Scenario: Non-red-meat high-carbon food does NOT trigger
 
-- GIVEN a food with `category = 'dairy'` and `carbonFootprint = 5.0`
+- GIVEN a food with `category = 'white_meat'` and `carbonFootprint = 8.0`
 - WHEN `suggestAlternative` is called
-- THEN alternatives SHALL be returned (same LEGUMES + blue FISH logic)
+- THEN the result SHALL be an empty array
 
-#### Scenario: Low-carbon food returns empty
+#### Scenario: Chorizo (RED_MEAT, CF 8.0) triggers correctly
+
+- GIVEN chorizo with `category = 'red_meat'` and `carbonFootprint = 8.0`
+- WHEN `suggestAlternative` is called
+- THEN alternatives SHALL be returned using category gate only (no heuristic)
+
+#### Scenario: Conejo (WHITE_MEAT, CF 4.0) no longer triggers
+
+- GIVEN conejo with `category = 'white_meat'` and `carbonFootprint = 4.0`
+- WHEN `suggestAlternative` is called
+- THEN the result SHALL be an empty array (heuristic removed)
+
+#### Scenario: Low-carbon food returns empty (unchanged)
 
 - GIVEN a food with `category = 'legumes'` and `carbonFootprint = 0.8`
 - WHEN `suggestAlternative` is called
 - THEN the result SHALL be an empty array
 
-#### Scenario: No carbon data returns empty
+#### Scenario: No carbon data returns empty (unchanged)
 
 - GIVEN a food with `category = 'cereals'` and no `carbonFootprint`
 - WHEN `suggestAlternative` is called
@@ -42,13 +54,13 @@ Alternatives MUST be foods from the `LEGUMES` category. FISH alternatives MUST b
 
 #### Scenario: Only legumes and blue fish returned
 
-- GIVEN a white meat food
+- GIVEN a red meat food
 - WHEN `suggestAlternative` returns results
 - THEN every result SHALL have `category = 'legumes'` OR be a blue fish
 
 #### Scenario: White fish excluded
 
-- GIVEN a white meat food and a FISH catalog containing both blue and white fish
+- GIVEN a red meat food and a FISH catalog containing both blue and white fish
 - WHEN `suggestAlternative` runs
 - THEN white fish entries SHALL NOT appear in results
 
@@ -58,14 +70,14 @@ Results MUST be sorted by `computeEnvironmentalScore().score` descending and lim
 
 #### Scenario: Returns top 3 by score
 
-- GIVEN a white meat food with 5+ candidate alternatives
+- GIVEN a red meat food with 5+ candidate alternatives
 - WHEN `suggestAlternative` runs
 - THEN the result SHALL contain at most 3 items
-- AND each item's `environmentalScore` SHALL be ≥ any excluded candidate's score
+- AND each item's `environmentalScore` SHALL be >= any excluded candidate's score
 
 #### Scenario: Results sorted descending
 
-- GIVEN a white meat food with 3 candidate alternatives
+- GIVEN a red meat food with 3 candidate alternatives
 - WHEN `suggestAlternative` runs
 - THEN `result[0].environmentalScore >= result[1].environmentalScore >= result[2].environmentalScore`
 
@@ -75,6 +87,6 @@ If the food catalog contains no LEGUMES and no blue FISH items, the system MUST 
 
 #### Scenario: Missing alternatives
 
-- GIVEN a white meat food and an empty food catalog
+- GIVEN a red meat food and an empty food catalog
 - WHEN `suggestAlternative` is called
 - THEN the result SHALL be an empty array

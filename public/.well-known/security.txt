@@ -1,6 +1,5 @@
 Contact: mailto:security@nutrefitdia.dev
-Expires: 2026-12-31T23:59:59Z
+Expires: 2027-12-31T23:59:59Z
 Preferred-Languages: es, en
-Canonical: https://github.com/darkmagic76/nutre-fit-dia/security/policy
-Policy: https://github.com/darkmagic76/nutre-fit-dia/security/policy
-Hiring: https://nutrefitdia.dev/jobs
+Canonical: https://nutrefitdia.dev/.well-known/security.txt
+Policy: https://nutrefitdia.dev/security

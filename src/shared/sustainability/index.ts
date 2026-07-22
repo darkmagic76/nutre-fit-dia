@@ -1,15 +1,11 @@
-export {
-  Seasonality,
-  Proximity,
-  PackagingLevel,
-} from './types'
+export { Seasonality, Proximity, PackagingLevel } from './types';
 
 export type {
   Seasonality as SeasonalityType,
   Proximity as ProximityType,
   PackagingLevel as PackagingLevelType,
   EnvironmentalScore,
-} from './types'
+} from './types';
 
 export {
   PROTEIN_EMISSION_RATIOS,
@@ -18,7 +14,7 @@ export {
   SCORING_WEIGHTS,
   SEASONALITY_SCORES,
   PROXIMITY_SCORES,
-} from './constants'
+} from './constants';
 
-export { computeEnvironmentalScore } from './scoringService'
-export { suggestAlternative, BLUE_FISH_IDS } from './substitutionService'
+export { computeEnvironmentalScore } from './scoringService';
+export { suggestAlternative, BLUE_FISH_IDS } from './substitutionService';

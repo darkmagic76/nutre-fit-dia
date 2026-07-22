@@ -14,9 +14,9 @@ Define a **`ScannerAdapter`** interface in `src/infrastructure/ml/types.ts` that
 
 ```typescript
 interface ScannerAdapter {
-  scan(input: ScanInput): Promise<ScanResult>
-  isAvailable(): boolean
-  getModelInfo(): ModelInfo
+  scan(input: ScanInput): Promise<ScanResult>;
+  isAvailable(): boolean;
+  getModelInfo(): ModelInfo;
 }
 ```
 

@@ -1,41 +1,44 @@
-import { useCallback, useRef, useEffect } from 'react'
-import { useActivityStore, DEFAULT_WEEKLY_GOAL } from '../store'
-import type { ActivityEntry } from '../types'
+import { useCallback, useRef, useEffect } from 'react';
+import { useActivityStore, DEFAULT_WEEKLY_GOAL } from '../activityStore';
+import type { ActivityEntry } from '../types';
 
-let streakCount = 0
+let streakCount = 0;
 
 export function useActivityTracker() {
-  const { weeklyMinutes, strengthSessions, entries, addEntry: storeAddEntry } = useActivityStore()
-  const prevEntryCount = useRef(entries.length)
+  const { weeklyMinutes, strengthSessions, entries, addEntry: storeAddEntry } = useActivityStore();
+  const prevEntryCount = useRef(entries.length);
 
-  const meetsModerate = weeklyMinutes >= DEFAULT_WEEKLY_GOAL.moderateMinutesMin
-    && weeklyMinutes <= DEFAULT_WEEKLY_GOAL.moderateMinutesMax
+  const meetsModerate =
+    weeklyMinutes >= DEFAULT_WEEKLY_GOAL.moderateMinutesMin &&
+    weeklyMinutes <= DEFAULT_WEEKLY_GOAL.moderateMinutesMax;
 
-  const meetsStrength = strengthSessions >= DEFAULT_WEEKLY_GOAL.strengthSessionsMin
+  const meetsStrength = strengthSessions >= DEFAULT_WEEKLY_GOAL.strengthSessionsMin;
 
-  const compliance: number = meetsModerate && meetsStrength ? 100
-    : meetsModerate || meetsStrength ? 50
-    : 0
+  const compliance: number =
+    meetsModerate && meetsStrength ? 100 : meetsModerate || meetsStrength ? 50 : 0;
 
   // Update streak only when a new entry is added
   useEffect(() => {
     if (entries.length > prevEntryCount.current) {
       if (compliance === 100) {
-        streakCount++
+        streakCount++;
       } else {
-        streakCount = 0
+        streakCount = 0;
       }
-      prevEntryCount.current = entries.length
+      prevEntryCount.current = entries.length;
     }
-  }, [entries.length, compliance])
+  }, [entries.length, compliance]);
 
-  const addEntry = useCallback((entry: Omit<ActivityEntry, 'date'> & { date?: string }) => {
-    storeAddEntry({
-      date: entry.date ?? new Date().toISOString().slice(0, 10),
-      moderateMinutes: entry.moderateMinutes,
-      strengthSessions: entry.strengthSessions,
-    })
-  }, [storeAddEntry])
+  const addEntry = useCallback(
+    (entry: Omit<ActivityEntry, 'date'> & { date?: string }) => {
+      storeAddEntry({
+        date: entry.date ?? new Date().toISOString().slice(0, 10),
+        moderateMinutes: entry.moderateMinutes,
+        strengthSessions: entry.strengthSessions,
+      });
+    },
+    [storeAddEntry],
+  );
 
   return {
     weeklyMinutes,
@@ -47,5 +50,5 @@ export function useActivityTracker() {
     meetsStrength,
     weeklyGoal: DEFAULT_WEEKLY_GOAL,
     addEntry,
-  }
+  };
 }
