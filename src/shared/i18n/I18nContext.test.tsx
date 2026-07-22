@@ -34,6 +34,12 @@ describe('I18nContext', () => {
     expect(() => renderHook(() => useT())).toThrow('useT must be used within I18nProvider');
   });
 
+  it('throws when useLocale is used outside provider', () => {
+    expect(() => renderHook(() => useLocale())).toThrow(
+      'useLocale must be used within I18nProvider',
+    );
+  });
+
   it('has all keys matching between en and es', () => {
     const { result } = renderHook(() => ({ t: useT(), ...useLocale() }), { wrapper });
     const esKeys = Object.keys(result.current.t).sort();

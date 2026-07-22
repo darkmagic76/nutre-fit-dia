@@ -30,16 +30,8 @@ export function ActivityTrackerContainer() {
 
   return (
     <ActivityTrackerView
-      weeklyMinutes={weeklyMinutes}
-      strengthSessions={strengthSessions}
-      compliance={compliance}
-      streak={streak}
-      meetsModerate={meetsModerate}
-      meetsStrength={meetsStrength}
-      minutes={minutes}
-      sessions={sessions}
-      onMinutesChange={setMinutes}
-      onSessionsChange={setSessions}
+      stats={{ weeklyMinutes, strengthSessions, compliance, streak, meetsModerate, meetsStrength }}
+      form={{ minutes, sessions, onMinutesChange: setMinutes, onSessionsChange: setSessions }}
       onSubmit={handleSubmit}
     />
   );

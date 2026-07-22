@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nProvider } from '@shared/i18n';
 import { createLocalStorage, createMatchMedia } from './test/test-helpers';
 import App from './App';
@@ -18,7 +18,7 @@ describe('App', () => {
     vi.unstubAllGlobals();
   });
 
-  it('renders and shows controls bar with locale toggle', () => {
+  it('renders and shows locale toggle button', () => {
     render(
       <I18nProvider>
         <App />
@@ -26,5 +26,35 @@ describe('App', () => {
     );
 
     expect(screen.getByText('🇬🇧 EN')).toBeInTheDocument();
+  });
+
+  it('toggles locale from ES to EN when button is clicked', () => {
+    render(
+      <I18nProvider>
+        <App />
+      </I18nProvider>,
+    );
+
+    const toggle = screen.getByText('🇬🇧 EN');
+    fireEvent.click(toggle);
+
+    // After clicking, locale switched to EN → button now shows 'ES'
+    expect(screen.getByText('🇪🇸 ES')).toBeInTheDocument();
+    expect(screen.queryByText('🇬🇧 EN')).toBeNull();
+  });
+
+  it('renders footer with TFM and security link', () => {
+    render(
+      <I18nProvider>
+        <App />
+      </I18nProvider>,
+    );
+
+    // Footer should exist with at least 2 paragraphs (TFM + disclaimer)
+    const footer = screen.getByRole('contentinfo');
+    expect(footer).toBeInTheDocument();
+
+    const link = screen.getByRole('link', { name: /seguridad/i });
+    expect(link).toHaveAttribute('href', '/.well-known/security.txt');
   });
 });
