@@ -60,11 +60,11 @@ export const NUDGE_RULES: SafetyRule[] = [
   },
   {
     id: 'VEGETABLES_DEFICIT',
-    type: NotificationType.SAFETY_ALERT,
-    severity: NotificationSeverity.SOFT_WARN,
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
     cooldown: COOLDOWN_6H,
-    title: '¿Has comido suficientes verduras?',
-    body: 'Llevas menos de 3 raciones de verduras hoy. Intenta incluir una ración en la cena.',
+    title: '¿Has comido suficientes hortalizas?',
+    body: 'Llevas menos de 3 raciones de hortalizas hoy. Intenta incluir una ración en la cena.',
     condition: (ctx) =>
       ctx.counts[FoodCategory.VEGETABLES] < VEGETABLE_MIN_RATIONS &&
       ctx.currentHour >= VEGETABLE_NUDGE_HOUR_THRESHOLD,
