@@ -1,6 +1,6 @@
 # ADR-004: Caloric Target Algorithm (Mifflin-St Jeor + PREDIMED-Plus)
 
-**Status:** Accepted — Amended 2026-07-15, Amended 2026-07-21  
+**Status:** Accepted — Amended 2026-07-15, Amended 2026-07-21, Amended 2026-07-22  
 **Date:** 2026-07-12  
 **Deciders:** darkmagic76, gentle-orchestrator
 
@@ -29,7 +29,9 @@ The modifier is applied **before** the 30% TDEE safety cap to preserve clinical 
 
 ## Decision
 
-Implement in `src/features/metabolic-tracker/services/caloricTargetService.ts`:
+Implement in `src/shared/services/caloricTargetService.ts`:
+
+> **Note (2026-07-22 amendment):** Originally located at `src/features/metabolic-tracker/services/`. Moved to `src/shared/services/` per Scope Rule (ADR-001) because `computeCaloricTarget()` is consumed by both the metabolic-tracker and recipe-engine features. The feature now imports from `@shared/services`.
 
 ### Inputs
 
