@@ -36,7 +36,7 @@ export function DailyLogView({
       {caloricTarget && <CaloricSummary caloricTarget={caloricTarget} totalKcal={totalKcal} />}
 
       {!caloricTarget && (
-        <p className="text-amber-600 text-sm" role="status">
+        <p className="text-amber-600 dark:text-amber-400 text-sm" role="status">
           <span aria-hidden="true">💡</span> {t['log.emptyProfile']}
         </p>
       )}

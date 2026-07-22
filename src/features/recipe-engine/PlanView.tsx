@@ -65,7 +65,7 @@ function CulturalBadges({ meta }: { meta: CulturalMetadata }) {
         <span className="text-xs text-emerald-700 ml-1">{t['cultural.socialEating']}</span>
       )}
       {meta.cookingTechnique && COOKING_TECHNIQUE_I18N[meta.cookingTechnique] && (
-        <span className="text-xs text-stone-500 ml-1">
+        <span className="text-xs text-stone-500 dark:text-zinc-400 ml-1">
           {t['cultural.preparation']}:{' '}
           {t[COOKING_TECHNIQUE_I18N[meta.cookingTechnique] as keyof typeof t]}
         </span>
@@ -128,7 +128,7 @@ export function PlanView({
       {weeklyPlan && (
         <div aria-live="polite">
           <p
-            className={`text-sm font-medium mb-3 ${weeklyPlan.valid ? 'text-emerald-600' : 'text-red-600'}`}
+            className={`text-sm font-medium mb-3 ${weeklyPlan.valid ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}
             role="status"
           >
             {weeklyPlan.valid ? t['ui.planValid'] : t['ui.planViolations']}
@@ -145,7 +145,10 @@ export function PlanView({
             <div className="space-y-1 mt-2">
               {weeklyPlan.dailyResults.map((r, d) =>
                 r.violations.length > 0 ? (
-                  <details key={d} className="text-sm text-red-600 bg-red-50 p-2 rounded">
+                  <details
+                    key={d}
+                    className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950 p-2 rounded"
+                  >
                     <summary className="cursor-pointer font-medium">
                       {t['ui.day']} {d + 1}: {r.violations.length} {t['ui.violationsCount']}
                     </summary>
@@ -176,7 +179,7 @@ export function PlanView({
               }
 
               return (
-                <details key={day.day} className="bg-stone-50 rounded-lg">
+                <details key={day.day} className="bg-stone-50 dark:bg-zinc-700/60 rounded-lg">
                   <summary className="font-medium cursor-pointer text-sm p-2 min-h-[44px] flex items-center">
                     <span>
                       {t['ui.day']} {day.day} — {day.entries.length} {t['ui.foods']}
@@ -198,14 +201,14 @@ export function PlanView({
                           : '—';
                       return (
                         <div key={meal}>
-                          <h3 className="font-semibold text-stone-700 mb-1">
+                          <h3 className="font-semibold text-stone-700 dark:text-zinc-200 mb-1">
                             {t[MEAL_I18N[meal]]} ({kcalText})
                           </h3>
                           <ul className="space-y-1">
                             {entries.map((e, i) => (
                               <li
                                 key={i}
-                                className="flex justify-between py-1 border-t border-stone-200"
+                                className="flex justify-between py-1 border-t border-stone-200 dark:border-zinc-700"
                               >
                                 <span>
                                   {e.rations}× {e.food.name}
@@ -214,7 +217,7 @@ export function PlanView({
                                   )}
                                   <ZeroWasteBadges food={e.food} />
                                 </span>
-                                <span className="text-stone-400">
+                                <span className="text-stone-400 dark:text-zinc-500">
                                   {CATEGORY_DISPLAY_NAMES[e.food.category]}
                                 </span>
                               </li>

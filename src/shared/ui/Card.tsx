@@ -9,17 +9,19 @@ interface CardProps {
 export function Card({ children, title, description }: CardProps) {
   return (
     <section
-      className="bg-white rounded-xl shadow p-4 sm:p-6 space-y-4"
+      className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6 space-y-4"
       aria-labelledby={`card-title-${title.replace(/\s+/g, '-')}`}
     >
       <header>
         <h2
           id={`card-title-${title.replace(/\s+/g, '-')}`}
-          className="text-lg sm:text-xl font-semibold text-emerald-700"
+          className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400"
         >
           {title}
         </h2>
-        {description && <p className="text-stone-500 text-sm mt-1">{description}</p>}
+        {description && (
+          <p className="text-stone-500 dark:text-zinc-400 text-sm mt-1">{description}</p>
+        )}
       </header>
       {children}
     </section>

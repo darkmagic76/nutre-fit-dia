@@ -28,36 +28,42 @@ export function ActivityTrackerView({ stats, form, onSubmit }: ActivityTrackerVi
   const t = useT();
   const complianceColor =
     stats.compliance === 100
-      ? 'text-emerald-600'
+      ? 'text-emerald-600 dark:text-emerald-400'
       : stats.compliance === 50
-        ? 'text-amber-600'
-        : 'text-red-600';
+        ? 'text-amber-600 dark:text-amber-400'
+        : 'text-red-600 dark:text-red-400';
 
   return (
     <Card title={t['activity.title']} description={t['activity.goalDescription']}>
       <div className="grid grid-cols-2 gap-3 mb-3">
-        <div className="bg-stone-50 rounded-lg p-3 text-center">
-          <p className="text-2xl font-bold">{stats.weeklyMinutes}</p>
-          <p className="text-xs text-stone-500">{t['activity.minutes']}</p>
+        <div className="bg-stone-50 dark:bg-zinc-700/60 rounded-lg p-3 text-center">
+          <p className="text-2xl font-bold dark:text-zinc-100">{stats.weeklyMinutes}</p>
+          <p className="text-xs text-stone-500 dark:text-zinc-400">{t['activity.minutes']}</p>
           {stats.meetsModerate && (
-            <p className="text-emerald-600 text-xs mt-1">{t['activity.objectiveMet']}</p>
+            <p className="text-emerald-600 dark:text-emerald-400 text-xs mt-1">
+              {t['activity.objectiveMet']}
+            </p>
           )}
         </div>
-        <div className="bg-stone-50 rounded-lg p-3 text-center">
-          <p className="text-2xl font-bold">{stats.strengthSessions}</p>
-          <p className="text-xs text-stone-500">{t['activity.strength']}</p>
+        <div className="bg-stone-50 dark:bg-zinc-700/60 rounded-lg p-3 text-center">
+          <p className="text-2xl font-bold dark:text-zinc-100">{stats.strengthSessions}</p>
+          <p className="text-xs text-stone-500 dark:text-zinc-400">{t['activity.strength']}</p>
           {stats.meetsStrength && (
-            <p className="text-emerald-600 text-xs mt-1">{t['activity.objectiveMet']}</p>
+            <p className="text-emerald-600 dark:text-emerald-400 text-xs mt-1">
+              {t['activity.objectiveMet']}
+            </p>
           )}
         </div>
       </div>
 
       <div className="flex gap-2 items-center mb-3">
         <span className={`text-lg font-bold ${complianceColor}`}>{stats.compliance}%</span>
-        <span className="text-sm text-stone-500">{t['activity.compliance']}</span>
+        <span className="text-sm text-stone-500 dark:text-zinc-400">
+          {t['activity.compliance']}
+        </span>
         {stats.streak > 0 && (
           <span
-            className="text-sm text-amber-600 ml-auto"
+            className="text-sm text-amber-600 dark:text-amber-400 ml-auto"
             aria-label={`Racha de ${stats.streak} semanas`}
           >
             <span aria-hidden="true">🔥</span> {stats.streak} sem
