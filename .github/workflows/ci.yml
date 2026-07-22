@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@v4
         with:
@@ -34,8 +36,8 @@ jobs:
 
       - name: Check for secrets in code
         uses: gitleaks/gitleaks-action@v2
-        with:
-          args: detect --source . --verbose --redact
+        env:
+          GITLEAKS_ENABLE_COMMENT: false
 
   quality:
     name: ✅ Quality Gate
