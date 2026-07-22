@@ -25,7 +25,10 @@ export function DailyViolations({ validation, hasFoods }: DailyViolationsProps) 
           type="warning"
           violations={[
             {
-              message: `Proteína animal: ${validation.animalProteinCount}/día — considerar fuente de calcio vegetal`,
+              message: t['log.animalProteinWarning'].replace(
+                '{count}',
+                String(validation.animalProteinCount),
+              ),
             },
           ]}
         />

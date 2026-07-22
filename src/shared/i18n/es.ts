@@ -159,6 +159,19 @@ export const es: Translations = {
 
   'validation.allClear': '✅ El registro de hoy cumple con los límites diarios.',
   'caloric.dailyObjective': 'Objetivo diario',
+  'caloric.ingested': 'Ingerido',
   'metabolic.descriptionDetail':
     'Protocolo erMedDiet (PREDIMED-Plus): déficit condicional de 600 kcal si IMC > 25. Fórmula Mifflin-St Jeor.',
+  'metabolic.formAriaLabel': 'Formulario de perfil metabólico',
+
+  // Activity — extended
+  'activity.streakWeeksAria': 'Racha de {streak} semanas',
+  'activity.streakUnit': 'sem',
+
+  // Scanner — extended
+  'scanner.detailsAria': 'Detalles de {name}',
+  'scanner.macrosFormat': '{kcal} kcal | {protein}g prot | {carbs}g HC | {fat}g grasa',
+
+  // Log — extended
+  'log.animalProteinWarning': 'Proteína animal: {count}/día — considerar fuente de calcio vegetal',
 };

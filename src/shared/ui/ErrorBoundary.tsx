@@ -46,9 +46,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       }
       return (
         <ErrorFallback
-          title="Algo salió mal"
-          description="Ocurrió un error inesperado al renderizar esta sección."
-          buttonLabel="Reintentar"
+          title="Something went wrong"
+          description="An unexpected error occurred while rendering this section."
+          buttonLabel="Retry"
           onRetry={this.handleRetry}
         />
       );

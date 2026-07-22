@@ -175,4 +175,21 @@ export interface Translations {
   'form.glucoseContext': string;
   'form.glucoseFasting': string;
   'form.glucosePostprandial': string;
+
+  // Activity — extended
+  'activity.streakWeeksAria': string;
+  'activity.streakUnit': string;
+
+  // Scanner — extended
+  'scanner.detailsAria': string;
+  'scanner.macrosFormat': string;
+
+  // Log — extended
+  'log.animalProteinWarning': string;
+
+  // Caloric summary — extended
+  'caloric.ingested': string;
+
+  // Metabolic — extended
+  'metabolic.formAriaLabel': string;
 }

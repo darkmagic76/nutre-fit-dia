@@ -158,6 +158,19 @@ export const en: Translations = {
 
   'validation.allClear': "✅ Today's log meets all daily limits.",
   'caloric.dailyObjective': 'Daily objective',
+  'caloric.ingested': 'Ingested',
   'metabolic.descriptionDetail':
     'erMedDiet protocol (PREDIMED-Plus): conditional 600 kcal deficit for IMC > 25. Mifflin-St Jeor formula.',
+  'metabolic.formAriaLabel': 'Metabolic profile form',
+
+  // Activity — extended
+  'activity.streakWeeksAria': 'Streak of {streak} weeks',
+  'activity.streakUnit': 'wk',
+
+  // Scanner — extended
+  'scanner.detailsAria': 'Details for {name}',
+  'scanner.macrosFormat': '{kcal} kcal | {protein}g protein | {carbs}g carbs | {fat}g fat',
+
+  // Log — extended
+  'log.animalProteinWarning': 'Animal protein: {count}/day — consider plant-based calcium source',
 };

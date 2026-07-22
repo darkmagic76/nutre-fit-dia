@@ -107,7 +107,7 @@ describe('ErrorBoundary', () => {
     const alert = screen.getByRole('alert');
     expect(alert).toBeInTheDocument();
     // default fallback renders both title and description from ErrorFallback
-    expect(screen.getByText('Algo salió mal')).toBeInTheDocument();
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
   });
 
   it('catches an error in a deeply nested child (3+ levels)', () => {
@@ -126,7 +126,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
     expect(screen.getByTestId('custom')).toHaveTextContent('Custom error UI');
-    expect(screen.queryByText('Algo salió mal')).not.toBeInTheDocument();
+    expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
   });
 
   // ---- retry ----
@@ -153,7 +153,7 @@ describe('ErrorBoundary', () => {
     shouldThrow = false;
 
     // click retry
-    await user.click(screen.getByRole('button', { name: /reintentar/i }));
+    await user.click(screen.getByRole('button', { name: /retry/i }));
 
     // ErrorBoundary remounts children — but React error boundary re-renders children
     // via setState, which triggers a fresh render. We need to force a re-render
@@ -193,7 +193,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
 
     // retry while error persists — falls back again
-    await user.click(screen.getByRole('button', { name: /reintentar/i }));
+    await user.click(screen.getByRole('button', { name: /retry/i }));
     // ErrorBoundary re-renders, ConditionalThrower still throws
     // (React 19 may recover via sync rendering path)
     // Trigger full re-render with the same condition
@@ -208,7 +208,7 @@ describe('ErrorBoundary', () => {
     shouldThrow = false;
 
     // retry should now succeed
-    await user.click(screen.getByRole('button', { name: /reintentar/i }));
+    await user.click(screen.getByRole('button', { name: /retry/i }));
     rerender(
       <ErrorBoundary>
         <ConditionalThrower />
@@ -393,7 +393,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    await user.click(screen.getByRole('button', { name: /reintentar/i }));
+    await user.click(screen.getByRole('button', { name: /retry/i }));
     expect(onRetry).toHaveBeenCalled();
     // After retry, the fallback UI should be replaced with children
     // (Thrower re-throws, so error state persists — but onRetry was invoked)
@@ -434,7 +434,7 @@ describe('ErrorBoundary', () => {
     expect(screen.getByRole('alert')).toBeInTheDocument();
 
     // Now click retry — this resets hasError and re-renders the (now fixed) children
-    await user.click(screen.getByRole('button', { name: /reintentar/i }));
+    await user.click(screen.getByRole('button', { name: /retry/i }));
 
     // After retry, children render cleanly
     expect(screen.getByTestId('clean')).toHaveTextContent('Clean render');
