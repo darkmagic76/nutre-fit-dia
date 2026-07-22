@@ -51,6 +51,12 @@ test.describe('NutreFitDia E2E Smoke', () => {
     // Navigate to metabolic profile
     await page.getByRole('tab', { name: /perfil/i }).click();
 
+    // Fill glucose (required per FR-5.1)
+    await page
+      .getByLabel(/glucosa/i)
+      .first()
+      .fill('100');
+
     // Click calculate
     await page.getByRole('button', { name: /calcular/i }).click();
 
