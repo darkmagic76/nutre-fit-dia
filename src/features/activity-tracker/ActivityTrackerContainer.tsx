@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useActivityTracker } from './hooks/useActivityTracker';
+import { evaluateAndEnqueue } from '@features/nudge-engine';
 import { ActivityTrackerView } from './ActivityTrackerView';
 
 export function ActivityTrackerContainer() {
@@ -25,6 +26,8 @@ export function ActivityTrackerContainer() {
       addEntry({ moderateMinutes: mm, strengthSessions: ss });
       setMinutes('');
       setSessions('');
+      // FR-4.3: re-evaluate nudges after logging activity (HC_INACTIVITY_ADJUST)
+      evaluateAndEnqueue();
     }
   };
 

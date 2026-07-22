@@ -1,4 +1,5 @@
 import { useTrackerStore } from '@shared/stores';
+import { evaluateAndEnqueue } from '@features/nudge-engine';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import type { FormEvent } from 'react';
 
@@ -28,6 +29,8 @@ export function MetabolicTrackerContainer() {
   const handleCalculate = (e: FormEvent) => {
     e.preventDefault();
     calculateTarget();
+    // FR-4.3 / FR-5.1: re-evaluate nudges after recording glucose/weight biomarkers
+    evaluateAndEnqueue();
   };
 
   const canCalculate = glucose.trim().length > 0;
