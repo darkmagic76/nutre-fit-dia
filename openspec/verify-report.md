@@ -251,6 +251,22 @@ All 16 FR requirements (FR-1.1 through FR-5.2) verified against the FR-MATRIX. T
 
 ---
 
+## 12. Archived Changes
+
+### enable-https-protocol (RNF-04) — Archived 2026-07-23
+
+| Property | Value |
+|----------|-------|
+| **Verdict** | PASS WITH WARNINGS |
+| **Spec synced** | `openspec/specs/https-transport/spec.md` (created) |
+| **Archive path** | `openspec/changes/archive/2026-07-23-enable-https-protocol/` |
+| **Domain** | `https-transport` — HTTPS dev server via `@vitejs/plugin-basic-ssl` + CSP `upgrade-insecure-requests` |
+| **Tasks** | 7/7 completed |
+| **Tests** | ✅ 545/545 passing |
+| **Domain files touched** | Zero — infrastructure-only change |
+
+---
+
 ## Final Verdict
 
 **PASS WITH WARNINGS**

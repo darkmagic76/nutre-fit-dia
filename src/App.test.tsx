@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nProvider } from '@shared/i18n';
 import { createLocalStorage, createMatchMedia } from './test/test-helpers';
 import App from './App';
+import indexHtml from '../index.html?raw';
 
 describe('App', () => {
   beforeEach(() => {
@@ -56,5 +57,12 @@ describe('App', () => {
 
     const link = screen.getByRole('link', { name: /seguridad/i });
     expect(link).toHaveAttribute('href', '/.well-known/security.txt');
+  });
+
+  it('includes upgrade-insecure-requests in CSP', () => {
+    // Arrange: indexHtml imported from index.html?raw at module level (line 6)
+    // Act: read the raw HTML content
+    // Assert: CSP meta tag includes the upgrade-insecure-requests directive
+    expect(indexHtml).toContain('upgrade-insecure-requests');
   });
 });
