@@ -1,4 +1,4 @@
-export { useNudgeStore } from './store';
+export { useNudgeStore } from '@shared/stores';
 export {
   CooldownTracker,
   NUDGE_RULES,

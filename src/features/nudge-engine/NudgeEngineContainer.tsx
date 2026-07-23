@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useT } from '@shared/i18n';
 import { Card } from '@shared/ui';
 import { evaluateAndEnqueue } from '@shared/nudge';
-import { useNudgeStore } from './store';
+import { useNudgeStore } from '@shared/stores';
 import { NudgePanelView } from './NudgePanelView';
 
 export function NudgeEngineContainer() {

@@ -12,7 +12,7 @@ import { getTrend } from '@shared/services/biomarkerTrackingService';
 import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits';
 import { NUDGE_RULES } from './rules';
 import { CooldownTracker } from './cooldownTracker';
-import { useNudgeStore } from '@features/nudge-engine/store';
+import { useNudgeStore } from '@shared/stores';
 import type { NudgeContext, NudgeEvaluation, SafetyRule } from './types';
 import type { CooldownTracker as CooldownTrackerType } from './cooldownTracker';
 
