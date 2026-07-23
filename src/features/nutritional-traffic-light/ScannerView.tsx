@@ -1,4 +1,4 @@
-import { TrafficLightColor, CATEGORY_DISPLAY_NAMES } from '@shared/domain';
+import { TrafficLightColor } from '@shared/domain';
 import type { Food } from '@shared/domain';
 import { Card, SelectField, PrimaryButton } from '@shared/ui';
 import { SafetyAlertDisplay } from './components/SafetyAlertDisplay';
@@ -60,14 +60,18 @@ export function ScannerView({
       {selected && (
         <div
           className="p-3 bg-stone-50 dark:bg-zinc-700/60 rounded-lg text-sm space-y-1 dark:text-zinc-100"
-          aria-label={`Detalles de ${displayName}`}
+          aria-label={t['scanner.detailsAria'].replace('{name}', displayName)}
         >
           <p>
-            <strong>{displayName}</strong> — {CATEGORY_DISPLAY_NAMES[selected.category]}
+            <strong>{displayName}</strong> —{' '}
+            {t[`category.${selected.category}` as keyof typeof t] ?? selected.category}
           </p>
           <p>
-            {selected.kcalPer100g} kcal | {selected.proteinPer100g}g prot | {selected.carbsPer100g}g
-            HC | {selected.fatPer100g}g grasa
+            {t['scanner.macrosFormat']
+              .replace('{kcal}', String(selected.kcalPer100g))
+              .replace('{protein}', String(selected.proteinPer100g))
+              .replace('{carbs}', String(selected.carbsPer100g))
+              .replace('{fat}', String(selected.fatPer100g))}
           </p>
           {selected.harmfulIngredients.length > 0 && (
             <p className="text-red-600 dark:text-red-400" role="alert">

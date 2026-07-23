@@ -2,10 +2,16 @@ import { useCallback, useRef, useEffect } from 'react';
 import { useActivityStore, DEFAULT_WEEKLY_GOAL } from '../activityStore';
 import type { ActivityEntry } from '../types';
 
-let streakCount = 0;
-
 export function useActivityTracker() {
-  const { weeklyMinutes, strengthSessions, entries, addEntry: storeAddEntry } = useActivityStore();
+  const {
+    weeklyMinutes,
+    strengthSessions,
+    entries,
+    streak,
+    addEntry: storeAddEntry,
+    incrementStreak,
+    resetStreak,
+  } = useActivityStore();
   const prevEntryCount = useRef(entries.length);
 
   const meetsModerate =
@@ -21,13 +27,13 @@ export function useActivityTracker() {
   useEffect(() => {
     if (entries.length > prevEntryCount.current) {
       if (compliance === 100) {
-        streakCount++;
+        incrementStreak();
       } else {
-        streakCount = 0;
+        resetStreak();
       }
       prevEntryCount.current = entries.length;
     }
-  }, [entries.length, compliance]);
+  }, [entries.length, compliance, incrementStreak, resetStreak]);
 
   const addEntry = useCallback(
     (entry: Omit<ActivityEntry, 'date'> & { date?: string }) => {
@@ -45,7 +51,7 @@ export function useActivityTracker() {
     strengthSessions,
     entries,
     compliance,
-    streak: streakCount,
+    streak,
     meetsModerate,
     meetsStrength,
     weeklyGoal: DEFAULT_WEEKLY_GOAL,

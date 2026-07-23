@@ -64,9 +64,9 @@ export function ActivityTrackerView({ stats, form, onSubmit }: ActivityTrackerVi
         {stats.streak > 0 && (
           <span
             className="text-sm text-amber-600 dark:text-amber-400 ml-auto"
-            aria-label={`Racha de ${stats.streak} semanas`}
+            aria-label={t['activity.streakWeeksAria'].replace('{streak}', String(stats.streak))}
           >
-            <span aria-hidden="true">🔥</span> {stats.streak} sem
+            <span aria-hidden="true">🔥</span> {stats.streak} {t['activity.streakUnit']}
           </span>
         )}
       </div>

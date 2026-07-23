@@ -61,6 +61,21 @@ In-memory `Map<ruleId, timestamp>`. Constructor accepts `now?: () => number` for
 - WHEN condition evaluated
 - THEN returns false (≤4 is within limit)
 
+### REQ-CEREALS-DEFICIT: Cereal deficit reminder
+
+**MUST** fire when `counts.CEREALS < 3`. Type `behavioral_nudge`, severity `info`, cooldown 6h.
+Added 2026-07-23 per INFORME_ADR FR-2 requirement (minimum 3 cereal rations/day).
+
+#### Scenario: Fires when below minimum
+- GIVEN `counts.CEREALS=2`
+- WHEN condition evaluated
+- THEN returns true
+
+#### Scenario: Does not fire at minimum
+- GIVEN `counts.CEREALS=3`
+- WHEN condition evaluated
+- THEN returns false
+
 ### REQ-FRUITS-GLYCEMIC: Warning on high-GI fruit
 
 **MUST** fire when `containsHighGlycemicFruit`. Glycemic set: `{uva, dátil, higo, pasa, plátano maduro}`. Severity `soft_warn`, cooldown 24h.
@@ -75,17 +90,33 @@ In-memory `Map<ruleId, timestamp>`. Constructor accepts `now?: () => number` for
 - WHEN condition(ctx)
 - THEN returns true, severity soft_warn
 
-### REQ-VEGETABLES-DEFICIT: Evening vegetable reminder
+### REQ-FRUITS-DEFICIT: Fruit deficit reminder
 
-**MUST** fire when `counts.VEGETABLES < 3 && currentHour >= 20`. Severity `soft_warn`, cooldown 6h.
+**MUST** fire when `counts.FRUITS < 2`. Type `behavioral_nudge`, severity `info`, cooldown 6h.
+Added 2026-07-23 per SPECS_RF / SPECS_TECH §5 requirement (minimum 2 fruit rations/day).
 
-#### Scenario: Time gate blocks before 20:00
+#### Scenario: Fires when below minimum
+- GIVEN `counts.FRUITS=1`
+- WHEN condition evaluated
+- THEN returns true
+
+#### Scenario: Does not fire at minimum
+- GIVEN `counts.FRUITS=2`
+- WHEN condition evaluated
+- THEN returns false
+
+### REQ-VEGETABLES-DEFICIT: Afternoon vegetable reminder
+
+**MUST** fire when `counts.VEGETABLES < 3 && currentHour >= 14`. Type `behavioral_nudge`, severity `info`, cooldown 6h.
+Updated 2026-07-23: threshold lowered from 20 (8PM) to 14 (2PM) for earlier intervention.
+
+#### Scenario: Time gate blocks before 14:00
 - GIVEN counts.VEGETABLES=2
-- WHEN currentHour=19 → false; currentHour=20 → true
-- THEN rule activates only from 20:00
+- WHEN currentHour=13 → false; currentHour=14 → true
+- THEN rule activates from 14:00 (afternoon window)
 
 #### Scenario: Sufficient vegetables
-- GIVEN `counts.VEGETABLES=3, currentHour=21`
+- GIVEN `counts.VEGETABLES=3, currentHour=15`
 - WHEN condition(ctx)
 - THEN returns false
 

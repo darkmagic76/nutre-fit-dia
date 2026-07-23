@@ -1,5 +1,9 @@
-export { useNudgeStore } from './store';
-export { CooldownTracker } from './cooldownTracker';
-export { NUDGE_RULES } from './rules';
-export { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from './engine';
-export type { NudgeRule, SafetyRule, NudgeContext, NudgeEvaluation } from './types';
+export { useNudgeStore } from '@shared/stores';
+export {
+  CooldownTracker,
+  NUDGE_RULES,
+  buildNudgeContext,
+  evaluateRules,
+  evaluateAndEnqueue,
+} from '@shared/nudge';
+export type { NudgeRule, SafetyRule, NudgeContext, NudgeEvaluation } from '@shared/nudge';

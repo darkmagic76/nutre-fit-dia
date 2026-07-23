@@ -1,5 +1,5 @@
 import { useTrackerStore } from '@shared/stores';
-import { evaluateAndEnqueue } from '@features/nudge-engine';
+import { evaluateAndEnqueue } from '@shared/nudge';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import type { FormEvent } from 'react';
 

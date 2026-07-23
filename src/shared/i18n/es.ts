@@ -151,6 +151,19 @@ export const es: Translations = {
   'cooking.grilled': 'a la plancha',
   'cooking.raw': 'en crudo',
 
+  // Food categories
+  'category.cereals': 'Cereales',
+  'category.vegetables': 'Hortalizas',
+  'category.fruits': 'Frutas',
+  'category.olive_oil': 'AOVE',
+  'category.dairy': 'Lácteos',
+  'category.legumes': 'Legumbres',
+  'category.fish': 'Pescado',
+  'category.eggs': 'Huevos',
+  'category.white_meat': 'Carne blanca',
+  'category.red_meat': 'Carne roja',
+  'category.water': 'Agua',
+
   'alert.severityCritical': 'Crítico',
   'alert.severityWarning': 'Advertencia',
   'alert.acknowledge': 'Reconocer alerta',
@@ -158,7 +171,72 @@ export const es: Translations = {
   'alert.understood': 'Entendido',
 
   'validation.allClear': '✅ El registro de hoy cumple con los límites diarios.',
+  'validation.unitDay': 'día',
+  'validation.unitWeek': 'semana',
   'caloric.dailyObjective': 'Objetivo diario',
+  'caloric.ingested': 'Ingerido',
   'metabolic.descriptionDetail':
     'Protocolo erMedDiet (PREDIMED-Plus): déficit condicional de 600 kcal si IMC > 25. Fórmula Mifflin-St Jeor.',
+  'metabolic.formAriaLabel': 'Formulario de perfil metabólico',
+
+  // Nudge titles
+  'nudge.title.cerealsRestriction': 'Límite de cereales excedido',
+  'nudge.title.cerealsDeficit': 'Cereales insuficientes',
+  'nudge.title.fruitsGlycemicAlert': 'Fruta de alto índice glucémico',
+  'nudge.title.fruitsDeficit': 'Frutas insuficientes',
+  'nudge.title.vegetablesDeficit': '¿Has comido suficientes hortalizas?',
+  'nudge.title.dairyCalcium': 'Proteína animal elevada',
+  'nudge.title.waterHydration': 'Recordatorio de hidratación',
+  'nudge.title.hyperglycemia': 'Glucosa elevada',
+  'nudge.title.adherenceGlucose': 'Registra tu glucosa',
+  'nudge.title.adherenceWeight': 'Registra tu peso',
+  'nudge.title.aoveTagging': 'AOVE requerido',
+  'nudge.title.legumesGlycemicBase': 'Legumbres insuficientes esta semana',
+  'nudge.title.fishCodTag': 'Bacalao — High Protein Low Fat',
+  'nudge.title.eggsRedMeatAlt': 'Huevos como alternativa',
+  'nudge.title.whiteMeatRestrict': 'Restringir carnes blancas',
+  'nudge.title.hcInactivityAdjust': 'Actividad física insuficiente',
+  'nudge.title.sustainableSubstitution': 'Sustitución inteligente',
+
+  // Nudge bodies
+  'nudge.body.cerealsRestriction':
+    'Has superado las 4 raciones de cereales permitidas durante la restricción calórica.',
+  'nudge.body.cerealsDeficit':
+    'Llevas menos de 3 raciones de cereales hoy. Los cereales integrales son la base energética de la dieta mediterránea.',
+  'nudge.body.fruitsGlycemicAlert':
+    'Has registrado una fruta con alto índice glucémico. Considera alternativas como manzana o pera.',
+  'nudge.body.fruitsDeficit':
+    'Llevas menos de 2 raciones de fruta hoy. La fruta fresca aporta fibra y antioxidantes esenciales.',
+  'nudge.body.vegetablesDeficit':
+    'Llevas menos de 3 raciones de hortalizas hoy. Intenta incluir una ración en la cena.',
+  'nudge.body.dairyCalcium':
+    'Has consumido más de 2 raciones de proteína animal hoy. Considera fuentes de calcio vegetal (brócoli, almendras, sardinas).',
+  'nudge.body.waterHydration': 'Recuerda beber agua. Objetivo: 4-8 vasos al día.',
+  'nudge.body.hyperglycemia':
+    'Tu última lectura de glucosa es elevada. Considera una caminata de 15 minutos o una receta rica en fibra soluble.',
+  'nudge.body.adherenceGlucose':
+    'No has registrado tu glucosa en las últimas 4 horas. Mantener el registro ayuda a tu control metabólico.',
+  'nudge.body.adherenceWeight':
+    'No has registrado tu peso en las últimas 4 horas. El seguimiento regular permite ajustar tu plan.',
+  'nudge.body.aoveTagging': 'El AOVE debe estar presente en cada comida principal.',
+  'nudge.body.legumesGlycemicBase':
+    'Las legumbres son requisito base para el control glucémico. Objetivo: ≥4 raciones/semana.',
+  'nudge.body.fishCodTag': 'El bacalao es una proteína de alta prioridad (0.7% grasa).',
+  'nudge.body.eggsRedMeatAlt': 'Los huevos son alternativa preferente a carnes rojas.',
+  'nudge.body.whiteMeatRestrict':
+    'Se han superado las raciones de pescado. Considera reducir carnes blancas.',
+  'nudge.body.hcInactivityAdjust':
+    'No has alcanzado los 150 min/semana de actividad moderada. Considera reducir carga de HC.',
+  'nudge.body.sustainableSubstitution': 'Considera alternativas más sostenibles: {names}',
+
+  // Activity — extended
+  'activity.streakWeeksAria': 'Racha de {streak} semanas',
+  'activity.streakUnit': 'sem',
+
+  // Scanner — extended
+  'scanner.detailsAria': 'Detalles de {name}',
+  'scanner.macrosFormat': '{kcal} kcal | {protein}g prot | {carbs}g HC | {fat}g grasa',
+
+  // Log — extended
+  'log.animalProteinWarning': 'Proteína animal: {count}/día — considerar fuente de calcio vegetal',
 };

@@ -97,7 +97,9 @@ describe('App integration', () => {
       const select = screen.getByLabelText('Seleccionar alimento');
       fireEvent.change(select, { target: { value: 'oil-aove' } });
 
-      expect(screen.getByText(/AOVE/)).toBeInTheDocument();
+      // Food name appears in scanner details (multiple matches possible from other tabs)
+      const foodNames = screen.getAllByText(/AOVE/);
+      expect(foodNames.length).toBeGreaterThanOrEqual(1);
     });
 
     it('does nothing when classifying or adding without selecting a food', () => {
@@ -145,10 +147,12 @@ describe('App integration', () => {
       fireEvent.click(screen.getByRole('button', { name: /Añadir al/i }));
 
       selectTab('Hoy');
-      expect(screen.getByText(/AOVE/)).toBeInTheDocument();
+      expect(screen.getByText(/aceite/i)).toBeInTheDocument();
 
       fireEvent.click(screen.getByRole('button', { name: /eliminar aceite/i }));
-      expect(screen.queryByText(/AOVE/)).toBeNull();
+
+      // After removal, food list shows empty state
+      expect(screen.getByText(/sin alimentos registrados/i)).toBeInTheDocument();
     });
   });
 

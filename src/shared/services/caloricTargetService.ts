@@ -8,8 +8,8 @@ import { isRestrictionCandidate } from '@shared/utils';
  * SPECS_RF RF-02: "Reducción automática de 600 kcal/día si el IMC > 25"
  * SPECS_TECH §2: "Trigger automático ante IMC > 25"
  *
- * diagnosisAge is stored for downstream phenotypic filtering (FR-4.1).
- * It does not alter the MSJ formula itself.
+ * diagnosisAge is used via getDiagnosisModifier() for phenotypic deficit scaling (FR-4.1,
+ * ADR-004 amendment 2026-07-21). It does not alter the MSJ formula itself.
  */
 
 export type CaloricTargetInput = UserMetrics;

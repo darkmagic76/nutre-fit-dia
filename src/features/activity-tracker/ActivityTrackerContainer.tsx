@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useActivityTracker } from './hooks/useActivityTracker';
-import { evaluateAndEnqueue } from '@features/nudge-engine';
+import { evaluateAndEnqueue } from '@shared/nudge';
 import { ActivityTrackerView } from './ActivityTrackerView';
 
 export function ActivityTrackerContainer() {

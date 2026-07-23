@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-22 | Rama: `develop` | Tests: 510 ✅ | Lint: 0 | Typecheck: limpio | Coverage: 93.53% | Formatter: Prettier
+Generado: 2026-07-17 | Actualizado: 2026-07-23 | Rama: `develop` | Tests: 544 ✅ (56 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.64% Stmts / 100% Funcs / 99.31% Lines | Formatter: Prettier
 
 ---
 
@@ -98,10 +98,7 @@ Fase 4 — Pulido (LOW)
 
 ## Notas
 
-- **510 tests verdes**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
-- **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module.
-- **NudgeEngine wiring**: `evaluateAndEnqueue()` se dispara en `ScannerContainer.handleClassify` y `handleAddToLog`. Singleton `CooldownTracker` previene notificaciones duplicadas.
-- **Activity form**: `NumberField` usa estado local (`useState`) — bug de `value=""` fijo corregido.
+- **544 tests verdes (56 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
+- **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module. Motor de nudge extraído a `src/shared/nudge/` (2026-07-23).
 - **Infra**: `tsconfig.app.json` excluye tests del build. Husky activo: pre-commit (lint) + pre-push (quality). `coverage/` en `.gitignore`.
-- **ADR-003 ScannerAdapter**: la interfaz ya existe. `MockScannerAdapter` implementado. La extensión para Dual Qualification (H4) es backward-compatible.
-- **Supabase reservado V2**: sin imports en V1. La app funciona completamente offline con datos estáticos del catálogo.
+- **i18n**: 0 strings hardcodeados. Categorías de alimento (11 keys) con traducción ES/EN. `AOVE` se mantiene como término clínico en ambos idiomas.

@@ -150,6 +150,19 @@ export const en: Translations = {
   'cooking.grilled': 'grilled',
   'cooking.raw': 'raw',
 
+  // Food categories
+  'category.cereals': 'Cereals',
+  'category.vegetables': 'Vegetables',
+  'category.fruits': 'Fruits',
+  'category.olive_oil': 'AOVE',
+  'category.dairy': 'Dairy',
+  'category.legumes': 'Legumes',
+  'category.fish': 'Fish',
+  'category.eggs': 'Eggs',
+  'category.white_meat': 'White Meat',
+  'category.red_meat': 'Red Meat',
+  'category.water': 'Water',
+
   'alert.severityCritical': 'Critical',
   'alert.severityWarning': 'Warning',
   'alert.acknowledge': 'Acknowledge alert',
@@ -157,7 +170,71 @@ export const en: Translations = {
   'alert.understood': 'Understood',
 
   'validation.allClear': "✅ Today's log meets all daily limits.",
+  'validation.unitDay': 'day',
+  'validation.unitWeek': 'week',
   'caloric.dailyObjective': 'Daily objective',
+  'caloric.ingested': 'Ingested',
   'metabolic.descriptionDetail':
     'erMedDiet protocol (PREDIMED-Plus): conditional 600 kcal deficit for IMC > 25. Mifflin-St Jeor formula.',
+  'metabolic.formAriaLabel': 'Metabolic profile form',
+
+  // Nudge titles
+  'nudge.title.cerealsRestriction': 'Cereal limit exceeded',
+  'nudge.title.cerealsDeficit': 'Insufficient cereals',
+  'nudge.title.fruitsGlycemicAlert': 'High glycemic fruit',
+  'nudge.title.fruitsDeficit': 'Insufficient fruit',
+  'nudge.title.vegetablesDeficit': 'Have you eaten enough vegetables?',
+  'nudge.title.dairyCalcium': 'High animal protein',
+  'nudge.title.waterHydration': 'Hydration reminder',
+  'nudge.title.hyperglycemia': 'High glucose',
+  'nudge.title.adherenceGlucose': 'Log your glucose',
+  'nudge.title.adherenceWeight': 'Log your weight',
+  'nudge.title.aoveTagging': 'EVOO required',
+  'nudge.title.legumesGlycemicBase': 'Insufficient legumes this week',
+  'nudge.title.fishCodTag': 'Cod — High Protein Low Fat',
+  'nudge.title.eggsRedMeatAlt': 'Eggs as alternative',
+  'nudge.title.whiteMeatRestrict': 'Restrict white meat',
+  'nudge.title.hcInactivityAdjust': 'Insufficient physical activity',
+  'nudge.title.sustainableSubstitution': 'Smart substitution',
+
+  // Nudge bodies
+  'nudge.body.cerealsRestriction':
+    'You have exceeded the 4 cereal rations allowed during caloric restriction.',
+  'nudge.body.cerealsDeficit':
+    'You have eaten less than 3 cereal rations today. Whole grains are the energy foundation of the Mediterranean diet.',
+  'nudge.body.fruitsGlycemicAlert':
+    'You logged a high-glycemic fruit. Consider alternatives such as apple or pear.',
+  'nudge.body.fruitsDeficit':
+    'You have eaten less than 2 fruit rations today. Fresh fruit provides essential fiber and antioxidants.',
+  'nudge.body.vegetablesDeficit':
+    'You have eaten less than 3 vegetable rations today. Try to include a serving at dinner.',
+  'nudge.body.dairyCalcium':
+    'You have consumed more than 2 animal protein rations today. Consider plant-based calcium sources (broccoli, almonds, sardines).',
+  'nudge.body.waterHydration': 'Remember to drink water. Target: 4–8 glasses per day.',
+  'nudge.body.hyperglycemia':
+    'Your latest glucose reading is high. Consider a 15-minute walk or a fiber-rich meal.',
+  'nudge.body.adherenceGlucose':
+    'You have not logged your glucose in the last 4 hours. Regular tracking helps your metabolic control.',
+  'nudge.body.adherenceWeight':
+    'You have not logged your weight in the last 4 hours. Regular tracking allows for plan adjustments.',
+  'nudge.body.aoveTagging': 'EVOO must be present in every main meal.',
+  'nudge.body.legumesGlycemicBase':
+    'Legumes are a base requirement for glycemic control. Target: ≥4 servings/week.',
+  'nudge.body.fishCodTag': 'Cod is a high-priority protein (0.7% fat).',
+  'nudge.body.eggsRedMeatAlt': 'Eggs are a preferred alternative to red meat.',
+  'nudge.body.whiteMeatRestrict': 'Fish servings exceeded. Consider reducing white meat.',
+  'nudge.body.hcInactivityAdjust':
+    'You have not reached 150 min/week of moderate activity. Consider reducing carbohydrate intake.',
+  'nudge.body.sustainableSubstitution': 'Consider more sustainable alternatives: {names}',
+
+  // Activity — extended
+  'activity.streakWeeksAria': 'Streak of {streak} weeks',
+  'activity.streakUnit': 'wk',
+
+  // Scanner — extended
+  'scanner.detailsAria': 'Details for {name}',
+  'scanner.macrosFormat': '{kcal} kcal | {protein}g protein | {carbs}g carbs | {fat}g fat',
+
+  // Log — extended
+  'log.animalProteinWarning': 'Animal protein: {count}/day — consider plant-based calcium source',
 };

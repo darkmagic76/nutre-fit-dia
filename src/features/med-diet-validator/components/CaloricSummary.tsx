@@ -18,7 +18,7 @@ export function CaloricSummary({ caloricTarget, totalKcal }: CaloricSummaryProps
         variant="success"
       />
       <StatCard
-        label="Ingerido"
+        label={t['caloric.ingested']}
         value={`${ingested} kcal`}
         variant={ingested > caloricTarget.target ? 'danger' : 'default'}
       />

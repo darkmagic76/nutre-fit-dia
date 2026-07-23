@@ -37,7 +37,7 @@ export function ProfileForm({
     <form
       onSubmit={onSubmit}
       className="space-y-3"
-      aria-label="Formulario de perfil metabólico"
+      aria-label={t['metabolic.formAriaLabel']}
       noValidate
     >
       <div className="grid grid-cols-2 gap-3">

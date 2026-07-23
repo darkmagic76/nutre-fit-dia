@@ -60,10 +60,10 @@ describe('Nudge Engine Integration', () => {
     const eveningCtx = { ...ctx, currentHour: 21, dayOfWeek: 4 };
     const results = evaluateRules(eveningCtx, NUDGE_RULES, cooldown);
 
-    // CEREALS_RESTRICTION + FRUITS_GLYCEMIC_ALERT + VEGETABLES_DEFICIT
+    // CEREALS_RESTRICTION + CEREALS_DEFICIT?no(cereals=5) + FRUITS_GLYCEMIC_ALERT + FRUITS_DEFICIT + VEGETABLES_DEFICIT
     // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION
     // + AOVE_TAGGING + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY_ADJUST
-    expect(results).toHaveLength(9);
+    expect(results).toHaveLength(10);
     const matchedIds = results.map((r) => r.rule.id);
     expect(matchedIds).toContain('CEREALS_RESTRICTION');
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT');
@@ -82,7 +82,7 @@ describe('Nudge Engine Integration', () => {
     const ctx = buildNudgeContext();
     const daytimeCtx = { ...ctx, currentHour: 12, dayOfWeek: 4 };
     const firstPass = evaluateRules(daytimeCtx, NUDGE_RULES, cooldown);
-    expect(firstPass).toHaveLength(7); // CEREALS + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY
+    expect(firstPass).toHaveLength(8); // CEREALS + FRUITS_DEFICIT + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY
     expect(firstPass[0].rule.id).toBe('CEREALS_RESTRICTION');
 
     // Simulate caller registering cooldown
@@ -90,7 +90,7 @@ describe('Nudge Engine Integration', () => {
 
     // Second evaluation — CEREALS_RESTRICTION now on cooldown
     const secondPass = evaluateRules(daytimeCtx, NUDGE_RULES, cooldown);
-    expect(secondPass).toHaveLength(6); // ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY
+    expect(secondPass).toHaveLength(7); // FRUITS_DEFICIT + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER + AOVE + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY
   });
 
   it('does not match when no rules trigger', () => {
@@ -105,8 +105,8 @@ describe('Nudge Engine Integration', () => {
 
     const results = evaluateRules(morningCtx, NUDGE_RULES, cooldown);
     // ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION + AOVE_TAGGING
-    // + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY_ADJUST
-    expect(results).toHaveLength(6);
+    // + LEGUMES_GLYCEMIC_BASE + HC_INACTIVITY_ADJUST + CEREALS_DEFICIT + FRUITS_DEFICIT
+    expect(results).toHaveLength(8);
   });
 
   describe('auto-resolution', () => {

@@ -3,7 +3,7 @@ import { foodsById } from '@shared/data/foods';
 import { classifyFoodWithReasons } from './services/classificationService';
 import { checkSafetyAlerts } from './services/safetyCheck';
 import { useLogStore } from '@shared/stores';
-import { evaluateAndEnqueue } from '@features/nudge-engine';
+import { evaluateAndEnqueue } from '@shared/nudge';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import { ScannerView } from './ScannerView';
 import type { SafetyAlert } from '@shared/services/rationValidator';

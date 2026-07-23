@@ -110,8 +110,8 @@ describe('evaluateRules', () => {
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
 
-    // Only CEREALS_RESTRICTION should match (dayOfWeek=3 < 4 → LEGUMES_GLYCEMIC_BASE does NOT fire)
-    expect(results).toHaveLength(1);
+    // Only CEREALS_RESTRICTION + FRUITS_DEFICIT should match
+    expect(results).toHaveLength(2);
     expect(results[0].rule.id).toBe('CEREALS_RESTRICTION');
     expect(results[0].notification.type).toBe('safety_alert');
     expect(results[0].notification.severity).toBe('hard_block');
@@ -120,6 +120,7 @@ describe('evaluateRules', () => {
   it('returns empty when all matching rules are on cooldown', () => {
     const cooldown = new CooldownTracker(() => 0);
     cooldown.register('CEREALS_RESTRICTION');
+    cooldown.register('FRUITS_DEFICIT');
 
     const ctx: NudgeContext = {
       restrictionActive: true,
@@ -149,7 +150,12 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: false,
       animalProteinCount: 0,
-      counts: { ...emptyCounts(), [FoodCategory.OLIVE_OIL]: 1 },
+      counts: {
+        ...emptyCounts(),
+        [FoodCategory.OLIVE_OIL]: 1,
+        [FoodCategory.FRUITS]: 3,
+        [FoodCategory.CEREALS]: 3,
+      },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
@@ -249,7 +255,7 @@ describe('evaluateRules', () => {
 
     // Should match: CEREALS_RESTRICTION, FRUITS_GLYCEMIC_ALERT, VEGETABLES_DEFICIT
     // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION + AOVE_TAGGING
-    expect(results).toHaveLength(7);
+    expect(results).toHaveLength(8);
     const matchedIds = results.map((r) => r.rule.id);
     expect(matchedIds).toContain('CEREALS_RESTRICTION');
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT');

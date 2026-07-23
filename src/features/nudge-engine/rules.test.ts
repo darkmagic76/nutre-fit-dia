@@ -82,7 +82,7 @@ describe('NUDGE_RULES', () => {
       expect(rule).toBeDefined();
     });
 
-    it('fires when VEGETABLES < 3 and hour >= 20', () => {
+    it('fires when VEGETABLES < 3 and hour >= 14', () => {
       const ctx = makeContext({
         counts: { ...emptyCounts(), [FoodCategory.VEGETABLES]: 2 },
         currentHour: 20,
@@ -90,10 +90,10 @@ describe('NUDGE_RULES', () => {
       expect(rule!.condition(ctx)).toBe(true);
     });
 
-    it('does NOT fire when hour=19 (before evening gate)', () => {
+    it('does NOT fire when hour=13 (before afternoon gate)', () => {
       const ctx = makeContext({
         counts: { ...emptyCounts(), [FoodCategory.VEGETABLES]: 2 },
-        currentHour: 19,
+        currentHour: 13,
       });
       expect(rule!.condition(ctx)).toBe(false);
     });
@@ -328,6 +328,6 @@ describe('SUSTAINABLE_SUBSTITUTION', () => {
     const bodyFn = rule()!.body;
     expect(typeof bodyFn).toBe('function');
     const body = bodyFn(ctx);
-    expect(body).toBe('Considera alternativas más sostenibles: ');
+    expect(body).toBe('nudge.body.sustainableSubstitution|');
   });
 });
