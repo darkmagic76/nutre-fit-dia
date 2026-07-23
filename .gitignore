@@ -34,6 +34,7 @@ session-ses_*
 # Engram generated
 .atl/.skill-registry.cache.json
 .atl/skill-registry.md
+/sdd/
 
 # Playwright
 /test-results/
