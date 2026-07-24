@@ -8,6 +8,11 @@ El marco de este proyecto, es el **TFM del Máster en Desarrollo con IA de BIGSc
 
 Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y el Ejercicio diario** creando un **Ecosistema de Autocuidado Integral para la Diabetes Tipo 2 (DT2) y la Salud Sostenible.**
 
+## Presentación del Proyecto
+
+- [Presentación en PowerPoint](docs/slides/Nutre-Fit-Dia_Metabolic_Architecture.pptx)
+- [Video de presentación](https://youtu.be/RSCQ3jXF96A)
+
 ## Stack tecnológico utilizado
 
 | Tecnología            | Versión  | Propósito                                       |
