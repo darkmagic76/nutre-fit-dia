@@ -171,5 +171,25 @@ describe('trackerStore', () => {
       expect(state.caloricTarget).not.toBeNull();
       expect(state.profileError).toBeNull();
     });
+
+    it('sets profileError when glucose is empty (FR-5.1)', () => {
+      useTrackerStore.getState().setWeight('80');
+      useTrackerStore.getState().setHeight('170');
+      useTrackerStore.getState().setGlucose('');
+      useTrackerStore.getState().calculateTarget();
+      const state = useTrackerStore.getState();
+      expect(state.profileError).toBeInstanceOf(ValidationError);
+      expect(state.profileError!.message).toContain('glucosa es obligatoria');
+    });
+
+    it('sets profileError when glucose is NaN or non-positive (FR-5.1)', () => {
+      useTrackerStore.getState().setWeight('80');
+      useTrackerStore.getState().setHeight('170');
+      useTrackerStore.getState().setGlucose('abc');
+      useTrackerStore.getState().calculateTarget();
+      const state = useTrackerStore.getState();
+      expect(state.profileError).toBeInstanceOf(ValidationError);
+      expect(state.profileError!.message).toContain('valor positivo');
+    });
   });
 });

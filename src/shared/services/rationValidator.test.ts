@@ -4,6 +4,7 @@ import {
   validateWeeklyRations,
   countRations,
   emptyCounts,
+  RATION_LIMITS,
   AESAN_GRAM_STANDARDS,
   validateFoodPortions,
 } from './rationValidator';
@@ -357,6 +358,40 @@ describe('rationValidator', () => {
       const result = validateRations(counts, false);
       // Should NOT have RED_MEAT violations in daily validation
       expect(result.violations.filter((v) => v.category === FoodCategory.RED_MEAT)).toHaveLength(0);
+    });
+  });
+
+  describe('category fallback (unknown category)', () => {
+    it('uses raw category key as display name when not in CATEGORY_DISPLAY_NAMES', () => {
+      const unknownCategory = 'fake-unknown-cat-xyz' as unknown as FoodCategory;
+      (RATION_LIMITS as Record<string, unknown>)[unknownCategory] = {
+        min: 99,
+        unit: 'day',
+      };
+      try {
+        // Satisfy all real daily-minimum categories so they pass validation
+        const counts = countsWith({
+          [FoodCategory.CEREALS]: 3,
+          [FoodCategory.VEGETABLES]: 3,
+          [FoodCategory.FRUITS]: 2,
+          [FoodCategory.OLIVE_OIL]: 3,
+          [FoodCategory.WATER]: 4,
+        });
+        const result = validateRations(counts, false);
+        // Unknown category not in CountByCategory → current=undefined → no violation
+        expect(result.valid).toBe(true);
+        expect(result.violations).toEqual([]);
+      } finally {
+        delete (RATION_LIMITS as Record<string, unknown>)[unknownCategory];
+      }
+    });
+  });
+
+  describe('validateFoodPortions missing AESAN standard', () => {
+    it('returns empty array when food category is not in AESAN_GRAM_STANDARDS', () => {
+      const food = makeFood({ category: 'nonexistent' as any });
+      const alerts = validateFoodPortions([food]);
+      expect(alerts).toEqual([]);
     });
   });
 });

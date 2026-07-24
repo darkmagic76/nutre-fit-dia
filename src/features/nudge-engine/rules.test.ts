@@ -3,7 +3,7 @@ import { NUDGE_RULES } from './rules';
 import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits';
 import { emptyCounts } from '@shared/services/rationValidator';
 import { FoodCategory } from '@shared/domain';
-import type { NudgeContext } from './types';
+import type { NudgeContext } from '@shared/nudge';
 
 function makeContext(overrides: Partial<NudgeContext> = {}): NudgeContext {
   return {

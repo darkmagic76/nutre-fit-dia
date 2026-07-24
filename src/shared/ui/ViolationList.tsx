@@ -1,15 +1,15 @@
 interface ViolationListProps {
   violations: Array<{ message: string }>;
   type?: 'error' | 'warning';
-  errorLabel?: string;
-  warningLabel?: string;
+  errorLabel: string;
+  warningLabel: string;
 }
 
 export function ViolationList({
   violations,
   type = 'error',
-  errorLabel = '⚠️ Violaciones detectadas:',
-  warningLabel = '💡 Sugerencias:',
+  errorLabel,
+  warningLabel,
 }: ViolationListProps) {
   if (violations.length === 0) return null;
 

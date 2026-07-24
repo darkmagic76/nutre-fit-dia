@@ -36,7 +36,13 @@ export const FoodCategorySchema = z.enum([
   'water',
 ]);
 
-/** Display names in Spanish for UI rendering */
+/**
+ * Display names in Spanish for UI rendering.
+ *
+ * @deprecated Use i18n `t['category.xxx']` keys instead.
+ *             Kept for backward-compatibility only — new code must resolve
+ *             display names via the i18n system (`useT()` or equivalent).
+ */
 export const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
   [FoodCategory.CEREALS]: 'Cereales',
   [FoodCategory.VEGETABLES]: 'Hortalizas',

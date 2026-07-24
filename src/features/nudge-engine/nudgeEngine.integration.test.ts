@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from './engine';
-import { CooldownTracker } from './cooldownTracker';
+import { CooldownTracker } from '@shared/nudge';
 import { NUDGE_RULES } from './rules';
 import { useTrackerStore, useLogStore } from '@shared/stores';
 import { useNudgeStore } from './store';

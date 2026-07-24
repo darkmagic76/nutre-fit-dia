@@ -172,6 +172,18 @@ export const en: Translations = {
   'validation.allClear': "✅ Today's log meets all daily limits.",
   'validation.unitDay': 'day',
   'validation.unitWeek': 'week',
+  'validation.message.under': '{current} servings (min {limit}/{unit})',
+  'validation.message.over': '{current} servings (max {limit}/{unit})',
+  'validation.crossRule.whiteMeatFish': 'White Meat: restrict if fish rations exceeded',
+  'validation.safety.portionTooSmall': '{name}: {grams}g (min {min}g/ration AESAN 2022)',
+  'validation.safety.portionTooLarge': '{name}: {grams}g (max {max}g/ration AESAN 2022)',
+  'validation.safety.highGlycemicFruit': '{name}: high glycemic fruit — consume in moderation',
+  'validation.label.errors': 'Errors detected',
+  'validation.label.warnings': 'Warnings',
+  'violations.vegetableNudge.before2pm':
+    'Vegetable reminders activate from 2 PM. You still have time to include veggies in your meal.',
+  'violations.vegetableNudge.after2pm':
+    'You have a vegetable deficit. The reminder has been logged in your nudge history.',
   'caloric.dailyObjective': 'Daily objective',
   'caloric.ingested': 'Ingested',
   'metabolic.descriptionDetail':

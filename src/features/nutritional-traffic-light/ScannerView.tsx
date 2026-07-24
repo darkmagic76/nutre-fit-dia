@@ -63,8 +63,7 @@ export function ScannerView({
           aria-label={t['scanner.detailsAria'].replace('{name}', displayName)}
         >
           <p>
-            <strong>{displayName}</strong> —{' '}
-            {t[`category.${selected.category}` as keyof typeof t] ?? selected.category}
+            <strong>{displayName}</strong> — {t[`category.${selected.category}` as keyof typeof t]}
           </p>
           <p>
             {t['scanner.macrosFormat']

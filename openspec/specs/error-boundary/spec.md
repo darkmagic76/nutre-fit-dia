@@ -195,3 +195,15 @@ The system MUST log caught error details to the console during development to ai
 - GIVEN dev mode and a nested component throws
 - WHEN the error is caught and logged
 - THEN the log includes `errorInfo.componentStack` showing the render tree
+
+### Requirement: REQ-ERRORBOUNDARY-FALLBACK — Function fallback receives handleRetry
+
+The ErrorBoundary component MUST support a function-as-fallback prop and wire `handleRetry` to it when an error occurs.
+
+#### Scenario: Error with function fallback
+
+- GIVEN an ErrorBoundary with `fallback={(handleRetry) => <button data-testid="fn-retry" onClick={handleRetry}>Retry</button>}`
+- WHEN a child component throws during render
+- THEN the function fallback receives `handleRetry` as an argument
+- AND clicking the rendered button invokes `handleRetry`
+- AND the error state resets (fallback dismissed)

@@ -18,7 +18,7 @@ const CEREAL_MIN_RATIONS = 3;
 /** Minimum vegetable rations before nudge triggers */
 const VEGETABLE_MIN_RATIONS = 3;
 /** Afternoon hour after which vegetable deficit nudge fires (2PM — allows time to correct) */
-const VEGETABLE_NUDGE_HOUR_THRESHOLD = 14;
+export const VEGETABLE_NUDGE_HOUR_THRESHOLD = 14;
 /** Fruit minimum rations before deficit nudge triggers */
 const FRUIT_MIN_RATIONS = 2;
 /** Animal protein rations above this triggers dairy/calcium nudge */

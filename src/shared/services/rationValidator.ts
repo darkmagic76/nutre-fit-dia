@@ -1,8 +1,8 @@
-import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES, CATEGORY_DISPLAY_NAMES } from '@shared/domain';
+import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES } from '@shared/domain';
 import { CEREAL_RESTRICTED_MAX } from '@shared/constants/clinical';
-import { es } from '@shared/i18n/es';
 import type { FoodCategory as FoodCategoryType } from '@shared/domain';
 import type { Food } from '@shared/domain';
+import type { Translations } from '@shared/i18n/types';
 
 /**
  * Ration limits per INFORME_ADR FR-2 and ADR-005.
@@ -78,7 +78,10 @@ export interface RationViolation {
   limit: number;
   direction: 'under' | 'over';
   unit: 'day' | 'week';
-  message: string;
+  /** @deprecated Use formatViolation(t, v) instead — locale-aware message formatting at UI layer. */
+  message?: string;
+  /** Cross-category i18n key (e.g. whiteMeatFish). Bypasses template interpolation. */
+  messageKey?: keyof Translations;
 }
 
 export interface ValidationResult {
@@ -135,9 +138,7 @@ function checkCategoryLimits(
   const violations: RationViolation[] = [];
   const current = counts[category];
   const unit = limit.unit;
-  const suffix = unit === 'day' ? es['validation.unitDay'] : es['validation.unitWeek'];
   const effectiveMax = options?.effectiveMax ?? limit.max;
-  const displayName = CATEGORY_DISPLAY_NAMES[category] ?? category;
 
   if (effectiveMax !== undefined && current > effectiveMax) {
     violations.push({
@@ -146,7 +147,6 @@ function checkCategoryLimits(
       limit: effectiveMax,
       direction: 'over',
       unit,
-      message: `${displayName}: ${current} raciones (máx ${effectiveMax}/${suffix})`,
     });
   }
 
@@ -157,7 +157,6 @@ function checkCategoryLimits(
       limit: limit.min,
       direction: 'under',
       unit,
-      message: `${displayName}: ${current} raciones (mín ${limit.min}/${suffix})`,
     });
   }
 
@@ -217,7 +216,7 @@ export function validateWeeklyRations(counts: CountByCategory): ValidationResult
       limit: 0,
       direction: 'over',
       unit: 'week',
-      message: 'Carnes blancas: restringir si se han superado raciones de pescado',
+      messageKey: 'validation.crossRule.whiteMeatFish',
     });
   }
 
@@ -249,9 +248,18 @@ export type SafetyAlertSeverity = 'critical' | 'warning';
 export interface SafetyAlert {
   severity: SafetyAlertSeverity;
   code: string;
+  /** @deprecated Format at UI layer via formatSafetyAlert(). Structured fields below replace this. */
   message: string;
   category: FoodCategoryType;
   acknowledgeRequired: boolean;
+  /** Food name for i18n template interpolation. */
+  foodName?: string;
+  /** Actual grams per ration for i18n template interpolation. */
+  actualGrams?: number;
+  /** AESAN minimum gram standard for this category. */
+  standardMin?: number;
+  /** AESAN maximum gram standard for this category. */
+  standardMax?: number;
 }
 
 /**
@@ -272,6 +280,10 @@ export function validateFoodPortions(foods: Food[]): SafetyAlert[] {
         message: `${food.name}: ${food.gramsPerRation}g (mín ${standard.min}g/ración AESAN 2022)`,
         category: food.category,
         acknowledgeRequired: false,
+        foodName: food.name,
+        actualGrams: food.gramsPerRation,
+        standardMin: standard.min,
+        standardMax: standard.max,
       });
     }
 
@@ -282,6 +294,10 @@ export function validateFoodPortions(foods: Food[]): SafetyAlert[] {
         message: `${food.name}: ${food.gramsPerRation}g (máx ${standard.max}g/ración AESAN 2022)`,
         category: food.category,
         acknowledgeRequired: true,
+        foodName: food.name,
+        actualGrams: food.gramsPerRation,
+        standardMin: standard.min,
+        standardMax: standard.max,
       });
     }
   }

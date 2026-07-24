@@ -1,4 +1,5 @@
 import { useT } from '@shared/i18n';
+import { formatSafetyAlert } from '@shared/ui/formatters/formatViolation';
 import type { SafetyAlert } from '@shared/services/rationValidator';
 
 interface SafetyAlertDisplayProps {
@@ -29,7 +30,8 @@ export function SafetyAlertDisplay({ alerts, onAcknowledge }: SafetyAlertDisplay
           className={`flex items-start justify-between gap-2 p-3 rounded-lg border text-sm ${SEVERITY_STYLES[alert.severity]}`}
         >
           <div>
-            <span className="font-semibold">{labels[alert.severity]}:</span> {alert.message}
+            <span className="font-semibold">{labels[alert.severity]}:</span>{' '}
+            {formatSafetyAlert(t, alert)}
           </div>
           {alert.acknowledgeRequired && onAcknowledge && (
             <button
