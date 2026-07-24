@@ -1,4 +1,336 @@
-# README.md
+[🇪🇸 Español](#español) | [🇬🇧 English](#english)
+
+---
+
+<div id="english">
+
+# Nutre-Fit-Dia — Comprehensive Self-Care Ecosystem for Type 2 Diabetes and Sustainable Health
+
+## Project Overview
+
+### Scope and Framework
+
+This project is the **Master's Thesis (TFM) for the Master in AI Development at BIGSchool and Universidad Isabel I.**
+
+It is built on **Mediterranean Diet (MD)-based Nutrition and Daily Exercise**, creating a **Comprehensive Self-Care Ecosystem for Type 2 Diabetes (T2D) and Sustainable Health.**
+
+## Project Presentation
+
+- [PowerPoint Presentation](docs/slides/Nutre-Fit-Dia_Metabolic_Architecture.pptx)
+- [Presentation Video](https://youtu.be/RSCQ3jXF96A)
+
+## Tech Stack
+
+| Technology            | Version  | Purpose                                         |
+| --------------------- | -------- | ----------------------------------------------- |
+| React                 | 19.2.7   | UI Components (Container/Presentational)        |
+| TypeScript            | 6.0.2    | Type safety, erasableSyntaxOnly                 |
+| Vite                  | 8.1.1    | Dev server and builds                           |
+| Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)                 |
+| Zod                   | 4.4.3    | Runtime validation with type inference          |
+| Zustand               | 5.0.8    | State management — one store per feature        |
+| Supabase JS           | 2.87.3   | BaaS: PostgreSQL, Auth, Storage (V1)            |
+| Vitest                | 4.1.10   | Unit and component test runner                  |
+| Testing Library React | 16.3.2   | Behavioral component testing                    |
+| Oxlint                | 1.71.0   | Rust-based linting                              |
+| Prettier              | 3.7.4    | Code formatter                                  |
+| jsdom                 | 29.1.1   | Browser environment for tests                   |
+| Playwright            | 1.61.1   | E2E tests — full user flow                      |
+| PWA                   | Manifest | Installable as mobile app (offline-ready)       |
+| GitHub Actions        | CI/CD    | Lint → Typecheck → Tests → Build → E2E → Deploy |
+| pnpm                  | —        | Fast, disk-efficient package manager            |
+
+## Installation and Running
+
+```bash
+# Install
+git clone <repo-url>
+cd nutre-fit-dia
+pnpm install
+
+# Development
+pnpm dev              # HTTPS (self-signed cert via @vitejs/plugin-basic-ssl)
+pnpm dev:http          # HTTP without cert (debug only)
+
+# Tests (TDD)
+pnpm test:run        # Unit and component tests
+pnpm test:coverage   # With coverage
+pnpm test:e2e        # End-to-end tests with Playwright
+pnpm test:e2e:ui     # E2E interactive mode
+
+# Quality
+pnpm quality         # format:check + lint + typecheck + tests
+pnpm verify          # quality + build
+```
+
+## Project Structure
+
+```text
+src/
+├── features/
+│   ├── nutritional-traffic-light/       # Nutritional Traffic Light + Dual Scan (H4)
+│   │   ├── ScannerContainer.tsx          # Logic: state, store, handlers
+│   │   ├── ScannerView.tsx               # Pure UI: props, no store
+│   │   ├── store/scannerStore.ts         # Scan history (Zustand)
+│   │   └── services/                     # classificationService, occultSugarDetector, safetyCheck
+│   ├── metabolic-tracker/               # Phenotypic profile + biomarkers
+│   │   ├── MetabolicTrackerContainer.tsx # Logic: metabolic profile
+│   │   ├── MetabolicTrackerView.tsx      # UI: form + results
+│   │   ├── components/                   # ProfileForm, ProfileResults, ProfileError
+│   │   ├── store/trackerStore.ts         # Profile + caloric target (Zustand)
+│   │   └── services/                     # caloricTargetService, biomarkerTrackingService
+│   ├── med-diet-validator/              # AESAN 2022 validation
+│   │   ├── DailyLogContainer.tsx         # Logic: daily log
+│   │   ├── DailyLogView.tsx              # UI: food list + validation
+│   │   ├── components/                   # FoodList, DailyViolations, CaloricSummary
+│   │   └── store/logStore.ts             # todayLog + validation (Zustand)
+│   ├── recipe-engine/                   # Weekly erMedDiet plan + M7 meal splitting
+│   │   ├── PlanContainer.tsx             # Logic: weekly plan
+│   │   ├── PlanView.tsx                  # UI: checkbox + generated plan
+│   │   ├── store/planStore.ts            # weeklyPlan (Zustand)
+│   │   └── services/                     # planGenerator
+│   ├── activity-tracker/                # WHO 150-300 min + strength (ADR-006) ✅
+│   │   ├── ActivityTrackerContainer.tsx  # Logic: compliance + streak
+│   │   ├── ActivityTrackerView.tsx       # UI: WHO goals + form
+│   │   ├── hooks/useActivityTracker.ts   # Hook: compliance %, streak, weeklyGoal
+│   │   ├── store/activityStore.ts        # weeklyMinutes + entries (Zustand)
+│   │   └── types.ts                      # ActivityEntry, WeeklyGoal, ComplianceReport
+│   ├── nudge-engine/                    # 15 rules + panel UI (ADR-008) ✅
+│   │   ├── NudgePanelContainer.tsx       # Logic: pending nudges + history
+│   │   ├── NudgePanelView.tsx            # UI: list + dismiss + counter badge
+│   │   ├── engine.ts                     # buildNudgeContext + evaluateRules (pure)
+│   │   ├── rules.ts                      # SafetyAlert + BehavioralNudge + SystemAction
+│   │   ├── cooldownTracker.ts            # CooldownTracker (in-memory)
+│   │   ├── store/nudgeStore.ts           # pending + history (Zustand)
+│   │   └── types.ts                      # NudgeRule, NudgeContext, SafetyRule
+│   └── sustainability/                  # Eco Dashboard + scoring (ADR-007) ✅
+│       ├── SustainabilityContainer.tsx   # Logic: scoring + zero-waste + emissions
+│       └── SustainabilityView.tsx        # UI: sustainability tabs
+├── shared/
+│   ├── data/foods.ts                     # 34-food AESAN catalog
+│   ├── domain/                           # FoodCategory, Food (Zod), TrafficLight, Notification
+│   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
+│   ├── hooks/                            # Cross-feature hooks
+│   ├── i18n/                             # ES/EN (useT, I18nProvider, 80+ keys)
+│   ├── services/rationValidator.ts       # Daily/weekly validation
+│   ├── sustainability/                   # EnvironmentalScore, substitutionService, constants
+│   ├── ui/                               # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
+│   └── utils/                            # sanitize, imc, enum helpers
+├── infrastructure/
+│   └── ml/                               # ScannerAdapter + MockScannerAdapter (ADR-003)
+└── test/
+    ├── setup.ts                          # Testing Library + jsdom
+    └── fixtures.ts                       # makeFood factory
+```
+
+## Key Features
+
+- **Nutritional Traffic Light**: Classifies foods as Green/Orange/Red. Detects hidden sugars. SafetyAlert for high-glycemic-load fruits. **Dual Rating** (health + sustainability) integrated.
+- **Metabolic Tracker**: Calculates caloric target with conditional deficit (BMI > 25). Phenotypic profile. Glucose and biomarker tracking.
+- **Mediterranean Diet Validator**: Validates daily/weekly frequencies per AESAN 2022 matrix. Exact gram-portion control.
+- **Recipe Engine**: Weekly plans with caloric restriction. Dual health+sustainability ranking. **3-6 daily meal split** with kcal per meal. UNESCO cultural badges (🏺👥🌿). AOVE mandatory in every main meal.
+- **Activity Goal Tracker**: WHO 150-300 min/week tracking. Compliance % and streak. Dashboard tab.
+- **Nudge Engine**: 15 rules (SafetyAlert + BehavioralNudge + SystemAction). Panel UI with counter badge + engagement history. Smart substitution (M2): sustainable alternatives when environmentalScore < 30.
+- **Sustainability Scoring**: `computeEnvironmentalScore()` with AESAN/EAT-Lancet constants. Configurable 50/30/20 weights. Integrated into RecipeEngine (dual ranking).
+- **Substitution Service**: `suggestAlternative(food)` — WHITE_MEAT → LEGUMES + blue FISH (AESAN 2.4.2.1). Environmental score ranking. Top 3 alternatives.
+- **Conviviality**: UNESCO textual suggestions in PlanView: "Ideal for sharing meals" + cooking techniques (stew, steam, boil, grill, raw).
+- **Zero-Waste**: `isUglyProduce` + `isZeroWaste` in FoodSchema. Badges ♻️🥕 in PlanView. 7 foods tagged as zero-waste.
+- **Sustainability Dashboard**: 🌍 Eco tab with environmental score (50/30/20), comparative EAT-Lancet emissions, and Zero-Waste counter. Responsive layout.
+
+## Technical and Architectural Specification: Comprehensive Self-Care Ecosystem (T2D and Sustainable Health)
+
+### 1. Medical Foundations and Strategic System Vision
+
+Clinical management of Type 2 Diabetes (T2D) demands a transition from passive monitoring to active metabolic intervention. This ecosystem is built on the **energy-reduced Mediterranean Diet (erMedDiet)**, a strategic pillar that uses caloric restriction and lipid quality to reverse insulin resistance. We do not accept a superficial digitization of nutritional guidelines; we implement a health engine based on evidence from the **PREDIMED-Plus and ProDiGY** studies.
+
+The system **must enforce a 600 kcal reduction** from basal metabolic expenditure in overweight or obese patients, integrating physical activity not as a supplement but as an algorithmic requirement for insulin sensitivity. The software architecture is not a simple data container; it must be a **"Screaming Architecture"** that declares its medical purpose and ensures each module is an exact reflection of the patient's biological constraints.
+
+## 2. Software Architecture: Screaming Architecture and the Scope Rule
+
+As technical leaders, we reject generic structures. We adopt **Screaming Architecture** so that business intent (Metabolic Control) dominates project organization. We complement this with rigorous application of the **Scope Rule** to safeguard maintainability and prevent cross-coupling of medical logic.
+
+### Structural Design Mandates
+
+1. **`features/` directory**: Each folder must represent a single functional capability of the T2D ecosystem. It is **mandatory** that feature-specific `services`, `hooks`, and `logic-utils` be **colocated** within their respective feature folder. _**We prohibit the leakage of metabolic logic into global folders**_.
+2. **`shared/` directory**: Reserved exclusively for cross-cutting components (primitive UI, network wrappers) used by **two or more** features. If metabolic logic repeats, it is not moved to `shared/` without prior refactoring into `shared/metabolic-utils` under architecture approval.
+
+### Feature Rationale
+
+- `nutritional-traffic-light`: Encapsulates the metabolic risk classification engine.
+- `metabolic-tracker`: Manages glucose, weight, and BMI tracking — critical variables for dynamic adjustment.
+- `recipe-engine`: Implements erMedDiet planning logic and sustainability filtering.
+
+### Container/Presentational Pattern
+
+Every feature-level component must follow the Container/Presentational pattern. The container (e.g. `NutritionalTrafficLightContainer.tsx`) **must exclusively handle** business logic and state, injecting clean data into the UI component. This separation is non-negotiable to enable system scalability without compromising source code integrity.
+
+## 3. Algorithmic Logic: Intake and Nutritional Distribution
+
+Translating the **AESAN 2022** guidelines into code requires mathematical precision in portion management to ensure glycemic stability. The planning algorithm must strictly apply the following constraints:
+
+### Intake Constraints (Ground Truth AESAN 2022)
+
+- **Whole Grains**: The system **must limit consumption to a maximum of 4 daily servings** for users under caloric restriction (erMedDiet). Refined flours are prohibited.
+- **Legumes**: The engine must prioritize **at least 4 weekly servings**, scalable up to daily consumption.
+- **Dairy**: The maximum ceiling is **3 daily servings**. The algorithm must trigger a dairy reduction suggestion if other animal protein intake is detected to optimize sustainability.
+- **Proteins**: **3 to 4 weekly servings of fish** are required (alternating fatty and lean fish). **Cod** must be tagged as "high-priority protein" due to its minimal fat profile (0.7%).
+- **AOVE**: Mandatory lipid source (3-6 servings/day).
+- **Fruits and Vegetables**: Minimum 2 servings of vegetables and 2-3 of whole fruit (juice is prohibited as a substitute).
+
+### Glycemic Stability
+
+The planning engine must enforce **meal splitting into 3 to 6 daily intakes**. This technical requirement is vital to prevent postprandial hyperglycemic spikes and is the foundation of the data that feeds the nutritional traffic light display.
+
+## 4. Personalization Engine and Nutritional Traffic Light System
+
+Personalization is not an aesthetic option; it is a phenotypic necessity. The system must adjust energy load based on the user's **diagnosis age** and current **BMI**.
+
+### Nutritional Traffic Light Algorithm (Hospital Rey Juan Carlos Model)
+
+| Color      | Food Criteria (Input)                                  | System Action (Output)                     |
+| ---------- | ------------------------------------------------------ | ------------------------------------------ |
+| **Green**  | Whole grains, legumes, fish (Cod), AOVE.               | Active promotion in meal plans.            |
+| **Orange** | White rice/pasta, potatoes, lean meats.                | Portion restriction and frequency warning. |
+| **Red**    | Added sugars, refined flours, trans fats, soft drinks. | Block alert and substitution suggestion.   |
+
+### "Hidden" Detection
+
+The scanning engine **must prioritize ingredient list analysis (**`ingredient_list`**)** over macro-nutritional labeling. If added sugars are detected in processed foods or preserves (sucrose, syrups, etc.), the product must be automatically classified as **Red**, regardless of its total caloric contribution.
+
+## 5. Adherence Dynamics (Nudges) and Safety Protocols
+
+The system uses an **AI Nudge Engine** to monitor physical activity and lifestyle. The technical goal is the quantifiable improvement of **HbA1c (Glycated Hemoglobin)** and blood pressure.
+
+### Safety Protocols and Planetary Sustainability
+
+- **Professional Validation Notice**: This is a critical safety requirement. No generated nutritional plan is definitive until **validated by a registered dietitian-nutritionist**.
+- **Systemic Impact**: Adherence to this dietary pattern has the potential to **prevent 80,000 annual deaths in Spain** and reduce greenhouse gas emissions by **70%**, according to AESAN 2022 data.
+- **Monitoring**: Glucose, weight, and BMI tracking must recalibrate the 600 kcal reduction engine in real time.
+- **Sustainability**: The food search engine must prioritize seasonal and local products (km 0) to reduce water and CO2 footprints, aligning with the UNESCO SDGs.
+
+## 6. Recipe Metadata and Planetary Sustainability
+
+Each `Recipe` object in our database must comply with an enriched metadata schema to align with planetary health.
+
+**Mandatory Attributes per Recipe:**
+
+- **Protein Biological Value**: Essential amino acid score.
+- **Carbon/Water Footprint**: Environmental impact metrics per serving.
+- **erMedDiet Flag**: Boolean validation for caloric restriction and fat quality.
+- **Geographic Origin**: Proximity indicator of the main ingredient.
+
+## 7. Development Implementation Plan
+
+### Technical Execution Phases
+
+1. **Phase 1: Domain Modeling** ✅ — Strict type definitions for metabolic profiles, AESAN portions, food types, notification taxonomy.
+2. **Phase 2: Domain Services & Containers** ✅ — erMedDiet logic implementation, Container/Presentational split, per-feature Zustand stores.
+3. **Phase 3: ADR Scaffolding** ✅ — ScannerAdapter (ADR-003), Activity Tracker (ADR-006), Sustainability (ADR-007), Nudge Engine (ADR-008).
+4. **Phase 4: Tests & Error Handling** ✅ — 578 tests (59 test files). 99.76% stmt / 100% lines / 100% functions coverage. `ErrorBoundary` with per-tab isolation. Typed `ValidationError` and `NotFoundError`. Full ES/EN i18n.
+5. **Phase 5: E2E & Accessibility** ✅ — Playwright smoke tests (scan→classify→plan). WCAG 2.1 AA: ARIA roles, aria-labels, keyboard nav, skip links.
+
+### Example: Container/Presentational Pattern
+
+```typescript
+import { useState } from 'react'
+import { foodsById } from '@shared/data/foods'
+import { classifyFoodWithReasons } from './services/classificationService'
+import { useLogStore } from '@features/med-diet-validator/store'
+import { ScannerView } from './ScannerView'
+
+export function ScannerContainer() {
+  const [selectedId, setSelectedId] = useState('')
+  const [result, setResult] = useState<ReturnType<typeof classifyFoodWithReasons> | null>(null)
+  const addFoodToLog = useLogStore(s => s.addFoodToLog)
+
+  const options = Array.from(foodsById.entries()).map(([id, food]) => ({
+    value: id,
+    label: `${food.name} ${food.isProcessed ? '⚠️' : ''}`,
+  }))
+
+  const selected = selectedId ? foodsById.get(selectedId) ?? null : null
+
+  const handleClassify = () => {
+    if (!selected) return
+    setResult(classifyFoodWithReasons(selected))
+  }
+
+  const handleAddToLog = () => {
+    if (!selected) return
+    addFoodToLog(selected)
+  }
+
+  const handleSelect = (id: string) => {
+    setSelectedId(id)
+    setResult(null)
+  }
+
+  return (
+    <ScannerView
+      selectedId={selectedId}
+      options={options}
+      selected={selected}
+      result={result}
+      onSelect={handleSelect}
+      onClassify={handleClassify}
+      onAddToLog={handleAddToLog}
+    />
+  )
+}
+```
+
+## 8. Technical Conclusion and App Sustainability
+
+This _**Comprehensive Self-Care Ecosystem for T2D and Sustainable Health**_ is NOT a simple wellness application; **it is a high-precision medical engineering tool**. The adoption of **Screaming Architecture** and the **Scope Rule** ensures that _**the Mediterranean Diet logic and AESAN 2022 constraints are immutable and maintainable**_.
+
+By implementing **an engine that penalizes hidden sugars and restricts whole grains to 4 servings under the erMedDiet regimen**, we ensure _**absolute fidelity to scientific evidence**_. This architecture not only optimizes development efficiency but **positions the system as a standard in HbA1c reduction and the promotion of sustainable health for both the patient and the planet**.
+
+## 9. PWA — Mobile Device Installation
+
+The application is a **Progressive Web App (PWA)**. It installs directly from the browser without app stores:
+
+1. Open `https://nutrefitdia.dev` in Chrome/Safari mobile
+2. Tap **"Add to Home Screen"** (Chrome) or **"Share → Add to Home Screen"** (Safari)
+3. The app opens in standalone mode (no browser chrome)
+
+**PWA files:** `public/manifest.json` | `public/favicon.svg` | `index.html` (theme-color + apple-touch-icon)
+
+## 10. CI/CD — Continuous Integration and Delivery
+
+Automated pipeline in **GitHub Actions** (`.github/workflows/ci.yml`):
+
+```
+Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
+              │                    │
+                ├ pnpm audit         ├ format:check + lint + typecheck
+                └ gitleaks           ├ unit tests (578)
+                                    └ build (vite)
+```
+
+**Protected branches:** `staging` (pre-production) ← `develop` ← features
+
+## 11. OWASP 2025 Security
+
+| Control                       | Implementation                                                                                                                  |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| CSP (Content-Security-Policy) | `default-src 'self'`, no inline scripts, frame-ancestors 'none'                                                                 |
+| X-Content-Type-Options        | `nosniff` — prevents MIME sniffing                                                                                              |
+| Referrer-Policy               | `strict-origin-when-cross-origin`                                                                                               |
+| Permissions-Policy            | Camera, geolocation, microphone disabled                                                                                        |
+| Base-uri                      | `'self'` — prevents <base> injection                                                                                            |
+| Form-action                   | `'self'` — prevents form hijacking                                                                                              |
+| Dependency audit              | `pnpm audit --audit-level=high` in CI                                                                                           |
+| Secret scanning               | Gitleaks in CI                                                                                                                  |
+| Security.txt                  | `/.well-known/security.txt` (RFC 9116)                                                                                          |
+| Runtime validation            | Zod schemas on all inputs                                                                                                       |
+| HTML sanitation               | No `dangerouslySetInnerHTML`, no `eval()`                                                                                       |
+| HTTPS                         | `@vitejs/plugin-basic-ssl` (default, via `pnpm dev`) + `pnpm dev:http` (fallback without TLS) + CSP `upgrade-insecure-requests` |
+
+</div>
+
+<div id="español">
+
+# Nutre-Fit-Dia — Ecosistema de Autocuidado Integral para Diabetes Tipo 2 y Salud Sostenible
 
 ## Descripción general del proyecto
 
@@ -298,7 +630,7 @@ Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deplo
               │                    │
                 ├ pnpm audit         ├ format:check + lint + typecheck
                 └ gitleaks           ├ unit tests (578)
-                                   └ build (vite)
+                                    └ build (vite)
 ```
 
 **Ramas protegidas:** `staging` (pre-producción) ← `develop` ← features
@@ -319,3 +651,5 @@ Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deplo
 | Runtime validation            | Zod schemas en todas las entradas                                                                                           |
 | HTML sanitation               | Sin `dangerouslySetInnerHTML`, sin `eval()`                                                                                 |
 | HTTPS                         | `@vitejs/plugin-basic-ssl` (default, vía `pnpm dev`) + `pnpm dev:http` (fallback sin TLS) + CSP `upgrade-insecure-requests` |
+
+</div>
