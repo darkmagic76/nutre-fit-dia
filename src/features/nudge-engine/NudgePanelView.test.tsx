@@ -68,4 +68,16 @@ describe('NudgePanelView', () => {
     fireEvent.click(summary);
     expect(screen.getByText('Glucosa elevada')).toBeInTheDocument();
   });
+
+  it('renders body with pipe-delimited key|replacements format', () => {
+    const substituteNudge = makeNudge({
+      id: 'n2',
+      title: 'Sustitución sostenible',
+      body: 'nudge.sustBody|soja, lentejas',
+    });
+    renderWithI18n(<NudgePanelView {...defaultProps} pending={[substituteNudge]} />);
+    // The translateBody function processes key|replacements format even when
+    // the translation key is not in the i18n dictionary (falls back to raw key).
+    expect(screen.getByText(/nudge\.sustBody/)).toBeInTheDocument();
+  });
 });

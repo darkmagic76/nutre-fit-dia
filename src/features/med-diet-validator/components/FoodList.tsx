@@ -25,7 +25,7 @@ export function FoodList({ foods, onRemove }: FoodListProps) {
           <span>
             {getFoodName(food)}
             <span className="text-stone-400 dark:text-zinc-500 ml-1">
-              ({t[`category.${food.category}` as keyof typeof t] ?? food.category})
+              ({t[`category.${food.category}` as keyof typeof t]})
             </span>
           </span>
           <button

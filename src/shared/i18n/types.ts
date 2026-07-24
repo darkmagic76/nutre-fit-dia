@@ -155,6 +155,16 @@ export interface Translations {
   'validation.allClear': string;
   'validation.unitDay': string;
   'validation.unitWeek': string;
+  'validation.message.under': string;
+  'validation.message.over': string;
+  'validation.crossRule.whiteMeatFish': string;
+  'validation.safety.portionTooSmall': string;
+  'validation.safety.portionTooLarge': string;
+  'validation.safety.highGlycemicFruit': string;
+  'validation.label.errors': string;
+  'validation.label.warnings': string;
+  'violations.vegetableNudge.before2pm': string;
+  'violations.vegetableNudge.after2pm': string;
 
   // Caloric summary
   'caloric.dailyObjective': string;

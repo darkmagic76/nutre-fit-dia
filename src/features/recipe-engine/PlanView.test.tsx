@@ -113,14 +113,14 @@ describe('PlanView', () => {
     renderPlan(<PlanView {...defaultProps} weeklyPlan={invalidPlan} />);
     const alerts = screen.getAllByRole('alert');
     const alertTexts = alerts.map((a) => a.textContent).join(' ');
-    expect(alertTexts).toContain('Violaciones detectadas');
-    expect(alertTexts).toContain('legumes: 1 raciones');
+    expect(alertTexts).toContain('Errores detectados');
+    expect(alertTexts).toContain('Legumbres: 1 raciones');
   });
 
   it('displays daily violation details', () => {
     renderPlan(<PlanView {...defaultProps} weeklyPlan={invalidPlan} />);
     expect(screen.getByText('Día 1: 1 violaciones')).toBeInTheDocument();
-    expect(screen.getByText('cereals: 10 raciones (máx 6/día)')).toBeInTheDocument();
+    expect(screen.getByText('Cereales: 10 raciones (máx 6/día)')).toBeInTheDocument();
   });
 
   it('shows cultural badges for foods with UNESCO metadata', () => {

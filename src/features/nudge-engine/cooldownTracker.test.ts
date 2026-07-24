@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { CooldownTracker } from './cooldownTracker';
+import { CooldownTracker } from '@shared/nudge';
 
 describe('CooldownTracker', () => {
   describe('register / isOnCooldown', () => {

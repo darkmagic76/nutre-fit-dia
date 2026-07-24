@@ -173,6 +173,20 @@ export const es: Translations = {
   'validation.allClear': '✅ El registro de hoy cumple con los límites diarios.',
   'validation.unitDay': 'día',
   'validation.unitWeek': 'semana',
+  'validation.message.under': '{current} raciones (mín {limit}/{unit})',
+  'validation.message.over': '{current} raciones (máx {limit}/{unit})',
+  'validation.crossRule.whiteMeatFish':
+    'Carnes blancas: restringir si se han superado raciones de pescado',
+  'validation.safety.portionTooSmall': '{name}: {grams}g (mín {min}g/ración AESAN 2022)',
+  'validation.safety.portionTooLarge': '{name}: {grams}g (máx {max}g/ración AESAN 2022)',
+  'validation.safety.highGlycemicFruit':
+    '{name}: fruta de alta carga glucémica — consumir con moderación',
+  'validation.label.errors': 'Errores detectados',
+  'validation.label.warnings': 'Avisos',
+  'violations.vegetableNudge.before2pm':
+    'Los recordatorios de hortalizas se activan a partir de las 14:00. Aún tienes tiempo de incluir verduras en tu comida.',
+  'violations.vegetableNudge.after2pm':
+    'Tienes déficit de hortalizas. El recordatorio se ha registrado en tu historial de nudges.',
   'caloric.dailyObjective': 'Objetivo diario',
   'caloric.ingested': 'Ingerido',
   'metabolic.descriptionDetail':

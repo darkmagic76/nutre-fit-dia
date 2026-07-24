@@ -156,4 +156,17 @@ describe('useInstallPrompt', () => {
 
     expect(removeEventListenerSpy).toHaveBeenCalledWith('beforeinstallprompt', handler);
   });
+
+  it('install() returns early without error when deferredPrompt is null (no event)', async () => {
+    const { result } = renderHook(() => useInstallPrompt());
+    expect(result.current.isInstallable).toBe(false);
+
+    // Call install() without dispatching beforeinstallprompt — deferredPrompt is null
+    await act(async () => {
+      await result.current.install();
+    });
+
+    // Should not throw; isInstallable remains false
+    expect(result.current.isInstallable).toBe(false);
+  });
 });

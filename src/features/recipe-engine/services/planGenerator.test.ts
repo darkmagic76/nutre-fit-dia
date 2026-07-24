@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { generateWeeklyPlan, getWeeklyCounts, MealType, enforceAOVE } from './planGenerator';
 import { FoodCategory } from '@shared/domain';
+import { foods } from '@shared/data/foods';
 
 describe('planGenerator', () => {
   describe('generateWeeklyPlan', () => {
@@ -329,6 +330,72 @@ describe('meal distribution', () => {
       const bacalaoEntries = allFish.filter((e) => e.food.name.toLowerCase().includes('bacalao'));
       expect(bacalaoEntries.length).toBeGreaterThanOrEqual(1);
       expect(bacalaoEntries[0].food.isHighPriority).toBe(true);
+    });
+
+    it('sort comparator hits isHighPriority branch when two high-priority items exist', () => {
+      // With only 1 high-priority FISH, V8 sort may never trigger
+      // a.isHighPriority && !b.isHighPriority. Add a duplicate to force it.
+      const bacalao = foods.find((f) => f.id === 'fish-bacalao')!;
+      const secondHP = { ...bacalao, id: 'fish-bacalao-test-hp', name: 'Bacalao Test HP' };
+      foods.push(secondHP);
+      try {
+        const plan = generateWeeklyPlan(false);
+        expect(plan.valid).toBe(true);
+        // Both Bacalao entries should retain isHighPriority
+        const allFish = plan.days.flatMap((d) =>
+          d.entries.filter((e) => e.food.category === FoodCategory.FISH),
+        );
+        const hpFish = allFish.filter((e) => e.food.isHighPriority);
+        expect(hpFish.length).toBeGreaterThan(0);
+        expect(hpFish.every((e) => e.food.isHighPriority)).toBe(true);
+      } finally {
+        foods.pop();
+      }
+    });
+  });
+
+  describe('enforceAOVE with empty OLIVE_OIL catalog', () => {
+    it('returns original entries unchanged when no OLIVE_OIL foods exist in catalog', () => {
+      const originalFoods = [...foods];
+      try {
+        // Remove all OLIVE_OIL entries from catalog
+        const withoutOliveOil = originalFoods.filter((f) => f.category !== FoodCategory.OLIVE_OIL);
+        foods.length = 0;
+        foods.push(...withoutOliveOil);
+
+        const entries = [
+          {
+            food: {
+              id: 'cereal-test',
+              name: 'Cereal Test',
+              category: FoodCategory.CEREALS,
+              gramsPerRation: 50,
+              kcalPer100g: 200,
+              proteinPer100g: 5,
+              carbsPer100g: 40,
+              fiberPer100g: 2,
+              fatPer100g: 1,
+              saturatedFatPer100g: 0,
+              addedSugarsPer100g: 0,
+              harmfulIngredients: [],
+              hasTransFats: false,
+              isProcessed: false,
+              isSeasonal: true,
+              carbonFootprint: 0.5,
+            },
+            rations: 1,
+            mealType: MealType.BREAKFAST,
+          },
+        ];
+
+        const result = enforceAOVE(entries, 1);
+        // No OLIVE_OIL in catalog → no additions, returns original only
+        expect(result).toHaveLength(1);
+        expect(result).toEqual(entries);
+      } finally {
+        foods.length = 0;
+        foods.push(...originalFoods);
+      }
     });
   });
 });

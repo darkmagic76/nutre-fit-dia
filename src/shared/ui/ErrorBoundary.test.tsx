@@ -520,6 +520,25 @@ describe('ErrorBoundary', () => {
     expect(screen.getByText('Tab B')).toBeInTheDocument();
     expect(screen.getAllByRole('alert')).toHaveLength(1);
   });
+
+  it('renders a function fallback and wires the retry handler to it', () => {
+    // Create a fallback function that renders a button wired to the retry handler
+    const fallback = vi.fn((handleRetry: () => void) => (
+      <button onClick={handleRetry}>Custom Retry</button>
+    ));
+
+    render(
+      <ErrorBoundary fallback={fallback}>
+        <Thrower />
+      </ErrorBoundary>,
+    );
+
+    // The function fallback rendered our custom button
+    expect(screen.getByText('Custom Retry')).toBeInTheDocument();
+
+    // The fallback function was called with handleRetry (a Function)
+    expect(fallback).toHaveBeenCalledWith(expect.any(Function));
+  });
 });
 
 /* ---------- ErrorFallback tests ---------- */

@@ -16,6 +16,7 @@ export function checkSafetyAlerts(food: Food): SafetyAlert[] {
       message: `${food.name}: fruta de alta carga glucémica — consumir con moderación`,
       category: food.category,
       acknowledgeRequired: true,
+      foodName: food.name,
     });
   }
 

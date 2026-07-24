@@ -2,6 +2,7 @@ import { useT } from '@shared/i18n';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import type { CulturalMetadata, Food } from '@shared/domain';
 import { Card, PrimaryButton, ViolationList, LegalDisclaimer } from '@shared/ui';
+import { formatViolation } from '@shared/ui/formatters/formatViolation';
 import { MealType, type MealEntry, type WeeklyPlan } from './services/planGenerator';
 import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
 
@@ -137,8 +138,11 @@ export function PlanView({
 
           {!weeklyPlan.valid && (
             <ViolationList
-              violations={weeklyPlan.weeklyResult.violations}
-              errorLabel={t['ui.violations']}
+              violations={weeklyPlan.weeklyResult.violations.map((v) => ({
+                message: formatViolation(t, v),
+              }))}
+              errorLabel={t['validation.label.errors']}
+              warningLabel={t['validation.label.warnings']}
             />
           )}
 
@@ -155,7 +159,7 @@ export function PlanView({
                     </summary>
                     <ul className="list-disc list-inside mt-1 ml-2">
                       {r.violations.map((v, i) => (
-                        <li key={i}>{v.message}</li>
+                        <li key={i}>{formatViolation(t, v)}</li>
                       ))}
                     </ul>
                   </details>
@@ -219,8 +223,7 @@ export function PlanView({
                                   <ZeroWasteBadges food={e.food} />
                                 </span>
                                 <span className="text-stone-400 dark:text-zinc-500">
-                                  {t[`category.${e.food.category}` as keyof typeof t] ??
-                                    e.food.category}
+                                  {t[`category.${e.food.category}` as keyof typeof t]}
                                 </span>
                               </li>
                             ))}
