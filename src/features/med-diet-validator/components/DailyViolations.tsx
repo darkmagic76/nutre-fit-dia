@@ -2,7 +2,7 @@ import { useT } from '@shared/i18n';
 import { ViolationList } from '@shared/ui';
 import { formatViolation } from '@shared/ui/formatters/formatViolation';
 import type { ValidationResult } from '@shared/services/rationValidator';
-import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/nudge';
+import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
 
 interface DailyViolationsProps {
   validation: ValidationResult;
