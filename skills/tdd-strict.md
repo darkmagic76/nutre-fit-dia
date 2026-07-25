@@ -13,18 +13,18 @@ Usar múltiples tests para triangular hacia la solución correcta:
 ```typescript
 // 1. Caso límite inferior
 it('returns 0 for < 5 items', () => {
-  expect(calculateBulkDiscount(item, 3)).toBe(0)
-})
+  expect(calculateBulkDiscount(item, 3)).toBe(0);
+});
 
 // 2. Caso límite exacto
 it('calculates discount for exactly 5 items', () => {
-  expect(calculateBulkDiscount(item, 5)).toBe(15.0)
-})
+  expect(calculateBulkDiscount(item, 5)).toBe(15.0);
+});
 
 // 3. Caso general (confirma lógica)
 it('calculates discount for 10 items', () => {
-  expect(calculateBulkDiscount(item, 10)).toBe(30.0)
-})
+  expect(calculateBulkDiscount(item, 10)).toBe(30.0);
+});
 ```
 
 ## Reglas

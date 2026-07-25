@@ -11,6 +11,7 @@
 ## Screaming Architecture
 
 La estructura debe COMUNICAR inmediatamente lo que hace la aplicación:
+
 - Los nombres de features describen funcionalidad de negocio, no implementación técnica
 - La estructura de directorios cuenta la historia de la app a primera vista
 - Los componentes Container deben tener el mismo nombre que su feature

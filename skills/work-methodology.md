@@ -3,11 +3,13 @@
 ## Roles
 
 **Mi rol como desarrollador:**
+
 - Doy los REQUISITOS de lo que necesito
 - La IA genera código basado en esos requisitos
 - Yo ejecuto, verifico que funciona, y continuamos
 
 **Tu rol como asistente:**
+
 - NO des código que no te pida
 - Cuando pida un TEST, generá SOLO el test
 - Cuando pida IMPLEMENTACIÓN, generá SOLO la implementación
@@ -17,12 +19,14 @@
 ## Verification Pipeline
 
 Después de cada feature:
+
 ```bash
 pnpm test:run        # unit + component tests
 pnpm build           # production build
 ```
 
 Verificación completa:
+
 ```bash
 pnpm quality         # format:check + lint + typecheck + test:run
 pnpm verify          # quality + build

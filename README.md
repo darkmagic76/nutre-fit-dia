@@ -141,12 +141,12 @@ src/
 
 Core principles and development rules live in dedicated, modular files — loaded per-context to save tokens and keep focus:
 
-| Resource | Content |
-|----------|---------|
-| [`skills/`](skills/) | Development rules: Scope Rule, TDD, DDD, architecture decisions, code smells, work methodology |
-| [`adr/`](adr/) | 11 Architecture Decision Records with traceability matrix |
-| [`openspec/specs/`](openspec/specs/) | 24 domain specifications (spec-driven development) |
-| [`docs/domain/`](docs/domain/) | DDD analysis: bounded contexts, polysemy detection, semantic untangling |
+| Resource                             | Content                                                                                        |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| [`skills/`](skills/)                 | Development rules: Scope Rule, TDD, DDD, architecture decisions, code smells, work methodology |
+| [`adr/`](adr/)                       | 11 Architecture Decision Records with traceability matrix                                      |
+| [`openspec/specs/`](openspec/specs/) | 24 domain specifications (spec-driven development)                                             |
+| [`docs/domain/`](docs/domain/)       | DDD analysis: bounded contexts, polysemy detection, semantic untangling                        |
 
 ### Implementation Phases (Complete ✅)
 
@@ -342,12 +342,12 @@ src/
 
 Los principios y reglas de desarrollo viven en archivos modulares dedicados — se cargan por contexto para ahorrar tokens y mantener el foco:
 
-| Recurso | Contenido |
-|---------|-----------|
-| [`skills/`](skills/) | Reglas de desarrollo: Scope Rule, TDD, DDD, decisiones arquitectónicas, code smells, metodología |
-| [`adr/`](adr/) | 11 Decisiones de Arquitectura con matriz de trazabilidad |
-| [`openspec/specs/`](openspec/specs/) | 24 especificaciones de dominio (spec-driven development) |
-| [`docs/domain/`](docs/domain/) | Análisis DDD: bounded contexts, detección de polisemia, desanudado semántico |
+| Recurso                              | Contenido                                                                                        |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------ |
+| [`skills/`](skills/)                 | Reglas de desarrollo: Scope Rule, TDD, DDD, decisiones arquitectónicas, code smells, metodología |
+| [`adr/`](adr/)                       | 11 Decisiones de Arquitectura con matriz de trazabilidad                                         |
+| [`openspec/specs/`](openspec/specs/) | 24 especificaciones de dominio (spec-driven development)                                         |
+| [`docs/domain/`](docs/domain/)       | Análisis DDD: bounded contexts, detección de polisemia, desanudado semántico                     |
 
 ### Fases de Implementación (Completadas ✅)
 

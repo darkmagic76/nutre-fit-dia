@@ -34,6 +34,7 @@ Toda decisión arquitectónica DEBE pasar estos 4 pilares.
 ## Checklist
 
 Antes de finalizar una decisión:
+
 - [ ] ¿Cada módulo tiene UNA razón para cambiar? (SRP)
 - [ ] ¿Las reglas de negocio están libres de dependencias de framework? (Domain Isolation)
 - [ ] ¿Se puede extender sin modificar código existente? (OCP)
