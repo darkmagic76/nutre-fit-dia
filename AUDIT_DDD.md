@@ -19,13 +19,13 @@ Para evitar que la lógica metabólica se contamine con la logística de recetas
 
 He detectado términos críticos que significan cosas distintas según el contexto. Ignorar esto causará que el código falle en su propósito médico:
 
-|Término|Significado en Contexto Médico/Nutricional|Significado en Contexto Técnico/Software|
-|:--|:--|:--|
-|**Validación**|Acto legal y clínico donde un **nutricionista colegiado** aprueba un plan.|Validación de tipos con **Zod** o esquemas de datos en tiempo de ejecución.|
-|**Ración**|Cantidad exacta en gramos según la matriz AESAN (ej. 4 de cereales/día).|Una instancia o entrada en un array dentro del `RecipeEngine`.|
-|**Alerta (Alert)**|Riesgo metabólico inminente (pico glucémico).|Un componente de UI, un `SafetyAlert` de sistema o un `ErrorBoundary`.|
-|**Azúcar**|Carbohidrato macro-nutricional presente de forma natural.|**Ingrediente oculto** (sacarosa, jarabe) que debe disparar un bloqueo de sistema.|
-|**Sostenibilidad**|Capacidad del planeta para soportar la producción del alimento (EAT-Lancet).|Mantenibilidad del código mediante la **Screaming Architecture** y tests.|
+| Término            | Significado en Contexto Médico/Nutricional                                   | Significado en Contexto Técnico/Software                                           |
+| :----------------- | :--------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- |
+| **Validación**     | Acto legal y clínico donde un **nutricionista colegiado** aprueba un plan.   | Validación de tipos con **Zod** o esquemas de datos en tiempo de ejecución.        |
+| **Ración**         | Cantidad exacta en gramos según la matriz AESAN (ej. 4 de cereales/día).     | Una instancia o entrada en un array dentro del `RecipeEngine`.                     |
+| **Alerta (Alert)** | Riesgo metabólico inminente (pico glucémico).                                | Un componente de UI, un `SafetyAlert` de sistema o un `ErrorBoundary`.             |
+| **Azúcar**         | Carbohidrato macro-nutricional presente de forma natural.                    | **Ingrediente oculto** (sacarosa, jarabe) que debe disparar un bloqueo de sistema. |
+| **Sostenibilidad** | Capacidad del planeta para soportar la producción del alimento (EAT-Lancet). | Mantenibilidad del código mediante la **Screaming Architecture** y tests.          |
 
 ---
 
