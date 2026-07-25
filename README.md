@@ -29,7 +29,6 @@ It is built on **Mediterranean Diet (MD)-based Nutrition and Daily Exercise**, c
 | Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)                 |
 | Zod                   | 4.4.3    | Runtime validation with type inference          |
 | Zustand               | 5.0.8    | State management — one store per feature        |
-| Supabase JS           | 2.87.3   | BaaS: PostgreSQL, Auth, Storage (V1)            |
 | Vitest                | 4.1.10   | Unit and component test runner                  |
 | Testing Library React | 16.3.2   | Behavioral component testing                    |
 | Oxlint                | 1.71.0   | Rust-based linting                              |
@@ -174,14 +173,15 @@ The application is a **Progressive Web App (PWA)** with full offline support via
 Automated pipeline in **GitHub Actions** (`.github/workflows/ci.yml`):
 
 ```
-Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
+Push/PR → ✅ Quality Gate → 🏗️ Build
               │                    │
-                ├ pnpm audit         ├ format:check + lint + typecheck
-                └ gitleaks           ├ unit tests (580)
-                                    └ build (vite)
+              ├ format:check        ├ vite build
+              ├ lint (oxlint)       └ dist/ artifact
+              ├ typecheck
+              └ unit tests (580)
 ```
 
-**Protected branches:** `staging` (pre-production) ← `develop` ← features
+**Deployment**: separate workflow (`deploy.yml`) deploys to GitHub Pages on push to `main`.
 
 ## 11. OWASP 2025 Security
 
@@ -193,8 +193,6 @@ Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deplo
 | Permissions-Policy            | Camera, geolocation, microphone disabled                                                                                        |
 | Base-uri                      | `'self'` — prevents <base> injection                                                                                            |
 | Form-action                   | `'self'` — prevents form hijacking                                                                                              |
-| Dependency audit              | `pnpm audit --audit-level=high` in CI                                                                                           |
-| Secret scanning               | Gitleaks in CI                                                                                                                  |
 | Security.txt                  | `/.well-known/security.txt` (RFC 9116)                                                                                          |
 | Runtime validation            | Zod schemas on all inputs                                                                                                       |
 | HTML sanitation               | No `dangerouslySetInnerHTML`, no `eval()`                                                                                       |
@@ -229,7 +227,6 @@ Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y 
 | Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)                 |
 | Zod                   | 4.4.3    | Validación runtime con inferencia de tipos      |
 | Zustand               | 5.0.8    | State management — una store por feature        |
-| Supabase JS           | 2.87.3   | BaaS: PostgreSQL, Auth, Storage (V1)            |
 | Vitest                | 4.1.10   | Test runner unitario y de componentes           |
 | Testing Library React | 16.3.2   | Testing conductual de componentes               |
 | Oxlint                | 1.71.0   | Linting basado en Rust                          |
@@ -374,14 +371,15 @@ La aplicación es una **Progressive Web App (PWA)** con soporte offline completo
 Pipeline automático en **GitHub Actions** (`.github/workflows/ci.yml`):
 
 ```
-Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
+Push/PR → ✅ Quality Gate → 🏗️ Build
               │                    │
-                ├ pnpm audit         ├ format:check + lint + typecheck
-                └ gitleaks           ├ unit tests (580)
-                                    └ build (vite)
+              ├ format:check        ├ vite build
+              ├ lint (oxlint)       └ dist/ artifact
+              ├ typecheck
+              └ unit tests (580)
 ```
 
-**Ramas protegidas:** `staging` (pre-producción) ← `develop` ← features
+**Deployment**: workflow separado (`deploy.yml`) despliega a GitHub Pages en push a `main`.
 
 ## 11. Seguridad OWASP 2025
 
@@ -393,8 +391,6 @@ Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deplo
 | Permissions-Policy            | Cámara, geolocalización, micrófono deshabilitados                                                                           |
 | Base-uri                      | `'self'` — previene <base> injection                                                                                        |
 | Form-action                   | `'self'` — previene form hijacking                                                                                          |
-| Dependency audit              | `pnpm audit --audit-level=high` en CI                                                                                       |
-| Secret scanning               | Gitleaks en CI                                                                                                              |
 | Security.txt                  | `/.well-known/security.txt` (RFC 9116)                                                                                      |
 | Runtime validation            | Zod schemas en todas las entradas                                                                                           |
 | HTML sanitation               | Sin `dangerouslySetInnerHTML`, sin `eval()`                                                                                 |
