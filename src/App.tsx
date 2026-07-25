@@ -3,13 +3,13 @@ import { createErrorFallback } from '@shared/ui/createErrorFallback';
 import { useTabNavigation, TAB_IDS, TAB_ICONS, type Tab } from '@shared/hooks/useTabNavigation';
 import { useT, useLocale } from '@shared/i18n';
 import { useInstallPrompt } from '@shared/hooks/useInstallPrompt';
-import { NutritionalTrafficLightContainer } from '@features/nutritional-traffic-light/NutritionalTrafficLightContainer';
-import { MedDietValidatorContainer } from '@features/med-diet-validator/MedDietValidatorContainer';
-import { MetabolicTrackerContainer } from '@features/metabolic-tracker/MetabolicTrackerContainer';
-import { RecipeEngineContainer } from '@features/recipe-engine/RecipeEngineContainer';
+import { NutritionalTrafficLightContainer } from '@features/nutritional-traffic-light';
+import { MedDietValidatorContainer } from '@features/med-diet-validator';
+import { MetabolicTrackerContainer } from '@features/metabolic-tracker';
+import { RecipeEngineContainer } from '@features/recipe-engine';
 import { ActivityTrackerContainer } from '@features/activity-tracker';
-import { NudgeEngineContainer } from '@features/nudge-engine/NudgeEngineContainer';
-import { SustainabilityContainer } from '@features/sustainability/SustainabilityContainer';
+import { NudgeEngineContainer } from '@features/nudge-engine';
+import { SustainabilityContainer } from '@features/sustainability';
 
 const TAB_LABEL_KEYS: Record<Tab, keyof ReturnType<typeof useT>> = {
   scanner: 'tab.scanner',

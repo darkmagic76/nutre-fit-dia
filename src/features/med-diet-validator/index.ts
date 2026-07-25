@@ -1,0 +1,1 @@
+export { MedDietValidatorContainer } from './MedDietValidatorContainer';

@@ -1,5 +1,20 @@
 import { NotificationType, NotificationSeverity, FoodCategory } from '@shared/domain';
-import { CEREAL_RESTRICTED_MAX } from '@shared/constants/clinical';
+import {
+  CEREAL_RESTRICTED_MAX,
+  CEREAL_MIN_RATIONS,
+  VEGETABLE_MIN_RATIONS,
+  VEGETABLE_NUDGE_HOUR_THRESHOLD,
+  FRUIT_MIN_RATIONS,
+  ANIMAL_PROTEIN_NUDGE_THRESHOLD,
+  WATER_MIN_RATIONS,
+  HYPERGLYCEMIA_THRESHOLD_MG_DL,
+  LEGUMES_CHECK_DAY_THRESHOLD,
+  LEGUMES_MIN_WEEKLY_CHECK,
+  FISH_EXCESS_THRESHOLD,
+  WEEKLY_ACTIVITY_MINUTES_TARGET,
+  MAX_ALTERNATIVES_TO_SHOW,
+  LOW_ENVIRONMENTAL_SCORE_THRESHOLD,
+} from '@shared/constants/clinical';
 import {
   COOLDOWN_24H,
   COOLDOWN_12H,
@@ -10,35 +25,6 @@ import {
   COOLDOWN_NONE,
 } from './cooldownDurations';
 import type { SafetyRule } from './types';
-
-// ─── Threshold constants ───
-
-/** Cereal minimum rations before deficit nudge triggers */
-const CEREAL_MIN_RATIONS = 3;
-/** Minimum vegetable rations before nudge triggers */
-const VEGETABLE_MIN_RATIONS = 3;
-/** Afternoon hour after which vegetable deficit nudge fires (2PM — allows time to correct) */
-export const VEGETABLE_NUDGE_HOUR_THRESHOLD = 14;
-/** Fruit minimum rations before deficit nudge triggers */
-const FRUIT_MIN_RATIONS = 2;
-/** Animal protein rations above this triggers dairy/calcium nudge */
-const ANIMAL_PROTEIN_NUDGE_THRESHOLD = 2;
-/** Minimum water rations before hydration nudge fires */
-const WATER_MIN_RATIONS = 4;
-/** Glucose mg/dL threshold for hyperglycemia nudge */
-const HYPERGLYCEMIA_THRESHOLD_MG_DL = 180;
-/** Day-of-week threshold (Thu=4) after which legumes check activates */
-const LEGUMES_CHECK_DAY_THRESHOLD = 4;
-/** Minimum legumes count for weekly check */
-const LEGUMES_MIN_WEEKLY_CHECK = 1;
-/** Fish rations above this triggers white meat restriction nudge */
-const FISH_EXCESS_THRESHOLD = 7;
-/** WHO minimum weekly activity minutes */
-const WEEKLY_ACTIVITY_MINUTES_TARGET = 150;
-/** Max substitution alternatives to include in nudge body */
-const MAX_ALTERNATIVES_TO_SHOW = 3;
-/** Environmental score below this triggers sustainable substitution nudge */
-const LOW_ENVIRONMENTAL_SCORE_THRESHOLD = 30;
 
 /** All nudge rules evaluated by the engine. Titles and bodies use i18n keys resolved at display time. */
 export const NUDGE_RULES: SafetyRule[] = [

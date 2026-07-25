@@ -36,3 +36,11 @@ createRoot(root).render(
     </ErrorBoundary>
   </StrictMode>,
 );
+
+// Register service worker for PWA offline support
+// Guard prevents 'virtual:pwa-register' import in jsdom test environment
+if ('serviceWorker' in navigator) {
+  import('virtual:pwa-register').then(({ registerSW }) => {
+    registerSW({ immediate: true });
+  });
+}

@@ -36,6 +36,10 @@ session-ses_*
 .atl/skill-registry.md
 /sdd/
 
+# PWA generated service workers
+sw.js
+dev-sw.js
+
 # Playwright
 /test-results/
 /playwright-report/
