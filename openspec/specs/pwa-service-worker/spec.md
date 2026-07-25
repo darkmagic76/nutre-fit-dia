@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Offline-capable PWA via Workbox-based service worker. Enables precaching of the app shell and runtime caching of Supabase API responses with network-first strategy.
+Offline-capable PWA via Workbox-based service worker. Enables precaching of the app shell. Runtime caching is intentionally empty (`runtimeCaching: []`) per ADR-011 — the app is a static SPA with no backend API to cache.
 
 ## Requirements
 
@@ -20,7 +20,7 @@ Offline-capable PWA via Workbox-based service worker. Enables precaching of the 
 
 - GIVEN the user has visited the app once online and the SW is installed
 - WHEN they open the app without internet connectivity
-- THEN the app shell renders from precache and previously cached API responses are served
+- THEN the app shell renders from precache
 
 ### Requirement: SW-REGISTER
 
@@ -37,16 +37,6 @@ The app MUST lazily import `virtual:pwa-register` in `main.tsx`, guarded by `'se
 - GIVEN tests run in jsdom where `navigator.serviceWorker` is undefined
 - WHEN `main.tsx` executes
 - THEN no SW registration attempt occurs and no error is thrown
-
-### Requirement: SW-RUNTIME
-
-The service worker MUST runtime-cache Supabase API responses using `NetworkFirst` strategy with a maximum of 50 entries and 24-hour expiration.
-
-#### Scenario: Supabase data cached at runtime
-
-- GIVEN the SW is active and a Supabase API request is made
-- WHEN the request completes successfully
-- THEN the response is stored in the runtime cache and served from cache when offline
 
 ### Requirement: SW-MANIFEST
 

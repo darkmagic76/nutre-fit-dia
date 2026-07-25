@@ -160,7 +160,7 @@ export default function App() {
         <p>{t['app.footer.tfm']}</p>
         <p className="mt-1">{t['app.footer.disclaimer']}</p>
         <p className="mt-1">
-          <a href="/.well-known/security.txt" className="underline hover:text-stone-600">
+          <a href=".well-known/security.txt" className="underline hover:text-stone-600">
             {t['app.footer.security']}
           </a>
         </p>

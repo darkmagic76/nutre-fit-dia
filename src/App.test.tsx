@@ -56,7 +56,7 @@ describe('App', () => {
     expect(footer).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: /seguridad/i });
-    expect(link).toHaveAttribute('href', '/.well-known/security.txt');
+    expect(link).toHaveAttribute('href', '.well-known/security.txt');
   });
 
   it('includes upgrade-insecure-requests in CSP', () => {

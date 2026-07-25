@@ -63,13 +63,12 @@ pnpm install
 
 Main dependencies installed:
 
-| Category           | Packages                                |
-| ------------------ | --------------------------------------- |
-| Frontend           | React 19, Vite 8, Tailwind 4, Zustand 5 |
-| Validation         | Zod 4                                   |
-| Backend (optional) | Supabase JS                             |
-| Testing            | Vitest 4, Testing Library 16, jsdom 29  |
-| Quality            | TypeScript 6, Oxlint                    |
+| Category   | Packages                                |
+| ---------- | --------------------------------------- |
+| Frontend   | React 19, Vite 8, Tailwind 4, Zustand 5 |
+| Validation | Zod 4                                   |
+| Testing    | Vitest 4, Testing Library 16, jsdom 29  |
+| Quality    | TypeScript 6, Oxlint                    |
 
 ---
 
@@ -251,7 +250,6 @@ nutre-fit-dia/
 | Types          | TypeScript 6 (erasableSyntaxOnly)                  | ADR-002  |
 | Validation     | Zod 4                                              | ADR-002  |
 | State          | Zustand 5                                          | ADR-009  |
-| Backend        | Supabase (PostgreSQL + Auth)                       | ADR-009  |
 | Tests          | Vitest 4 + Testing Library 16                      | ADR-009  |
 | Lint           | Oxlint (Rust)                                      | ADR-009  |
 | Architecture   | Screaming Architecture                             | ADR-001  |
@@ -370,13 +368,12 @@ pnpm install
 
 Dependencias principales que se instalan:
 
-| Categoría          | Paquetes                                |
-| ------------------ | --------------------------------------- |
-| Frontend           | React 19, Vite 8, Tailwind 4, Zustand 5 |
-| Validación         | Zod 4                                   |
-| Backend (opcional) | Supabase JS                             |
-| Testing            | Vitest 4, Testing Library 16, jsdom 29  |
-| Calidad            | TypeScript 6, Oxlint                    |
+| Categoría  | Paquetes                                |
+| ---------- | --------------------------------------- |
+| Frontend   | React 19, Vite 8, Tailwind 4, Zustand 5 |
+| Validación | Zod 4                                   |
+| Testing    | Vitest 4, Testing Library 16, jsdom 29  |
+| Calidad    | TypeScript 6, Oxlint                    |
 
 ---
 
@@ -558,7 +555,6 @@ nutre-fit-dia/
 | Tipos          | TypeScript 6 (erasableSyntaxOnly)                   | ADR-002  |
 | Validación     | Zod 4                                               | ADR-002  |
 | Estado         | Zustand 5                                           | ADR-009  |
-| Backend        | Supabase (PostgreSQL + Auth)                        | ADR-009  |
 | Tests          | Vitest 4 + Testing Library 16                       | ADR-009  |
 | Lint           | Oxlint (Rust)                                       | ADR-009  |
 | Arquitectura   | Screaming Architecture                              | ADR-001  |

@@ -7,6 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'node:path';
 
 export default defineConfig({
+  base: '/nutre-fit-dia/',
   plugins: [
     react(),
     tailwindcss(),
@@ -19,17 +20,7 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/[a-z]*\.supabase\.co\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'supabase-api',
-              expiration: { maxEntries: 50, maxAgeSeconds: 86400 },
-              networkTimeoutSeconds: 10,
-            },
-          },
-        ],
+        runtimeCaching: [],
       },
     }),
     ...(process.env.NO_HTTPS ? [] : [basicSsl({ name: 'localhost' })]),
