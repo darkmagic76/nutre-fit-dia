@@ -1,6 +1,8 @@
-# AUDIT DDD - Nutre-Fit-Dia
+# Domain-Driven Development — Introducción Conceptual
 
-Como Arquitecto de Softwar-e con enfoque en **Domain-Driven Development (DDD)**, el primer paso para desatar el "nudo semántico" es reconocer que el lenguaje en Nutre-Fit-Dia no es uniforme; lo que un médico entiende por "validación" es radicalmente distinto a lo que entiende un desarrollador.
+> **📖 Este documento es una introducción conceptual al dominio de Nutre-Fit-Dia. Para el análisis semántico a nivel de código, consultar los specs en `openspec/specs/` y el modelo de tipos en `src/shared/domain/`. Este documento complementa, no reemplaza, esos artefactos técnicos.**
+
+Como Arquitecto de Software con enfoque en **Domain-Driven Development (DDD)**, el primer paso para desatar el "nudo semántico" es reconocer que el lenguaje en Nutre-Fit-Dia no es uniforme; lo que un médico entiende por "validación" es radicalmente distinto a lo que entiende un desarrollador.
 
 A continuación, presento el análisis de los **Bounded Contexts** (Contextos Delimitados) y el mapa de **polisemia** detectado en las fuentes.
 
