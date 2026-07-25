@@ -127,7 +127,7 @@ pnpm quality
   ├── pnpm format:check → Prettier
   ├── pnpm lint         → Oxlint (Rust, ultra-fast)
   ├── pnpm typecheck    → TypeScript 6 (erasableSyntaxOnly)
-  └── pnpm test:run     → Vitest (578 tests)
+  └── pnpm test:run     → Vitest (580 tests)
 ```
 
 ---
@@ -434,7 +434,7 @@ pnpm quality
   ├── pnpm format:check → Prettier
   ├── pnpm lint         → Oxlint (Rust, ultrarrápido)
   ├── pnpm typecheck    → TypeScript 6 (erasableSyntaxOnly)
-  └── pnpm test:run     → Vitest (578 tests)
+  └── pnpm test:run     → Vitest (580 tests)
 ```
 
 ---

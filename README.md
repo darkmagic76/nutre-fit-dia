@@ -96,23 +96,22 @@ src/
 │   │   ├── store/activityStore.ts        # weeklyMinutes + entries (Zustand)
 │   │   └── types.ts                      # ActivityEntry, WeeklyGoal, ComplianceReport
 │   ├── nudge-engine/                    # 15 rules + panel UI (ADR-008) ✅
-│   │   ├── NudgePanelContainer.tsx       # Logic: pending nudges + history
+│   │   ├── NudgeEngineContainer.tsx       # Logic: pending nudges + history
 │   │   ├── NudgePanelView.tsx            # UI: list + dismiss + counter badge
-│   │   ├── engine.ts                     # buildNudgeContext + evaluateRules (pure)
-│   │   ├── rules.ts                      # SafetyAlert + BehavioralNudge + SystemAction
-│   │   ├── cooldownTracker.ts            # CooldownTracker (in-memory)
-│   │   ├── store/nudgeStore.ts           # pending + history (Zustand)
-│   │   └── types.ts                      # NudgeRule, NudgeContext, SafetyRule
+│   │   └── store/                        # Re-exports from shared/stores
 │   └── sustainability/                  # Eco Dashboard + scoring (ADR-007) ✅
 │       ├── SustainabilityContainer.tsx   # Logic: scoring + zero-waste + emissions
 │       └── SustainabilityView.tsx        # UI: sustainability tabs
 ├── shared/
+│   ├── constants/clinical.ts             # 14 clinical thresholds (AESAN/WHO/PREDIMED-Plus)
 │   ├── data/foods.ts                     # 34-food AESAN catalog
 │   ├── domain/                           # FoodCategory, Food (Zod), TrafficLight, Notification
 │   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
 │   ├── hooks/                            # Cross-feature hooks
 │   ├── i18n/                             # ES/EN (useT, I18nProvider, 80+ keys)
+│   ├── nudge/                            # Nudge engine: rules, context, cooldowns
 │   ├── services/rationValidator.ts       # Daily/weekly validation
+│   ├── stores/                           # Zustand stores (log, tracker, activity, nudge)
 │   ├── sustainability/                   # EnvironmentalScore, substitutionService, constants
 │   ├── ui/                               # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
 │   └── utils/                            # sanitize, imc, enum helpers
@@ -162,7 +161,7 @@ Built on **erMedDiet** (energy-reduced Mediterranean Diet) with evidence from **
 
 ## PWA — Mobile Device Installation
 
-The application is a **Progressive Web App (PWA)**. It installs directly from the browser without app stores:
+The application is a **Progressive Web App (PWA)** with full offline support via service worker. It installs directly from the browser without app stores:
 
 1. Open `https://nutrefitdia.dev` in Chrome/Safari mobile
 2. Tap **"Add to Home Screen"** (Chrome) or **"Share → Add to Home Screen"** (Safari)
@@ -178,7 +177,7 @@ Automated pipeline in **GitHub Actions** (`.github/workflows/ci.yml`):
 Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
               │                    │
                 ├ pnpm audit         ├ format:check + lint + typecheck
-                └ gitleaks           ├ unit tests (578)
+                └ gitleaks           ├ unit tests (580)
                                     └ build (vite)
 ```
 
@@ -297,23 +296,22 @@ src/
 │   │   ├── store/activityStore.ts        # weeklyMinutes + entries (Zustand)
 │   │   └── types.ts                      # ActivityEntry, WeeklyGoal, ComplianceReport
 │   ├── nudge-engine/                    # 15 reglas + panel UI (ADR-008) ✅
-│   │   ├── NudgePanelContainer.tsx       # Lógica: nudges pendientes + historial
+│   │   ├── NudgeEngineContainer.tsx       # Lógica: nudges pendientes + historial
 │   │   ├── NudgePanelView.tsx            # UI: lista + dismiss + badge contador
-│   │   ├── engine.ts                     # buildNudgeContext + evaluateRules (puro)
-│   │   ├── rules.ts                      # SafetyAlert + BehavioralNudge + SystemAction
-│   │   ├── cooldownTracker.ts            # CooldownTracker (in-memory)
-│   │   ├── store/nudgeStore.ts           # pending + history (Zustand)
-│   │   └── types.ts                      # NudgeRule, NudgeContext, SafetyRule
+│   │   └── store/                        # Re-exports desde shared/stores
 │   └── sustainability/                  # Dashboard Eco + scoring (ADR-007) ✅
 │       ├── SustainabilityContainer.tsx   # Lógica: scoring + zero-waste + emisiones
 │       └── SustainabilityView.tsx        # UI: tabs de sostenibilidad
 ├── shared/
+│   ├── constants/clinical.ts             # 14 umbrales clínicos (AESAN/WHO/PREDIMED-Plus)
 │   ├── data/foods.ts                     # Catálogo 34 alimentos AESAN
 │   ├── domain/                           # FoodCategory, Food (Zod), TrafficLight, Notification
 │   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
 │   ├── hooks/                            # Hooks cross-feature
 │   ├── i18n/                             # ES/EN (useT, I18nProvider, 80+ keys)
+│   ├── nudge/                            # Motor de nudges: reglas, contexto, cooldowns
 │   ├── services/rationValidator.ts       # Validación diaria/semanal
+│   ├── stores/                           # Stores Zustand (log, tracker, activity, nudge)
 │   ├── sustainability/                   # EnvironmentalScore, substitutionService, constants
 │   ├── ui/                               # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
 │   └── utils/                            # sanitize, imc, enum helpers
@@ -363,7 +361,7 @@ Construido sobre la **erMedDiet** (Dieta Mediterránea con reducción de energí
 
 ## 9. PWA — Instalación en Dispositivos Móviles
 
-La aplicación es una **Progressive Web App (PWA)**. Se instala directamente desde el navegador sin necesidad de stores:
+La aplicación es una **Progressive Web App (PWA)** con soporte offline completo mediante service worker. Se instala directamente desde el navegador sin necesidad de stores:
 
 1. Abrí `https://nutrefitdia.dev` en Chrome/Safari móvil
 2. Tocá **"Añadir a pantalla de inicio"** (Chrome) o **"Compartir → Añadir a inicio"** (Safari)
@@ -379,7 +377,7 @@ Pipeline automático en **GitHub Actions** (`.github/workflows/ci.yml`):
 Push/PR → 🔒 Security Audit → ✅ Quality Gate → 🎭 E2E → 🚀 Deploy
               │                    │
                 ├ pnpm audit         ├ format:check + lint + typecheck
-                └ gitleaks           ├ unit tests (578)
+                └ gitleaks           ├ unit tests (580)
                                     └ build (vite)
 ```
 
