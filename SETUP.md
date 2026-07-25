@@ -286,6 +286,21 @@ pnpm typecheck # verify TypeScript resolves paths
 pnpm test:run -- --environment jsdom
 ```
 
+### Blank screen after pulling new changes
+
+**Symptom**: the browser shows a completely white page with no errors in the terminal. DevTools console may show `Failed to resolve import` or CSP violations.
+
+**Cause**: new dependencies (e.g., `vite-plugin-pwa`, `workbox-window`) were added to `package.json` but `node_modules` is stale. Vite cannot resolve the new imports in `vite.config.ts`, so the dev server starts but serves broken modules.
+
+**Fix**:
+
+```bash
+pnpm install   # sync node_modules with updated pnpm-lock.yaml
+pnpm dev       # restart the dev server
+```
+
+**Prevention**: always run `pnpm install` after `git pull` when `pnpm-lock.yaml` has changed.
+
 ### Port 5173 already in use
 
 ```bash
@@ -577,6 +592,21 @@ pnpm typecheck # verificar que TypeScript resuelve los paths
 # Asegurarse que src/test/setup.ts importa @testing-library/jest-dom
 pnpm test:run -- --environment jsdom
 ```
+
+### Pantalla en blanco después de hacer pull
+
+**Síntoma**: el navegador muestra una página completamente blanca sin errores en la terminal. La consola DevTools puede mostrar `Failed to resolve import` o violaciones CSP.
+
+**Causa**: se agregaron nuevas dependencias (ej. `vite-plugin-pwa`, `workbox-window`) al `package.json` pero `node_modules` está desactualizado. Vite no puede resolver los nuevos imports en `vite.config.ts`, así que el servidor arranca pero sirve módulos rotos.
+
+**Solución**:
+
+```bash
+pnpm install   # sincronizar node_modules con pnpm-lock.yaml actualizado
+pnpm dev       # reiniciar el servidor
+```
+
+**Prevención**: ejecutá siempre `pnpm install` después de `git pull` cuando `pnpm-lock.yaml` haya cambiado.
 
 ### Puerto 5173 en uso
 
