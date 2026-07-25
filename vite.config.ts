@@ -3,12 +3,35 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import basicSsl from '@vitejs/plugin-basic-ssl';
+import { VitePWA } from 'vite-plugin-pwa';
 import path from 'node:path';
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      manifest: false,
+      includeAssets: ['favicon.svg'],
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,svg}'],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/[a-z]*\.supabase\.co\/.*/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'supabase-api',
+              expiration: { maxEntries: 50, maxAgeSeconds: 86400 },
+              networkTimeoutSeconds: 10,
+            },
+          },
+        ],
+      },
+    }),
     ...(process.env.NO_HTTPS ? [] : [basicSsl({ name: 'localhost' })]),
   ],
   resolve: {
