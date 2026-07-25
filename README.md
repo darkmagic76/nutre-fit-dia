@@ -21,23 +21,23 @@ It is built on **Mediterranean Diet (MD)-based Nutrition and Daily Exercise**, c
 
 ## Tech Stack
 
-| Technology            | Version  | Purpose                                         |
-| --------------------- | -------- | ----------------------------------------------- |
-| React                 | 19.2.7   | UI Components (Container/Presentational)        |
-| TypeScript            | 6.0.2    | Type safety, erasableSyntaxOnly                 |
-| Vite                  | 8.1.1    | Dev server and builds                           |
-| Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)                 |
-| Zod                   | 4.4.3    | Runtime validation with type inference          |
-| Zustand               | 5.0.8    | State management — one store per feature        |
-| Vitest                | 4.1.10   | Unit and component test runner                  |
-| Testing Library React | 16.3.2   | Behavioral component testing                    |
-| Oxlint                | 1.71.0   | Rust-based linting                              |
-| Prettier              | 3.7.4    | Code formatter                                  |
-| jsdom                 | 29.1.1   | Browser environment for tests                   |
-| Playwright            | 1.61.1   | E2E tests — full user flow                      |
-| PWA                   | Manifest | Installable as mobile app (offline-ready)       |
-| GitHub Actions        | CI/CD    | Lint → Typecheck → Tests → Build → E2E → Deploy |
-| pnpm                  | —        | Fast, disk-efficient package manager            |
+| Technology            | Version  | Purpose                                       |
+| --------------------- | -------- | --------------------------------------------- |
+| React                 | 19.2.7   | UI Components (Container/Presentational)      |
+| TypeScript            | 6.0.2    | Type safety, erasableSyntaxOnly               |
+| Vite                  | 8.1.1    | Dev server and builds                         |
+| Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)               |
+| Zod                   | 4.4.3    | Runtime validation with type inference        |
+| Zustand               | 5.0.8    | State management — one store per feature      |
+| Vitest                | 4.1.10   | Unit and component test runner                |
+| Testing Library React | 16.3.2   | Behavioral component testing                  |
+| Oxlint                | 1.71.0   | Rust-based linting                            |
+| Prettier              | 3.9.5    | Code formatter                                |
+| jsdom                 | 29.1.1   | Browser environment for tests                 |
+| Playwright            | 1.61.1   | E2E tests — full user flow (manual trigger)   |
+| PWA                   | Manifest | Installable as mobile app (offline-ready)     |
+| GitHub Actions        | CI/CD    | Quality (format+lint+typecheck+tests) → Build |
+| pnpm                  | —        | Fast, disk-efficient package manager          |
 
 ## Installation and Running
 
@@ -219,23 +219,23 @@ Este proyecto se basa en **la Nutrición mediante la Dieta Mediterránea (DM) y 
 
 ## Stack tecnológico utilizado
 
-| Tecnología            | Versión  | Propósito                                       |
-| --------------------- | -------- | ----------------------------------------------- |
-| React                 | 19.2.7   | Componentes de UI (Container/Presentational)    |
-| TypeScript            | 6.0.2    | Type safety, erasableSyntaxOnly                 |
-| Vite                  | 8.1.1    | Servidor de desarrollo y builds                 |
-| Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)                 |
-| Zod                   | 4.4.3    | Validación runtime con inferencia de tipos      |
-| Zustand               | 5.0.8    | State management — una store por feature        |
-| Vitest                | 4.1.10   | Test runner unitario y de componentes           |
-| Testing Library React | 16.3.2   | Testing conductual de componentes               |
-| Oxlint                | 1.71.0   | Linting basado en Rust                          |
-| Prettier              | 3.7.4    | Formateador de código                           |
-| jsdom                 | 29.1.1   | Entorno browser para tests                      |
-| Playwright            | 1.61.1   | Tests E2E — flujo completo de usuario           |
-| PWA                   | Manifest | Instalable como app en móvil (offline-ready)    |
-| GitHub Actions        | CI/CD    | Lint → Typecheck → Tests → Build → E2E → Deploy |
-| pnpm                  | —        | Gestor de paquetes rápido y eficiente en disco  |
+| Tecnología            | Versión  | Propósito                                      |
+| --------------------- | -------- | ---------------------------------------------- |
+| React                 | 19.2.7   | Componentes de UI (Container/Presentational)   |
+| TypeScript            | 6.0.2    | Type safety, erasableSyntaxOnly                |
+| Vite                  | 8.1.1    | Servidor de desarrollo y builds                |
+| Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)                |
+| Zod                   | 4.4.3    | Validación runtime con inferencia de tipos     |
+| Zustand               | 5.0.8    | State management — una store por feature       |
+| Vitest                | 4.1.10   | Test runner unitario y de componentes          |
+| Testing Library React | 16.3.2   | Testing conductual de componentes              |
+| Oxlint                | 1.71.0   | Linting basado en Rust                         |
+| Prettier              | 3.9.5    | Formateador de código                          |
+| jsdom                 | 29.1.1   | Entorno browser para tests                     |
+| Playwright            | 1.61.1   | Tests E2E — flujo completo de usuario (manual) |
+| PWA                   | Manifest | Instalable como app en móvil (offline-ready)   |
+| GitHub Actions        | CI/CD    | Quality (format+lint+typecheck+tests) → Build  |
+| pnpm                  | —        | Gestor de paquetes rápido y eficiente en disco |
 
 ## Información sobre su instalación y ejecución
 

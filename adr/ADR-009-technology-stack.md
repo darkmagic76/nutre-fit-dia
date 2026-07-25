@@ -4,7 +4,7 @@
 **Date:** 2026-07-15  
 **Deciders:** darkmagic76, gentle-orchestrator
 
-> **Note:** Superseded by [ADR-011](./ADR-011-production-readiness-deploy-supabase.md) for hosting and backend. Supabase is deferred to V2. This ADR retains the original frontend, state management, PWA, and food catalog decisions which remain valid. Backend, hosting, and CI/CD sections below reflect the current reality after ADR-011.
+> **Note:** Superseded by [ADR-011](./ADR-011-production-readiness-deploy-github-pages.md) for hosting and backend. Supabase is deferred to V2. This ADR retains the original frontend, state management, PWA, and food catalog decisions which remain valid. Backend, hosting, and CI/CD sections below reflect the current reality after ADR-011.
 
 ## Context
 
