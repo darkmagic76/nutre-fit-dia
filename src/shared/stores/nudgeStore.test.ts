@@ -281,3 +281,16 @@ describe('NudgeStateSchema', () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe('onRehydrateStorage', () => {
+  it('resets to defaults when stored data fails schema validation', async () => {
+    const STORAGE_KEY = 'nutrefitdia-nudge';
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: { pending: 'bad' }, version: 0 }));
+    vi.resetModules();
+    const mod = await import('./nudgeStore');
+    const state = mod.useNudgeStore.getState();
+    expect(state.pending).toEqual([]);
+    expect(state.history).toEqual([]);
+    expect(state.cooldowns).toEqual({});
+  });
+});

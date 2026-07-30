@@ -180,3 +180,18 @@ describe('LogStateSchema', () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe('onRehydrateStorage', () => {
+  it('resets to defaults when stored data fails schema validation', async () => {
+    const STORAGE_KEY = 'nutrefitdia-log';
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ state: { todayLog: 'not-an-array' }, version: 0 }),
+    );
+    vi.resetModules();
+    const mod = await import('./logStore');
+    const state = mod.useLogStore.getState();
+    expect(state.todayLog).toEqual([]);
+    expect(state.todayValidation).toBeNull();
+  });
+});

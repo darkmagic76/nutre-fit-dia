@@ -148,3 +148,21 @@ describe('biomarkerStore', () => {
     });
   });
 });
+
+describe('onRehydrateStorage', () => {
+  it('resets to defaults when stored data fails schema validation', async () => {
+    const storage = createLocalStorage();
+    vi.stubGlobal('localStorage', storage);
+    vi.resetModules();
+    vi.unstubAllEnvs();
+    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrefitdia');
+    storage.setItem(
+      'nutrefitdia-biomarker',
+      JSON.stringify({ state: { glucoseHistory: 'bad' }, version: 0 }),
+    );
+    const mod = await import('./biomarkerStore');
+    const state = mod.useBiomarkerStore.getState();
+    expect(state.glucoseHistory).toEqual([]);
+    expect(state.weightHistory).toEqual([]);
+  });
+});

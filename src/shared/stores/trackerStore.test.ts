@@ -346,3 +346,16 @@ describe('TrackerStateSchema', () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe('onRehydrateStorage', () => {
+  it('resets to defaults when stored data fails schema validation', async () => {
+    const STORAGE_KEY = 'nutrefitdia-tracker';
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: { weight: 'bad' }, version: 0 }));
+    vi.resetModules();
+    const mod = await import('./trackerStore');
+    const state = mod.useTrackerStore.getState();
+    expect(state.weight).toBe('80');
+    expect(state.height).toBe('170');
+    expect(state.gender).toBe('male');
+  });
+});

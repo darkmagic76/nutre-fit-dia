@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { z } from 'zod';
 import { computeIMC, IMC_NORMAL_MAX } from '@shared/utils';
 import type {
   GlucoseReading,
@@ -7,6 +8,24 @@ import type {
   BiomarkerTrend,
 } from '@shared/services/biomarkerTypes';
 import { createPersistConfig } from '@infrastructure/storage';
+
+// Zod schema for persisted state (structural integrity only — not business rules)
+const BiomarkerStateSchema = z.object({
+  glucoseHistory: z.array(
+    z.object({
+      value: z.number(),
+      timestamp: z.number(),
+      context: z.enum(['fasting', 'postprandial']),
+    }),
+  ),
+  weightHistory: z.array(
+    z.object({
+      value: z.number(),
+      timestamp: z.number(),
+      imc: z.number(),
+    }),
+  ),
+});
 
 interface BiomarkerState {
   glucoseHistory: GlucoseReading[];
@@ -99,8 +118,19 @@ export const useBiomarkerStore = create<BiomarkerState>()(
         set({ glucoseHistory: [], weightHistory: [] });
       },
     }),
-    createPersistConfig('biomarker', {
-      sensitiveFields: ['glucoseHistory', 'weightHistory'],
-    }),
+    {
+      ...createPersistConfig('biomarker', {
+        sensitiveFields: ['glucoseHistory', 'weightHistory'],
+      }),
+      onRehydrateStorage: () => (state, error) => {
+        if (error) return;
+        if (state) {
+          const parsed = BiomarkerStateSchema.safeParse(state);
+          if (!parsed.success) {
+            useBiomarkerStore.setState({ glucoseHistory: [], weightHistory: [] });
+          }
+        }
+      },
+    },
   ),
 );

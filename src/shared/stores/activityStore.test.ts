@@ -168,3 +168,20 @@ describe('ActivityStateSchema', () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe('onRehydrateStorage', () => {
+  it('resets to defaults when stored data fails schema validation', async () => {
+    const STORAGE_KEY = 'nutrefitdia-activity';
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ state: { weeklyMinutes: 'bad' }, version: 0 }),
+    );
+    vi.resetModules();
+    const mod = await import('./activityStore');
+    const state = mod.useActivityStore.getState();
+    expect(state.weeklyMinutes).toBe(0);
+    expect(state.strengthSessions).toBe(0);
+    expect(state.entries).toEqual([]);
+    expect(state.streak).toBe(0);
+  });
+});

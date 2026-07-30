@@ -122,3 +122,14 @@ describe('PlanStateSchema', () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe('onRehydrateStorage', () => {
+  it('resets to defaults when stored data fails schema validation', async () => {
+    const STORAGE_KEY = 'nutrefitdia-plan';
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: { weeklyPlan: 'bad' }, version: 0 }));
+    vi.resetModules();
+    const mod = await import('./planStore');
+    const state = mod.usePlanStore.getState();
+    expect(state.weeklyPlan).toBeNull();
+  });
+});
