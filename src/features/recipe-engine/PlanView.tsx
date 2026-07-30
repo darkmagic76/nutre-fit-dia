@@ -1,7 +1,7 @@
 import { useT } from '@shared/i18n';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import type { CulturalMetadata, Food } from '@shared/domain';
-import { Card, PrimaryButton, ViolationList, LegalDisclaimer } from '@shared/ui';
+import { Card, PrimaryButton, ViolationList } from '@shared/ui';
 import { formatViolation } from '@shared/ui/formatters/formatViolation';
 import { MealType, type MealEntry, type WeeklyPlan } from './services/planGenerator';
 import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
@@ -112,8 +112,6 @@ export function PlanView({
 
   return (
     <Card title={t['plan.title']} description={t['plan.description']}>
-      <LegalDisclaimer text={t['legal.disclaimer']} />
-      <div className="h-2" />
       <label className="flex items-center gap-2 text-sm cursor-pointer min-h-[44px]">
         <input
           type="checkbox"
