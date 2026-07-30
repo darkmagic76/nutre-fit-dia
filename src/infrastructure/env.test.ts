@@ -26,7 +26,8 @@ describe('env', () => {
     expect(env.VITE_LOG_LEVEL).toBe('info');
   });
 
-  it('should throw when VITE_STORAGE_PREFIX is missing', async () => {
+  it('should throw when VITE_STORAGE_PREFIX is empty', async () => {
+    vi.stubEnv('VITE_STORAGE_PREFIX', '');
     await expect(import('@infrastructure/env')).rejects.toThrow(/VITE_STORAGE_PREFIX/);
   });
 

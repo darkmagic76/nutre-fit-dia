@@ -118,7 +118,7 @@ export function createPersistConfig<S extends object>(
       for (const field of sensitive) {
         const value = target[field];
         if (isEncryptedField(value)) {
-          target[field] = await decryptSensitive(value);
+          target[field] = JSON.parse(await decryptSensitive(value));
         }
       }
 
@@ -133,7 +133,7 @@ export function createPersistConfig<S extends object>(
 
       for (const field of sensitive) {
         if (target[field] !== undefined) {
-          const plaintext = String(target[field]);
+          const plaintext = JSON.stringify(target[field]);
           const encrypted = await encryptSensitive(plaintext);
           target[field] = {
             __encrypted: true as const,

@@ -38,6 +38,9 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: true,
+    env: {
+      VITE_STORAGE_PREFIX: 'nutrefitdia',
+    },
     exclude: ['e2e/**', 'node_modules/**'],
     coverage: {
       provider: 'v8',
