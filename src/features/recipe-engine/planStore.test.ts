@@ -1,42 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { usePlanStore } from './planStore';
+import { usePlanStore, PlanStateSchema } from './planStore';
 import { useTrackerStore } from '@shared/stores';
-import { z } from 'zod';
-
-// --- Zod schema for persisted state (structural integrity only) ---
-const PlanStateSchema = z.object({
-  weeklyPlan: z
-    .object({
-      days: z.array(
-        z.object({
-          day: z.string(),
-          meals: z.object({
-            breakfast: z.array(
-              z.object({
-                id: z.string(),
-                name: z.string(),
-                category: z.string(),
-                gramsPerRation: z.number(),
-                kcalPer100g: z.number(),
-                proteinPer100g: z.number(),
-                carbsPer100g: z.number(),
-                fiberPer100g: z.number(),
-                fatPer100g: z.number(),
-                saturatedFatPer100g: z.number(),
-                carbonFootprint: z.number(),
-              }),
-            ),
-            lunch: z.array(z.any()),
-            dinner: z.array(z.any()),
-            snack: z.array(z.any()),
-          }),
-          restrictionActive: z.boolean(),
-        }),
-      ),
-      valid: z.boolean(),
-    })
-    .nullable(),
-});
 
 describe('planStore', () => {
   const STORAGE_KEY = 'nutrefitdia-plan';
@@ -132,14 +96,24 @@ describe('PlanStateSchema', () => {
     expect(result.success).toBe(true);
   });
 
-  it('accepts valid populated weeklyPlan', () => {
-    // Just test the nullable acceptance — full plan validation is Zod's job
+  it('accepts valid populated weeklyPlan structure', () => {
     const result = PlanStateSchema.safeParse({
       weeklyPlan: {
         days: [],
+        dailyResults: [],
+        weeklyResult: {},
         valid: false,
       },
     });
+    expect(result.success).toBe(true);
+  });
+
+  it('accepts real generated weeklyPlan', () => {
+    usePlanStore.getState().generatePlan();
+    const { weeklyPlan } = usePlanStore.getState();
+    expect(weeklyPlan).not.toBeNull();
+
+    const result = PlanStateSchema.safeParse({ weeklyPlan });
     expect(result.success).toBe(true);
   });
 

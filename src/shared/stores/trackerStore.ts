@@ -181,7 +181,7 @@ export const useTrackerStore = create<TrackerState>()(
     }),
     {
       ...createPersistConfig('tracker', {
-        sensitiveFields: ['weight', 'height', 'age', 'diagnosisAge', 'glucose', 'imc'],
+        sensitiveFields: ['weight', 'height', 'age', 'diagnosisAge', 'glucose'],
       }),
       onRehydrateStorage: () => (state, error) => {
         if (error) return;

@@ -11,22 +11,24 @@ interface PlanState {
   generatePlan: () => void;
 }
 
-// Zod schema for persisted state (structural integrity only — not business rules)
-const PlanStateSchema = z.object({
+// Zod schema for persisted state (structural integrity — matches WeeklyPlan shape)
+const MealEntrySchema = z.object({
+  food: z.any(), // Food is a complex domain object validated at creation
+  rations: z.number(),
+  mealType: z.string().optional(),
+});
+
+export const PlanStateSchema = z.object({
   weeklyPlan: z
     .object({
       days: z.array(
         z.object({
-          day: z.string(),
-          meals: z.object({
-            breakfast: z.array(z.any()),
-            lunch: z.array(z.any()),
-            dinner: z.array(z.any()),
-            snack: z.array(z.any()),
-          }),
-          restrictionActive: z.boolean(),
+          day: z.number(),
+          entries: z.array(MealEntrySchema),
         }),
       ),
+      dailyResults: z.array(z.any()),
+      weeklyResult: z.any(),
       valid: z.boolean(),
     })
     .nullable(),
