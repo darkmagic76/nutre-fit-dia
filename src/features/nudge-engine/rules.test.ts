@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { NUDGE_RULES } from './rules';
+import { NUDGE_RULES } from '@shared/nudge/rules';
 import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits';
 import { emptyCounts } from '@shared/services/rationValidator';
 import { FoodCategory } from '@shared/domain';

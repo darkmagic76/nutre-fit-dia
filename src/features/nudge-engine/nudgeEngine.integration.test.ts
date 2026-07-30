@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from './engine';
+import { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from '@shared/nudge/engine';
 import { CooldownTracker } from '@shared/nudge';
-import { NUDGE_RULES } from './rules';
+import { NUDGE_RULES } from '@shared/nudge/rules';
 import { useTrackerStore, useLogStore } from '@shared/stores';
-import { useNudgeStore } from './store';
+import { useNudgeStore } from '@shared/stores/nudgeStore';
 import { FoodCategory, NotificationType } from '@shared/domain';
 import { makeFood } from '@/test/fixtures';
 
