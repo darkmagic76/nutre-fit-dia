@@ -19,6 +19,7 @@ describe('App integration', () => {
       'matchMedia',
       vi.fn(() => createMatchMedia(false)),
     );
+    sessionStorage.clear();
     renderApp();
   });
 

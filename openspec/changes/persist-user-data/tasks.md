@@ -55,9 +55,9 @@ Chain strategy: feature-branch-chain
 
 ## Phase 5: Locale, Tab & Export
 
-- [ ] 5.1 Modify `src/shared/i18n/I18nContext.tsx` — persist locale to localStorage
-- [ ] 5.2 Modify `src/shared/hooks/useTabNavigation.ts` — persist tab to sessionStorage
-- [ ] 5.3 Test → Implement: `src/shared/hooks/useExportData.ts` — exportAllData() aggregates 6 stores into JSON blob download
+- [x] 5.1 Modify `src/shared/i18n/I18nContext.tsx` — persist locale to localStorage
+- [x] 5.2 Modify `src/shared/hooks/useTabNavigation.ts` — persist tab to sessionStorage
+- [x] 5.3 Test → Implement: `src/shared/hooks/useExportData.ts` — exportAllData() aggregates 6 stores into JSON blob download
 
 ## Phase 6: Quality Gate
 
