@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  VITE_STORAGE_PREFIX: z.string().min(1),
+  VITE_STORAGE_PREFIX: z.string().min(1).default('nutrefitdia'),
   VITE_BASE_URL: z.string().default('/'),
   VITE_LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
 });
