@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from 'react';
-import { useActivityStore, DEFAULT_WEEKLY_GOAL } from '../activityStore';
-import type { ActivityEntry } from '../types';
+import { useActivityStore, DEFAULT_WEEKLY_GOAL } from '@shared/stores/activityStore';
+import type { ActivityEntry } from '@shared/domain';
 
 export function useActivityTracker() {
   const {
