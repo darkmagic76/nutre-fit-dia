@@ -1,8 +1,24 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { CooldownTracker } from '@shared/nudge';
+import { useNudgeStore } from '@shared/stores';
 
 describe('CooldownTracker', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
+  });
+
   describe('register / isOnCooldown', () => {
+    it('stores cooldowns in nudgeStore persisted state', () => {
+      let now = 0;
+      const tracker = new CooldownTracker(() => now);
+      tracker.register('R1');
+
+      // VERIFY: cooldowns are stored in nudgeStore's persisted state, not an internal Map
+      const nudgeCooldowns = useNudgeStore.getState().cooldowns;
+      expect(nudgeCooldowns['R1']).toBe(0);
+    });
+
     it('blocks within cooldown window and allows after expiry', () => {
       // now() returns ms like Date.now; cooldownMinutes is in minutes
       let now = 0;

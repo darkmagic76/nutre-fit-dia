@@ -49,9 +49,9 @@ Chain strategy: feature-branch-chain
 
 ## Phase 4: Cooldown Migration
 
-- [ ] 4.1 Modify `src/shared/nudge/cooldownTracker.ts` — read/write via useNudgeStore.getState().cooldowns; keep injectable now()
-- [ ] 4.2 Modify `src/shared/nudge/engine.ts` — remove singleton CooldownTracker; use nudgeStore state
-- [ ] 4.3 Verify existing CooldownTracker tests pass with nudgeStore backend
+- [x] 4.1 Modify `src/shared/nudge/cooldownTracker.ts` — read/write via useNudgeStore.getState().cooldowns; keep injectable now()
+- [x] 4.2 Modify `src/shared/nudge/engine.ts` — remove singleton CooldownTracker; use nudgeStore state
+- [x] 4.3 Verify existing CooldownTracker tests pass with nudgeStore backend
 
 ## Phase 5: Locale, Tab & Export
 

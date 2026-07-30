@@ -13,7 +13,7 @@ interface NudgeState {
   acknowledge: (id: string) => void;
   dismiss: (id: string) => void;
   clearPending: () => void;
-  registerCooldown: (id: string) => void;
+  registerCooldown: (id: string, timestamp?: number) => void;
   resetCooldown: (id?: string) => void;
 }
 
@@ -86,9 +86,9 @@ export const useNudgeStore = create<NudgeState>()(
 
       clearPending: () => set({ pending: [] }),
 
-      registerCooldown: (id) =>
+      registerCooldown: (id, timestamp?) =>
         set((state) => ({
-          cooldowns: { ...state.cooldowns, [id]: Date.now() },
+          cooldowns: { ...state.cooldowns, [id]: timestamp ?? Date.now() },
         })),
 
       resetCooldown: (id) =>

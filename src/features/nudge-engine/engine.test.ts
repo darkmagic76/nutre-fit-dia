@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { buildNudgeContext, evaluateRules } from '@shared/nudge/engine';
 import { CooldownTracker } from '@shared/nudge';
 import { NUDGE_RULES } from '@shared/nudge/rules';
-import { useTrackerStore, useLogStore } from '@shared/stores';
+import { useTrackerStore, useLogStore, useNudgeStore } from '@shared/stores';
 import { FoodCategory } from '@shared/domain';
 import { makeFood } from '@/test/fixtures';
 import { emptyCounts } from '@shared/services/rationValidator';
@@ -25,6 +25,7 @@ describe('buildNudgeContext', () => {
     localStorage.clear();
     useTrackerStore.setState({ restrictionActive: false });
     useLogStore.setState({ todayLog: [] });
+    useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
   });
 
   it('reads restrictionActive from trackerStore and counts from logStore', () => {
@@ -88,6 +89,10 @@ describe('buildNudgeContext', () => {
 });
 
 describe('evaluateRules', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
+  });
   it('returns matching evaluations when rules match and no cooldown', () => {
     const cooldown = new CooldownTracker(() => 0);
     const ctx: NudgeContext = {

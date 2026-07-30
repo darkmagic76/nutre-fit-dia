@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 coverage
+*_es.md
 
 # Environment
 .env
