@@ -98,6 +98,13 @@ export const es: Translations = {
   'sustainability.zeroWasteFooter': '♻️ Zero-Waste · 🥕 KM0 / Defectos estéticos',
   'sustainability.emissions': 'Emisiones Comparativas',
   'sustainability.emissionsDesc': 'kg CO₂eq por kg de alimento (EAT-Lancet)',
+  'sustainability.emissionLabel.legumes': 'Legumbres',
+  'sustainability.emissionLabel.eggs': 'Huevos',
+  'sustainability.emissionLabel.poultry': 'Aves',
+  'sustainability.emissionLabel.pork': 'Cerdo',
+  'sustainability.emissionLabel.beef': 'Ternera',
+  'sustainability.emissionLabel.fish_white': 'Pescado blanco',
+  'sustainability.emissionLabel.fish_blue': 'Pescado azul',
 
   'install.title': 'Instalar app',
   'install.dismiss': 'Cerrar',

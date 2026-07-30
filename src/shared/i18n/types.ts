@@ -137,6 +137,13 @@ export interface Translations {
   'sustainability.zeroWasteFooter': string;
   'sustainability.emissions': string;
   'sustainability.emissionsDesc': string;
+  'sustainability.emissionLabel.legumes': string;
+  'sustainability.emissionLabel.eggs': string;
+  'sustainability.emissionLabel.poultry': string;
+  'sustainability.emissionLabel.pork': string;
+  'sustainability.emissionLabel.beef': string;
+  'sustainability.emissionLabel.fish_white': string;
+  'sustainability.emissionLabel.fish_blue': string;
 
   // Cultural / UNESCO
   'cultural.socialEating': string;
