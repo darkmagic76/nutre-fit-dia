@@ -7,7 +7,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'node:path';
 
 export default defineConfig({
-  base: '/nutre-fit-dia/',
+  base: process.env.VITE_BASE_URL || '/nutre-fit-dia/',
   plugins: [
     react(),
     tailwindcss(),
