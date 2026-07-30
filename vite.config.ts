@@ -23,7 +23,7 @@ export default defineConfig({
         runtimeCaching: [],
       },
     }),
-    ...(process.env.NO_HTTPS ? [] : [basicSsl({ name: 'localhost' })]),
+    ...(process.env.NO_HTTPS ? [] : [basicSsl({ name: 'nutrefitdia.dev' })]),
   ],
   resolve: {
     alias: {

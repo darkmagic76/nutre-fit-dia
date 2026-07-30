@@ -7,12 +7,12 @@ describe('env', () => {
   });
 
   it('should parse valid environment variables', async () => {
-    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrifit');
+    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrefitdia');
     vi.stubEnv('VITE_BASE_URL', '/');
     vi.stubEnv('VITE_LOG_LEVEL', 'info');
 
     const { env } = await import('@infrastructure/env');
-    expect(env.VITE_STORAGE_PREFIX).toBe('nutrifit');
+    expect(env.VITE_STORAGE_PREFIX).toBe('nutrefitdia');
     expect(env.VITE_BASE_URL).toBe('/');
     expect(env.VITE_LOG_LEVEL).toBe('info');
   });

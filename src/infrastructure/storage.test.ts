@@ -13,7 +13,7 @@ describe('encryptSensitive', () => {
   beforeEach(() => {
     vi.resetModules();
     vi.unstubAllEnvs();
-    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrifit');
+    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrefitdia');
     setupStorageMock();
   });
 
@@ -62,7 +62,7 @@ describe('createPersistConfig', () => {
   beforeEach(() => {
     vi.unstubAllEnvs();
     vi.resetModules();
-    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrifit');
+    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrefitdia');
     storage = setupStorageMock();
   });
 
@@ -87,7 +87,7 @@ describe('createPersistConfig', () => {
     const lastCall = calls[calls.length - 1];
     const storedKey = lastCall[0];
     const storedValue = lastCall[1] as string;
-    expect(storedKey).toBe('nutrifit-test');
+    expect(storedKey).toBe('nutrefitdia-test');
 
     // Zustand persist wraps in { state, version }
     const data = JSON.parse(storedValue);
@@ -135,7 +135,7 @@ describe('createPersistConfig', () => {
   it('should rehydrate state correctly after encryption roundtrip', async () => {
     vi.resetModules();
     vi.unstubAllEnvs();
-    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrifit');
+    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrefitdia');
     storage = setupStorageMock();
 
     const { encryptSensitive: enc } = await import('@infrastructure/storage');
@@ -152,15 +152,15 @@ describe('createPersistConfig', () => {
       },
       version: 1,
     };
-    storage.setItem('nutrifit-hydrate', JSON.stringify(stored));
+    storage.setItem('nutrefitdia-hydrate', JSON.stringify(stored));
 
     // Now re-import createPersistConfig and create the store
     vi.resetModules();
-    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrifit');
+    vi.stubEnv('VITE_STORAGE_PREFIX', 'nutrefitdia');
     storage = setupStorageMock();
 
     // Seed the mock so createPersistConfig can read the encrypted data
-    storage.setItem('nutrifit-hydrate', JSON.stringify(stored));
+    storage.setItem('nutrefitdia-hydrate', JSON.stringify(stored));
 
     const { createPersistConfig: cp1 } = await import('@infrastructure/storage');
 
