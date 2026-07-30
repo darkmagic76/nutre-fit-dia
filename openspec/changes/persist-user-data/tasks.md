@@ -40,12 +40,12 @@ Chain strategy: feature-branch-chain
 
 ## Phase 3: Store Persist Wrappers
 
-- [ ] 3.1 Test → Wrap: `trackerStore` in persist() — encrypted: weight, height, age, diagnosisAge, glucose, imc
-- [ ] 3.2 Test → Wrap: `logStore` in persist() — plaintext (non-sensitive food log)
-- [ ] 3.3 Test → Wrap: `nudgeStore` in persist() — add cooldowns: Record<string,number> + registerCooldown/resetCooldown
-- [ ] 3.4 Test → Wrap: `activityStore` in persist() — encrypted: weeklyMinutes, strengthSessions
-- [ ] 3.5 Test → Wrap: `planStore` in persist() — plaintext
-- [ ] 3.6 Audit all store test files — add localStorage.clear() in beforeEach
+- [x] 3.1 Test → Wrap: `trackerStore` in persist() — encrypted: weight, height, age, diagnosisAge, glucose, imc
+- [x] 3.2 Test → Wrap: `logStore` in persist() — plaintext (non-sensitive food log)
+- [x] 3.3 Test → Wrap: `nudgeStore` in persist() — add cooldowns: Record<string,number> + registerCooldown/resetCooldown
+- [x] 3.4 Test → Wrap: `activityStore` in persist() — encrypted: weeklyMinutes, strengthSessions
+- [x] 3.5 Test → Wrap: `planStore` in persist() — plaintext
+- [x] 3.6 Audit all store test files — add localStorage.clear() in beforeEach
 
 ## Phase 4: Cooldown Migration
 
