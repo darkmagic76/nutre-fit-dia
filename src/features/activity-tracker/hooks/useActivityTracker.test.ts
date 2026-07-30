@@ -5,6 +5,7 @@ import { useActivityStore } from '@shared/stores/activityStore';
 
 describe('useActivityTracker', () => {
   beforeEach(() => {
+    localStorage.clear();
     useActivityStore.getState().resetWeek();
   });
 

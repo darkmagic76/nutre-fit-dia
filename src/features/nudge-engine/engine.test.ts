@@ -22,6 +22,7 @@ const glycemicFruit = makeFood({
 
 describe('buildNudgeContext', () => {
   beforeEach(() => {
+    localStorage.clear();
     useTrackerStore.setState({ restrictionActive: false });
     useLogStore.setState({ todayLog: [] });
   });
