@@ -26,8 +26,7 @@ export const useBiomarkerStore = create<BiomarkerState>()(
       weightHistory: [],
 
       recordGlucose: (glucose) => {
-        get().glucoseHistory.push(glucose);
-        set({ glucoseHistory: get().glucoseHistory });
+        set({ glucoseHistory: [...get().glucoseHistory, glucose] });
       },
 
       recordWeight: (weightKg, heightCm) => {
@@ -37,8 +36,7 @@ export const useBiomarkerStore = create<BiomarkerState>()(
           timestamp: Date.now(),
           imc,
         };
-        get().weightHistory.push(reading);
-        set({ weightHistory: get().weightHistory });
+        set({ weightHistory: [...get().weightHistory, reading] });
         return reading;
       },
 

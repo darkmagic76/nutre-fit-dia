@@ -8,12 +8,12 @@
 | 400-line budget risk | High |
 | Chained PRs recommended | Yes |
 | Suggested split | PR 1 → PR 2 → PR 3 → PR 4 |
-| Delivery strategy | ask-on-risk |
-| Chain strategy | pending |
+| Delivery strategy | auto-chain |
+| Chain strategy | feature-branch-chain |
 
-Decision needed before apply: Yes
+Decision needed before apply: Resolved
 Chained PRs recommended: Yes
-Chain strategy: pending
+Chain strategy: feature-branch-chain
 400-line budget risk: High
 
 ### Suggested Work Units
@@ -29,14 +29,14 @@ Chain strategy: pending
 
 - [x] 1.1 Test → Implement: `src/infrastructure/env.ts` — Zod schema for VITE_STORAGE_PREFIX, VITE_BASE_URL, VITE_LOG_LEVEL
 - [x] 1.2 Test → Implement: `src/infrastructure/storage.ts` — createPersistConfig(name, opts), encryptSensitive, decryptSensitive (AES-GCM + PBKDF2)
-- [x] 1.3 Create `.env.example` — VITE_STORAGE_PREFIX=nutrifit, VITE_BASE_URL=/, VITE_LOG_LEVEL=info
+- [x] 1.3 Create `.env.example` — VITE_STORAGE_PREFIX=nutrefitdia, VITE_BASE_URL=/, VITE_LOG_LEVEL=info
 - [x] 1.4 Modify `vite.config.ts` — wire base from env.VITE_BASE_URL
 
 ## Phase 2: Biomarker Store
 
-- [ ] 2.1 Test → Implement: `src/shared/stores/biomarkerStore.ts` — glucoseHistory, weightHistory, record*, getTrend, resetBiomarkerHistory with persist
-- [ ] 2.2 Modify `src/shared/services/biomarkerTrackingService.ts` — delegate to biomarkerStore.getState(); preserve public API
-- [ ] 2.3 Modify `src/shared/stores/index.ts` — export useBiomarkerStore
+- [x] 2.1 Test → Implement: `src/shared/stores/biomarkerStore.ts` — glucoseHistory, weightHistory, record*, getTrend, resetBiomarkerHistory with persist
+- [x] 2.2 Modify `src/shared/services/biomarkerTrackingService.ts` — delegate to biomarkerStore.getState(); preserve public API
+- [x] 2.3 Modify `src/shared/stores/index.ts` — export useBiomarkerStore
 
 ## Phase 3: Store Persist Wrappers
 
