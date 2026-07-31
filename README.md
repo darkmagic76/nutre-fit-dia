@@ -154,7 +154,7 @@ Built on **erMedDiet** (energy-reduced Mediterranean Diet) with evidence from **
 
 The application is a **Progressive Web App (PWA)** with full offline support via service worker. It installs directly from the browser without app stores:
 
-1. Open `https://nutrefitdia.dev` in Chrome/Safari mobile
+1. Open `https://darkmagic76.github.io/nutre-fit-dia/` in Chrome/Safari mobile
 2. Tap **"Add to Home Screen"** (Chrome) or **"Share → Add to Home Screen"** (Safari)
 3. The app opens in standalone mode (no browser chrome)
 

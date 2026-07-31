@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `develop` | Tests: 680 ✅ (66 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.63% Stmts / 100% Funcs / 99.35% Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN
+Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `main` | Tests: 745 ✅ (73 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.63% Stmts / 100% Funcs / 99.35% Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/
 
 ---
 
@@ -106,7 +106,7 @@ Fase 4 — Pulido (LOW)
 
 ## Notas
 
-- **680 tests verdes (66 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
+- **745 tests verdes (73 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
 - **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module. Motor de nudge extraído a `src/shared/nudge/` (2026-07-23).
 - **Infra**: `tsconfig.app.json` excluye tests del build. Husky activo: pre-commit (lint) + pre-push (quality). `coverage/` en `.gitignore`.
 - **i18n**: 0 strings hardcodeados. Categorías de alimento (11 keys) con traducción ES/EN. `AOVE` se mantiene como término clínico en ambos idiomas.
