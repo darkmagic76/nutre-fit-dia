@@ -1,15 +1,18 @@
 import { Card } from '@shared/ui';
 import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability';
-import { useT } from '@shared/i18n';
+import type { Translations } from '@shared/i18n';
 
 interface SustainabilityViewProps {
   zeroWasteCount: number;
   totalFoods: number;
+  translate: Translations;
 }
 
-export function SustainabilityView({ zeroWasteCount, totalFoods }: SustainabilityViewProps) {
-  const t = useT();
-
+export function SustainabilityView({
+  zeroWasteCount,
+  totalFoods,
+  translate: t,
+}: SustainabilityViewProps) {
   return (
     <Card title={t['sustainability.title']} description={t['sustainability.description']}>
       <div className="space-y-4 text-sm" role="region" aria-label={t['sustainability.title']}>

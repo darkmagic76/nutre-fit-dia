@@ -116,6 +116,15 @@ export const en: Translations = {
   'error.boundary.retry': 'Retry',
   'error.boundary.globalReload': 'Reload application',
 
+  'errors.invalidGender': 'Invalid gender: {gender}',
+  'errors.diagnosisAgeExceedsCurrentAge': 'Diagnosis age cannot exceed current age',
+  'errors.glucoseRequiredForMetabolicProfile':
+    'Glucose is required to calculate the metabolic profile',
+  'errors.glucoseMustBePositive': 'Glucose must be a positive value (mg/dL)',
+  'errors.imcThresholdCrossedUp': 'BMI has exceeded 25 — caloric restriction activated',
+  'errors.imcThresholdCrossedDown': 'BMI has dropped below 25 — caloric restriction deactivated',
+  'errors.processingError': 'Processing error: {message}',
+
   'form.weight': 'Weight (kg)',
   'form.height': 'Height (cm)',
   'form.age': 'Age',

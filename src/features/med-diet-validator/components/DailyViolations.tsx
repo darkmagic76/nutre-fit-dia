@@ -4,6 +4,25 @@ import { formatViolation } from '@shared/ui/formatters/formatViolation';
 import type { ValidationResult } from '@shared/services/rationValidator';
 import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
 
+/**
+ * Renders ration-limit breach feedback to the user.
+ *
+ * ## "validation/violations" polysemy note
+ *
+ * In this component, "violations" means **UI-level display of clinical rule
+ * breaches** — the visual feedback layer that surfaces `validateRations()` results
+ * to the user. This component does NOT perform any validation itself; it receives
+ * pre-computed `ValidationResult` data and renders it.
+ *
+ * Distinct from:
+ * - **Ration-rule checks** (`src/shared/services/rationValidator.ts`): the clinical
+ *   logic that computes whether AESAN 2022 limits are met
+ * - **Form/input validation** (`src/shared/errors.ts` {@link ValidationError}):
+ *   structural checks on raw user input before domain processing
+ *
+ * "Violations" here = "breaches detected by the validator, now shown to the user."
+ */
+
 interface DailyViolationsProps {
   validation: ValidationResult;
   hasFoods: boolean;

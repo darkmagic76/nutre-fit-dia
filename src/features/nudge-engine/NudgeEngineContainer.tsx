@@ -3,7 +3,7 @@ import { useT } from '@shared/i18n';
 import { Card } from '@shared/ui';
 import { evaluateAndEnqueue } from '@shared/nudge';
 import { useNudgeStore } from '@shared/stores';
-import { NudgePanelView } from './NudgePanelView';
+import { NudgeEngineView } from './NudgeEngineView';
 
 export function NudgeEngineContainer() {
   const pending = useNudgeStore((s) => s.pending);
@@ -18,7 +18,7 @@ export function NudgeEngineContainer() {
 
   return (
     <Card title={t['nudges.title']} description={t['nudges.description']}>
-      <NudgePanelView pending={pending} history={history} onDismiss={dismiss} />
+      <NudgeEngineView pending={pending} history={history} onDismiss={dismiss} translate={t} />
     </Card>
   );
 }

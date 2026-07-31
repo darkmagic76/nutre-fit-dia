@@ -182,6 +182,15 @@ export interface Translations {
   'error.boundary.retry': string;
   'error.boundary.globalReload': string;
 
+  // Errors — tracker / validation
+  'errors.invalidGender': string;
+  'errors.diagnosisAgeExceedsCurrentAge': string;
+  'errors.glucoseRequiredForMetabolicProfile': string;
+  'errors.glucoseMustBePositive': string;
+  'errors.imcThresholdCrossedUp': string;
+  'errors.imcThresholdCrossedDown': string;
+  'errors.processingError': string;
+
   // Legal
   'legal.disclaimer': string;
 

@@ -120,7 +120,7 @@ pnpm quality
   ├── pnpm format:check → Prettier
   ├── pnpm lint         → Oxlint (Rust, ultra-fast)
   ├── pnpm typecheck    → TypeScript 6 (erasableSyntaxOnly)
-  └── pnpm test:run     → Vitest (580 tests)
+  └── pnpm test:run     → Vitest (680 tests)
 ```
 
 ---
@@ -213,18 +213,29 @@ nutre-fit-dia/
 │   │   ├── metabolic-tracker/          ← Phenotypic profile + biomarkers
 │   │   ├── med-diet-validator/         ← AESAN 2022 validation
 │   │   ├── recipe-engine/              ← Weekly plan + UNESCO badges + ZeroWaste
-│   │   ├── activity-tracker/           ← WHO 150-300 min (H1)
-│   │   └── nudge-engine/               ← 15 rules + panel UI (H2, H6, H7, M2)
+│   │   ├── activity-tracker/           ← WHO 150-300 min + strength (H1, M6)
+│   │   ├── nudge-engine/               ← 17 rules + panel UI (H2, H6, H7, M2)
+│   │   └── sustainability/             ← Eco Dashboard + scoring (ADR-007)
 │   ├── shared/
+│   │   ├── constants/         ← 14 clinical thresholds (AESAN/WHO/PREDIMED-Plus)
+│   │   ├── data/              ← 39-food AESAN catalog
 │   │   ├── domain/            ← FoodCategory, Food (Zod), CulturalMetadata, Notification
-│   │   ├── data/              ← 34-food AESAN catalog
-│   │   ├── sustainability/    ← EnvironmentalScore, substitutionService, ZeroWaste
-│   │   ├── services/          ← rationValidator cross-feature
-│   │   └── ui/                ← Atomic components (Card, TabButton, etc.)
+│   │   ├── hooks/             ← useExportData, useInstallPrompt, useTabNavigation, useFoodName
+│   │   ├── i18n/              ← ES/EN (useT, I18nProvider, 80+ keys)
+│   │   ├── nudge/             ← Nudge engine: rules, context, cooldowns
+│   │   ├── services/          ← rationValidator, caloricTargetService, biomarkerTracking
+│   │   ├── stores/            ← Zustand stores (tracker, log, activity, nudge, biomarker)
+│   │   ├── sustainability/    ← EnvironmentalScore, substitutionService, constants
+│   │   ├── ui/                ← Atomic components (Card, TabButton, ErrorBoundary, etc.)
+│   │   ├── utils/             ← sanitize, imc, enum helpers
+│   │   └── errors.ts          ← DomainError, ValidationError, NotFoundError
 │   ├── infrastructure/
-│   │   └── ml/                ← ScannerAdapter (ADR-003) + ScanResult
+│   │   ├── env.ts             ← Zod-validated env config (VITE_STORAGE_PREFIX, etc.)
+│   │   ├── storage.ts         ← AES-GCM encryption + Zustand persist config
+│   │   └── ml/                ← ScannerAdapter (ADR-003), MockScannerAdapter
 │   └── test/
-│       └── fixtures.ts        ← makeFood factory
+│       ├── fixtures.ts        ← makeFood factory
+│       └── setup.ts           ← Testing Library + jsdom
 ├── adr/                       ← 11 ADRs + traceability matrix + reconciliation
 ├── docs/                      ← Specifications (INFORME_ADR, SPECS_RF, SPECS_TECH)
 ├── package.json
@@ -245,14 +256,17 @@ nutre-fit-dia/
 | Validation     | Zod 4                                              | ADR-002  |
 | State          | Zustand 5                                          | ADR-009  |
 | Tests          | Vitest 4 + Testing Library 16                      | ADR-009  |
+| E2E            | Playwright 1.61                                    | ADR-009  |
 | Lint           | Oxlint (Rust)                                      | ADR-009  |
+| Format         | Prettier 3.9                                       | ADR-009  |
+| Browser env    | jsdom 29.1                                         | ADR-009  |
 | Architecture   | Screaming Architecture                             | ADR-001  |
 | Domain         | 11 FoodCategory groups                             | ADR-005  |
 | Deficit        | 600 kcal conditional (BMI > 25)                    | ADR-004  |
 | Scanner        | Mock → ONNX (V2)                                   | ADR-003  |
 | Activity       | GoalTracker manual V1                              | ADR-006  |
 | Sustainability | EnvironmentalScore + substitutionService V1        | ADR-007  |
-| Notifications  | 15 rules: SafetyAlert/SystemAction/BehavioralNudge | ADR-008  |
+| Notifications  | 17 rules: SafetyAlert/SystemAction/BehavioralNudge | ADR-008  |
 
 ---
 

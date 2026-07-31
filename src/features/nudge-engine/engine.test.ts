@@ -5,7 +5,7 @@ import { NUDGE_RULES } from '@shared/nudge/rules';
 import { useTrackerStore, useLogStore, useNudgeStore } from '@shared/stores';
 import { FoodCategory } from '@shared/domain';
 import { makeFood } from '@/test/fixtures';
-import { emptyCounts } from '@shared/services/rationValidator';
+import { defaultRationCounts } from '@shared/services/rationValidator';
 import type { NudgeContext } from '@shared/nudge';
 
 const cerealFood = makeFood({
@@ -98,7 +98,7 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
+      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
@@ -131,7 +131,7 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
+      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
@@ -157,7 +157,7 @@ describe('evaluateRules', () => {
       restrictionActive: false,
       animalProteinCount: 0,
       counts: {
-        ...emptyCounts(),
+        ...defaultRationCounts(),
         [FoodCategory.OLIVE_OIL]: 1,
         [FoodCategory.FRUITS]: 3,
         [FoodCategory.CEREALS]: 3,
@@ -186,7 +186,7 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
+      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
@@ -211,7 +211,7 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
+      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
       containsHighGlycemicFruit: false,
       currentHour: 12,
       latestGlucose: null,
@@ -241,7 +241,7 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       restrictionActive: true,
       animalProteinCount: 0,
-      counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 6, [FoodCategory.VEGETABLES]: 1 },
+      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 6, [FoodCategory.VEGETABLES]: 1 },
       containsHighGlycemicFruit: true,
       currentHour: 22,
       latestGlucose: null,

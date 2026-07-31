@@ -1,32 +1,58 @@
 # Nutre-Fit-Dia - Comprehensive Self-Care Ecosystem for DT2 and Sustainable Health
 
-````html
-<div id="english">
-  ## Project Overview ### Scope and Framework This project is the **Master's Thesis (TFM) for the
-  Master in AI Development at BIGSchool and Universidad Isabel I.** It is built on **Mediterranean
-  Diet (MD)-based Nutrition and Daily Exercise**, creating a **Comprehensive Self-Care Ecosystem for
-  Type 2 Diabetes (T2D) and Sustainable Health.** ## Project Presentation - [PowerPoint
-  Presentation](docs/slides/Nutre-Fit-Dia_Metabolic_Architecture.pptx) - [Presentation
-  Video](https://youtu.be/RSCQ3jXF96A) ## Tech Stack | Technology | Version | Purpose | |
-  --------------------- | -------- | --------------------------------------------- | | React |
-  19.2.7 | UI Components (Container/Presentational) | | TypeScript | 6.0.2 | Type safety,
-  erasableSyntaxOnly | | Vite | 8.1.1 | Dev server and builds | | Tailwind CSS | 4.3.2 | CSS
-  utility-first (Vite plugin) | | Zod | 4.4.3 | Runtime validation with type inference | | Zustand |
-  5.0.8 | State management — one store per feature | | Vitest | 4.1.10 | Unit and component test
-  runner | | Testing Library React | 16.3.2 | Behavioral component testing | | Oxlint | 1.71.0 |
-  Rust-based linting | | Prettier | 3.9.5 | Code formatter | | jsdom | 29.1.1 | Browser environment
-  for tests | | Playwright | 1.61.1 | E2E tests — full user flow (manual trigger) | | PWA | Manifest
-  | Installable as mobile app (offline-ready) | | GitHub Actions | CI/CD | Quality
-  (format+lint+typecheck+tests) → Build | | pnpm | — | Fast, disk-efficient package manager | ##
-  Installation and Running ```bash # Install git clone
-  <repo-url>
-    cd nutre-fit-dia pnpm install # Development pnpm dev # HTTP on localhost (no cert needed) #
-    Tests (TDD) pnpm test:run # Unit and component tests pnpm test:coverage # With coverage pnpm
-    test:e2e # End-to-end tests with Playwright pnpm test:e2e:ui # E2E interactive mode # Quality
-    pnpm quality # format:check + lint + typecheck + tests pnpm verify # quality + build</repo-url
-  >
-</div>
-````
+## Project Overview
+
+### Scope and Framework
+
+This project is the **Master's Thesis (TFM) for the Master in AI Development at BIGSchool and Universidad Isabel I.**
+It is built on **Mediterranean Diet (MD)-based Nutrition and Daily Exercise**, creating a **Comprehensive Self-Care Ecosystem for Type 2 Diabetes (T2D) and Sustainable Health.**
+
+## Project Presentation
+
+- [PowerPoint Presentation](docs/slides/Nutre-Fit-Dia_Metabolic_Architecture.pptx)
+- [Presentation Video](https://youtu.be/RSCQ3jXF96A)
+
+## Tech Stack
+
+| Technology            | Version  | Purpose                                       |
+| --------------------- | -------- | --------------------------------------------- |
+| React                 | 19.2.7   | UI Components (Container/Presentational)      |
+| TypeScript            | 6.0.2    | Type safety, erasableSyntaxOnly               |
+| Vite                  | 8.1.1    | Dev server and builds                         |
+| Tailwind CSS          | 4.3.2    | CSS utility-first (Vite plugin)               |
+| Zod                   | 4.4.3    | Runtime validation with type inference        |
+| Zustand               | 5.0.8    | State management — one store per feature      |
+| Vitest                | 4.1.10   | Unit and component test runner                |
+| Testing Library React | 16.3.2   | Behavioral component testing                  |
+| Oxlint                | 1.71.0   | Rust-based linting                            |
+| Prettier              | 3.9.5    | Code formatter                                |
+| jsdom                 | 29.1.1   | Browser environment for tests                 |
+| Playwright            | 1.61.1   | E2E tests — full user flow (manual trigger)   |
+| PWA                   | Manifest | Installable as mobile app (offline-ready)     |
+| GitHub Actions        | CI/CD    | Quality (format+lint+typecheck+tests) → Build |
+| pnpm                  | —        | Fast, disk-efficient package manager          |
+
+## Installation and Running
+
+```bash
+# Install
+git clone <repo-url>
+cd nutre-fit-dia
+pnpm install
+
+# Development
+pnpm dev            # HTTP on localhost (no cert needed)
+
+# Tests (TDD)
+pnpm test:run       # Unit and component tests
+pnpm test:coverage  # With coverage
+pnpm test:e2e       # End-to-end tests with Playwright
+pnpm test:e2e:ui    # E2E interactive mode
+
+# Quality
+pnpm quality        # format:check + lint + typecheck + tests
+pnpm verify         # quality + build</repo-url>
+```
 
 ## Project Structure
 
@@ -69,7 +95,7 @@ src/
 │       └── SustainabilityView.tsx        # UI: sustainability tabs
 ├── shared/
 │   ├── constants/clinical.ts             # 14 clinical thresholds (AESAN/WHO/PREDIMED-Plus)
-│   ├── data/foods.ts                     # 34-food AESAN catalog
+│   ├── data/foods.ts                     # 39-food AESAN catalog
 │   ├── domain/                           # FoodCategory, Food (Zod), TrafficLight, Notification
 │   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
 │   ├── hooks/                            # Cross-feature hooks
@@ -109,7 +135,7 @@ Core principles and development rules live in dedicated, modular files — loade
 | ------------------------------------ | ---------------------------------------------------------------------------------------------- |
 | [`skills/`](skills/)                 | Development rules: Scope Rule, TDD, DDD, architecture decisions, code smells, work methodology |
 | [`adr/`](adr/)                       | 11 Architecture Decision Records with traceability matrix                                      |
-| [`openspec/specs/`](openspec/specs/) | 24 domain specifications (spec-driven development)                                             |
+| [`openspec/specs/`](openspec/specs/) | 37 domain specifications (spec-driven development)                                             |
 | [`docs/domain/`](docs/domain/)       | DDD analysis: bounded contexts, polysemy detection, semantic untangling                        |
 
 ### Implementation Phases (Complete ✅)
@@ -117,7 +143,7 @@ Core principles and development rules live in dedicated, modular files — loade
 1. **Domain Modeling** — Strict types: metabolic profiles, AESAN portions, food types, notifications
 2. **Domain Services & Containers** — erMedDiet logic, Container/Presentational split, Zustand stores
 3. **ADR Scaffolding** — ScannerAdapter, Activity Tracker, Sustainability, Nudge Engine
-4. **Tests & Error Handling** — 580 tests (60 files), 100% lines coverage, i18n ES/EN, ErrorBoundary
+4. **Tests & Error Handling** — 680 tests (66 files), 99.4% lines coverage, i18n ES/EN, ErrorBoundary
 5. **E2E & Accessibility** — Playwright smoke tests, WCAG 2.1 AA compliance
 
 ### Clinical Foundation
@@ -163,6 +189,3 @@ Push/PR → ✅ Quality Gate → 🏗️ Build
 | Runtime validation            | Zod schemas on all inputs                                                             |
 | HTML sanitation               | No `dangerouslySetInnerHTML`, no `eval()`                                             |
 | HTTPS                         | HTTP on localhost (dev) + GitHub Pages HTTPS (prod) + CSP `upgrade-insecure-requests` |
-
-</div>
-```

@@ -3,7 +3,8 @@ import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import { ValidationError } from '@shared/errors';
-import { computeIMC, parseNumeric } from '@shared/utils';
+import { parseNumeric } from '@shared/utils';
+import { computeIMC, validateProfile } from '@shared/services/profileService';
 import {
   computeCaloricTarget,
   type CaloricTargetOutput,
@@ -13,6 +14,9 @@ import {
   detectIMCThresholdCrossing,
   recordGlucose,
 } from '@shared/services/biomarkerTrackingService';
+import type { Translations } from '@shared/i18n/types';
+import { es as DEFAULT_TRANSLATIONS } from '@shared/i18n/es';
+import { type GlucoseInput, GlucoseInput as coerceGlucoseInput } from '@shared/domain/glucoseInput';
 
 const genderSchema = z.enum(['male', 'female']);
 
@@ -51,12 +55,12 @@ interface TrackerState {
   setHeight: (v: string) => void;
   setAge: (v: string) => void;
   setDiagnosisAge: (v: string) => void;
-  setGender: (v: string) => void;
+  setGender: (v: string, translate?: Translations) => void;
   setPaf: (v: string) => void;
   setGlucose: (v: string) => void;
   setGlucoseContext: (v: 'fasting' | 'postprandial') => void;
   setRestrictionActive: (v: boolean) => void;
-  calculateTarget: () => void;
+  calculateTarget: (translate?: Translations) => void;
 }
 
 export const useTrackerStore = create<TrackerState>()(
@@ -79,15 +83,17 @@ export const useTrackerStore = create<TrackerState>()(
       setAge: (v) => set({ age: v }),
       setDiagnosisAge: (v) => set({ diagnosisAge: v }),
 
-      setGender: (v) => {
+      setGender: (v, translate) => {
+        const t = translate ?? DEFAULT_TRANSLATIONS;
         try {
           const parsed = genderSchema.parse(v);
           set({ gender: parsed, profileError: null });
         } catch (e) {
           set({
-            profileError: new ValidationError(`Género no válido: ${(e as Error).message}`, {
-              value: v,
-            }),
+            profileError: new ValidationError(
+              t['errors.invalidGender'].replace('{gender}', (e as Error).message),
+              { value: v },
+            ),
           });
         }
       },
@@ -97,7 +103,8 @@ export const useTrackerStore = create<TrackerState>()(
       setGlucoseContext: (v) => set({ glucoseContext: v }),
       setRestrictionActive: (v) => set({ restrictionActive: v }),
 
-      calculateTarget: () => {
+      calculateTarget: (translate) => {
+        const t = translate ?? DEFAULT_TRANSLATIONS;
         const { weight, height, age, diagnosisAge, gender, paf, glucose, glucoseContext } = get();
 
         let w: number, h: number, a: number, p: number, da: number;
@@ -112,17 +119,9 @@ export const useTrackerStore = create<TrackerState>()(
             profileError:
               e instanceof ValidationError
                 ? e
-                : new ValidationError(`Error al procesar: ${(e as Error).message}`),
-          });
-          return;
-        }
-
-        if (da > a) {
-          set({
-            profileError: new ValidationError(
-              'La edad de diagnóstico no puede ser mayor que la edad actual',
-              { diagnosisAge: da, currentAge: a },
-            ),
+                : new ValidationError(
+                    t['errors.processingError'].replace('{message}', (e as Error).message),
+                  ),
           });
           return;
         }
@@ -131,17 +130,37 @@ export const useTrackerStore = create<TrackerState>()(
         const glucoseTrimmed = glucose.trim();
         if (glucoseTrimmed === '') {
           set({
-            profileError: new ValidationError(
-              'La glucosa es obligatoria para calcular el perfil metabólico',
-            ),
+            profileError: new ValidationError(t['errors.glucoseRequiredForMetabolicProfile']),
           });
           return;
         }
 
-        const g = parseFloat(glucoseTrimmed);
-        if (Number.isNaN(g) || g <= 0) {
+        const rawGlucose = parseFloat(glucoseTrimmed);
+        const g: GlucoseInput = coerceGlucoseInput(rawGlucose);
+        if (g <= 0) {
           set({
-            profileError: new ValidationError('La glucosa debe ser un valor positivo (mg/dL)'),
+            profileError: new ValidationError(t['errors.glucoseMustBePositive']),
+          });
+          return;
+        }
+
+        // Delegate domain validation to profileService (pure function)
+        const validation = validateProfile({
+          weight: w,
+          height: h,
+          age: a,
+          diagnosisAge: da,
+          gender,
+          glucose: g,
+          physicalActivityFactor: p,
+        });
+
+        if (validation.errors.some((e) => e.field === 'diagnosisAge')) {
+          set({
+            profileError: new ValidationError(t['errors.diagnosisAgeExceedsCurrentAge'], {
+              diagnosisAge: da,
+              currentAge: a,
+            }),
           });
           return;
         }
@@ -165,9 +184,9 @@ export const useTrackerStore = create<TrackerState>()(
         const crossing = detectIMCThresholdCrossing();
         const crossedMessage =
           crossing === 'crossed_above'
-            ? 'IMC ha superado 25 — restricción calórica activada'
+            ? t['errors.imcThresholdCrossedUp']
             : crossing === 'crossed_below'
-              ? 'IMC ha bajado de 25 — restricción calórica desactivada'
+              ? t['errors.imcThresholdCrossedDown']
               : null;
 
         set({

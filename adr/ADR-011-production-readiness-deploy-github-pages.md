@@ -1,6 +1,6 @@
 # ADR-011: Production Readiness — Deployment Strategy & Supabase V2
 
-**Status:** proposed
+**Status:** Accepted
 **Date:** 2026-07-25
 **Deciders:** darkmagic76, gentle-orchestrator
 

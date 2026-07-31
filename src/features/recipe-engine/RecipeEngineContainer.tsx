@@ -1,18 +1,21 @@
+import { useT } from '@shared/i18n';
 import { usePlanStore } from '@shared/stores/planStore';
 import { useTrackerStore } from '@shared/stores';
-import { PlanView } from './PlanView';
+import { RecipeEngineView } from './RecipeEngineView';
 
 export function RecipeEngineContainer() {
+  const t = useT();
   const { weeklyPlan, generatePlan } = usePlanStore();
   const { restrictionActive, setRestrictionActive, caloricTarget } = useTrackerStore();
 
   return (
-    <PlanView
+    <RecipeEngineView
       restrictionActive={restrictionActive}
       caloricTarget={caloricTarget}
       weeklyPlan={weeklyPlan}
       onToggleRestriction={setRestrictionActive}
       onGeneratePlan={generatePlan}
+      translate={t}
     />
   );
 }

@@ -8,30 +8,38 @@
 
 | # | Requirement | Keyword |
 |---|-------------|---------|
-| R1 | `useExportData()` MUST return `exportAllData()` function | MUST |
+| R1 | `useExportData()` MUST return `exportAllData()` function; `usePlanStore` MUST be imported from `@shared/stores/planStore` | MUST |
 | R2 | `exportAllData()` MUST aggregate all persisted stores into one JSON object | MUST |
 | R3 | Exported JSON MUST trigger a browser download via `Blob` + `<a download>` | MUST |
 | R4 | Offline-first: export MUST work without internet | MUST |
 
 ### R1: Hook API
 
-`useExportData()` SHALL return `{ exportAllData, isExporting }` where `isExporting` is `true` during serialization.
+`useExportData()` SHALL return `{ exportAllData, isExporting }` where `isExporting` is `true` during serialization. `useExportData()` SHALL import `usePlanStore` from `@shared/stores/planStore`. The hook API (`{ exportAllData, isExporting }`) SHALL remain unchanged.
 
 #### Scenario: Hook returns export function
 
 - GIVEN `useExportData()` is called in a component
 - WHEN the component renders
 - THEN `exportAllData` SHALL be a callable function
+- AND `isExporting` SHALL be `false`
 
 ### R2: Data Aggregation
 
-`exportAllData()` MUST call `getState()` on trackerStore, logStore, nudgeStore, activityStore, planStore, and biomarkerStore. Output SHALL include `tracker`, `log`, `nudge`, `activity`, `plan`, `biomarkerHistory`, and `exportedAt` (ISO timestamp).
+`exportAllData()` MUST call `getState()` on trackerStore, logStore, nudgeStore, activityStore, planStore, and biomarkerStore. `usePlanStore` MUST be imported from `@shared/stores/planStore` (not `@features/recipe-engine/planStore`). Output SHALL include `tracker`, `log`, `nudge`, `activity`, `plan`, `biomarkerHistory`, and `exportedAt` (ISO timestamp).
 
 #### Scenario: All stores included
 
-- GIVEN trackerStore has weight=80, logStore has 3 food items
+- GIVEN trackerStore has weight=80, planStore has a 7-day plan
 - WHEN `exportAllData()` is called
-- THEN JSON SHALL contain `tracker.weight: "80"`, `log.todayLog` with 3 items, and `exportedAt`
+- THEN JSON SHALL contain `tracker.weight: "80"`, `plan.weeklyPlan` with plan data, and `exportedAt`
+
+#### Scenario: Export format unchanged after refactor
+
+- GIVEN all stores have data
+- WHEN `exportData` is called
+- THEN the JSON output structure SHALL match the pre-refactor format exactly
+- AND all six top-level keys (`tracker`, `log`, `nudge`, `activity`, `plan`, `biomarkerHistory`) SHALL be present
 
 #### Scenario: Empty stores produce valid JSON
 

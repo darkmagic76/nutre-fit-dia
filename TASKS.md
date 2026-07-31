@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `develop` | Tests: 680 ✅ (66 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.6% Stmts / 100% Funcs / 99.3% Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN
+Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `develop` | Tests: 680 ✅ (66 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.63% Stmts / 100% Funcs / 99.35% Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN
 
 ---
 
@@ -15,7 +15,7 @@ Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `develop` | Tests: 680 �
 | Domain Types                    | ✅ Implementado — FoodCategory, TrafficLight, Notification, Zod schemas, domain errors                                                                            |
 | UI Primitives                   | ✅ Implementado — 7 componentes con tests unitarios                                                                                                               |
 | Activity Tracker                | ✅ Implementado (H1) — useActivityTracker, compliance %, streak, dashboard tab                                                                                    |
-| Nudge Engine                    | ✅ Completo (H2+H6+H7) — 14 reglas, CooldownTracker, NudgeStore, NudgePanel UI con badge + historial                                                              |
+| Nudge Engine                    | ✅ Completo (H2+H6+H7) — 17 reglas, CooldownTracker, NudgeStore, NudgePanel UI con badge + historial                                                              |
 | Sustainability                  | ✅ Implementado (H3) — computeEnvironmentalScore, PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS, integrado en RecipeEngine (ranking dual)                              |
 | UserProfile + Filtro Fenotípico | ✅ Implementado (C1) — UserProfileSchema (Zod), diagnosisAge, phenotypic filter                                                                                   |
 | Legal Disclaimer                | ✅ Implementado (C3) — RNF-01 banner persistente en Dashboard + Plan                                                                                              |

@@ -117,6 +117,16 @@ export const es: Translations = {
   'error.boundary.retry': 'Reintentar',
   'error.boundary.globalReload': 'Recargar aplicación',
 
+  'errors.invalidGender': 'Género no válido: {gender}',
+  'errors.diagnosisAgeExceedsCurrentAge':
+    'La edad de diagnóstico no puede ser mayor que la edad actual',
+  'errors.glucoseRequiredForMetabolicProfile':
+    'La glucosa es obligatoria para calcular el perfil metabólico',
+  'errors.glucoseMustBePositive': 'La glucosa debe ser un valor positivo (mg/dL)',
+  'errors.imcThresholdCrossedUp': 'IMC ha superado 25 — restricción calórica activada',
+  'errors.imcThresholdCrossedDown': 'IMC ha bajado de 25 — restricción calórica desactivada',
+  'errors.processingError': 'Error al procesar: {message}',
+
   'form.weight': 'Peso (kg)',
   'form.height': 'Altura (cm)',
   'form.age': 'Edad',
