@@ -1,4 +1,4 @@
-import { usePlanStore } from './planStore';
+import { usePlanStore } from '@shared/stores/planStore';
 import { useTrackerStore } from '@shared/stores';
 import { PlanView } from './PlanView';
 
