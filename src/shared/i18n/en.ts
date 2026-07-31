@@ -97,6 +97,13 @@ export const en: Translations = {
   'sustainability.zeroWasteFooter': '♻️ Zero-Waste · 🥕 KM0 / Cosmetic defects',
   'sustainability.emissions': 'Comparative Emissions',
   'sustainability.emissionsDesc': 'kg CO₂eq per kg of food (EAT-Lancet)',
+  'sustainability.emissionLabel.legumes': 'Legumes',
+  'sustainability.emissionLabel.eggs': 'Eggs',
+  'sustainability.emissionLabel.poultry': 'Poultry',
+  'sustainability.emissionLabel.pork': 'Pork',
+  'sustainability.emissionLabel.beef': 'Beef',
+  'sustainability.emissionLabel.fish_white': 'White fish',
+  'sustainability.emissionLabel.fish_blue': 'Blue fish',
 
   'install.title': 'Install app',
   'install.dismiss': 'Dismiss',
@@ -108,6 +115,15 @@ export const en: Translations = {
   'error.boundary.description': 'An unexpected error occurred while rendering this section.',
   'error.boundary.retry': 'Retry',
   'error.boundary.globalReload': 'Reload application',
+
+  'errors.invalidGender': 'Invalid gender: {gender}',
+  'errors.diagnosisAgeExceedsCurrentAge': 'Diagnosis age cannot exceed current age',
+  'errors.glucoseRequiredForMetabolicProfile':
+    'Glucose is required to calculate the metabolic profile',
+  'errors.glucoseMustBePositive': 'Glucose must be a positive value (mg/dL)',
+  'errors.imcThresholdCrossedUp': 'BMI has exceeded 25 — caloric restriction activated',
+  'errors.imcThresholdCrossedDown': 'BMI has dropped below 25 — caloric restriction deactivated',
+  'errors.processingError': 'Processing error: {message}',
 
   'form.weight': 'Weight (kg)',
   'form.height': 'Height (cm)',

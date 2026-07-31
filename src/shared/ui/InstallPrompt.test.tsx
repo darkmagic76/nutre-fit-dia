@@ -108,16 +108,15 @@ describe('InstallPrompt', () => {
     render(
       <InstallPrompt isInstallable={true} onInstall={() => {}} onDismiss={() => {}} t={baseT} />,
     );
-    expect(screen.getByTestId('install-prompt')).toBeInTheDocument();
-    expect(screen.getByTestId('install-button')).toBeInTheDocument();
-    expect(screen.getByTestId('dismiss-button')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /install app/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /dismiss/i })).toBeInTheDocument();
   });
 
   it('does not render when isInstallable=false', () => {
     render(
       <InstallPrompt isInstallable={false} onInstall={() => {}} onDismiss={() => {}} t={baseT} />,
     );
-    expect(screen.queryByTestId('install-prompt')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /install app/i })).not.toBeInTheDocument();
   });
 
   it('click dismiss calls onDismiss', () => {
@@ -125,7 +124,7 @@ describe('InstallPrompt', () => {
     render(
       <InstallPrompt isInstallable={true} onInstall={() => {}} onDismiss={onDismiss} t={baseT} />,
     );
-    fireEvent.click(screen.getByTestId('dismiss-button'));
+    fireEvent.click(screen.getByRole('button', { name: /dismiss/i }));
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
 });

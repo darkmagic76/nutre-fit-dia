@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import { useT } from '@shared/i18n';
 import { useActivityTracker } from './hooks/useActivityTracker';
 import { evaluateAndEnqueue } from '@shared/nudge';
 import { ActivityTrackerView } from './ActivityTrackerView';
+import { ModerateMinutes } from './types';
 
 export function ActivityTrackerContainer() {
+  const t = useT();
   const {
     weeklyMinutes,
     strengthSessions,
@@ -20,7 +23,7 @@ export function ActivityTrackerContainer() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const mm = Number(minutes) || 0;
+    const mm = ModerateMinutes(Number(minutes));
     const ss = Number(sessions) || 0;
     if (mm > 0 || ss > 0) {
       addEntry({ moderateMinutes: mm, strengthSessions: ss });
@@ -36,6 +39,7 @@ export function ActivityTrackerContainer() {
       stats={{ weeklyMinutes, strengthSessions, compliance, streak, meetsModerate, meetsStrength }}
       form={{ minutes, sessions, onMinutesChange: setMinutes, onSessionsChange: setSessions }}
       onSubmit={handleSubmit}
+      translate={t}
     />
   );
 }

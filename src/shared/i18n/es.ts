@@ -98,6 +98,13 @@ export const es: Translations = {
   'sustainability.zeroWasteFooter': '♻️ Zero-Waste · 🥕 KM0 / Defectos estéticos',
   'sustainability.emissions': 'Emisiones Comparativas',
   'sustainability.emissionsDesc': 'kg CO₂eq por kg de alimento (EAT-Lancet)',
+  'sustainability.emissionLabel.legumes': 'Legumbres',
+  'sustainability.emissionLabel.eggs': 'Huevos',
+  'sustainability.emissionLabel.poultry': 'Aves',
+  'sustainability.emissionLabel.pork': 'Cerdo',
+  'sustainability.emissionLabel.beef': 'Ternera',
+  'sustainability.emissionLabel.fish_white': 'Pescado blanco',
+  'sustainability.emissionLabel.fish_blue': 'Pescado azul',
 
   'install.title': 'Instalar app',
   'install.dismiss': 'Cerrar',
@@ -109,6 +116,16 @@ export const es: Translations = {
   'error.boundary.description': 'Ocurrió un error inesperado al renderizar esta sección.',
   'error.boundary.retry': 'Reintentar',
   'error.boundary.globalReload': 'Recargar aplicación',
+
+  'errors.invalidGender': 'Género no válido: {gender}',
+  'errors.diagnosisAgeExceedsCurrentAge':
+    'La edad de diagnóstico no puede ser mayor que la edad actual',
+  'errors.glucoseRequiredForMetabolicProfile':
+    'La glucosa es obligatoria para calcular el perfil metabólico',
+  'errors.glucoseMustBePositive': 'La glucosa debe ser un valor positivo (mg/dL)',
+  'errors.imcThresholdCrossedUp': 'IMC ha superado 25 — restricción calórica activada',
+  'errors.imcThresholdCrossedDown': 'IMC ha bajado de 25 — restricción calórica desactivada',
+  'errors.processingError': 'Error al procesar: {message}',
 
   'form.weight': 'Peso (kg)',
   'form.height': 'Altura (cm)',

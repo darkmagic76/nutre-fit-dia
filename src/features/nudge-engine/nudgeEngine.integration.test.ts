@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from './engine';
+import { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from '@shared/nudge/engine';
 import { CooldownTracker } from '@shared/nudge';
-import { NUDGE_RULES } from './rules';
+import { NUDGE_RULES } from '@shared/nudge/rules';
 import { useTrackerStore, useLogStore } from '@shared/stores';
-import { useNudgeStore } from './store';
+import { useNudgeStore } from '@shared/stores/nudgeStore';
 import { FoodCategory, NotificationType } from '@shared/domain';
 import { makeFood } from '@/test/fixtures';
 
@@ -27,9 +27,10 @@ const vegetableFood = makeFood({
 
 describe('Nudge Engine Integration', () => {
   beforeEach(() => {
+    localStorage.clear();
     useTrackerStore.setState({ restrictionActive: false });
     useLogStore.setState({ todayLog: [] });
-    useNudgeStore.setState({ pending: [], history: [] });
+    useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
   });
 
   it('full pipeline: sets store state, builds context, evaluates rules, returns expected matches', () => {

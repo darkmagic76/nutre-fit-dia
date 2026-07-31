@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useActivityTracker } from './useActivityTracker';
-import { useActivityStore } from '../activityStore';
+import { useActivityStore } from '@shared/stores/activityStore';
 
 describe('useActivityTracker', () => {
   beforeEach(() => {
+    localStorage.clear();
     useActivityStore.getState().resetWeek();
   });
 

@@ -1,15 +1,18 @@
 import { Card } from '@shared/ui';
 import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability';
-import { useT } from '@shared/i18n';
+import type { Translations } from '@shared/i18n';
 
 interface SustainabilityViewProps {
   zeroWasteCount: number;
   totalFoods: number;
+  translate: Translations;
 }
 
-export function SustainabilityView({ zeroWasteCount, totalFoods }: SustainabilityViewProps) {
-  const t = useT();
-
+export function SustainabilityView({
+  zeroWasteCount,
+  totalFoods,
+  translate: t,
+}: SustainabilityViewProps) {
   return (
     <Card title={t['sustainability.title']} description={t['sustainability.description']}>
       <div className="space-y-4 text-sm" role="region" aria-label={t['sustainability.title']}>
@@ -60,7 +63,9 @@ export function SustainabilityView({ zeroWasteCount, totalFoods }: Sustainabilit
                 key={key}
                 className="flex justify-between bg-stone-50 dark:bg-zinc-700/60 px-2 py-1 rounded"
               >
-                <span className="text-stone-600 dark:text-zinc-400">{key}</span>
+                <span className="text-stone-600 dark:text-zinc-400">
+                  {t[`sustainability.emissionLabel.${key}` as keyof typeof t]}
+                </span>
                 <span className="font-mono text-stone-800 dark:text-zinc-200">
                   {value.toFixed(1)}
                 </span>

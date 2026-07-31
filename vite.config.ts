@@ -2,11 +2,11 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import basicSsl from '@vitejs/plugin-basic-ssl';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'node:path';
 
 export default defineConfig({
+  base: process.env.VITE_BASE_URL || '/nutre-fit-dia/',
   plugins: [
     react(),
     tailwindcss(),
@@ -19,20 +19,9 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/[a-z]*\.supabase\.co\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'supabase-api',
-              expiration: { maxEntries: 50, maxAgeSeconds: 86400 },
-              networkTimeoutSeconds: 10,
-            },
-          },
-        ],
+        runtimeCaching: [],
       },
     }),
-    ...(process.env.NO_HTTPS ? [] : [basicSsl({ name: 'localhost' })]),
   ],
   resolve: {
     alias: {
@@ -47,6 +36,9 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: true,
+    env: {
+      VITE_STORAGE_PREFIX: 'nutrefitdia',
+    },
     exclude: ['e2e/**', 'node_modules/**'],
     coverage: {
       provider: 'v8',
@@ -66,6 +58,13 @@ export default defineConfig({
         functions: 100,
         lines: 80,
       },
+    },
+  },
+  server: {
+    headers: {
+      // Dev-mode relaxed CSP — allows Vite HMR WebSocket while keeping security
+      'Content-Security-Policy':
+        "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' ws://localhost:* wss://localhost:*; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
     },
   },
 });

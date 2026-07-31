@@ -3,7 +3,7 @@ import {
   validateRations,
   validateWeeklyRations,
   countRations,
-  emptyCounts,
+  defaultRationCounts,
   RATION_LIMITS,
   AESAN_GRAM_STANDARDS,
   validateFoodPortions,
@@ -13,7 +13,7 @@ import type { CountByCategory } from './rationValidator';
 import { makeEntries, makeFood } from '@/test/fixtures';
 
 function countsWith(overrides: Partial<CountByCategory> = {}): CountByCategory {
-  return { ...emptyCounts(), ...overrides };
+  return { ...defaultRationCounts(), ...overrides };
 }
 
 describe('rationValidator', () => {
@@ -231,12 +231,12 @@ describe('rationValidator', () => {
 
   describe('CountByCategory', () => {
     it('includes RED_MEAT key defaulting to 0', () => {
-      const counts = emptyCounts();
+      const counts = defaultRationCounts();
       expect(counts[FoodCategory.RED_MEAT]).toBe(0);
     });
 
     it('has RED_MEAT key in interface (type-level check verified at runtime)', () => {
-      const counts = emptyCounts();
+      const counts = defaultRationCounts();
       expect(Object.keys(counts)).toContain(FoodCategory.RED_MEAT);
     });
   });

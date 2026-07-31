@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { NUDGE_RULES } from './rules';
+import { NUDGE_RULES } from '@shared/nudge/rules';
 import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits';
-import { emptyCounts } from '@shared/services/rationValidator';
+import { defaultRationCounts } from '@shared/services/rationValidator';
 import { FoodCategory } from '@shared/domain';
 import type { NudgeContext } from '@shared/nudge';
 
@@ -9,7 +9,7 @@ function makeContext(overrides: Partial<NudgeContext> = {}): NudgeContext {
   return {
     restrictionActive: false,
     animalProteinCount: 0,
-    counts: emptyCounts(),
+    counts: defaultRationCounts(),
     containsHighGlycemicFruit: false,
     currentHour: 12,
     latestGlucose: null,
@@ -37,7 +37,7 @@ describe('NUDGE_RULES', () => {
     it('fires when restrictionActive and CEREALS > 4', () => {
       const ctx = makeContext({
         restrictionActive: true,
-        counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
+        counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5 },
       });
       expect(rule!.condition(ctx)).toBe(true);
     });
@@ -45,7 +45,7 @@ describe('NUDGE_RULES', () => {
     it('does NOT fire when restrictionActive is false despite high cereals', () => {
       const ctx = makeContext({
         restrictionActive: false,
-        counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 5 },
+        counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5 },
       });
       expect(rule!.condition(ctx)).toBe(false);
     });
@@ -53,7 +53,7 @@ describe('NUDGE_RULES', () => {
     it('does NOT fire when CEREALS = 4 (boundary, ≤4 is within limit)', () => {
       const ctx = makeContext({
         restrictionActive: true,
-        counts: { ...emptyCounts(), [FoodCategory.CEREALS]: 4 },
+        counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 4 },
       });
       expect(rule!.condition(ctx)).toBe(false);
     });
@@ -84,7 +84,7 @@ describe('NUDGE_RULES', () => {
 
     it('fires when VEGETABLES < 3 and hour >= 14', () => {
       const ctx = makeContext({
-        counts: { ...emptyCounts(), [FoodCategory.VEGETABLES]: 2 },
+        counts: { ...defaultRationCounts(), [FoodCategory.VEGETABLES]: 2 },
         currentHour: 20,
       });
       expect(rule!.condition(ctx)).toBe(true);
@@ -92,7 +92,7 @@ describe('NUDGE_RULES', () => {
 
     it('does NOT fire when hour=13 (before afternoon gate)', () => {
       const ctx = makeContext({
-        counts: { ...emptyCounts(), [FoodCategory.VEGETABLES]: 2 },
+        counts: { ...defaultRationCounts(), [FoodCategory.VEGETABLES]: 2 },
         currentHour: 13,
       });
       expect(rule!.condition(ctx)).toBe(false);
@@ -100,7 +100,7 @@ describe('NUDGE_RULES', () => {
 
     it('does NOT fire when VEGETABLES = 3 (sufficient)', () => {
       const ctx = makeContext({
-        counts: { ...emptyCounts(), [FoodCategory.VEGETABLES]: 3 },
+        counts: { ...defaultRationCounts(), [FoodCategory.VEGETABLES]: 3 },
         currentHour: 21,
       });
       expect(rule!.condition(ctx)).toBe(false);
@@ -193,7 +193,10 @@ describe('LEGUMES_GLYCEMIC_BASE', () => {
   it('fires on day >= 4 with legumes < 1', () => {
     expect(
       rule!.condition(
-        makeContext({ dayOfWeek: 5, counts: { ...emptyCounts(), [FoodCategory.LEGUMES]: 0 } }),
+        makeContext({
+          dayOfWeek: 5,
+          counts: { ...defaultRationCounts(), [FoodCategory.LEGUMES]: 0 },
+        }),
       ),
     ).toBe(true);
   });
@@ -214,7 +217,10 @@ describe('EGGS_RED_MEAT_ALT', () => {
   it('fires when RED_MEAT > 0 and no eggs', () => {
     expect(
       rule!.condition(
-        makeContext({ hasEggs: false, counts: { ...emptyCounts(), [FoodCategory.RED_MEAT]: 1 } }),
+        makeContext({
+          hasEggs: false,
+          counts: { ...defaultRationCounts(), [FoodCategory.RED_MEAT]: 1 },
+        }),
       ),
     ).toBe(true);
   });
@@ -222,7 +228,10 @@ describe('EGGS_RED_MEAT_ALT', () => {
   it('does NOT fire on white meat alone (no RED_MEAT)', () => {
     expect(
       rule!.condition(
-        makeContext({ hasEggs: false, counts: { ...emptyCounts(), [FoodCategory.WHITE_MEAT]: 1 } }),
+        makeContext({
+          hasEggs: false,
+          counts: { ...defaultRationCounts(), [FoodCategory.WHITE_MEAT]: 1 },
+        }),
       ),
     ).toBe(false);
   });
@@ -230,7 +239,10 @@ describe('EGGS_RED_MEAT_ALT', () => {
   it('does NOT fire when eggs present even with RED_MEAT', () => {
     expect(
       rule!.condition(
-        makeContext({ hasEggs: true, counts: { ...emptyCounts(), [FoodCategory.RED_MEAT]: 1 } }),
+        makeContext({
+          hasEggs: true,
+          counts: { ...defaultRationCounts(), [FoodCategory.RED_MEAT]: 1 },
+        }),
       ),
     ).toBe(false);
   });
@@ -242,7 +254,11 @@ describe('WHITE_MEAT_RESTRICT', () => {
     expect(
       rule!.condition(
         makeContext({
-          counts: { ...emptyCounts(), [FoodCategory.FISH]: 8, [FoodCategory.WHITE_MEAT]: 1 },
+          counts: {
+            ...defaultRationCounts(),
+            [FoodCategory.FISH]: 8,
+            [FoodCategory.WHITE_MEAT]: 1,
+          },
         }),
       ),
     ).toBe(true);
@@ -251,7 +267,11 @@ describe('WHITE_MEAT_RESTRICT', () => {
     expect(
       rule!.condition(
         makeContext({
-          counts: { ...emptyCounts(), [FoodCategory.FISH]: 7, [FoodCategory.WHITE_MEAT]: 1 },
+          counts: {
+            ...defaultRationCounts(),
+            [FoodCategory.FISH]: 7,
+            [FoodCategory.WHITE_MEAT]: 1,
+          },
         }),
       ),
     ).toBe(false);

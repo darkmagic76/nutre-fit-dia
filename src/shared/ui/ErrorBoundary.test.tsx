@@ -14,20 +14,19 @@ function Thrower({ msg = 'test render error' }: { msg?: string }) {
 function NestedThrower({ depth = 3 }: { depth?: number }) {
   if (depth <= 1) throw new Error(`nested error at depth ${depth}`);
   return (
-    <div data-testid="depth-wrapper">
+    <div>
       <NestedThrower depth={depth - 1} />
     </div>
   );
 }
 
 function StableChild({ label = 'OK' }: { label?: string }) {
-  return <p data-testid="stable">{label}</p>;
+  return <p>{label}</p>;
 }
 
 function BrokenOnClickThrower() {
   return (
     <button
-      data-testid="sync-throw-btn"
       onClick={() => {
         throw new Error('sync click error');
       }}
@@ -44,7 +43,7 @@ function AsyncThrower() {
     }, 0);
     return () => clearTimeout(id);
   }, []);
-  return <p data-testid="async-loaded">Async loaded</p>;
+  return <p>Async loaded</p>;
 }
 
 function PromiseRejector() {
@@ -53,7 +52,7 @@ function PromiseRejector() {
       /* swallow in test so it doesn't become unhandled */
     });
   }, []);
-  return <p data-testid="promise-loaded">Promise loaded</p>;
+  return <p>Promise loaded</p>;
 }
 
 function CleanupThrower({ onMount }: { onMount?: () => void }) {
@@ -63,7 +62,7 @@ function CleanupThrower({ onMount }: { onMount?: () => void }) {
       throw new Error('cleanup error');
     };
   }, [onMount]);
-  return <p data-testid="cleanup-loaded">Cleanup loaded</p>;
+  return <p>Cleanup loaded</p>;
 }
 
 /* suppress React's own console.error for caught errors in tests */
@@ -92,7 +91,7 @@ describe('ErrorBoundary', () => {
         <StableChild label="Hello World" />
       </ErrorBoundary>,
     );
-    expect(screen.getByTestId('stable')).toHaveTextContent('Hello World');
+    expect(screen.getByText('Hello World')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
@@ -121,11 +120,11 @@ describe('ErrorBoundary', () => {
 
   it('renders a custom fallback when provided via the fallback prop', () => {
     render(
-      <ErrorBoundary fallback={<div data-testid="custom">Custom error UI</div>}>
+      <ErrorBoundary fallback={<div>Custom error UI</div>}>
         <Thrower />
       </ErrorBoundary>,
     );
-    expect(screen.getByTestId('custom')).toHaveTextContent('Custom error UI');
+    expect(screen.getByText('Custom error UI')).toBeInTheDocument();
     expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
   });
 
@@ -137,7 +136,7 @@ describe('ErrorBoundary', () => {
 
     function ConditionalThrower() {
       if (shouldThrow) throw new Error('first render error');
-      return <p data-testid="recovered">Recovered!</p>;
+      return <p>Recovered!</p>;
     }
 
     const { rerender } = render(
@@ -170,7 +169,7 @@ describe('ErrorBoundary', () => {
     );
 
     // after retry, children should be visible again
-    expect(screen.getByTestId('recovered')).toHaveTextContent('Recovered!');
+    expect(screen.getByText('Recovered!')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
@@ -180,7 +179,7 @@ describe('ErrorBoundary', () => {
 
     function ConditionalThrower() {
       if (shouldThrow) throw new Error('conditional error');
-      return <p data-testid="finally-ok">Finally OK</p>;
+      return <p>Finally OK</p>;
     }
 
     const { rerender } = render(
@@ -215,7 +214,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByTestId('finally-ok')).toHaveTextContent('Finally OK');
+    expect(screen.getByText('Finally OK')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 
@@ -239,7 +238,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    const btn = screen.getByTestId('sync-throw-btn');
+    const btn = screen.getByRole('button', { name: 'Throw sync' });
     fireEvent.click(btn);
 
     // Fallback should NOT appear — ErrorBoundary didn't intercept
@@ -257,7 +256,7 @@ describe('ErrorBoundary', () => {
     );
 
     // Component renders successfully (async throw hasn't fired yet)
-    expect(screen.getByTestId('async-loaded')).toBeInTheDocument();
+    expect(screen.getByText('Async loaded')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
     // The setTimeout error would fire after this test completes.
@@ -275,7 +274,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByTestId('promise-loaded')).toBeInTheDocument();
+    expect(screen.getByText('Promise loaded')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
 
     spy.mockRestore();
@@ -293,7 +292,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByTestId('cleanup-loaded')).toBeInTheDocument();
+    expect(screen.getByText('Cleanup loaded')).toBeInTheDocument();
     expect(onMount).toHaveBeenCalled();
     // No fallback visible before unmount
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
@@ -407,7 +406,7 @@ describe('ErrorBoundary', () => {
 
     function ExternallyControlled({ cause }: { cause: boolean }) {
       if (cause) throw new Error('controlled error');
-      return <p data-testid="clean">Clean render</p>;
+      return <p>Clean render</p>;
     }
 
     const { rerender } = render(
@@ -437,7 +436,7 @@ describe('ErrorBoundary', () => {
     await user.click(screen.getByRole('button', { name: /retry/i }));
 
     // After retry, children render cleanly
-    expect(screen.getByTestId('clean')).toHaveTextContent('Clean render');
+    expect(screen.getByText('Clean render')).toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 

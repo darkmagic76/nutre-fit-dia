@@ -13,6 +13,22 @@ export const TAB_IDS: Tab[] = [
   'sustainability',
 ];
 
+const STORAGE_KEY = 'nutrefitdia-activeTab';
+
+function isValidTab(value: string): value is Tab {
+  return (TAB_IDS as string[]).includes(value);
+}
+
+function readTab(): Tab {
+  try {
+    const stored = sessionStorage.getItem(STORAGE_KEY);
+    if (stored && isValidTab(stored)) return stored;
+  } catch {
+    // sessionStorage unavailable (SSR, privacy mode) — fall back to default
+  }
+  return 'scanner';
+}
+
 export const TAB_ICONS: Record<Tab, string> = {
   scanner: '🔍',
   log: '📝',
@@ -24,7 +40,16 @@ export const TAB_ICONS: Record<Tab, string> = {
 };
 
 export function useTabNavigation() {
-  const [tab, setTab] = useState<Tab>('scanner');
+  const [tab, setTabState] = useState<Tab>(readTab);
+
+  const setTab = useCallback((next: Tab) => {
+    try {
+      sessionStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // sessionStorage write failed — state still updates for current session
+    }
+    setTabState(next);
+  }, []);
 
   const handleKeyNav = useCallback(
     (e: KeyboardEvent) => {
@@ -38,7 +63,7 @@ export function useTabNavigation() {
         setTab(TAB_IDS[(currentIndex - 1 + TAB_IDS.length) % TAB_IDS.length]);
       }
     },
-    [tab],
+    [tab, setTab],
   );
 
   useEffect(() => {

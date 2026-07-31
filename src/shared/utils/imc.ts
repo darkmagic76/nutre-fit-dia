@@ -8,6 +8,7 @@ export const IMC_OVERWEIGHT = 30;
  * Formula: weight(kg) / (height(m))²
  */
 export function computeIMC(weightKg: number, heightCm: number): number {
+  if (weightKg <= 0 || heightCm <= 0) return NaN;
   return Math.round((weightKg / (heightCm / 100) ** 2) * 10) / 10;
 }
 
