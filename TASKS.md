@@ -1,31 +1,32 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-24 | Rama: `develop` | Tests: 578 ✅ (59 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 99.76% Stmts / 100% Funcs / 100% Lines | Formatter: Prettier | HTTPS: ✅ | CI/CD: ✅ | i18n: ✅ ES/EN
+Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `develop` | Tests: 680 ✅ (66 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.6% Stmts / 100% Funcs / 99.3% Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN
 
 ---
 
 ## Estado Actual
 
-| Capa                            | Estado                                                                                                                                                   |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Nutritional Traffic Light       | ✅ Implementado (FR-3.1, FR-3.2) — classificationService + occultSugarDetector, 22 tests                                                                 |
-| Metabolic Tracker               | ✅ Implementado (FR-4.2, RF-02) — caloricTargetService con déficit condicional IMC > 25                                                                  |
-| Med Diet Validator              | ✅ Implementado — rationValidator cross-feature, DailyLog con Container/Presentational                                                                   |
-| Recipe Engine                   | ✅ Implementado — planGenerator + PlanContainer, sustainability badges, fraccionamiento 3-6 tomas (M7)                                                   |
-| Domain Types                    | ✅ Implementado — FoodCategory, TrafficLight, Notification, Zod schemas, domain errors                                                                   |
-| UI Primitives                   | ✅ Implementado — 7 componentes con tests unitarios                                                                                                      |
-| Activity Tracker                | ✅ Implementado (H1) — useActivityTracker, compliance %, streak, dashboard tab                                                                           |
-| Nudge Engine                    | ✅ Completo (H2+H6+H7) — 14 reglas, CooldownTracker, NudgeStore, NudgePanel UI con badge + historial                                                     |
-| Sustainability                  | ✅ Implementado (H3) — computeEnvironmentalScore, PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS, integrado en RecipeEngine (ranking dual)                     |
-| UserProfile + Filtro Fenotípico | ✅ Implementado (C1) — UserProfileSchema (Zod), diagnosisAge, phenotypic filter                                                                          |
-| Legal Disclaimer                | ✅ Implementado (C3) — RNF-01 banner persistente en Dashboard + Plan                                                                                     |
-| SafetyAlert UI                  | ✅ Implementado (C4) — SafetyAlertDisplay, high-glycemic fruit detection                                                                                 |
-| Biomarker Tracking              | ✅ Implementado (C5) — GlucoseReading, WeightReading, IMC threshold crossing, getTrend                                                                   |
-| HTTPS Transport (OWASP 2025)    | ✅ Implementado (RNF-04) — `@vitejs/plugin-basic-ssl` + CSP `upgrade-insecure-requests`, `pnpm dev:http` fallback, infra-only                            |
-| Vegetable Nudge Timegate UX     | ✅ Implementado — DailyViolations informa al usuario por qué el nudge de hortalizas se activa a partir de las 14:00 (REQ-VEGETABLES-DEFICIT)             |
-| Coverage Zombie Cleanup         | ✅ Implementado — 4 archivos zombies eliminados de `features/nudge-engine/`, 5 imports corregidos a `@shared/nudge`                                      |
-| i18n Violation Messages (ES/EN) | ✅ Implementado — `formatViolation()` utility, 8 nuevas claves i18n, violaciones y safety alerts en inglés y español, `CATEGORY_DISPLAY_NAMES` deprecado |
-| Statement Coverage 100% Lines   | ✅ Implementado — 3 archivos a 100% statements (ErrorBoundary, ScannerView, installPrompt, rationValidator, planGenerator), 17 tests nuevos              |
+| Capa                            | Estado                                                                                                                                                            |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nutritional Traffic Light       | ✅ Implementado (FR-3.1, FR-3.2) — classificationService + occultSugarDetector, 22 tests                                                                          |
+| Metabolic Tracker               | ✅ Implementado (FR-4.2, RF-02) — caloricTargetService con déficit condicional IMC > 25                                                                           |
+| Med Diet Validator              | ✅ Implementado — rationValidator cross-feature, DailyLog con Container/Presentational                                                                            |
+| Recipe Engine                   | ✅ Implementado — planGenerator + PlanContainer, sustainability badges, fraccionamiento 3-6 tomas (M7)                                                            |
+| Domain Types                    | ✅ Implementado — FoodCategory, TrafficLight, Notification, Zod schemas, domain errors                                                                            |
+| UI Primitives                   | ✅ Implementado — 7 componentes con tests unitarios                                                                                                               |
+| Activity Tracker                | ✅ Implementado (H1) — useActivityTracker, compliance %, streak, dashboard tab                                                                                    |
+| Nudge Engine                    | ✅ Completo (H2+H6+H7) — 14 reglas, CooldownTracker, NudgeStore, NudgePanel UI con badge + historial                                                              |
+| Sustainability                  | ✅ Implementado (H3) — computeEnvironmentalScore, PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS, integrado en RecipeEngine (ranking dual)                              |
+| UserProfile + Filtro Fenotípico | ✅ Implementado (C1) — UserProfileSchema (Zod), diagnosisAge, phenotypic filter                                                                                   |
+| Legal Disclaimer                | ✅ Implementado (C3) — RNF-01 banner persistente en Dashboard + Plan                                                                                              |
+| SafetyAlert UI                  | ✅ Implementado (C4) — SafetyAlertDisplay, high-glycemic fruit detection                                                                                          |
+| Biomarker Tracking              | ✅ Implementado (C5) — GlucoseReading, WeightReading, IMC threshold crossing, getTrend                                                                            |
+| Offline Persistence             | ✅ Implementado (H8) — 6 stores con Zustand persist, AES-256-GCM en datos de salud, Zod Mapper.toDomain() en onRehydrateStorage, export JSON, cooldown persistido |
+| HTTPS Transport (OWASP 2025)    | ✅ Implementado (RNF-04) — HTTP localhost dev, GitHub Pages HTTPS prod, CSP `upgrade-insecure-requests`                                                           |
+| Vegetable Nudge Timegate UX     | ✅ Implementado — DailyViolations informa al usuario por qué el nudge de hortalizas se activa a partir de las 14:00 (REQ-VEGETABLES-DEFICIT)                      |
+| Coverage Zombie Cleanup         | ✅ Implementado — 4 archivos zombies eliminados de `features/nudge-engine/`, 5 imports corregidos a `@shared/nudge`                                               |
+| i18n Violation Messages (ES/EN) | ✅ Implementado — `formatViolation()` utility, 8 nuevas claves i18n, violaciones y safety alerts en inglés y español, `CATEGORY_DISPLAY_NAMES` deprecado          |
+| Statement Coverage 100% Lines   | ✅ Implementado — 3 archivos a 100% statements (ErrorBoundary, ScannerView, installPrompt, rationValidator, planGenerator), 17 tests nuevos                       |
 
 ---
 
@@ -71,14 +72,15 @@ Generado: 2026-07-17 | Actualizado: 2026-07-24 | Rama: `develop` | Tests: 578 �
 
 ### LOW — Pulido y experiencia
 
-| #      | Tarea                       | ADR / Fuente       | Descripción                                                                                                                                                                                                                                            | Esfuerzo | Dependencias |
-| ------ | --------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------------ |
-| **L1** | **Bacalao Priority Tag**    | SPECS_TECH         | ✅ **Completado** — `isHighPriority: true` en FoodSchema + Bacalao. `pickSustainableFood()` prioriza high-priority foods sobre environmental score. 2 tests nuevos.                                                                                    | XS       | Ninguna      |
-| **L2** | **Dashboard Unificado**     | —                  | ✅ **Completado** — Nueva feature `sustainability/` con Container/Presentational (emisiones, zero-waste, scoring). Tab "🌍 Eco" integrado. Nav responsive: iconos en mobile, icono+label en desktop. `overflow-x-auto` + `flex-wrap`. 4 tests.         | L        | H1, H4, H7   |
-| **L3** | **i18n ES/EN**              | —                  | ✅ **Completado** — Infraestructura i18n con React Context tipado (`useT()`). Archivos `es.ts` + `en.ts` con 60+ claves. App shell, PlanView, SustainabilityView, LegalDisclaimer y ViolationList traducidos. Nav responsive con labels i18n. 4 tests. | L        | Ninguna      |
-| **L4** | **E2E Smoke Tests**         | —                  | ✅ **Completado** — Playwright instalado + chromium. 3 smoke tests: flujo completo (scan→classify→log→plan), procesado ROJO, perfil metabólico. `playwright.config.ts` + `e2e/smoke.spec.ts`. Scripts: `test:e2e`, `test:e2e:ui`.                      | M        | L2           |
-| **L5** | **A11y Audit**              | RNF-03             | ✅ **Completado** — Emojis decorativos con `aria-hidden`. Sin tabindex positivos. Heading hierarchy correcto (h1→h2→h3). Roles ARIA en tabs, alerts, status. Labels en botones y formularios. Min-height 44px en interactivos.                         | M        | Ninguna      |
-| **L6** | **HTTPS Transport (OWASP)** | RNF-04, README §11 | ✅ **Completado** — `@vitejs/plugin-basic-ssl` v2.3.0 (certificados auto-generados vía `node:crypto`). CSP `upgrade-insecure-requests`. `pnpm dev` = HTTPS por defecto, `pnpm dev:http` = fallback HTTP. Infraestructura pluggable sin tocar dominio.  | S        | Ninguna      |
+| #      | Tarea                       | ADR / Fuente | Descripción                                                                                                                                                                                                                                            | Esfuerzo | Dependencias |
+| ------ | --------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------------ |
+| **L1** | **Bacalao Priority Tag**    | SPECS_TECH   | ✅ **Completado** — `isHighPriority: true` en FoodSchema + Bacalao. `pickSustainableFood()` prioriza high-priority foods sobre environmental score. 2 tests nuevos.                                                                                    | XS       | Ninguna      |
+| **L2** | **Dashboard Unificado**     | —            | ✅ **Completado** — Nueva feature `sustainability/` con Container/Presentational (emisiones, zero-waste, scoring). Tab "🌍 Eco" integrado. Nav responsive: iconos en mobile, icono+label en desktop. `overflow-x-auto` + `flex-wrap`. 4 tests.         | L        | H1, H4, H7   |
+| **L3** | **i18n ES/EN**              | —            | ✅ **Completado** — Infraestructura i18n con React Context tipado (`useT()`). Archivos `es.ts` + `en.ts` con 60+ claves. App shell, PlanView, SustainabilityView, LegalDisclaimer y ViolationList traducidos. Nav responsive con labels i18n. 4 tests. | L        | Ninguna      |
+| **L4** | **E2E Smoke Tests**         | —            | ✅ **Completado** — Playwright instalado + chromium. 3 smoke tests: flujo completo (scan→classify→log→plan), procesado ROJO, perfil metabólico. `playwright.config.ts` + `e2e/smoke.spec.ts`. Scripts: `test:e2e`, `test:e2e:ui`.                      | M        | L2           |
+| **L5** | **A11y Audit**              | RNF-03       | ✅ **Completado** — Emojis decorativos con `aria-hidden`. Sin tabindex positivos. Heading hierarchy correcto (h1→h2→h3). Roles ARIA en tabs, alerts, status. Labels en botones y formularios. Min-height 44px en interactivos.                         | M        | Ninguna      |
+| **L6** | **HTTPS Transport (OWASP)** | RNF-04       | ✅ **Completado** — HTTP localhost dev, GitHub Pages HTTPS prod. CSP `upgrade-insecure-requests`. Infraestructura pluggable sin tocar dominio.                                                                                                         | S        | Ninguna      |
+| **H8** | **Offline Persistence**     | ADR-011      | ✅ **Completado** — 6 stores con Zustand persist + AES-256-GCM (datos de salud) + Zod onRehydrateStorage (Mapper.toDomain). biomarkerStore, cooldown persistido, data export JSON, locale/tab localStorage. 680 tests (66 files).                      | XL       | C5, H2, H6   |
 
 ---
 
@@ -104,7 +106,7 @@ Fase 4 — Pulido (LOW)
 
 ## Notas
 
-- **578 tests verdes (59 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
+- **680 tests verdes (66 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
 - **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module. Motor de nudge extraído a `src/shared/nudge/` (2026-07-23).
 - **Infra**: `tsconfig.app.json` excluye tests del build. Husky activo: pre-commit (lint) + pre-push (quality). `coverage/` en `.gitignore`.
 - **i18n**: 0 strings hardcodeados. Categorías de alimento (11 keys) con traducción ES/EN. `AOVE` se mantiene como término clínico en ambos idiomas.

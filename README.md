@@ -20,11 +20,10 @@
   (format+lint+typecheck+tests) → Build | | pnpm | — | Fast, disk-efficient package manager | ##
   Installation and Running ```bash # Install git clone
   <repo-url>
-    cd nutre-fit-dia pnpm install # Development pnpm dev # HTTPS (self-signed cert via
-    @vitejs/plugin-basic-ssl) pnpm dev:http # HTTP without cert (debug only) # Tests (TDD) pnpm
-    test:run # Unit and component tests pnpm test:coverage # With coverage pnpm test:e2e #
-    End-to-end tests with Playwright pnpm test:e2e:ui # E2E interactive mode # Quality pnpm quality
-    # format:check + lint + typecheck + tests pnpm verify # quality + build</repo-url
+    cd nutre-fit-dia pnpm install # Development pnpm dev # HTTP on localhost (no cert needed) #
+    Tests (TDD) pnpm test:run # Unit and component tests pnpm test:coverage # With coverage pnpm
+    test:e2e # End-to-end tests with Playwright pnpm test:e2e:ui # E2E interactive mode # Quality
+    pnpm quality # format:check + lint + typecheck + tests pnpm verify # quality + build</repo-url
   >
 </div>
 ````
@@ -152,18 +151,18 @@ Push/PR → ✅ Quality Gate → 🏗️ Build
 
 ## 11. OWASP 2025 Security
 
-| Control                       | Implementation                                                                                                                  |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| CSP (Content-Security-Policy) | `default-src 'self'`, no inline scripts, frame-ancestors 'none'                                                                 |
-| X-Content-Type-Options        | `nosniff` — prevents MIME sniffing                                                                                              |
-| Referrer-Policy               | `strict-origin-when-cross-origin`                                                                                               |
-| Permissions-Policy            | Camera, geolocation, microphone disabled                                                                                        |
-| Base-uri                      | `'self'` — prevents < base > injection                                                                                          |
-| Form-action                   | `'self'` — prevents form hijacking                                                                                              |
-| Security.txt                  | `/.well-known/security.txt` (RFC 9116)                                                                                          |
-| Runtime validation            | Zod schemas on all inputs                                                                                                       |
-| HTML sanitation               | No `dangerouslySetInnerHTML`, no `eval()`                                                                                       |
-| HTTPS                         | `@vitejs/plugin-basic-ssl` (default, via `pnpm dev`) + `pnpm dev:http` (fallback without TLS) + CSP `upgrade-insecure-requests` |
+| Control                       | Implementation                                                                        |
+| ----------------------------- | ------------------------------------------------------------------------------------- |
+| CSP (Content-Security-Policy) | `default-src 'self'`, no inline scripts, frame-ancestors 'none'                       |
+| X-Content-Type-Options        | `nosniff` — prevents MIME sniffing                                                    |
+| Referrer-Policy               | `strict-origin-when-cross-origin`                                                     |
+| Permissions-Policy            | Camera, geolocation, microphone disabled                                              |
+| Base-uri                      | `'self'` — prevents < base > injection                                                |
+| Form-action                   | `'self'` — prevents form hijacking                                                    |
+| Security.txt                  | `/.well-known/security.txt` (RFC 9116)                                                |
+| Runtime validation            | Zod schemas on all inputs                                                             |
+| HTML sanitation               | No `dangerouslySetInnerHTML`, no `eval()`                                             |
+| HTTPS                         | HTTP on localhost (dev) + GitHub Pages HTTPS (prod) + CSP `upgrade-insecure-requests` |
 
 </div>
 ```
