@@ -14,7 +14,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: 22
 
       - uses: pnpm/action-setup@v4
         with:
@@ -25,3 +25,12 @@ jobs:
       - run: pnpm quality
 
       - run: pnpm build
+
+      - name: Deploy staging (develop)
+        if: github.ref == 'refs/heads/develop'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          destination_dir: staging
+          keep_files: true
