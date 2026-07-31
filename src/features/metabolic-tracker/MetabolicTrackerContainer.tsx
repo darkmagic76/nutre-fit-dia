@@ -1,9 +1,11 @@
 import { useTrackerStore } from '@shared/stores';
+import { useT } from '@shared/i18n';
 import { evaluateAndEnqueue } from '@shared/nudge';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import type { FormEvent } from 'react';
 
 export function MetabolicTrackerContainer() {
+  const t = useT();
   const {
     weight,
     height,
@@ -59,6 +61,7 @@ export function MetabolicTrackerContainer() {
       profileError={profileError}
       canCalculate={canCalculate}
       onCalculate={handleCalculate}
+      translate={t}
     />
   );
 }

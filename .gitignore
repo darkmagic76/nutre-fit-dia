@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 coverage
+*_es.md
 
 # Environment
 .env
@@ -31,9 +32,8 @@ session-ses_*
 *.sln
 *.sw?
 
-# Engram generated
-.atl/.skill-registry.cache.json
-.atl/skill-registry.md
+# Auto-generated
+/.atl/
 /sdd/
 
 # PWA generated service workers

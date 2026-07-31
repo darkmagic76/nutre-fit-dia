@@ -1,4 +1,4 @@
-import { useT } from '@shared/i18n';
+import type { Translations } from '@shared/i18n';
 import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
 import { Card } from '@shared/ui';
 import type { ValidationError } from '@shared/errors';
@@ -14,6 +14,7 @@ interface MetabolicTrackerViewProps {
   profileError: ValidationError | null;
   canCalculate: boolean;
   onCalculate: (e: FormEvent) => void;
+  translate: Translations;
 }
 
 export function MetabolicTrackerView({
@@ -22,8 +23,8 @@ export function MetabolicTrackerView({
   profileError,
   canCalculate,
   onCalculate,
+  translate: t,
 }: MetabolicTrackerViewProps) {
-  const t = useT();
   return (
     <Card title={t['metabolic.title']} description={t['metabolic.descriptionDetail']}>
       <ProfileForm form={form} onSubmit={onCalculate} canSubmit={canCalculate} />

@@ -1,14 +1,16 @@
 import { useState } from 'react';
+import { useT } from '@shared/i18n';
 import { foodsById } from '@shared/data/foods';
 import { classifyFoodWithReasons } from './services/classificationService';
 import { checkSafetyAlerts } from './services/safetyCheck';
 import { useLogStore } from '@shared/stores';
 import { evaluateAndEnqueue } from '@shared/nudge';
 import { useFoodName } from '@shared/hooks/useFoodName';
-import { ScannerView } from './ScannerView';
+import { NutritionalTrafficLightView } from './NutritionalTrafficLightView';
 import type { SafetyAlert } from '@shared/services/rationValidator';
 
 export function NutritionalTrafficLightContainer() {
+  const t = useT();
   const [selectedId, setSelectedId] = useState('');
   const [result, setResult] = useState<ReturnType<typeof classifyFoodWithReasons> | null>(null);
   const [safetyAlerts, setSafetyAlerts] = useState<SafetyAlert[]>([]);
@@ -46,7 +48,7 @@ export function NutritionalTrafficLightContainer() {
   };
 
   return (
-    <ScannerView
+    <NutritionalTrafficLightView
       selectedId={selectedId}
       options={options}
       selected={selected ?? null}
@@ -57,6 +59,7 @@ export function NutritionalTrafficLightContainer() {
       onClassify={handleClassify}
       onAddToLog={handleAddToLog}
       onAcknowledgeAlert={handleAcknowledge}
+      translate={t}
     />
   );
 }

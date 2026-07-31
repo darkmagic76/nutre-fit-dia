@@ -112,9 +112,6 @@ export function evaluateRules(
     }));
 }
 
-/** Singleton cooldown tracker — persists across evaluateAndEnqueue calls */
-const cooldownTracker = new CooldownTracker();
-
 /**
  * Full pipeline: resolve stale nudges → build context → evaluate rules → enqueue notifications → register cooldowns.
  *
@@ -126,10 +123,13 @@ const cooldownTracker = new CooldownTracker();
  * This ensures nudges disappear when the user corrects the underlying condition
  * (e.g., drinking enough water clears the hydration nudge, eating enough vegetables clears the vegetable nudge).
  * SAFETY_ALERTs are excluded — they persist until explicitly acknowledged by the user.
+ *
+ * Cooldown state is persisted in nudgeStore; the CooldownTracker instance is a thin stateless adapter.
  */
 export function evaluateAndEnqueue(food?: Food): void {
   const ctx = buildNudgeContext(food);
   const { enqueue, acknowledge, pending } = useNudgeStore.getState();
+  const cooldown = new CooldownTracker();
 
   // 1. Auto-resolve stale nudges: any non-safety pending nudge whose rule condition is no longer met
   for (const nudge of pending) {
@@ -142,11 +142,11 @@ export function evaluateAndEnqueue(food?: Food): void {
   }
 
   // 2. Evaluate rules against current context
-  const results = evaluateRules(ctx, NUDGE_RULES, cooldownTracker);
+  const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
 
   // 3. Enqueue new notifications
   for (const result of results) {
     enqueue(result.notification);
-    cooldownTracker.register(result.rule.id);
+    cooldown.register(result.rule.id);
   }
 }

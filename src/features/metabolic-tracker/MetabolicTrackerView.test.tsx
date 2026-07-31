@@ -4,6 +4,7 @@ import { MetabolicTrackerView } from './MetabolicTrackerView';
 import { makeCaloricTargetOutput, makeMetricsFormState } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { ValidationError } from '@shared/errors';
+import { es } from '@shared/i18n/es';
 import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
 import type { ValidationError as ValidationErrorType } from '@shared/errors';
 
@@ -21,6 +22,7 @@ describe('MetabolicTrackerView', () => {
         caloricTarget={caloricTarget}
         profileError={profileError}
         onCalculate={onCalculate}
+        translate={es}
       />,
     );
 

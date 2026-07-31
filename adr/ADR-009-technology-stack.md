@@ -1,8 +1,10 @@
-# ADR-009: Technology Stack — SPA + Supabase + PWA
+# ADR-009: Technology Stack — SPA + PWA
 
-**Status:** Accepted  
+**Status:** Superseded (by ADR-011)  
 **Date:** 2026-07-15  
 **Deciders:** darkmagic76, gentle-orchestrator
+
+> **Note:** Superseded by [ADR-011](./ADR-011-production-readiness-deploy-github-pages.md) for hosting and backend. Supabase is deferred to V2. This ADR retains the original frontend, state management, PWA, and food catalog decisions which remain valid. Backend, hosting, and CI/CD sections below reflect the current reality after ADR-011.
 
 ## Context
 
@@ -12,7 +14,31 @@ This ADR ratifies the declared frontend stack and fills the gaps with decisions 
 
 ## Decision
 
-### Architecture: SPA + BaaS
+### Architecture: Static SPA + PWA (current per ADR-011)
+
+```
+┌─────────────────────────────────────────────┐
+│  Browser (PWA)                              │
+│  ┌──────────┐ ┌──────────┐ ┌─────────────┐ │
+│  │  React   │ │ Zustand  │ │ Scanner      │ │
+│  │  19 SPA  │◄┤ stores   │◄┤ (mock/ONNX)  │ │
+│  └────┬─────┘ └──────────┘ └─────────────┘ │
+│       │                                     │
+│       │ localStorage / in-memory data       │
+│       │ (no backend — static SPA)           │
+└───────┼─────────────────────────────────────┘
+        │
+        │ HTTPS
+┌───────┼─────────────────────────────────────┐
+│  GitHub Pages (static hosting)              │
+│  ┌───────────────────────────────────────┐  │
+│  │ dist/ → HTML + JS + CSS + SW          │  │
+│  └───────────────────────────────────────┘  │
+└─────────────────────────────────────────────┘
+```
+
+<details>
+<summary>Original architecture (superseded by ADR-011)</summary>
 
 ```
 ┌─────────────────────────────────────────────┐
@@ -32,6 +58,8 @@ This ADR ratifies the declared frontend stack and fills the gaps with decisions 
 └─────────────────────────────────────────────┘
 ```
 
+</details>
+
 ### Frontend (Ratified from README)
 
 | Technology      | Version | Role                                                 |
@@ -47,9 +75,18 @@ This ADR ratifies the declared frontend stack and fills the gaps with decisions 
 | jsdom           | 29.1.1  | Browser environment for tests                        |
 | pnpm            | —       | Package manager                                      |
 
-### Backend: Supabase
+### Backend: No backend — static SPA (current per ADR-011)
 
-**Why Supabase over alternatives:**
+The application has **zero backend dependencies**. All data lives on the client:
+
+- **Zustand stores** for application state — persisted to `localStorage`
+- **Static food catalog** in `src/shared/data/` — imported at build time
+- **No authentication** — single-device, local-only usage for TFM scope
+
+> **Original rationale (superseded):** Supabase was selected for its PostgreSQL database, built-in auth, Row Level Security, and free tier. ADR-011 determined that a static SPA better serves the TFM scope — offline-first is a clinical feature for T2D patients without internet. Supabase integration is deferred to V2 via ports/adapters pattern.
+
+<details>
+<summary>Original backend decision (superseded by ADR-011)</summary>
 
 | Criterion          | Supabase                                          | Firebase             | Custom Express    | None (localStorage) |
 | ------------------ | ------------------------------------------------- | -------------------- | ----------------- | ------------------- |
@@ -62,23 +99,11 @@ This ADR ratifies the declared frontend stack and fills the gaps with decisions 
 
 **Why relational matters**: the domain model is inherently relational — users have profiles, profiles have glucose readings, plans contain recipes, recipes contain foods, foods belong to categories, dietitians validate plans. PostgreSQL models this naturally. Firestore's document model would force denormalization and compound queries for cross-feature operations.
 
-**Auth roles**:
+**Auth roles** (deferred to V2): `patient` (self-registration), `dietitian` (manual invite, validates plans). Both roles were to be enforced via Supabase Row Level Security policies.
 
-- `patient` — default role, self-registration
-- `dietitian` — assigned manually or via invite, validates plans
-- Both roles enforced via Supabase Row Level Security policies
+**Supabase services planned**: `supabase-js` SDK, Auth (email/password, magic link), PostgreSQL, Storage.
 
-**Supabase services used**:
-
-- `supabase-js` SDK (client-side, anon key)
-- Auth (email/password, magic link)
-- PostgreSQL (data tables, RLS policies)
-- Storage (recipe images, food photos)
-
-**Services NOT used in V1**:
-
-- Edge Functions (no serverless compute needed for TFM)
-- Realtime (deferred to V2 for dietitian notifications)
+</details>
 
 ### State Management: Zustand
 
@@ -136,41 +161,46 @@ The README references `shared/data/foods.ts` with 34 items. For TFM:
 
 This is a deliberate TFM tradeoff: static catalog avoids backend complexity for the demo while keeping the domain model intact.
 
-### CI/CD: GitHub Actions
+### CI/CD: GitHub Actions (current per ADR-011)
 
-| Workflow                | Trigger            | Actions                                        |
-| ----------------------- | ------------------ | ---------------------------------------------- |
-| `quality.yml`           | Push to any branch | `pnpm lint`, `pnpm typecheck`, `pnpm test:run` |
-| `deploy-preview.yml`    | PR to `develop`    | Build + deploy to Vercel preview URL           |
-| `deploy-staging.yml`    | Push to `staging`  | Build + deploy to staging environment          |
-| `deploy-production.yml` | Push to `main`     | Build + deploy to production                   |
+| Workflow     | Trigger                         | Actions                                        |
+| ------------ | ------------------------------- | ---------------------------------------------- |
+| `ci.yml`     | Push to `develop`, PR to `main` | `pnpm lint`, `pnpm typecheck`, `pnpm test:run` |
+| `deploy.yml` | Push to `main`                  | Build + deploy to GitHub Pages                 |
 
-**Hosting**: Vercel (free tier, optimal for Vite SPA, preview deployments per PR).
+**Hosting**: GitHub Pages (free tier, static site hosting, HTTPS enforced). Deployed from `dist/` via GitHub Actions.
 
-### Development Workflow
+> **Original CI/CD (superseded):** Four workflows were planned (`quality.yml`, `deploy-preview.yml`, `deploy-staging.yml`, `deploy-production.yml`) with Vercel hosting. ADR-011 consolidated to two workflows (`ci.yml` + `deploy.yml`) and switched from Vercel to GitHub Pages to keep deployment on the same platform as CI/CD and avoid vendor-specific features.
+
+### Development Workflow (current per ADR-011)
 
 ```
-feature/*  →  develop  →  staging  →  main
-   │              │           │          │
-   │         PR checks    manual QA   production
-   │         + preview    + smoke     deploy
-   └────────── quality gate on every push ──────────┘
+feature/*  →  develop  →  main
+   │             │          │
+   │         CI gate    deploy to
+   │         (ci.yml)   GitHub Pages
+   │                     (deploy.yml)
+   └────────── quality gate on PRs ─────────┘
 ```
 
 Per ADR-001 and conventional commits, feature branches follow Screaming Architecture naming: `feat/scanner-dual-qualification`, `fix/nudge-cooldown-overflow`.
 
-## Consequences
+## Consequences (updated per ADR-011)
 
-- ✅ Zero-cost deploy: Supabase free tier + Vercel hobby = $0/month for TFM
-- ✅ Relational integrity: PostgreSQL enforces clinical data constraints at the database level
-- ✅ Auth + roles from day one: patient/dietitian distinction enables Human-in-the-loop (SPECS_TECH §5)
+- ✅ Zero-cost deploy: GitHub Pages free tier = $0/month for TFM
+- ✅ Zero vendor lock-in: `dist/` is a portable artifact deployable to any CDN
+- ✅ Offline-first is a clinical feature: static catalog + localStorage works without internet
+- ✅ Static SPA has minimal attack surface (no server, no database, no auth servers)
 - ✅ PWA camera access: ScannerAdapter can use real `getUserMedia()` in browser, not just mock
 - ✅ Zustand stores aligned to feature boundaries: no accidental coupling, per ADR-001
-- ❌ Supabase vendor lock-in: migration to custom backend requires rewriting auth + data layer
-- ❌ Static food catalog: outdated data requires a deploy, not a database update
-- ❌ No offline-first: PWA caches but doesn't sync — acceptable for TFM, insufficient for production
+- ❌ No auth: patient data lives only on their device (privacy = feature, sync = V2)
+- ❌ No multi-device: each device has independent state
+- ❌ Static food catalog: expanding the catalog requires a deploy, not a database update
+- ❌ No offline sync: PWA caches but doesn't sync — acceptable for TFM, insufficient for production
 
-## Traceability
+> **Original consequences (superseded):** Supabase vendor lock-in was a concern; now eliminated entirely. Vercel hosting replaced by GitHub Pages for zero vendor lock-in.
+
+## Traceability (updated per ADR-011)
 
 | Requirement                              | Covered by                                        |
 | ---------------------------------------- | ------------------------------------------------- |
@@ -178,6 +208,7 @@ Per ADR-001 and conventional commits, feature branches follow Screaming Architec
 | ADR-002 (Zod + TS6)                      | Ratified in stack                                 |
 | ADR-003 (ScannerAdapter)                 | PWA camera via `getUserMedia()`                   |
 | ADR-006 (Activity V1 manual)             | PWA, no native Health APIs                        |
-| SPECS_TECH §5 (Human-in-the-loop)        | Supabase Auth roles (patient/dietitian)           |
-| SPECS_RF RNF-01 (validación profesional) | Dietitian role + RLS policies                     |
-| TFM deployability                        | Vercel + Supabase free tiers                      |
+| ADR-011 (Production Readiness)           | GitHub Pages hosting, Supabase deferred to V2     |
+| SPECS_TECH §5 (Human-in-the-loop)        | Deferred to V2 (dietitian dashboard via Supabase) |
+| SPECS_RF RNF-01 (validación profesional) | Deferred to V2 (dietitian role + Supabase auth)   |
+| TFM deployability                        | GitHub Pages free tier                            |

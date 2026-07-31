@@ -9,6 +9,28 @@ import type { Translations } from '@shared/i18n/types';
  *
  * Daily limits: per-day constraints (most groups)
  * Weekly limits: per-week constraints (legumes, fish, eggs, white meat)
+ *
+ * ## "validation" polysemy note
+ *
+ * The term "validation" appears with 3 distinct meanings in this codebase:
+ *
+ * 1. **Ration-rule checks** (THIS file): `validateRations()`, `countRations()`,
+ *    `validateFoodPortions()` — checks whether daily/weekly food intake complies
+ *    with AESAN 2022 clinical ration limits. This is *clinical rule validation*,
+ *    not input validation.
+ *
+ * 2. **Form/domain validation** (`src/shared/errors.ts` \{
+ *    @link ValidationError}): user-input validation failures (missing required
+ *    fields, out-of-range values, invalid profile data). Raised when raw user input
+ *    fails structural checks before any domain processing.
+ *
+ * 3. **UI violation display** (`src/features/med-diet-validator/components/
+ *    DailyViolations.tsx`): "violations" in the UI context means rendering ration
+ *    limit breaches to the user as visual feedback — *display* of clinical
+ *    rule failures, not the check itself.
+ *
+ * When reading code in this module, "validation" always means definition #1
+ * (ration-rule checks against AESAN 2022 limits).
  */
 
 export interface RationLimit {
@@ -104,7 +126,7 @@ export interface CountByCategory {
   [FoodCategory.WATER]: number;
 }
 
-export function emptyCounts(): CountByCategory {
+export function defaultRationCounts(): CountByCategory {
   return {
     [FoodCategory.CEREALS]: 0,
     [FoodCategory.VEGETABLES]: 0,
@@ -122,7 +144,7 @@ export function emptyCounts(): CountByCategory {
 
 /** Count rations per category from a list of food entries */
 export function countRations(entries: Food[]): CountByCategory {
-  const counts = emptyCounts();
+  const counts = defaultRationCounts();
   for (const food of entries) {
     counts[food.category] += 1;
   }

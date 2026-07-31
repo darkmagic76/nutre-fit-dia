@@ -137,6 +137,13 @@ export interface Translations {
   'sustainability.zeroWasteFooter': string;
   'sustainability.emissions': string;
   'sustainability.emissionsDesc': string;
+  'sustainability.emissionLabel.legumes': string;
+  'sustainability.emissionLabel.eggs': string;
+  'sustainability.emissionLabel.poultry': string;
+  'sustainability.emissionLabel.pork': string;
+  'sustainability.emissionLabel.beef': string;
+  'sustainability.emissionLabel.fish_white': string;
+  'sustainability.emissionLabel.fish_blue': string;
 
   // Cultural / UNESCO
   'cultural.socialEating': string;
@@ -174,6 +181,15 @@ export interface Translations {
   'error.boundary.description': string;
   'error.boundary.retry': string;
   'error.boundary.globalReload': string;
+
+  // Errors — tracker / validation
+  'errors.invalidGender': string;
+  'errors.diagnosisAgeExceedsCurrentAge': string;
+  'errors.glucoseRequiredForMetabolicProfile': string;
+  'errors.glucoseMustBePositive': string;
+  'errors.imcThresholdCrossedUp': string;
+  'errors.imcThresholdCrossedDown': string;
+  'errors.processingError': string;
 
   // Legal
   'legal.disclaimer': string;

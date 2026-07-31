@@ -1,4 +1,4 @@
-import { useT } from '@shared/i18n';
+import type { Translations } from '@shared/i18n';
 import { Card, NumberField, PrimaryButton } from '@shared/ui';
 import type { FormEvent } from 'react';
 
@@ -22,10 +22,15 @@ interface ActivityTrackerViewProps {
   stats: ActivityStats;
   form: ActivityForm;
   onSubmit: (e: FormEvent) => void;
+  translate: Translations;
 }
 
-export function ActivityTrackerView({ stats, form, onSubmit }: ActivityTrackerViewProps) {
-  const t = useT();
+export function ActivityTrackerView({
+  stats,
+  form,
+  onSubmit,
+  translate: t,
+}: ActivityTrackerViewProps) {
   const complianceColor =
     stats.compliance === 100
       ? 'text-emerald-600 dark:text-emerald-400'

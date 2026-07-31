@@ -1,14 +1,20 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { I18nProvider } from './I18nContext';
 import { useT, useLocale } from './useT';
 import { createElement, type ReactNode } from 'react';
+
+const STORAGE_KEY = 'nutrefitdia-locale';
 
 function wrapper({ children }: { children: ReactNode }) {
   return createElement(I18nProvider, null, children);
 }
 
 describe('I18nContext', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
   it('provides Spanish translations by default', () => {
     const { result } = renderHook(() => useT(), { wrapper });
     expect(result.current['app.title']).toBe('NutreFitDia');
@@ -49,5 +55,30 @@ describe('I18nContext', () => {
     const enKeys = Object.keys(result.current.t).sort();
     expect(esKeys).toEqual(enKeys);
     expect(esKeys.length).toBeGreaterThan(50);
+  });
+
+  // --- Locale persistence via localStorage ---
+
+  it('persists locale to localStorage when changed', () => {
+    const { result } = renderHook(() => useLocale(), { wrapper });
+
+    act(() => result.current.setLocale('en'));
+
+    expect(localStorage.getItem(STORAGE_KEY)).toBe('en');
+  });
+
+  it('hydrates locale from localStorage on mount', () => {
+    // Pre-seed localStorage with English
+    localStorage.setItem(STORAGE_KEY, 'en');
+
+    // New provider mount — should read from localStorage
+    const { result } = renderHook(() => useT(), { wrapper });
+
+    expect(result.current['tab.scanner']).toBe('Traffic Light');
+  });
+
+  it('defaults to Spanish when localStorage is empty', () => {
+    const { result } = renderHook(() => useLocale(), { wrapper });
+    expect(result.current.locale).toBe('es');
   });
 });
