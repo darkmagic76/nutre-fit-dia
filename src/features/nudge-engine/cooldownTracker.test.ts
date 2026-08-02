@@ -1,6 +1,16 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CooldownTracker } from '@shared/nudge';
+import type { CooldownOps } from '@shared/nudge';
 import { useNudgeStore } from '@shared/stores';
+
+/** Build CooldownOps backed by the real persisted nudgeStore (integration test). */
+function storeOps(): CooldownOps {
+  return {
+    registerCooldown: (id, timestamp) => useNudgeStore.getState().registerCooldown(id, timestamp),
+    getCooldowns: () => useNudgeStore.getState().cooldowns,
+    resetCooldown: (id) => useNudgeStore.getState().resetCooldown(id),
+  };
+}
 
 describe('CooldownTracker', () => {
   beforeEach(() => {
@@ -11,7 +21,7 @@ describe('CooldownTracker', () => {
   describe('register / isOnCooldown', () => {
     it('stores cooldowns in nudgeStore persisted state', () => {
       let now = 0;
-      const tracker = new CooldownTracker(() => now);
+      const tracker = new CooldownTracker(storeOps(), () => now);
       tracker.register('R1');
 
       // VERIFY: cooldowns are stored in nudgeStore's persisted state, not an internal Map
@@ -20,9 +30,8 @@ describe('CooldownTracker', () => {
     });
 
     it('blocks within cooldown window and allows after expiry', () => {
-      // now() returns ms like Date.now; cooldownMinutes is in minutes
       let now = 0;
-      const tracker = new CooldownTracker(() => now);
+      const tracker = new CooldownTracker(storeOps(), () => now);
 
       tracker.register('R1');
 
@@ -35,7 +44,7 @@ describe('CooldownTracker', () => {
     });
 
     it('returns false for an unknown rule id', () => {
-      const tracker = new CooldownTracker();
+      const tracker = new CooldownTracker(storeOps());
       expect(tracker.isOnCooldown('unknown', 60)).toBe(false);
     });
   });
@@ -43,7 +52,7 @@ describe('CooldownTracker', () => {
   describe('reset', () => {
     it('clears all entries when called without id', () => {
       let now = 0;
-      const tracker = new CooldownTracker(() => now);
+      const tracker = new CooldownTracker(storeOps(), () => now);
       tracker.register('R1');
       tracker.register('R2');
 
@@ -52,29 +61,26 @@ describe('CooldownTracker', () => {
 
       tracker.reset();
 
-      // After reset, both should be unknown (not on cooldown)
       expect(tracker.isOnCooldown('R1', 60)).toBe(false);
       expect(tracker.isOnCooldown('R2', 60)).toBe(false);
     });
 
     it('clears a single entry when called with id', () => {
       let now = 0;
-      const tracker = new CooldownTracker(() => now);
+      const tracker = new CooldownTracker(storeOps(), () => now);
       tracker.register('R1');
       tracker.register('R2');
 
       tracker.reset('R1');
 
-      // R1 cleared, R2 still on cooldown
       expect(tracker.isOnCooldown('R1', 60)).toBe(false);
       expect(tracker.isOnCooldown('R2', 60)).toBe(true);
     });
   });
 
   it('defaults to Date.now when no factory is provided', () => {
-    const tracker = new CooldownTracker();
+    const tracker = new CooldownTracker(storeOps());
     tracker.register('R-default');
-    // With a large cooldown it should still be active right after registration
     expect(tracker.isOnCooldown('R-default', 1440)).toBe(true);
   });
 });

@@ -1,7 +1,5 @@
 import { computeIMC } from '@shared/utils/imc';
 
-export { computeIMC };
-
 /**
  * Input for profile validation — raw numeric values from form or store.
  */

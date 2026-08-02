@@ -3,7 +3,7 @@ import { useTrackerStore } from '@shared/stores/trackerStore';
 import { useLogStore } from '@shared/stores/logStore';
 import { useNudgeStore } from '@shared/stores/nudgeStore';
 import { useActivityStore } from '@shared/stores/activityStore';
-import { usePlanStore } from '@shared/stores/planStore';
+import { usePlanStore } from '@features/recipe-engine/store/planStore';
 import { useBiomarkerStore } from '@shared/stores/biomarkerStore';
 
 function stripActions<T extends object>(state: T): Partial<T> {

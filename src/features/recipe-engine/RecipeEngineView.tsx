@@ -1,5 +1,5 @@
 import type { Translations } from '@shared/i18n';
-import { useFoodName } from '@shared/hooks/useFoodName';
+import type { Food } from '@shared/domain';
 import { Card, PrimaryButton, ViolationList } from '@shared/ui';
 import { formatViolation } from '@shared/ui/formatters/formatViolation';
 import { MealType, type MealEntry, type WeeklyPlan } from './services/planGenerator';
@@ -35,6 +35,7 @@ interface RecipeEngineViewProps {
   onToggleRestriction: (active: boolean) => void;
   onGeneratePlan: () => void;
   translate: Translations;
+  getFoodName: (food: Pick<Food, 'name'>) => string;
 }
 
 export function RecipeEngineView({
@@ -44,9 +45,8 @@ export function RecipeEngineView({
   onToggleRestriction,
   onGeneratePlan,
   translate: t,
+  getFoodName,
 }: RecipeEngineViewProps) {
-  const getFoodName = useFoodName;
-
   return (
     <Card title={t['plan.title']} description={t['plan.description']}>
       <label className="flex items-center gap-2 text-sm cursor-pointer min-h-[44px]">

@@ -66,6 +66,8 @@ export interface Translations {
   'metabolic.restrictionActive': string;
   'metabolic.noRestriction': string;
   'metabolic.profileError': string;
+  'metabolic.exportData': string;
+  'metabolic.exporting': string;
 
   // Plan
   'plan.title': string;

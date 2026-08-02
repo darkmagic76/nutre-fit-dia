@@ -23,6 +23,9 @@ describe('MetabolicTrackerView', () => {
         profileError={profileError}
         onCalculate={onCalculate}
         translate={es}
+        canCalculate={true}
+        onExportData={vi.fn()}
+        isExporting={false}
       />,
     );
 

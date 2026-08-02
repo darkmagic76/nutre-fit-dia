@@ -1,5 +1,6 @@
 import { useT } from '@shared/i18n';
 import { foods } from '@shared/data/foods';
+import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability';
 import { SustainabilityView } from './SustainabilityView';
 
 export function SustainabilityContainer() {
@@ -8,6 +9,12 @@ export function SustainabilityContainer() {
   const totalFoods = foods.length;
 
   return (
-    <SustainabilityView zeroWasteCount={zeroWasteCount} totalFoods={totalFoods} translate={t} />
+    <SustainabilityView
+      zeroWasteCount={zeroWasteCount}
+      totalFoods={totalFoods}
+      translate={t}
+      scoringWeights={SCORING_WEIGHTS}
+      emissionRatios={PROTEIN_EMISSION_RATIOS}
+    />
   );
 }

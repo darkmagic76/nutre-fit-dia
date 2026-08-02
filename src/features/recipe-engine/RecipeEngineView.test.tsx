@@ -91,6 +91,7 @@ describe('RecipeEngineView', () => {
     onToggleRestriction: vi.fn(),
     onGeneratePlan: vi.fn(),
     translate: es,
+    getFoodName: (food: { name: string }) => food.name,
   };
 
   it('renders checkbox and generate button', () => {

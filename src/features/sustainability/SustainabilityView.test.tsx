@@ -2,13 +2,20 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SustainabilityView } from './SustainabilityView';
 import { es } from '@shared/i18n/es';
+import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability';
 import type { Translations } from '@shared/i18n';
 
 const t = es as Translations;
 
+const defaultProps = {
+  translate: t,
+  scoringWeights: SCORING_WEIGHTS,
+  emissionRatios: PROTEIN_EMISSION_RATIOS,
+};
+
 describe('SustainabilityView', () => {
   it('displays zero-waste count and total foods', () => {
-    render(<SustainabilityView zeroWasteCount={5} totalFoods={42} translate={t} />);
+    render(<SustainabilityView {...defaultProps} zeroWasteCount={5} totalFoods={42} />);
 
     // Zero-waste count should appear
     expect(screen.getByText('5')).toBeInTheDocument();
@@ -20,7 +27,7 @@ describe('SustainabilityView', () => {
   });
 
   it('renders environmental scoring section with weights', () => {
-    render(<SustainabilityView zeroWasteCount={0} totalFoods={10} translate={t} />);
+    render(<SustainabilityView {...defaultProps} zeroWasteCount={0} totalFoods={10} />);
 
     // Carbon footprint weight 50% — text contains "huella de carbono"
     expect(screen.getByText(/huella de carbono/i)).toBeInTheDocument();
@@ -31,7 +38,7 @@ describe('SustainabilityView', () => {
   });
 
   it('displays PROTEIN_EMISSION_RATIOS correctly', () => {
-    render(<SustainabilityView zeroWasteCount={0} totalFoods={10} translate={t} />);
+    render(<SustainabilityView {...defaultProps} zeroWasteCount={0} totalFoods={10} />);
 
     // Check emission labels are rendered
     expect(screen.getByText('Legumbres')).toBeInTheDocument();
@@ -41,7 +48,7 @@ describe('SustainabilityView', () => {
   });
 
   it('renders all three sections (scoring, zero-waste, emissions)', () => {
-    render(<SustainabilityView zeroWasteCount={3} totalFoods={20} translate={t} />);
+    render(<SustainabilityView {...defaultProps} zeroWasteCount={3} totalFoods={20} />);
 
     // Three headings for each section
     expect(screen.getByText(/Puntuación Ambiental/)).toBeInTheDocument();
@@ -50,7 +57,7 @@ describe('SustainabilityView', () => {
   });
 
   it('renders emission ratio values as decimal strings', () => {
-    render(<SustainabilityView zeroWasteCount={0} totalFoods={10} translate={t} />);
+    render(<SustainabilityView {...defaultProps} zeroWasteCount={0} totalFoods={10} />);
 
     // Find the emission values — they're formatted as e.g., "0.8", "4.2", "60.0"
     // Beef has the highest: check for a value around 60
@@ -59,7 +66,7 @@ describe('SustainabilityView', () => {
   });
 
   it('shows "de" separator for zero-waste description', () => {
-    render(<SustainabilityView zeroWasteCount={4} totalFoods={25} translate={t} />);
+    render(<SustainabilityView {...defaultProps} zeroWasteCount={4} totalFoods={25} />);
 
     // The description contains "4 de 25" (or similar zero-waste text)
     expect(screen.getByText('4')).toBeInTheDocument();
@@ -67,7 +74,7 @@ describe('SustainabilityView', () => {
   });
 
   it('renders the card title', () => {
-    render(<SustainabilityView zeroWasteCount={0} totalFoods={0} translate={t} />);
+    render(<SustainabilityView {...defaultProps} zeroWasteCount={0} totalFoods={0} />);
 
     expect(screen.getByText('🌍 Sostenibilidad')).toBeInTheDocument();
   });

@@ -1,25 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { computeIMC, validateProfile, buildProfile } from './profileService';
+import { validateProfile, buildProfile } from './profileService';
 import type { ProfileInput } from './profileService';
 
-// R1: computeIMC — re-exported from @shared/utils/imc
-describe('computeIMC', () => {
-  // Scenario: Standard calculation
-  it('returns BMI for weight 70kg and height 170cm (24.2)', () => {
-    expect(computeIMC(70, 170)).toBe(24.2);
-  });
-
-  // Scenario: Zero or negative input returns NaN
-  it('returns NaN for zero weight', () => {
-    expect(computeIMC(0, 170)).toBeNaN();
-  });
-
-  it('returns NaN for negative height', () => {
-    expect(computeIMC(70, -10)).toBeNaN();
-  });
-});
-
-// R2: validateProfile
 describe('validateProfile', () => {
   const validInput: ProfileInput = {
     weight: 80,

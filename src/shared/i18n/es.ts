@@ -209,6 +209,8 @@ export const es: Translations = {
   'metabolic.descriptionDetail':
     'Protocolo erMedDiet (PREDIMED-Plus): déficit condicional de 600 kcal si IMC > 25. Fórmula Mifflin-St Jeor.',
   'metabolic.formAriaLabel': 'Formulario de perfil metabólico',
+  'metabolic.exportData': '📥 Exportar datos',
+  'metabolic.exporting': 'Exportando...',
 
   // Nudge titles
   'nudge.title.cerealsRestriction': 'Límite de cereales excedido',

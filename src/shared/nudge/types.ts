@@ -1,7 +1,24 @@
 /** ADR-008: Nudge engine contract — rules and context */
 
 import type { CountByCategory } from '@shared/services/rationValidator';
-import type { NotificationSeverity, NotificationType, SystemNotification } from '@shared/domain';
+import type {
+  NotificationSeverity,
+  NotificationType,
+  SystemNotification,
+  Food,
+} from '@shared/domain';
+import type { BiomarkerTrend } from '@shared/services/biomarkerTypes';
+
+// ─── Domain input contracts (engine receives data, never reads stores) ───
+
+/** Pure data input for buildNudgeContext — no framework dependencies. */
+export interface ContextInput {
+  restrictionActive: boolean;
+  todayLog: Food[];
+  weeklyMinutes: number;
+  trends: BiomarkerTrend;
+  food?: Food;
+}
 
 export interface NudgeRule {
   id: string;

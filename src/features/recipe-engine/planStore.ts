@@ -1,2 +1,2 @@
-// Backward-compat barrel — planStore is now a shared store (2+ consumers)
-export { usePlanStore } from '@shared/stores/planStore';
+// planStore is local — single feature consumer (Scope Rule)
+export { usePlanStore } from './store/planStore';

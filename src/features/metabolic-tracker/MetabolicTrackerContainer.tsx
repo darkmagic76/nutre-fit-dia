@@ -1,5 +1,6 @@
 import { useTrackerStore } from '@shared/stores';
 import { useT } from '@shared/i18n';
+import { useExportData } from '@shared/hooks/useExportData';
 import { evaluateAndEnqueue } from '@shared/nudge';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import type { FormEvent } from 'react';
@@ -27,11 +28,11 @@ export function MetabolicTrackerContainer() {
     setGlucoseContext,
     calculateTarget,
   } = useTrackerStore();
+  const { exportAllData, isExporting } = useExportData();
 
   const handleCalculate = (e: FormEvent) => {
     e.preventDefault();
     calculateTarget();
-    // FR-4.3 / FR-5.1: re-evaluate nudges after recording glucose/weight biomarkers
     evaluateAndEnqueue();
   };
 
@@ -62,6 +63,8 @@ export function MetabolicTrackerContainer() {
       canCalculate={canCalculate}
       onCalculate={handleCalculate}
       translate={t}
+      onExportData={exportAllData}
+      isExporting={isExporting}
     />
   );
 }

@@ -15,6 +15,8 @@ interface MetabolicTrackerViewProps {
   canCalculate: boolean;
   onCalculate: (e: FormEvent) => void;
   translate: Translations;
+  onExportData: () => void;
+  isExporting: boolean;
 }
 
 export function MetabolicTrackerView({
@@ -24,12 +26,27 @@ export function MetabolicTrackerView({
   canCalculate,
   onCalculate,
   translate: t,
+  onExportData,
+  isExporting,
 }: MetabolicTrackerViewProps) {
   return (
     <Card title={t['metabolic.title']} description={t['metabolic.descriptionDetail']}>
       <ProfileForm form={form} onSubmit={onCalculate} canSubmit={canCalculate} />
       <ProfileError error={profileError} />
       {caloricTarget && <ProfileResults caloricTarget={caloricTarget} />}
+      <div className="mt-4 pt-3 border-t border-stone-200 dark:border-zinc-700">
+        <button
+          onClick={onExportData}
+          disabled={isExporting}
+          className="text-xs text-emerald-700 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300 underline disabled:opacity-50 min-h-[44px] min-w-[44px]"
+          aria-label={t['metabolic.exportData']}
+        >
+          {isExporting ? t['metabolic.exporting'] : t['metabolic.exportData']}
+        </button>
+        <p className="text-[10px] text-stone-400 dark:text-zinc-500 mt-1">
+          {t['legal.disclaimer']}
+        </p>
+      </div>
     </Card>
   );
 }

@@ -1,17 +1,26 @@
 import { Card } from '@shared/ui';
-import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability';
 import type { Translations } from '@shared/i18n';
+
+interface ScoringWeights {
+  carbon: number;
+  seasonality: number;
+  proximity: number;
+}
 
 interface SustainabilityViewProps {
   zeroWasteCount: number;
   totalFoods: number;
   translate: Translations;
+  scoringWeights: ScoringWeights;
+  emissionRatios: Record<string, number>;
 }
 
 export function SustainabilityView({
   zeroWasteCount,
   totalFoods,
   translate: t,
+  scoringWeights,
+  emissionRatios,
 }: SustainabilityViewProps) {
   return (
     <Card title={t['sustainability.title']} description={t['sustainability.description']}>
@@ -23,13 +32,13 @@ export function SustainabilityView({
           <p className="text-stone-600 dark:text-zinc-400">{t['sustainability.scoringDesc']}</p>
           <ul className="list-disc list-inside ml-2 mt-1 text-stone-500 dark:text-zinc-400 space-y-0.5">
             <li>
-              {t['sustainability.carbon']} — {SCORING_WEIGHTS.carbon * 100}%
+              {t['sustainability.carbon']} — {scoringWeights.carbon * 100}%
             </li>
             <li>
-              {t['sustainability.seasonality']} — {SCORING_WEIGHTS.seasonality * 100}%
+              {t['sustainability.seasonality']} — {scoringWeights.seasonality * 100}%
             </li>
             <li>
-              {t['sustainability.proximity']} — {SCORING_WEIGHTS.proximity * 100}%
+              {t['sustainability.proximity']} — {scoringWeights.proximity * 100}%
             </li>
           </ul>
         </section>
@@ -58,7 +67,7 @@ export function SustainabilityView({
             {t['sustainability.emissionsDesc']}
           </p>
           <div className="grid grid-cols-2 gap-1 text-xs">
-            {Object.entries(PROTEIN_EMISSION_RATIOS).map(([key, value]) => (
+            {Object.entries(emissionRatios).map(([key, value]) => (
               <div
                 key={key}
                 className="flex justify-between bg-stone-50 dark:bg-zinc-700/60 px-2 py-1 rounded"

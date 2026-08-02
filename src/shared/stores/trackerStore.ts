@@ -4,16 +4,13 @@ import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import { ValidationError } from '@shared/errors';
 import { parseNumeric } from '@shared/utils';
-import { computeIMC, validateProfile } from '@shared/services/profileService';
+import { computeIMC } from '@shared/utils/imc';
+import { validateProfile } from '@shared/services/profileService';
 import {
   computeCaloricTarget,
   type CaloricTargetOutput,
 } from '@shared/services/caloricTargetService';
-import {
-  recordWeight,
-  detectIMCThresholdCrossing,
-  recordGlucose,
-} from '@shared/services/biomarkerTrackingService';
+import { useBiomarkerStore } from '@shared/stores/biomarkerStore';
 import type { Translations } from '@shared/i18n/types';
 import { es as DEFAULT_TRANSLATIONS } from '@shared/i18n/es';
 import { type GlucoseInput, GlucoseInput as coerceGlucoseInput } from '@shared/domain/glucoseInput';
@@ -165,7 +162,9 @@ export const useTrackerStore = create<TrackerState>()(
           return;
         }
 
-        recordGlucose({ value: g, timestamp: Date.now(), context: glucoseContext });
+        useBiomarkerStore
+          .getState()
+          .recordGlucose({ value: g, timestamp: Date.now(), context: glucoseContext });
 
         const imc = computeIMC(w, h);
         const target = computeCaloricTarget({
@@ -179,9 +178,8 @@ export const useTrackerStore = create<TrackerState>()(
         });
 
         // FR-5.1: record weight reading for biomarker trends
-        recordWeight(w, h);
-        // Detect if IMC crossed the 25 threshold
-        const crossing = detectIMCThresholdCrossing();
+        useBiomarkerStore.getState().recordWeight(w, h);
+        const crossing = useBiomarkerStore.getState().detectIMCThresholdCrossing();
         const crossedMessage =
           crossing === 'crossed_above'
             ? t['errors.imcThresholdCrossedUp']

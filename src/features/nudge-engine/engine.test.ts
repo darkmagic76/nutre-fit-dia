@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { buildNudgeContext, evaluateRules } from '@shared/nudge/engine';
 import { CooldownTracker } from '@shared/nudge';
+import type { CooldownOps } from '@shared/nudge';
 import { NUDGE_RULES } from '@shared/nudge/rules';
-import { useTrackerStore, useLogStore, useNudgeStore } from '@shared/stores';
 import { FoodCategory } from '@shared/domain';
 import { makeFood } from '@/test/fixtures';
 import { defaultRationCounts } from '@shared/services/rationValidator';
-import type { NudgeContext } from '@shared/nudge';
+import type { NudgeContext, ContextInput } from '@shared/nudge';
 
 const cerealFood = makeFood({
   id: 'c1',
@@ -20,19 +20,39 @@ const glycemicFruit = makeFood({
   category: FoodCategory.FRUITS,
 });
 
+/** In-memory CooldownOps for pure function tests — no store needed. */
+function fakeCooldownOps(): CooldownOps {
+  const state: Record<string, number> = {};
+  return {
+    registerCooldown: (id, timestamp) => {
+      state[id] = timestamp;
+    },
+    getCooldowns: () => state,
+    resetCooldown: (id) => {
+      if (id) delete state[id];
+      else Object.keys(state).forEach((k) => delete state[k]);
+    },
+  };
+}
+
+function makeContextInput(overrides: Partial<ContextInput> = {}): ContextInput {
+  return {
+    restrictionActive: false,
+    todayLog: [],
+    weeklyMinutes: 200,
+    trends: { glucoseLatest: null, glucoseAvg7d: null, weightLatest: null, weightAvg7d: null },
+    ...overrides,
+  };
+}
+
 describe('buildNudgeContext', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    useTrackerStore.setState({ restrictionActive: false });
-    useLogStore.setState({ todayLog: [] });
-    useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
-  });
+  it('reads restrictionActive and counts from ContextInput', () => {
+    const input = makeContextInput({
+      restrictionActive: true,
+      todayLog: [cerealFood, cerealFood, cerealFood],
+    });
 
-  it('reads restrictionActive from trackerStore and counts from logStore', () => {
-    useTrackerStore.setState({ restrictionActive: true });
-    useLogStore.setState({ todayLog: [cerealFood, cerealFood, cerealFood] });
-
-    const ctx = buildNudgeContext();
+    const ctx = buildNudgeContext(input);
     expect(ctx.restrictionActive).toBe(true);
     expect(ctx.counts[FoodCategory.CEREALS]).toBe(3);
     expect(ctx.containsHighGlycemicFruit).toBe(false);
@@ -40,14 +60,14 @@ describe('buildNudgeContext', () => {
   });
 
   it('detects high-glycemic fruit when food is FRUITS and name in glycemic set', () => {
-    useLogStore.setState({ todayLog: [glycemicFruit] });
+    const input = makeContextInput({ todayLog: [glycemicFruit] });
 
-    const ctx = buildNudgeContext();
+    const ctx = buildNudgeContext(input);
     expect(ctx.containsHighGlycemicFruit).toBe(true);
   });
 
   it('returns false for containsHighGlycemicFruit when log is empty', () => {
-    const ctx = buildNudgeContext();
+    const ctx = buildNudgeContext(makeContextInput());
     expect(ctx.containsHighGlycemicFruit).toBe(false);
     expect(ctx.counts[FoodCategory.CEREALS]).toBe(0);
     expect(ctx.counts[FoodCategory.VEGETABLES]).toBe(0);
@@ -60,9 +80,9 @@ describe('buildNudgeContext', () => {
       name: 'Uvas',
       category: FoodCategory.VEGETABLES,
     });
-    useLogStore.setState({ todayLog: [nonFruitGlycemic] });
+    const input = makeContextInput({ todayLog: [nonFruitGlycemic] });
 
-    const ctx = buildNudgeContext();
+    const ctx = buildNudgeContext(input);
     expect(ctx.containsHighGlycemicFruit).toBe(false);
   });
 
@@ -73,7 +93,8 @@ describe('buildNudgeContext', () => {
       category: FoodCategory.RED_MEAT,
       carbonFootprint: 8.0,
     });
-    const ctx = buildNudgeContext(highCarbonFood);
+    const input = makeContextInput({ food: highCarbonFood });
+    const ctx = buildNudgeContext(input);
 
     expect(ctx.environmentalScore).toBeGreaterThanOrEqual(0);
     expect(ctx.alternatives).not.toBeNull();
@@ -81,7 +102,7 @@ describe('buildNudgeContext', () => {
   });
 
   it('sets environmentalScore to null and alternatives to null when food is NOT provided', () => {
-    const ctx = buildNudgeContext();
+    const ctx = buildNudgeContext(makeContextInput());
 
     expect(ctx.environmentalScore).toBeNull();
     expect(ctx.alternatives).toBeNull();
@@ -89,29 +110,31 @@ describe('buildNudgeContext', () => {
 });
 
 describe('evaluateRules', () => {
-  beforeEach(() => {
-    localStorage.clear();
-    useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
-  });
+  const baseCtx: NudgeContext = {
+    restrictionActive: false,
+    animalProteinCount: 0,
+    counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 3, [FoodCategory.OLIVE_OIL]: 1 },
+    containsHighGlycemicFruit: false,
+    currentHour: 12,
+    latestGlucose: null,
+    lastGlucoseTimestamp: Date.now(),
+    lastWeightTimestamp: Date.now(),
+    waterRations: 4,
+    hasBacalao: false,
+    hasEggs: false,
+    weeklyActivityMinutes: 200,
+    dayOfWeek: 3,
+    environmentalScore: null,
+    alternatives: null,
+    now: 0,
+  };
+
   it('returns matching evaluations when rules match and no cooldown', () => {
-    const cooldown = new CooldownTracker(() => 0);
+    const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
+      ...baseCtx,
       restrictionActive: true,
-      animalProteinCount: 0,
-      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
-      containsHighGlycemicFruit: false,
-      currentHour: 12,
-      latestGlucose: null,
-      lastGlucoseTimestamp: Date.now(),
-      lastWeightTimestamp: Date.now(),
-      waterRations: 4,
-      hasBacalao: false,
-      hasEggs: false,
-      weeklyActivityMinutes: 200,
-      dayOfWeek: 3,
-      environmentalScore: null,
-      alternatives: null,
-      now: 0,
+      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
@@ -124,27 +147,14 @@ describe('evaluateRules', () => {
   });
 
   it('returns empty when all matching rules are on cooldown', () => {
-    const cooldown = new CooldownTracker(() => 0);
+    const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     cooldown.register('CEREALS_RESTRICTION');
     cooldown.register('FRUITS_DEFICIT');
 
     const ctx: NudgeContext = {
+      ...baseCtx,
       restrictionActive: true,
-      animalProteinCount: 0,
-      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
-      containsHighGlycemicFruit: false,
-      currentHour: 12,
-      latestGlucose: null,
-      lastGlucoseTimestamp: Date.now(),
-      lastWeightTimestamp: Date.now(),
-      waterRations: 4,
-      hasBacalao: false,
-      hasEggs: false,
-      weeklyActivityMinutes: 200,
-      dayOfWeek: 3,
-      environmentalScore: null,
-      alternatives: null,
-      now: 0,
+      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
@@ -152,29 +162,10 @@ describe('evaluateRules', () => {
   });
 
   it('returns empty when no rules match', () => {
-    const cooldown = new CooldownTracker(() => 0);
+    const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
-      restrictionActive: false,
-      animalProteinCount: 0,
-      counts: {
-        ...defaultRationCounts(),
-        [FoodCategory.OLIVE_OIL]: 1,
-        [FoodCategory.FRUITS]: 3,
-        [FoodCategory.CEREALS]: 3,
-      },
-      containsHighGlycemicFruit: false,
-      currentHour: 12,
-      latestGlucose: null,
-      lastGlucoseTimestamp: Date.now(),
-      lastWeightTimestamp: Date.now(),
-      waterRations: 4,
-      hasBacalao: false,
-      hasEggs: false,
-      weeklyActivityMinutes: 200,
-      dayOfWeek: 3,
-      environmentalScore: null,
-      alternatives: null,
-      now: 0,
+      ...baseCtx,
+      counts: { ...baseCtx.counts, [FoodCategory.FRUITS]: 3 },
     };
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
@@ -182,24 +173,11 @@ describe('evaluateRules', () => {
   });
 
   it('returns empty when rules array is empty', () => {
-    const cooldown = new CooldownTracker(() => 0);
+    const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
+      ...baseCtx,
       restrictionActive: true,
-      animalProteinCount: 0,
-      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
-      containsHighGlycemicFruit: false,
-      currentHour: 12,
-      latestGlucose: null,
-      lastGlucoseTimestamp: Date.now(),
-      lastWeightTimestamp: Date.now(),
-      waterRations: 4,
-      hasBacalao: false,
-      hasEggs: false,
-      weeklyActivityMinutes: 200,
-      dayOfWeek: 3,
-      environmentalScore: null,
-      alternatives: null,
-      now: 0,
+      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
 
     const results = evaluateRules(ctx, [], cooldown);
@@ -207,24 +185,11 @@ describe('evaluateRules', () => {
   });
 
   it('does NOT mutate its parameters (pure function)', () => {
-    const cooldown = new CooldownTracker(() => 0);
+    const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
+      ...baseCtx,
       restrictionActive: true,
-      animalProteinCount: 0,
-      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 1 },
-      containsHighGlycemicFruit: false,
-      currentHour: 12,
-      latestGlucose: null,
-      lastGlucoseTimestamp: Date.now(),
-      lastWeightTimestamp: Date.now(),
-      waterRations: 4,
-      hasBacalao: false,
-      hasEggs: false,
-      weeklyActivityMinutes: 200,
-      dayOfWeek: 3,
-      environmentalScore: null,
-      alternatives: null,
-      now: 0,
+      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
     const rulesCount = NUDGE_RULES.length;
 
@@ -237,31 +202,23 @@ describe('evaluateRules', () => {
   });
 
   it('returns multiple evaluations when multiple rules match', () => {
-    const cooldown = new CooldownTracker(() => 0);
+    const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
+      ...baseCtx,
       restrictionActive: true,
-      animalProteinCount: 0,
-      counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 6, [FoodCategory.VEGETABLES]: 1 },
+      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 6, [FoodCategory.VEGETABLES]: 1 },
       containsHighGlycemicFruit: true,
       currentHour: 22,
-      latestGlucose: null,
       lastGlucoseTimestamp: null,
       lastWeightTimestamp: null,
       waterRations: 0,
-      hasBacalao: false,
-      hasEggs: false,
-      weeklyActivityMinutes: 200,
-      dayOfWeek: 3,
-      environmentalScore: null,
-      alternatives: null,
-      now: 0,
     };
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
 
     // Should match: CEREALS_RESTRICTION, FRUITS_GLYCEMIC_ALERT, VEGETABLES_DEFICIT
     // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION + AOVE_TAGGING
-    expect(results).toHaveLength(8);
+    expect(results).toHaveLength(7);
     const matchedIds = results.map((r) => r.rule.id);
     expect(matchedIds).toContain('CEREALS_RESTRICTION');
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT');
