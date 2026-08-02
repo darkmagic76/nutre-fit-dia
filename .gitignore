@@ -13,12 +13,12 @@ dist-ssr
 *.local
 coverage
 *_es.md
+sdd
 
 # Environment
 .env
 .env.*
 !.env.example
-AGENTS.md
 session-ses_*
 
 # Editor directories and files
@@ -34,7 +34,6 @@ session-ses_*
 
 # Auto-generated
 /.atl/
-/sdd/
 
 # PWA generated service workers
 sw.js
