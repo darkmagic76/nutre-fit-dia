@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features por Criticidad Funcional
 
-Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `main` | Tests: 745 ✅ (73 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: 98.63% Stmts / 100% Funcs / 99.35% Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/
+Generado: 2026-07-17 | Actualizado: 2026-08-02 | Rama: `develop` | Tests: 730 ✅ (72 files) | Lint: 0 (oxlint) | Typecheck: limpio | Coverage: Stmts/Branches/Funcs/Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/
 
 ---
 
@@ -34,13 +34,13 @@ Generado: 2026-07-17 | Actualizado: 2026-07-31 | Rama: `main` | Tests: 745 ✅ (
 
 ### CRITICAL — Seguridad clínica y corrección médica
 
-| #      | Tarea                               | ADR / Fuente           | Descripción                                                                                                                               | Esfuerzo | Dependencias |
-| ------ | ----------------------------------- | ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------ |
-| **C1** | **UserProfile + Filtro Fenotípico** | ADR-004, FR-4.1        | ✅ **Completado** — `UserProfileSchema` (Zod), diagnosisAge, validación ≤ currentAge, integrado en trackerStore + UI                      | M        | —            |
-| **C2** | **ErMedDietValidator completo**     | FR-2.1, RF-01, ADR-005 | ✅ **Completado** — `AESAN_GRAM_STANDARDS` (10 categorías), `SafetyAlert` type, `validateFoodPortions()`                                  | L        | —            |
-| **C3** | **Aviso Legal Dietista (RNF-01)**   | SPECS_RF RNF-01        | ✅ **Completado** — `LegalDisclaimer` banner en Dashboard + Plan, role="alert"                                                            | S        | —            |
-| **C4** | **SafetyAlert en UI**               | ADR-008                | ✅ **Completado** — `SafetyAlertDisplay` component, `safetyCheck` service (high-glycemic fruits), acknowledge button                      | M        | —            |
-| **C5** | **Monitoreo Biomarcadores**         | FR-5.1                 | ✅ **Completado** — `biomarkerTrackingService`: `GlucoseReading`, `WeightReading`, `IMC` threshold crossing, `getTrend`, glucose UI field | M        | —            |
+| #      | Tarea                               | ADR / Fuente           | Descripción                                                                                                                                                                             | Esfuerzo | Dependencias |
+| ------ | ----------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------ |
+| **C1** | **UserProfile + Filtro Fenotípico** | ADR-004, FR-4.1        | ✅ **Completado** — `UserProfileSchema` (Zod), diagnosisAge, validación ≤ currentAge, integrado en trackerStore + UI                                                                    | M        | —            |
+| **C2** | **ErMedDietValidator completo**     | FR-2.1, RF-01, ADR-005 | ✅ **Completado** — `AESAN_GRAM_STANDARDS` (10 categorías), `SafetyAlert` type, `validateFoodPortions()`                                                                                | L        | —            |
+| **C3** | **Aviso Legal Dietista (RNF-01)**   | SPECS_RF RNF-01        | ✅ **Completado** — `LegalDisclaimer` banner en Dashboard + Plan, role="alert"                                                                                                          | S        | —            |
+| **C4** | **SafetyAlert en UI**               | ADR-008                | ✅ **Completado** — `SafetyAlertDisplay` component, `safetyCheck` service (high-glycemic fruits), acknowledge button                                                                    | M        | —            |
+| **C5** | **Monitoreo Biomarcadores**         | FR-5.1                 | ✅ **Completado** — `biomarkerStore`: `GlucoseReading`, `WeightReading`, `IMC` threshold crossing, `getTrend`, glucose UI field, exportación de datos JSON (botón en perfil metabólico) | M        | —            |
 
 ### Fase 1: 5/5 completada 🎉
 
@@ -106,7 +106,9 @@ Fase 4 — Pulido (LOW)
 
 ## Notas
 
-- **745 tests verdes (73 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
-- **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module. Motor de nudge extraído a `src/shared/nudge/` (2026-07-23).
+- **730 tests verdes (72 files)**: cualquier feature nueva debe mantener el TDD estricto (RED → GREEN → TRIANGULATE → REFACTOR).
+- **Scope Rule**: código usado por 1 feature → dentro de esa feature. Usado por 2+ → `shared/` con estructura de domain module. Motor de nudge extraído a `src/shared/nudge/` (2026-07-23). `planStore` movido a `features/recipe-engine/store/` (2026-08-02).
+- **Nudge engine**: `buildNudgeContext()` puro vía `ContextInput`. `CooldownTracker` con dependency injection (`CooldownOps`). `biomarkerTrackingService` eliminado (Middle Man — inlined en `trackerStore`).
+- **FR-5.1 Exportación**: `useExportData` conectado a botón "📥 Exportar datos" en Perfil Metabólico. Descarga JSON con 6 stores.`
 - **Infra**: `tsconfig.app.json` excluye tests del build. Husky activo: pre-commit (lint) + pre-push (quality). `coverage/` en `.gitignore`.
 - **i18n**: 0 strings hardcodeados. Categorías de alimento (11 keys) con traducción ES/EN. `AOVE` se mantiene como término clínico en ambos idiomas.
