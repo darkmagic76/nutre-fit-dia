@@ -8,7 +8,7 @@ import {
   countRations,
   defaultRationCounts,
   type CountByCategory,
-  type ValidationResult,
+  type RationValidationResult,
 } from '@shared/services/rationValidator';
 import { computeEnvironmentalScore } from '@shared/sustainability';
 
@@ -42,8 +42,8 @@ export interface DailyMeal {
 
 export interface WeeklyPlan {
   days: DailyMeal[];
-  dailyResults: ValidationResult[];
-  weeklyResult: ValidationResult;
+  dailyResults: RationValidationResult[];
+  weeklyResult: RationValidationResult;
   valid: boolean;
 }
 
@@ -63,8 +63,11 @@ const CEREAL_DAILY_NORMAL = 5;
  * Build meal slot templates for a single day based on meal count and restriction.
  * Returns structured slots per food category — no food items assigned yet.
  */
-export function buildMealSlots(mealCount: number, restrictionActive = false): TemplateSlot[] {
-  const cerealMax = restrictionActive ? CEREAL_RESTRICTED_MAX : CEREAL_DAILY_NORMAL;
+export function buildMealSlots(
+  mealCount: number,
+  caloricRestrictionActive = false,
+): TemplateSlot[] {
+  const cerealMax = caloricRestrictionActive ? CEREAL_RESTRICTED_MAX : CEREAL_DAILY_NORMAL;
   const cerealDinner = Math.max(cerealMax - CEREAL_NON_DINNER_RATIONS, 0); // 2 normally, 1 when restricted
 
   const baseSlots: TemplateSlot[] = [
@@ -162,9 +165,12 @@ export interface WeekPlanContext {
 /**
  * Initialize the week plan context: builds the daily template and weekly slot distribution.
  */
-export function initializeWeekPlan(restrictionActive: boolean, mealCount = 4): WeekPlanContext {
+export function initializeWeekPlan(
+  caloricRestrictionActive: boolean,
+  mealCount = 4,
+): WeekPlanContext {
   return {
-    dailyTemplate: buildMealSlots(mealCount, restrictionActive),
+    dailyTemplate: buildMealSlots(mealCount, caloricRestrictionActive),
     weeklySlots: getWeeklySlots(),
   };
 }
@@ -210,8 +216,8 @@ export function buildDayPlan(
  *
  * Food selection prefers sustainability: lower carbon footprint + seasonal first.
  */
-export function generateWeeklyPlan(restrictionActive: boolean, mealCount = 4): WeeklyPlan {
-  const context = initializeWeekPlan(restrictionActive, mealCount);
+export function generateWeeklyPlan(caloricRestrictionActive: boolean, mealCount = 4): WeeklyPlan {
+  const context = initializeWeekPlan(caloricRestrictionActive, mealCount);
   const weeklyCounts = defaultRationCounts();
   const days: DailyMeal[] = [];
 
@@ -223,7 +229,7 @@ export function generateWeeklyPlan(restrictionActive: boolean, mealCount = 4): W
     const dayFoods: Food[] = d.entries.flatMap((e) =>
       Array.from({ length: e.rations }, () => e.food),
     );
-    return validateRations(countRations(dayFoods), restrictionActive);
+    return validateRations(countRations(dayFoods), caloricRestrictionActive);
   });
 
   const weeklyResult = validateWeeklyRations(weeklyCounts);
@@ -237,8 +243,11 @@ export function generateWeeklyPlan(restrictionActive: boolean, mealCount = 4): W
 /**
  * @deprecated Use {@link buildMealSlots} instead.
  */
-export function buildDailyTemplate(restrictionActive: boolean, mealCount = 4): TemplateSlot[] {
-  return buildMealSlots(mealCount, restrictionActive);
+export function buildDailyTemplate(
+  caloricRestrictionActive: boolean,
+  mealCount = 4,
+): TemplateSlot[] {
+  return buildMealSlots(mealCount, caloricRestrictionActive);
 }
 
 /**

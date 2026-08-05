@@ -13,7 +13,7 @@ import type { BiomarkerTrend } from '@shared/services/biomarkerTypes';
 
 /** Pure data input for buildNudgeContext — no framework dependencies. */
 export interface ContextInput {
-  restrictionActive: boolean;
+  caloricRestrictionActive: boolean;
   todayLog: Food[];
   weeklyMinutes: number;
   trends: BiomarkerTrend;
@@ -36,7 +36,7 @@ export interface SafetyRule extends NudgeRule {
 
 export interface NudgeContext {
   /** Whether caloric restriction is active (IMC > 25) */
-  restrictionActive: boolean;
+  caloricRestrictionActive: boolean;
   /** Total animal protein servings consumed today */
   animalProteinCount: number;
   /** Ration counts per category for today */

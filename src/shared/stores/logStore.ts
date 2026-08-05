@@ -7,12 +7,12 @@ import { useTrackerStore } from '@shared/stores/trackerStore';
 import {
   countRations,
   validateRations,
-  type ValidationResult,
+  type RationValidationResult,
 } from '@shared/services/rationValidator';
 
 interface LogState {
   todayLog: Food[];
-  todayValidation: ValidationResult | null;
+  todayValidation: RationValidationResult | null;
 
   addFoodToLog: (food: Food) => void;
   removeFoodFromLog: (index: number) => void;
@@ -41,9 +41,9 @@ const LogStateSchema = z.object({
 });
 
 function evaluateLog(log: Food[]) {
-  const { restrictionActive } = useTrackerStore.getState();
+  const { caloricRestrictionActive } = useTrackerStore.getState();
   const counts = countRations(log);
-  return validateRations(counts, restrictionActive);
+  return validateRations(counts, caloricRestrictionActive);
 }
 
 export const useLogStore = create<LogState>()(

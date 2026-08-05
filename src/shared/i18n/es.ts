@@ -58,7 +58,7 @@ export const es: Translations = {
   'metabolic.tdee': 'TDEE',
   'metabolic.deficit': 'Déficit',
   'metabolic.target': 'Objetivo',
-  'metabolic.restrictionActive': 'Restricción activa',
+  'metabolic.caloricRestrictionActive': 'Restricción activa',
   'metabolic.noRestriction': 'Sin restricción',
   'metabolic.profileError': 'Error de perfil',
 

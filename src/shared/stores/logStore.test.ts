@@ -46,7 +46,7 @@ describe('logStore', () => {
   beforeEach(() => {
     localStorage.clear();
     useLogStore.setState({ todayLog: [], todayValidation: null });
-    useTrackerStore.setState({ restrictionActive: false });
+    useTrackerStore.setState({ caloricRestrictionActive: false });
   });
 
   it('starts with empty log', () => {
@@ -86,8 +86,8 @@ describe('logStore', () => {
     expect(useLogStore.getState().todayValidation).not.toBeNull();
   });
 
-  it('reads restrictionActive from trackerStore cross-feature', () => {
-    useTrackerStore.setState({ restrictionActive: true });
+  it('reads caloricRestrictionActive from trackerStore cross-feature', () => {
+    useTrackerStore.setState({ caloricRestrictionActive: true });
 
     const { addFoodToLog } = useLogStore.getState();
     addFoodToLog(mockFood);

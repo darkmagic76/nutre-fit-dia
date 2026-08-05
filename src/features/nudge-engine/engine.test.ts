@@ -37,7 +37,7 @@ function fakeCooldownOps(): CooldownOps {
 
 function makeContextInput(overrides: Partial<ContextInput> = {}): ContextInput {
   return {
-    restrictionActive: false,
+    caloricRestrictionActive: false,
     todayLog: [],
     weeklyMinutes: 200,
     trends: { glucoseLatest: null, glucoseAvg7d: null, weightLatest: null, weightAvg7d: null },
@@ -46,14 +46,14 @@ function makeContextInput(overrides: Partial<ContextInput> = {}): ContextInput {
 }
 
 describe('buildNudgeContext', () => {
-  it('reads restrictionActive and counts from ContextInput', () => {
+  it('reads caloricRestrictionActive and counts from ContextInput', () => {
     const input = makeContextInput({
-      restrictionActive: true,
+      caloricRestrictionActive: true,
       todayLog: [cerealFood, cerealFood, cerealFood],
     });
 
     const ctx = buildNudgeContext(input);
-    expect(ctx.restrictionActive).toBe(true);
+    expect(ctx.caloricRestrictionActive).toBe(true);
     expect(ctx.counts[FoodCategory.CEREALS]).toBe(3);
     expect(ctx.containsHighGlycemicFruit).toBe(false);
     expect(typeof ctx.currentHour).toBe('number');
@@ -111,7 +111,7 @@ describe('buildNudgeContext', () => {
 
 describe('evaluateRules', () => {
   const baseCtx: NudgeContext = {
-    restrictionActive: false,
+    caloricRestrictionActive: false,
     animalProteinCount: 0,
     counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 3, [FoodCategory.OLIVE_OIL]: 1 },
     containsHighGlycemicFruit: false,
@@ -133,7 +133,7 @@ describe('evaluateRules', () => {
     const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
       ...baseCtx,
-      restrictionActive: true,
+      caloricRestrictionActive: true,
       counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
 
@@ -153,7 +153,7 @@ describe('evaluateRules', () => {
 
     const ctx: NudgeContext = {
       ...baseCtx,
-      restrictionActive: true,
+      caloricRestrictionActive: true,
       counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
 
@@ -176,7 +176,7 @@ describe('evaluateRules', () => {
     const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
       ...baseCtx,
-      restrictionActive: true,
+      caloricRestrictionActive: true,
       counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
 
@@ -188,7 +188,7 @@ describe('evaluateRules', () => {
     const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
       ...baseCtx,
-      restrictionActive: true,
+      caloricRestrictionActive: true,
       counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
     };
     const rulesCount = NUDGE_RULES.length;
@@ -205,7 +205,7 @@ describe('evaluateRules', () => {
     const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
       ...baseCtx,
-      restrictionActive: true,
+      caloricRestrictionActive: true,
       counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 6, [FoodCategory.VEGETABLES]: 1 },
       containsHighGlycemicFruit: true,
       currentHour: 22,

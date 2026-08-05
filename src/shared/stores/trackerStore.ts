@@ -45,7 +45,7 @@ interface TrackerState {
   glucose: string;
   glucoseContext: 'fasting' | 'postprandial';
   caloricTarget: CaloricTargetOutput | null;
-  restrictionActive: boolean;
+  caloricRestrictionActive: boolean;
   profileError: ValidationError | null;
 
   setWeight: (v: string) => void;
@@ -72,7 +72,7 @@ export const useTrackerStore = create<TrackerState>()(
       glucose: '',
       glucoseContext: 'fasting',
       caloricTarget: null,
-      restrictionActive: false,
+      caloricRestrictionActive: false,
       profileError: null,
 
       setWeight: (v) => set({ weight: v }),
@@ -98,7 +98,7 @@ export const useTrackerStore = create<TrackerState>()(
       setPaf: (v) => set({ paf: v }),
       setGlucose: (v) => set({ glucose: v }),
       setGlucoseContext: (v) => set({ glucoseContext: v }),
-      setRestrictionActive: (v) => set({ restrictionActive: v }),
+      setRestrictionActive: (v) => set({ caloricRestrictionActive: v }),
 
       calculateTarget: (translate) => {
         const t = translate ?? DEFAULT_TRANSLATIONS;
@@ -189,7 +189,7 @@ export const useTrackerStore = create<TrackerState>()(
 
         set({
           caloricTarget: target,
-          restrictionActive: target.restrictionActive,
+          caloricRestrictionActive: target.caloricRestrictionActive,
           profileError: crossedMessage
             ? new ValidationError(crossedMessage, { crossing, prevIMC: 'see history' })
             : null,
@@ -213,7 +213,7 @@ export const useTrackerStore = create<TrackerState>()(
             glucose: z.string(),
             glucoseContext: z.enum(['fasting', 'postprandial']),
             caloricTarget: z.any().nullable(),
-            restrictionActive: z.boolean(),
+            caloricRestrictionActive: z.boolean(),
             profileError: z.any().nullable(),
           });
           const parsed = TrackerStateSchema.safeParse(state);
@@ -228,7 +228,7 @@ export const useTrackerStore = create<TrackerState>()(
               glucose: '',
               glucoseContext: 'fasting',
               caloricTarget: null,
-              restrictionActive: false,
+              caloricRestrictionActive: false,
               profileError: null,
             });
           }

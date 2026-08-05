@@ -33,7 +33,7 @@ export interface CaloricTargetOutput {
   tdee: number; // kcal/day
   deficit: number; // kcal/day (0 if IMC ≤ 25)
   target: number; // kcal/day (≥ 1200)
-  restrictionActive: boolean; // true when deficit > 0
+  caloricRestrictionActive: boolean; // true when deficit > 0
 }
 
 const MSJ_WEIGHT_COEFF = 10;
@@ -60,14 +60,14 @@ export function computeCaloricTarget(input: CaloricTargetInput): CaloricTargetOu
   const tdee = Math.round(bmr * physicalActivityFactor);
 
   // SPECS_RF RF-02: deficit ONLY when IMC > 25 (via isRestrictionCandidate)
-  const restrictionActive = isRestrictionCandidate(imc);
+  const caloricRestrictionActive = isRestrictionCandidate(imc);
 
   // FR-4.1 phenotypic filtering: scale deficit by diagnosis-age aggressiveness
   const modifier = getDiagnosisModifier(input.diagnosisAge);
   const adjustedDeficit = Math.round(PREDIMED_PLUS_DEFICIT_KCAL * modifier);
 
   // PREDIMED-Plus: 600 kcal deficit (modifier-scaled), capped at 30% of TDEE for safety
-  const rawDeficit = restrictionActive
+  const rawDeficit = caloricRestrictionActive
     ? Math.min(adjustedDeficit, Math.round(tdee * DEFICIT_CAP_RATIO))
     : 0;
 
@@ -77,5 +77,5 @@ export function computeCaloricTarget(input: CaloricTargetInput): CaloricTargetOu
   const target = Math.max(rawTarget, SAFETY_FLOOR);
   const deficit = tdee - target;
 
-  return { bmr, tdee, deficit, target, restrictionActive };
+  return { bmr, tdee, deficit, target, caloricRestrictionActive };
 }

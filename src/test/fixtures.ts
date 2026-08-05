@@ -2,7 +2,7 @@ import { FoodCategory } from '@shared/domain';
 import type { Food } from '@shared/domain';
 import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
 import type { UserMetricsFormState } from '@shared/domain/metrics';
-import type { ValidationResult, RationViolation } from '@shared/services/rationValidator';
+import type { RationValidationResult, RationViolation } from '@shared/services/rationValidator';
 
 // ---------------------------------------------------------------------------
 // Food fixtures
@@ -52,7 +52,7 @@ export function makeCaloricTargetOutput(
     tdee: 1680,
     deficit: 600,
     target: 1680,
-    restrictionActive: true,
+    caloricRestrictionActive: true,
     ...overrides,
   };
 }
@@ -103,7 +103,9 @@ export function makeViolation(overrides: Partial<RationViolation> = {}): RationV
   };
 }
 
-export function makeValidationResult(overrides: Partial<ValidationResult> = {}): ValidationResult {
+export function makeRationValidationResult(
+  overrides: Partial<RationValidationResult> = {},
+): RationValidationResult {
   return {
     valid: true,
     violations: [],

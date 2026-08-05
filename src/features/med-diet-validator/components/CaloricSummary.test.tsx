@@ -6,7 +6,7 @@ import { makeCaloricTargetOutput } from '@/test/fixtures';
 
 describe('CaloricSummary', () => {
   it('renders target and ingested values when restriction is active', () => {
-    const caloricTarget = makeCaloricTargetOutput({ target: 1680, restrictionActive: true });
+    const caloricTarget = makeCaloricTargetOutput({ target: 1680, caloricRestrictionActive: true });
 
     renderWithI18n(<CaloricSummary caloricTarget={caloricTarget} totalKcal={1200} />);
 
@@ -17,7 +17,10 @@ describe('CaloricSummary', () => {
   });
 
   it('renders target and ingested values when restriction is inactive', () => {
-    const caloricTarget = makeCaloricTargetOutput({ target: 1680, restrictionActive: false });
+    const caloricTarget = makeCaloricTargetOutput({
+      target: 1680,
+      caloricRestrictionActive: false,
+    });
 
     renderWithI18n(<CaloricSummary caloricTarget={caloricTarget} totalKcal={1200} />);
 

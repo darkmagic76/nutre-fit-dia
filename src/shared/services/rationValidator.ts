@@ -106,7 +106,7 @@ export interface RationViolation {
   messageKey?: keyof Translations;
 }
 
-export interface ValidationResult {
+export interface RationValidationResult {
   valid: boolean;
   violations: RationViolation[];
   animalProteinCount: number;
@@ -188,8 +188,8 @@ function checkCategoryLimits(
 /** Validate daily ration counts against INFORME_ADR limits */
 export function validateRations(
   counts: CountByCategory,
-  restrictionActive: boolean,
-): ValidationResult {
+  caloricRestrictionActive: boolean,
+): RationValidationResult {
   const violations: RationViolation[] = [];
 
   for (const [category, limit] of Object.entries(RATION_LIMITS) as [
@@ -199,7 +199,7 @@ export function validateRations(
     if (limit.unit !== 'day') continue;
 
     let effectiveMax = limit.max;
-    if (limit.restrictOnCaloricDeficit && restrictionActive) {
+    if (limit.restrictOnCaloricDeficit && caloricRestrictionActive) {
       effectiveMax = CEREAL_RESTRICTED_MAX;
     }
 
@@ -212,7 +212,7 @@ export function validateRations(
 }
 
 /** Validate weekly ration counts */
-export function validateWeeklyRations(counts: CountByCategory): ValidationResult {
+export function validateWeeklyRations(counts: CountByCategory): RationValidationResult {
   const violations: RationViolation[] = [];
   const weeklyCategories: FoodCategoryType[] = [
     FoodCategory.LEGUMES,

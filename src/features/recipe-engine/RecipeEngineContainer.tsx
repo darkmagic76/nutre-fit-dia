@@ -8,11 +8,11 @@ export function RecipeEngineContainer() {
   const t = useT();
   const getFoodName = useFoodName;
   const { weeklyPlan, generatePlan } = usePlanStore();
-  const { restrictionActive, setRestrictionActive, caloricTarget } = useTrackerStore();
+  const { caloricRestrictionActive, setRestrictionActive, caloricTarget } = useTrackerStore();
 
   return (
     <RecipeEngineView
-      restrictionActive={restrictionActive}
+      caloricRestrictionActive={caloricRestrictionActive}
       caloricTarget={caloricTarget}
       weeklyPlan={weeklyPlan}
       onToggleRestriction={setRestrictionActive}

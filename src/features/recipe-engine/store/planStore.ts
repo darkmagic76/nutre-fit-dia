@@ -40,8 +40,8 @@ export const usePlanStore = create<PlanState>()(
       weeklyPlan: null,
 
       generatePlan: () => {
-        const { restrictionActive } = useTrackerStore.getState();
-        set({ weeklyPlan: generateWeeklyPlan(restrictionActive) });
+        const { caloricRestrictionActive } = useTrackerStore.getState();
+        set({ weeklyPlan: generateWeeklyPlan(caloricRestrictionActive) });
       },
     }),
     {

@@ -12,11 +12,11 @@ import { makeFood } from '@/test/fixtures';
 
 /** Build ContextInput from current store state — integration helper. */
 function storeContextInput(overrides: Partial<ContextInput> = {}): ContextInput {
-  const { restrictionActive } = useTrackerStore.getState();
+  const { caloricRestrictionActive } = useTrackerStore.getState();
   const { todayLog } = useLogStore.getState();
   const { weeklyMinutes } = useActivityStore.getState();
   const trends = useBiomarkerStore.getState().getTrend();
-  return { restrictionActive, todayLog, weeklyMinutes, trends, ...overrides };
+  return { caloricRestrictionActive, todayLog, weeklyMinutes, trends, ...overrides };
 }
 
 /** Store-backed CooldownOps for integration tests. */
@@ -49,7 +49,7 @@ const vegetableFood = makeFood({
 describe('Nudge Engine Integration', () => {
   beforeEach(() => {
     localStorage.clear();
-    useTrackerStore.setState({ restrictionActive: false });
+    useTrackerStore.setState({ caloricRestrictionActive: false });
     useLogStore.setState({ todayLog: [] });
     useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
     useActivityStore.setState({ weeklyMinutes: 200 });
@@ -57,7 +57,7 @@ describe('Nudge Engine Integration', () => {
   });
 
   it('full pipeline: sets store state, builds context, evaluates rules, returns expected matches', () => {
-    useTrackerStore.setState({ restrictionActive: true });
+    useTrackerStore.setState({ caloricRestrictionActive: true });
     useLogStore.setState({
       todayLog: [
         cerealFood,
@@ -73,7 +73,7 @@ describe('Nudge Engine Integration', () => {
     const cooldown = new CooldownTracker(storeCooldownOps(), () => 0);
     const ctx = buildNudgeContext(storeContextInput());
 
-    expect(ctx.restrictionActive).toBe(true);
+    expect(ctx.caloricRestrictionActive).toBe(true);
     expect(ctx.counts[FoodCategory.CEREALS]).toBe(5);
     expect(ctx.counts[FoodCategory.FRUITS]).toBe(1);
     expect(ctx.counts[FoodCategory.VEGETABLES]).toBe(1);
@@ -90,7 +90,7 @@ describe('Nudge Engine Integration', () => {
   });
 
   it('cooldown blocks rules already registered', () => {
-    useTrackerStore.setState({ restrictionActive: true });
+    useTrackerStore.setState({ caloricRestrictionActive: true });
     useLogStore.setState({
       todayLog: [cerealFood, cerealFood, cerealFood, cerealFood, cerealFood],
     });
@@ -110,7 +110,7 @@ describe('Nudge Engine Integration', () => {
   });
 
   it('does not match when no rules trigger', () => {
-    useTrackerStore.setState({ restrictionActive: false });
+    useTrackerStore.setState({ caloricRestrictionActive: false });
     useLogStore.setState({ todayLog: [vegetableFood, vegetableFood, vegetableFood] });
 
     const cooldown = new CooldownTracker(storeCooldownOps(), () => 0);

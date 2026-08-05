@@ -139,7 +139,7 @@ describe('meal distribution', () => {
     });
   });
 
-  describe('restrictionActive reduces CEREALS', () => {
+  describe('caloricRestrictionActive reduces CEREALS', () => {
     it('limits CEREALS to max 4 per day when restriction is active', () => {
       const plan = generateWeeklyPlan(true);
       for (const day of plan.days) {

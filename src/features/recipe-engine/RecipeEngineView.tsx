@@ -29,7 +29,7 @@ const MEAL_I18N: Record<MealType, 'meal.breakfast' | 'meal.lunch' | 'meal.dinner
   };
 
 interface RecipeEngineViewProps {
-  restrictionActive: boolean;
+  caloricRestrictionActive: boolean;
   caloricTarget: CaloricTargetOutput | null;
   weeklyPlan: WeeklyPlan | null;
   onToggleRestriction: (active: boolean) => void;
@@ -39,7 +39,7 @@ interface RecipeEngineViewProps {
 }
 
 export function RecipeEngineView({
-  restrictionActive,
+  caloricRestrictionActive,
   caloricTarget,
   weeklyPlan,
   onToggleRestriction,
@@ -52,7 +52,7 @@ export function RecipeEngineView({
       <label className="flex items-center gap-2 text-sm cursor-pointer min-h-[44px]">
         <input
           type="checkbox"
-          checked={restrictionActive}
+          checked={caloricRestrictionActive}
           onChange={(e) => onToggleRestriction(e.target.checked)}
           className="rounded w-5 h-5 text-emerald-700 focus:ring-emerald-500"
           aria-label={t['ui.activateRestriction']}

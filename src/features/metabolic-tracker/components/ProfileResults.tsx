@@ -20,8 +20,8 @@ export function ProfileResults({ caloricTarget }: ProfileResultsProps) {
       <StatCard
         label={t['metabolic.deficit']}
         value={`${caloricTarget.deficit} kcal`}
-        variant={caloricTarget.restrictionActive ? 'danger' : 'default'}
-        sub={caloricTarget.restrictionActive ? 'IMC > 25' : t['metabolic.noRestriction']}
+        variant={caloricTarget.caloricRestrictionActive ? 'danger' : 'default'}
+        sub={caloricTarget.caloricRestrictionActive ? 'IMC > 25' : t['metabolic.noRestriction']}
       />
       <StatCard
         label={t['metabolic.target']}

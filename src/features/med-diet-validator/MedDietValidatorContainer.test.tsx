@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { MedDietValidatorContainer } from './MedDietValidatorContainer';
 import { useLogStore, useTrackerStore } from '@shared/stores';
 import { FoodCategory } from '@shared/domain';
-import { makeFood, makeCaloricTargetOutput, makeValidationResult } from '@/test/fixtures';
+import { makeFood, makeCaloricTargetOutput, makeRationValidationResult } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 
 describe('MedDietValidatorContainer', () => {
@@ -39,8 +39,8 @@ describe('MedDietValidatorContainer', () => {
         gramsPerRation: 15,
       }),
     ];
-    const caloricTarget = makeCaloricTargetOutput({ target: 1680, restrictionActive: true });
-    const validation = makeValidationResult({ valid: true, animalProteinCount: 1 });
+    const caloricTarget = makeCaloricTargetOutput({ target: 1680, caloricRestrictionActive: true });
+    const validation = makeRationValidationResult({ valid: true, animalProteinCount: 1 });
 
     useLogStore.setState({ todayLog: foods, todayValidation: validation });
     useTrackerStore.setState({ caloricTarget });

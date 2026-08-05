@@ -8,7 +8,7 @@ describe('planStore', () => {
   beforeEach(() => {
     localStorage.clear();
     usePlanStore.setState({ weeklyPlan: null });
-    useTrackerStore.setState({ restrictionActive: false });
+    useTrackerStore.setState({ caloricRestrictionActive: false });
   });
 
   it('starts with no weekly plan', () => {
@@ -24,8 +24,8 @@ describe('planStore', () => {
     expect(state.weeklyPlan!.valid).toBe(true);
   });
 
-  it('generates a plan respecting restrictionActive from trackerStore', () => {
-    useTrackerStore.setState({ restrictionActive: true });
+  it('generates a plan respecting caloricRestrictionActive from trackerStore', () => {
+    useTrackerStore.setState({ caloricRestrictionActive: true });
     usePlanStore.getState().generatePlan();
 
     const state = usePlanStore.getState();

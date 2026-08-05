@@ -63,7 +63,7 @@ export interface Translations {
   'metabolic.tdee': string;
   'metabolic.deficit': string;
   'metabolic.target': string;
-  'metabolic.restrictionActive': string;
+  'metabolic.caloricRestrictionActive': string;
   'metabolic.noRestriction': string;
   'metabolic.profileError': string;
   'metabolic.exportData': string;

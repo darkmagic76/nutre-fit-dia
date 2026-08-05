@@ -2,13 +2,13 @@ import { describe, it, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { DailyViolations } from './DailyViolations';
-import { makeValidationResult, makeViolation } from '@/test/fixtures';
+import { makeRationValidationResult, makeViolation } from '@/test/fixtures';
 import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
 import { FoodCategory } from '@shared/domain';
 
 describe('DailyViolations', () => {
   it('shows green success message when valid and has foods', () => {
-    const validation = makeValidationResult({ valid: true, animalProteinCount: 1 });
+    const validation = makeRationValidationResult({ valid: true, animalProteinCount: 1 });
 
     renderWithI18n(<DailyViolations validation={validation} hasFoods={true} />);
 
@@ -17,7 +17,7 @@ describe('DailyViolations', () => {
   });
 
   it('shows violation list when not valid', () => {
-    const validation = makeValidationResult({
+    const validation = makeRationValidationResult({
       valid: false,
       violations: [makeViolation()],
       animalProteinCount: 1,
@@ -31,7 +31,7 @@ describe('DailyViolations', () => {
   });
 
   it('shows animal protein warning when count exceeds 2', () => {
-    const validation = makeValidationResult({ valid: true, animalProteinCount: 3 });
+    const validation = makeRationValidationResult({ valid: true, animalProteinCount: 3 });
 
     renderWithI18n(<DailyViolations validation={validation} hasFoods={true} />);
 
@@ -39,7 +39,7 @@ describe('DailyViolations', () => {
   });
 
   it('renders mixed severity: both error and warning when invalid with high animal protein', () => {
-    const validation = makeValidationResult({
+    const validation = makeRationValidationResult({
       valid: false,
       violations: [makeViolation()],
       animalProteinCount: 4,
@@ -59,7 +59,7 @@ describe('DailyViolations', () => {
   });
 
   it('renders nothing visible when valid but has no foods', () => {
-    const validation = makeValidationResult({ valid: true, animalProteinCount: 1 });
+    const validation = makeRationValidationResult({ valid: true, animalProteinCount: 1 });
 
     const { container } = renderWithI18n(
       <DailyViolations validation={validation} hasFoods={false} />,
@@ -82,7 +82,7 @@ describe('DailyViolations', () => {
       direction: 'under',
       message: 'Déficit de hortalizas',
     });
-    const validation = makeValidationResult({
+    const validation = makeRationValidationResult({
       valid: false,
       violations: [deficitViolation],
       animalProteinCount: 1,
@@ -108,7 +108,7 @@ describe('DailyViolations', () => {
       direction: 'under',
       message: 'Déficit de hortalizas',
     });
-    const validation = makeValidationResult({
+    const validation = makeRationValidationResult({
       valid: false,
       violations: [deficitViolation],
       animalProteinCount: 1,
@@ -132,7 +132,7 @@ describe('DailyViolations', () => {
       direction: 'over',
       message: 'Demasiados cereales',
     });
-    const validation = makeValidationResult({
+    const validation = makeRationValidationResult({
       valid: false,
       violations: [cerealViolation],
       animalProteinCount: 1,

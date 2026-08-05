@@ -36,7 +36,7 @@ export const NUDGE_RULES: SafetyRule[] = [
     title: 'nudge.title.cerealsRestriction',
     body: 'nudge.body.cerealsRestriction',
     condition: (ctx) =>
-      ctx.restrictionActive && ctx.counts[FoodCategory.CEREALS] > CEREAL_RESTRICTED_MAX,
+      ctx.caloricRestrictionActive && ctx.counts[FoodCategory.CEREALS] > CEREAL_RESTRICTED_MAX,
   },
   {
     id: 'CEREALS_DEFICIT',

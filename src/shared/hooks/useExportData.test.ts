@@ -27,7 +27,7 @@ describe('useExportData', () => {
       glucose: '',
       glucoseContext: 'fasting',
       caloricTarget: null,
-      restrictionActive: false,
+      caloricRestrictionActive: false,
       profileError: null,
     });
     useLogStore.setState({ todayLog: [], todayValidation: null });

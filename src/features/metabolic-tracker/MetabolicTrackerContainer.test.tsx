@@ -28,7 +28,7 @@ describe('MetabolicTrackerContainer', () => {
       glucose: '',
       glucoseContext: 'fasting',
       caloricTarget: null,
-      restrictionActive: false,
+      caloricRestrictionActive: false,
       profileError: null,
     });
   });
@@ -81,7 +81,7 @@ describe('MetabolicTrackerContainer', () => {
 
   it('renders restriction warning when IMC crossing is detected and restriction is active', () => {
     useTrackerStore.setState({
-      caloricTarget: makeCaloricTargetOutput({ restrictionActive: true, deficit: 600 }),
+      caloricTarget: makeCaloricTargetOutput({ caloricRestrictionActive: true, deficit: 600 }),
       profileError: new ValidationError('IMC ha superado 25 — restricción calórica activada', {
         crossing: 'crossed_above',
         prevIMC: 'see history',
@@ -102,7 +102,7 @@ describe('MetabolicTrackerContainer', () => {
 
   it('renders both ProfileResults and ProfileError simultaneously when both exist in store', () => {
     useTrackerStore.setState({
-      caloricTarget: makeCaloricTargetOutput({ restrictionActive: false, deficit: 0 }),
+      caloricTarget: makeCaloricTargetOutput({ caloricRestrictionActive: false, deficit: 0 }),
       profileError: new ValidationError('Glucosa en ayunas elevada — consulte con su médico'),
     });
 

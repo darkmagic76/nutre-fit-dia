@@ -98,7 +98,7 @@ describe('caloricTargetService', () => {
   describe('Deficit — conditional on IMC > 25 (SPECS_RF RF-02)', () => {
     it('applies deficit when IMC > 25', () => {
       const result = computeCaloricTarget(baseInput); // IMC 27.7
-      expect(result.restrictionActive).toBe(true);
+      expect(result.caloricRestrictionActive).toBe(true);
       expect(result.deficit).toBeGreaterThan(0);
     });
 
@@ -133,7 +133,7 @@ describe('caloricTargetService', () => {
         height: 170,
         imc: 24.2, // normal weight
       });
-      expect(result.restrictionActive).toBe(false);
+      expect(result.caloricRestrictionActive).toBe(false);
       expect(result.deficit).toBe(0);
       expect(result.target).toBe(result.tdee);
     });
@@ -145,7 +145,7 @@ describe('caloricTargetService', () => {
         height: 170,
         imc: 25.0,
       });
-      expect(result.restrictionActive).toBe(false);
+      expect(result.caloricRestrictionActive).toBe(false);
       expect(result.deficit).toBe(0);
     });
 
@@ -156,7 +156,7 @@ describe('caloricTargetService', () => {
         height: 170,
         imc: 25.1,
       });
-      expect(result.restrictionActive).toBe(true);
+      expect(result.caloricRestrictionActive).toBe(true);
       expect(result.deficit).toBeGreaterThan(0);
     });
   });
@@ -177,15 +177,15 @@ describe('caloricTargetService', () => {
     });
   });
 
-  describe('restrictionActive flag', () => {
+  describe('caloricRestrictionActive flag', () => {
     it('is true when IMC > 25', () => {
       const result = computeCaloricTarget({ ...baseInput, imc: 27 });
-      expect(result.restrictionActive).toBe(true);
+      expect(result.caloricRestrictionActive).toBe(true);
     });
 
     it('is false when IMC ≤ 25', () => {
       const result = computeCaloricTarget({ ...baseInput, imc: 23 });
-      expect(result.restrictionActive).toBe(false);
+      expect(result.caloricRestrictionActive).toBe(false);
     });
   });
 
@@ -240,7 +240,7 @@ describe('caloricTargetService', () => {
         height: 170,
         imc: 24.2, // normal weight
       });
-      expect(result.restrictionActive).toBe(false);
+      expect(result.caloricRestrictionActive).toBe(false);
       expect(result.deficit).toBe(0);
       expect(result.target).toBe(result.tdee);
     });
@@ -408,7 +408,7 @@ describe('caloricTargetService', () => {
         height: 170,
         imc: 24.2,
       });
-      expect(result.restrictionActive).toBe(false);
+      expect(result.caloricRestrictionActive).toBe(false);
       expect(result.deficit).toBe(0);
     });
 
@@ -490,7 +490,7 @@ describe('caloricTargetService', () => {
       expect(result.target).toBeGreaterThanOrEqual(1200);
       expect(result.target).toBe(1200);
       expect(result.deficit).toBe(438);
-      expect(result.restrictionActive).toBe(true);
+      expect(result.caloricRestrictionActive).toBe(true);
     });
   });
 });

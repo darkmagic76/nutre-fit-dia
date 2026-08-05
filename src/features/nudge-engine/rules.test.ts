@@ -7,7 +7,7 @@ import type { NudgeContext } from '@shared/nudge';
 
 function makeContext(overrides: Partial<NudgeContext> = {}): NudgeContext {
   return {
-    restrictionActive: false,
+    caloricRestrictionActive: false,
     animalProteinCount: 0,
     counts: defaultRationCounts(),
     containsHighGlycemicFruit: false,
@@ -34,17 +34,17 @@ describe('NUDGE_RULES', () => {
       expect(rule).toBeDefined();
     });
 
-    it('fires when restrictionActive and CEREALS > 4', () => {
+    it('fires when caloricRestrictionActive and CEREALS > 4', () => {
       const ctx = makeContext({
-        restrictionActive: true,
+        caloricRestrictionActive: true,
         counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5 },
       });
       expect(rule!.condition(ctx)).toBe(true);
     });
 
-    it('does NOT fire when restrictionActive is false despite high cereals', () => {
+    it('does NOT fire when caloricRestrictionActive is false despite high cereals', () => {
       const ctx = makeContext({
-        restrictionActive: false,
+        caloricRestrictionActive: false,
         counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 5 },
       });
       expect(rule!.condition(ctx)).toBe(false);
@@ -52,7 +52,7 @@ describe('NUDGE_RULES', () => {
 
     it('does NOT fire when CEREALS = 4 (boundary, ≤4 is within limit)', () => {
       const ctx = makeContext({
-        restrictionActive: true,
+        caloricRestrictionActive: true,
         counts: { ...defaultRationCounts(), [FoodCategory.CEREALS]: 4 },
       });
       expect(rule!.condition(ctx)).toBe(false);

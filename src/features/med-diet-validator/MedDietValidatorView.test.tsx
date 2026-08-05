@@ -2,21 +2,21 @@ import { describe, it, expect, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { MedDietValidatorView } from './MedDietValidatorView';
 import { FoodCategory } from '@shared/domain';
-import { makeFood, makeCaloricTargetOutput, makeValidationResult } from '@/test/fixtures';
+import { makeFood, makeCaloricTargetOutput, makeRationValidationResult } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { es } from '@shared/i18n/es';
 
 describe('MedDietValidatorView', () => {
   const caloricTarget = makeCaloricTargetOutput({
     target: 1680,
-    restrictionActive: true,
+    caloricRestrictionActive: true,
     deficit: 600,
   });
   const foods = [
     makeFood({ id: '1', name: 'Pan integral', category: FoodCategory.CEREALS, kcalPer100g: 250 }),
     makeFood({ id: '2', name: 'AOVE', category: FoodCategory.OLIVE_OIL, kcalPer100g: 100 }),
   ];
-  const validation = makeValidationResult({ valid: true, animalProteinCount: 1 });
+  const validation = makeRationValidationResult({ valid: true, animalProteinCount: 1 });
   const totalKcal = 350;
   const onRemoveFood = vi.fn();
 
@@ -82,8 +82,12 @@ describe('MedDietValidatorView', () => {
     expect(screen.getByText('AOVE')).toBeInTheDocument();
   });
 
-  it('renders description with deficit info when caloricTarget has restrictionActive', () => {
-    const target = makeCaloricTargetOutput({ target: 1680, restrictionActive: true, deficit: 600 });
+  it('renders description with deficit info when caloricTarget has caloricRestrictionActive', () => {
+    const target = makeCaloricTargetOutput({
+      target: 1680,
+      caloricRestrictionActive: true,
+      deficit: 600,
+    });
 
     renderWithI18n(
       <MedDietValidatorView

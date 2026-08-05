@@ -49,7 +49,7 @@ const baseT: Translations = {
   'metabolic.tdee': '',
   'metabolic.deficit': '',
   'metabolic.target': '',
-  'metabolic.restrictionActive': '',
+  'metabolic.caloricRestrictionActive': '',
   'metabolic.noRestriction': '',
   'metabolic.profileError': '',
   'plan.title': '',

@@ -1,7 +1,7 @@
 import { useT } from '@shared/i18n';
 import { ViolationList } from '@shared/ui';
 import { formatViolation } from '@shared/ui/formatters/formatViolation';
-import type { ValidationResult } from '@shared/services/rationValidator';
+import type { RationValidationResult } from '@shared/services/rationValidator';
 import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
 
 /**
@@ -12,7 +12,7 @@ import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
  * In this component, "violations" means **UI-level display of clinical rule
  * breaches** — the visual feedback layer that surfaces `validateRations()` results
  * to the user. This component does NOT perform any validation itself; it receives
- * pre-computed `ValidationResult` data and renders it.
+ * pre-computed `RationValidationResult` data and renders it.
  *
  * Distinct from:
  * - **Ration-rule checks** (`src/shared/services/rationValidator.ts`): the clinical
@@ -24,7 +24,7 @@ import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
  */
 
 interface DailyViolationsProps {
-  validation: ValidationResult;
+  validation: RationValidationResult;
   hasFoods: boolean;
   /** Hour of day (0-23) for vegetable nudge time gate. Defaults to current hour for testability. */
   currentHour?: number;

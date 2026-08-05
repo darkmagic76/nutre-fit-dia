@@ -18,7 +18,7 @@ describe('ProfileResults', () => {
   });
 
   it('shows "Sin restricción" subtext and default variant when restriction is inactive', () => {
-    renderResults({ restrictionActive: false, deficit: 0 });
+    renderResults({ caloricRestrictionActive: false, deficit: 0 });
 
     const deficitCard = screen.getByRole('status', { name: /Déficit: 0 kcal/ });
     expect(deficitCard).toBeInTheDocument();
@@ -27,7 +27,7 @@ describe('ProfileResults', () => {
   });
 
   it('shows restriction subtext "IMC > 25" and danger variant when restriction is active', () => {
-    renderResults({ restrictionActive: true, deficit: 600 });
+    renderResults({ caloricRestrictionActive: true, deficit: 600 });
 
     const deficitCard = screen.getByRole('status', { name: /Déficit: 600 kcal/ });
     expect(deficitCard).toBeInTheDocument();
@@ -50,7 +50,7 @@ describe('ProfileResults', () => {
 
   it('displays deficit capped at 30% of TDEE correctly', () => {
     // 30% of 1400 TDEE = 420 kcal deficit cap
-    renderResults({ tdee: 1400, deficit: 420, target: 980, restrictionActive: true });
+    renderResults({ tdee: 1400, deficit: 420, target: 980, caloricRestrictionActive: true });
 
     expect(screen.getByRole('status', { name: 'Déficit: 420 kcal' })).toBeInTheDocument();
   });

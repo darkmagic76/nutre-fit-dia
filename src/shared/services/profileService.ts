@@ -19,7 +19,7 @@ export interface ValidationFieldError {
   message: string;
 }
 
-export interface ValidationResult {
+export interface ProfileValidationResult {
   valid: boolean;
   errors: ValidationFieldError[];
 }
@@ -59,7 +59,7 @@ const DEFAULT_PAF = 1.2;
  * Returns structured errors for each field that violates a rule.
  * Pure function — no side effects, no framework imports.
  */
-export function validateProfile(input: ProfileInput): ValidationResult {
+export function validateProfile(input: ProfileInput): ProfileValidationResult {
   const errors: ValidationFieldError[] = [];
 
   if (input.weight <= 0) {

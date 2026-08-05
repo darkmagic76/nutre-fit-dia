@@ -13,7 +13,7 @@ const defaults = {
   glucose: '',
   glucoseContext: 'fasting' as const,
   caloricTarget: null,
-  restrictionActive: false,
+  caloricRestrictionActive: false,
   profileError: null,
 };
 
@@ -33,10 +33,10 @@ export const TrackerStateSchema = z.object({
       tdee: z.number(),
       deficit: z.number(),
       target: z.number(),
-      restrictionActive: z.boolean(),
+      caloricRestrictionActive: z.boolean(),
     })
     .nullable(),
-  restrictionActive: z.boolean(),
+  caloricRestrictionActive: z.boolean(),
   profileError: z.any().nullable(),
 });
 
@@ -58,7 +58,7 @@ describe('trackerStore', () => {
     expect(state.gender).toBe('male');
     expect(state.paf).toBe('1.2');
     expect(state.caloricTarget).toBeNull();
-    expect(state.restrictionActive).toBe(false);
+    expect(state.caloricRestrictionActive).toBe(false);
     expect(state.profileError).toBeNull();
   });
 
@@ -111,11 +111,11 @@ describe('trackerStore', () => {
       expect(state.profileError!.message).toContain('Género');
     });
 
-    it('toggles restrictionActive', () => {
+    it('toggles caloricRestrictionActive', () => {
       useTrackerStore.getState().setRestrictionActive(true);
-      expect(useTrackerStore.getState().restrictionActive).toBe(true);
+      expect(useTrackerStore.getState().caloricRestrictionActive).toBe(true);
       useTrackerStore.getState().setRestrictionActive(false);
-      expect(useTrackerStore.getState().restrictionActive).toBe(false);
+      expect(useTrackerStore.getState().caloricRestrictionActive).toBe(false);
     });
   });
 
@@ -156,21 +156,21 @@ describe('trackerStore', () => {
       expect(useTrackerStore.getState().profileError).toBeNull();
     });
 
-    it('activates restrictionActive when IMC > 25', () => {
+    it('activates caloricRestrictionActive when IMC > 25', () => {
       useTrackerStore.getState().setWeight('95');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
-      expect(useTrackerStore.getState().restrictionActive).toBe(true);
+      expect(useTrackerStore.getState().caloricRestrictionActive).toBe(true);
       expect(useTrackerStore.getState().caloricTarget!.deficit).toBeGreaterThan(0);
     });
 
-    it('does not activate restrictionActive when IMC <= 25', () => {
+    it('does not activate caloricRestrictionActive when IMC <= 25', () => {
       useTrackerStore.getState().setWeight('65');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('100');
       useTrackerStore.getState().calculateTarget();
-      expect(useTrackerStore.getState().restrictionActive).toBe(false);
+      expect(useTrackerStore.getState().caloricRestrictionActive).toBe(false);
       expect(useTrackerStore.getState().caloricTarget!.deficit).toBe(0);
     });
 

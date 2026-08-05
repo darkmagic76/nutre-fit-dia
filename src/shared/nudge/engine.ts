@@ -24,7 +24,7 @@ import type { CooldownTracker as CooldownTrackerType } from './cooldownTracker';
  * Testable with plain objects — no Zustand mocking required.
  */
 export function buildNudgeContext(input: ContextInput): NudgeContext {
-  const { restrictionActive, todayLog, weeklyMinutes, trends, food } = input;
+  const { caloricRestrictionActive, todayLog, weeklyMinutes, trends, food } = input;
   const counts = countRations(todayLog);
 
   const containsHighGlycemicFruit = todayLog.some(
@@ -55,7 +55,7 @@ export function buildNudgeContext(input: ContextInput): NudgeContext {
   }
 
   return {
-    restrictionActive,
+    caloricRestrictionActive,
     animalProteinCount,
     counts,
     containsHighGlycemicFruit,
@@ -81,12 +81,12 @@ export function buildNudgeContext(input: ContextInput): NudgeContext {
  * All impurity is concentrated here — domain functions stay pure.
  */
 function buildContextFromStores(food?: Food): ContextInput {
-  const { restrictionActive } = useTrackerStore.getState();
+  const { caloricRestrictionActive } = useTrackerStore.getState();
   const { todayLog } = useLogStore.getState();
   const { weeklyMinutes } = useActivityStore.getState();
   const trends = useBiomarkerStore.getState().getTrend();
 
-  return { restrictionActive, todayLog, weeklyMinutes, trends, food };
+  return { caloricRestrictionActive, todayLog, weeklyMinutes, trends, food };
 }
 
 function buildNotification(rule: SafetyRule, ctx: NudgeContext): SystemNotification {

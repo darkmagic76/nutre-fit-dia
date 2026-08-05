@@ -79,13 +79,13 @@ const invalidPlan: WeeklyPlan = {
 
 describe('RecipeEngineView', () => {
   const defaultProps = {
-    restrictionActive: false,
+    caloricRestrictionActive: false,
     caloricTarget: null as {
       target: number;
       bmr: number;
       tdee: number;
       deficit: number;
-      restrictionActive: boolean;
+      caloricRestrictionActive: boolean;
     } | null,
     weeklyPlan: null as WeeklyPlan | null,
     onToggleRestriction: vi.fn(),
@@ -469,7 +469,7 @@ describe('RecipeEngineView', () => {
             bmr: 1500,
             tdee: 2000,
             deficit: 0,
-            restrictionActive: false,
+            caloricRestrictionActive: false,
           }}
         />,
       );
@@ -503,7 +503,13 @@ describe('RecipeEngineView', () => {
         <RecipeEngineView
           {...defaultProps}
           weeklyPlan={plan}
-          caloricTarget={{ target: 0, bmr: 0, tdee: 0, deficit: 0, restrictionActive: false }}
+          caloricTarget={{
+            target: 0,
+            bmr: 0,
+            tdee: 0,
+            deficit: 0,
+            caloricRestrictionActive: false,
+          }}
         />,
       );
       const header = screen.getByRole('heading', { level: 3, name: /desayuno/i });

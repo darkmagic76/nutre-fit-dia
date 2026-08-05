@@ -2,14 +2,14 @@ import type { Translations } from '@shared/i18n';
 import { Card } from '@shared/ui';
 import type { Food } from '@shared/domain';
 import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
-import type { ValidationResult } from '@shared/services/rationValidator';
+import type { RationValidationResult } from '@shared/services/rationValidator';
 import { CaloricSummary } from './components/CaloricSummary';
 import { FoodList } from './components/FoodList';
 import { DailyViolations } from './components/DailyViolations';
 
 interface MedDietValidatorViewProps {
   todayLog: Food[];
-  todayValidation: ValidationResult | null;
+  todayValidation: RationValidationResult | null;
   caloricTarget: CaloricTargetOutput | null;
   totalKcal: number;
   onRemoveFood: (index: number) => void;
@@ -29,7 +29,7 @@ export function MedDietValidatorView({
       title={t['log.title']}
       description={
         caloricTarget
-          ? `${t['log.dailyObjective']}: ${caloricTarget.target} kcal | ${Math.round(totalKcal)} kcal${caloricTarget.restrictionActive ? ` | ${t['metabolic.deficit']}: ${caloricTarget.deficit} kcal` : ''}`
+          ? `${t['log.dailyObjective']}: ${caloricTarget.target} kcal | ${Math.round(totalKcal)} kcal${caloricTarget.caloricRestrictionActive ? ` | ${t['metabolic.deficit']}: ${caloricTarget.deficit} kcal` : ''}`
           : t['log.description']
       }
     >
