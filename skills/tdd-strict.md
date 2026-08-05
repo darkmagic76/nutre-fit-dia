@@ -1,36 +1,36 @@
-# TDD Estricto — Test-Driven Development
+# Strict TDD — Test-Driven Development
 
-## Ciclo RED → GREEN → REFACTOR
+## RED → GREEN → REFACTOR Cycle
 
-1. **RED**: escribir el test PRIMERO → ejecutar → DEBE FALLAR
-2. **GREEN**: implementar el código MÍNIMO para que pase
-3. **REFACTOR**: mejorar el código manteniendo tests en verde
+1. **RED**: write the test FIRST → run → it MUST FAIL
+2. **GREEN**: implement the MINIMUM code to make it pass
+3. **REFACTOR**: improve the code while keeping tests green
 
-## Triangulación
+## Triangulation
 
-Usar múltiples tests para triangular hacia la solución correcta:
+Use multiple tests to triangulate toward the correct solution:
 
 ```typescript
-// 1. Caso límite inferior
+// 1. Lower bound case
 it('returns 0 for < 5 items', () => {
   expect(calculateBulkDiscount(item, 3)).toBe(0);
 });
 
-// 2. Caso límite exacto
+// 2. Exact bound case
 it('calculates discount for exactly 5 items', () => {
   expect(calculateBulkDiscount(item, 5)).toBe(15.0);
 });
 
-// 3. Caso general (confirma lógica)
+// 3. General case (confirms logic)
 it('calculates discount for 10 items', () => {
   expect(calculateBulkDiscount(item, 10)).toBe(30.0);
 });
 ```
 
-## Reglas
+## Rules
 
-- Tests atómicos: un test = un comportamiento
-- Sin lógica condicional en tests
-- Usar AAA: Arrange → Act → Assert
+- Atomic tests: one test = one behavior
+- No conditional logic in tests
+- Use AAA: Arrange → Act → Assert
 - `getByRole` > `getByTestId` (Testing Library)
-- Tests de dominio: sin mocks de infraestructura
+- Domain tests: no infrastructure mocks

@@ -1,41 +1,41 @@
 # Container/Presentational Pattern
 
-## Regla
+## Rule
 
-- **Containers**: manejan lógica de negocio, estado y datos. NO renderizan UI directamente.
-- **Presentational**: componentes puros de UI que reciben props. NO acceden a stores ni servicios.
-- El Container principal DEBE tener el mismo nombre que la feature.
+- **Containers**: handle business logic, state and data. They do NOT render UI directly.
+- **Presentational**: pure UI components that receive props. They do NOT access stores or services.
+- The main Container MUST have the same name as the feature.
 
-## Estructura
+## Structure
 
 ```
 features/<feature-name>/
-├── <FeatureName>Container.tsx    # Lógica + estado + handlers
-├── <FeatureName>View.tsx         # UI puro: recibe props
-├── components/                   # Sub-componentes específicos
-├── services/                     # Servicios locales (1 feature)
-├── hooks/                        # Hooks locales (1 feature)
-├── store/                        # Zustand store (si aplica)
-└── types.ts                      # Tipos locales
+├── <FeatureName>Container.tsx    # Logic + state + handlers
+├── <FeatureName>View.tsx         # Pure UI: receives props
+├── components/                   # Feature-specific sub-components
+├── services/                     # Local services (1 feature)
+├── hooks/                        # Local hooks (1 feature)
+├── store/                        # Zustand store (if applicable)
+└── types.ts                      # Local types
 ```
 
-## Ejemplo
+## Example
 
 ```typescript
-// ScannerContainer.tsx — lógica
+// ScannerContainer.tsx — logic
 export function ScannerContainer() {
   const [selectedId, setSelectedId] = useState('')
   const result = useClassification(selectedId)
   return <ScannerView selectedId={selectedId} result={result} onSelect={setSelectedId} />
 }
 
-// ScannerView.tsx — UI puro
+// ScannerView.tsx — pure UI
 interface ScannerViewProps {
   selectedId: string
   result: ClassificationResult | null
   onSelect: (id: string) => void
 }
 export function ScannerView({ selectedId, result, onSelect }: ScannerViewProps) {
-  // solo JSX, sin lógica de negocio, sin stores
+  // only JSX, no business logic, no stores
 }
 ```

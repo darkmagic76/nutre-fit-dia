@@ -1,42 +1,42 @@
-# Architecture Decisions — Pilares Obligatorios
+# Architecture Decisions — Mandatory Pillars
 
-Toda decisión arquitectónica DEBE pasar estos 4 pilares.
+Every architectural decision MUST pass these 4 pillars.
 
 ## 1. Security by Design + Security by Default
 
-- La seguridad NO es un parche. Está en el ADN del producto.
-- Aplicar OWASP Top 10 y NIST como baseline.
-- Las configuraciones por defecto DEBEN ser seguras aunque el usuario no cambie nada.
-- Least privilege: cada componente recibe el acceso mínimo necesario.
-- Defense in depth: nunca depender de una sola capa de seguridad.
+- Security is NOT a patch. It is in the product's DNA.
+- Apply OWASP Top 10 and NIST as baseline.
+- Default configurations MUST be secure even if the user changes nothing.
+- Least privilege: each component receives the minimum necessary access.
+- Defense in depth: never rely on a single security layer.
 
-## 2. SRP + Modularidad (OCP)
+## 2. SRP + Modularity (OCP)
 
-- **Una razón para cambiar**: cada módulo, clase y función tiene exactamente UNA responsabilidad.
-- **Abierto para extensión**: diseñar para añadir comportamiento sin modificar código existente.
-- **Cerrado para modificación**: abstracciones estables que no requieren rewrites.
-- **Nunca mezclar**: lógica de dominio NO vive con acceso a datos, presentación o infraestructura.
+- **One reason to change**: each module, class and function has exactly ONE responsibility.
+- **Open for extension**: design to add behavior without modifying existing code.
+- **Closed for modification**: stable abstractions that do not require rewrites.
+- **Never mix**: domain logic does NOT live with data access, presentation or infrastructure.
 
 ## 3. Domain Isolation
 
-- El core NO depende de frameworks, bases de datos ni capas HTTP.
-- Tests de dominio sin mocks de infraestructura.
-- Evolución sin dolor: cambiar base de datos o framework UI sin tocar reglas de negocio.
-- **Ubiquitous Language**: si el experto dice "clasificar", el código dice `classify()`, NO `insertRow()`.
+- The core does NOT depend on frameworks, databases or HTTP layers.
+- Domain tests without infrastructure mocks.
+- Painless evolution: change database or UI framework without touching business rules.
+- **Ubiquitous Language**: if the expert says "classify", the code says `classify()`, NOT `insertRow()`.
 
-## 4. Escalabilidad Organizacional
+## 4. Organizational Scalability
 
-- Bounded Contexts que mapean a equipos autónomos.
-- APIs contractuales entre contextos.
-- Deploy independiente por contexto.
-- Sin bases de datos compartidas entre contextos.
+- Bounded Contexts that map to autonomous teams.
+- Contractual APIs between contexts.
+- Independent deploy per context.
+- No shared databases between contexts.
 
 ## Checklist
 
-Antes de finalizar una decisión:
+Before finalizing a decision:
 
-- [ ] ¿Cada módulo tiene UNA razón para cambiar? (SRP)
-- [ ] ¿Las reglas de negocio están libres de dependencias de framework? (Domain Isolation)
-- [ ] ¿Se puede extender sin modificar código existente? (OCP)
-- [ ] ¿Las configuraciones por defecto son seguras sin acción del usuario? (Security by Default)
-- [ ] ¿El código habla el lenguaje del experto de dominio? (Ubiquitous Language)
+- [ ] Does each module have ONE reason to change? (SRP)
+- [ ] Are business rules free of framework dependencies? (Domain Isolation)
+- [ ] Can it be extended without modifying existing code? (OCP)
+- [ ] Are default configurations secure without user action? (Security by Default)
+- [ ] Does the code speak the domain expert's language? (Ubiquitous Language)

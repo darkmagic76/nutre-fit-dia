@@ -1,31 +1,31 @@
-# Work Methodology — Ciclo de Desarrollo
+# Work Methodology — Development Cycle
 
 ## Roles
 
-**Mi rol como desarrollador:**
+**My role as developer:**
 
-- Doy los REQUISITOS de lo que necesito
-- La IA genera código basado en esos requisitos
-- Yo ejecuto, verifico que funciona, y continuamos
+- I provide the REQUIREMENTS of what I need
+- The AI generates code based on those requirements
+- I run it, verify it works, and we continue
 
-**Tu rol como asistente:**
+**Your role as assistant:**
 
-- NO des código que no te pida
-- Cuando pida un TEST, generá SOLO el test
-- Cuando pida IMPLEMENTACIÓN, generá SOLO la implementación
-- Seguí las convenciones del proyecto (Scope Rule, TDD, etc.)
-- Si algo no está claro, preguntá antes de generar
+- Do NOT give code I did not ask for
+- When I ask for a TEST, generate ONLY the test
+- When I ask for IMPLEMENTATION, generate ONLY the implementation
+- Follow the project conventions (Scope Rule, TDD, etc.)
+- If something is unclear, ask before generating
 
 ## Verification Pipeline
 
-Después de cada feature:
+After each feature:
 
 ```bash
 pnpm test:run        # unit + component tests
 pnpm build           # production build
 ```
 
-Verificación completa:
+Full verification:
 
 ```bash
 pnpm quality         # format:check + lint + typecheck + test:run
@@ -33,11 +33,11 @@ pnpm verify          # quality + build
 pnpm test:e2e        # end-to-end tests
 ```
 
-## Reglas de Código
+## Code Rules
 
-- TypeScript estricto
-- Tailwind CSS para estilos
-- Testing Library con queries accesibles (`getByRole` > `getByTestId`)
-- Componentes funcionales con hooks
-- Nombres descriptivos en inglés para código, español para UI de la app
-- Lenguaje Ubicuo: si el experto dice "Generate Plan", el código dice `generatePlan()`, NO `insertRow()`
+- Strict TypeScript
+- Tailwind CSS for styles
+- Testing Library with accessible queries (`getByRole` > `getByTestId`)
+- Functional components with hooks
+- Descriptive names in English for code, Spanish for app UI
+- Ubiquitous Language: if the expert says "Generate Plan", the code says `generatePlan()`, NOT `insertRow()`

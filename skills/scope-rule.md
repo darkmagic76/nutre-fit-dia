@@ -1,32 +1,32 @@
-# Scope Rule — Ley del Alcance
+# Scope Rule — Law of Scope
 
-## Regla Inquebrantable
+## Unbreakable Rule
 
-**"Scope determines structure"** — el alcance determina la estructura.
+**"Scope determines structure"** — the scope determines the structure.
 
-1. Código usado por **2+ features** → `shared/` (global)
-2. Código usado por **1 feature** → local en esa feature
-3. **Sin excepciones** — esta regla es absoluta y no negociable
+1. Code used by **2+ features** → `shared/` (global)
+2. Code used by **1 feature** → local in that feature
+3. **No exceptions** — this rule is absolute and non-negotiable
 
 ## Screaming Architecture
 
-La estructura debe COMUNICAR inmediatamente lo que hace la aplicación:
+The structure must immediately COMMUNICATE what the application does:
 
-- Los nombres de features describen funcionalidad de negocio, no implementación técnica
-- La estructura de directorios cuenta la historia de la app a primera vista
-- Los componentes Container deben tener el mismo nombre que su feature
+- Feature names describe business functionality, not technical implementation
+- The directory structure tells the app's story at a glance
+- Container components must have the same name as their feature
 
 ## Decision Framework
 
-Al analizar dónde colocar un componente:
+When analyzing where to place a component:
 
-1. **Contar usos**: identificar exactamente cuántas features usan el componente
-2. **Aplicar la regla**: 1 feature = local, 2+ features = shared
-3. **Validar**: la estructura debe gritar funcionalidad
-4. **Documentar**: explicar POR QUÉ se eligió esa ubicación
+1. **Count usages**: identify exactly how many features use the component
+2. **Apply the rule**: 1 feature = local, 2+ features = shared
+3. **Validate**: the structure must scream functionality
+4. **Document**: explain WHY that location was chosen
 
 ## Edge Cases
 
-- Si hay duda sobre uso futuro: empezar local, refactorizar a shared cuando se necesite
-- Utilidades en el límite: analizar imports reales, no uso hipotético
-- Si una lógica de dominio se repite, no mover a shared sin refactorizar en `shared/domain-utils` bajo aprobación de arquitectura
+- If in doubt about future use: start local, refactor to shared when needed
+- Borderline utilities: analyze real imports, not hypothetical use
+- If domain logic repeats, do not move to shared without refactoring into `shared/domain-utils` under architecture approval

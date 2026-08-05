@@ -1,51 +1,51 @@
-# Domain-Driven Development — Introducción Conceptual
+# Domain-Driven Development — Conceptual Introduction
 
-> **📖 Este documento es una introducción conceptual al dominio de Nutre-Fit-Dia. Para el análisis semántico a nivel de código, consultar los specs en `openspec/specs/` y el modelo de tipos en `src/shared/domain/`. Este documento complementa, no reemplaza, esos artefactos técnicos.**
+> **📖 This document is a conceptual introduction to the Nutre-Fit-Dia domain. For code-level semantic analysis, see the specs in `openspec/specs/` and the type model in `src/shared/domain/`. This document complements, not replaces, those technical artifacts.**
 
-Como Arquitecto de Software con enfoque en **Domain-Driven Development (DDD)**, el primer paso para desatar el "nudo semántico" es reconocer que el lenguaje en Nutre-Fit-Dia no es uniforme; lo que un médico entiende por "validación" es radicalmente distinto a lo que entiende un desarrollador.
+As a Software Architect focused on **Domain-Driven Development (DDD)**, the first step to untie the "semantic knot" is recognizing that language in Nutre-Fit-Dia is not uniform; what a doctor understands by "validation" is radically different from what a developer understands.
 
-A continuación, presento el análisis de los **Bounded Contexts** (Contextos Delimitados) y el mapa de **polisemia** detectado en las fuentes.
+Below, I present the analysis of the **Bounded Contexts** and the **polysemy** map detected in the sources.
 
-## 1. Propuesta de Bounded Contexts (BC)
+## 1. Proposed Bounded Contexts (BC)
 
-Para evitar que la lógica metabólica se contamine con la logística de recetas o métricas ambientales, identifico cuatro contextos claros:
+To prevent metabolic logic from being contaminated by recipe logistics or environmental metrics, I identify four clear contexts:
 
-- **BC de Gestión Metabólica (Core Domain):** Centrado en la fisiología del paciente (insulina, HbA1c, glucosa, IMC). Su objetivo es la reversión de la DT2.
-- **BC de Gobernanza Nutricional:** Encapsula las reglas de la dieta **erMedDiet** y las raciones **AESAN 2022**. Aquí reside el "Semáforo" y la lógica de "Azúcares Ocultos".
-- **BC de Sostenibilidad Planetaria:** Gestiona el `environmentalScore`, huellas hídricas y de carbono. No le interesa la glucosa, sino el impacto en el ecosistema.
-- **BC de Comportamiento (Nudge Engine):** Gestiona la adherencia, alertas y el "engagement" del usuario mediante reglas de IA.
-
----
-
-## 2. Detección de Polisemia y Conflictos Lingüísticos
-
-He detectado términos críticos que significan cosas distintas según el contexto. Ignorar esto causará que el código falle en su propósito médico:
-
-| Término            | Significado en Contexto Médico/Nutricional                                   | Significado en Contexto Técnico/Software                                           |
-| :----------------- | :--------------------------------------------------------------------------- | :--------------------------------------------------------------------------------- |
-| **Validación**     | Acto legal y clínico donde un **nutricionista colegiado** aprueba un plan.   | Validación de tipos con **Zod** o esquemas de datos en tiempo de ejecución.        |
-| **Ración**         | Cantidad exacta en gramos según la matriz AESAN (ej. 4 de cereales/día).     | Una instancia o entrada en un array dentro del `RecipeEngine`.                     |
-| **Alerta (Alert)** | Riesgo metabólico inminente (pico glucémico).                                | Un componente de UI, un `SafetyAlert` de sistema o un `ErrorBoundary`.             |
-| **Azúcar**         | Carbohidrato macro-nutricional presente de forma natural.                    | **Ingrediente oculto** (sacarosa, jarabe) que debe disparar un bloqueo de sistema. |
-| **Sostenibilidad** | Capacidad del planeta para soportar la producción del alimento (EAT-Lancet). | Mantenibilidad del código mediante la **Screaming Architecture** y tests.          |
+- **Metabolic Management BC (Core Domain):** Centered on patient physiology (insulin, HbA1c, glucose, BMI). Its goal is DT2 reversal.
+- **Nutritional Governance BC:** Encapsulates the **erMedDiet** diet rules and **AESAN 2022** rations. Here resides the "Traffic Light" and the "Occult Sugar" logic.
+- **Planetary Sustainability BC:** Manages the `environmentalScore`, water and carbon footprints. It does not care about glucose, but about ecosystem impact.
+- **Behavioral BC (Nudge Engine):** Manages adherence, alerts, and user "engagement" through AI rules.
 
 ---
 
-## 3. Análisis de Requisitos Crudos y Ambigüedades
+## 2. Polysemy Detection and Linguistic Conflicts
 
-Al analizar las fuentes, surgen "zonas grises" que deben resolverse antes de programar los servicios de dominio:
+I have detected critical terms that mean different things depending on the context. Ignoring this will cause the code to fail in its medical purpose:
 
-1. **La "Prioridad" del Bacalao:** Las fuentes lo marcan como "proteína de alta prioridad". **Ambigüedad:** ¿Esta prioridad es nutricional (aparece más veces) o logística (es lo primero que sugiere el `Substitution Service`)?.
-2. **El Peso del Semáforo:** Si un alimento es nutricionalmente "Verde" (AOVE) pero su `environmentalScore` es bajo (<30), ¿de qué color debe ser el semáforo?. Según la lógica de "Ranking Dual", el semáforo es médico, pero el ranking es el que penaliza la sostenibilidad. Confundir esto enviaría mensajes contradictorios al paciente.
-3. **Déficit Condicional:** Se impone una reducción de 600 kcal si el IMC > 25. **Ambigüedad:** ¿Es un recorte fijo o dinámico? Las fuentes dicen que el registro de glucosa debe "recalibrar el motor" en tiempo real, lo que implica una lógica reactiva compleja, no solo un cálculo estático.
+| Term               | Meaning in Medical/Nutritional Context                                         | Meaning in Technical/Software Context                                      |
+| :----------------- | :----------------------------------------------------------------------------- | :------------------------------------------------------------------------- |
+| **Validation**     | Legal and clinical act where a **nutricionista colegiado** approves a plan.    | Type validation with **Zod** or data schemas at runtime.                   |
+| **Ración**         | Exact quantity in grams according to the AESAN matrix (e.g. 4 of cereals/day). | An instance or entry in an array within the `RecipeEngine`.                |
+| **Alert**          | Imminent metabolic risk (glycemic spike).                                      | A UI component, a system `SafetyAlert` or an `ErrorBoundary`.              |
+| **Sugar**          | Macro-nutritional carbohydrate naturally present.                              | **Hidden ingredient** (sucrose, syrup) that should trigger a system block. |
+| **Sustainability** | The planet's capacity to support food production (EAT-Lancet).                 | Code maintainability through **Screaming Architecture** and tests.         |
 
 ---
 
-## 4. Simulación de Escenarios (Semantic Untangling)
+## 3. Analysis of Raw Requirements and Ambiguities
 
-Antes de escribir el `SubstitutionService.ts`, debemos resolver estos escenarios mentales:
+When analyzing the sources, "gray areas" emerge that must be resolved before programming the domain services:
 
-- **Escenario A: "El Error de la Fruta":** Una pieza de fruta tiene alta carga glucémica. El sistema lanza un `SafetyAlert`. Si el desarrollador lo trata como una "notificación de sistema" genérica, el usuario podría ignorarla. Debe ser un **Bloqueo de Dominio**, ya que es una restricción biológica.
-- **Escenario B: "El Azúcar Invisible":** Un yogur tiene 0% grasa (parece saludable) pero tiene jarabe de glucosa en los ingredientes. El contexto nutricional debe "ganar" al contexto de etiquetas macros. El modelo de dominio debe tener un `IngredientAnalyzer` que sea independiente del `MacroCalculator`.
+1. **The "Priority" of Bacalao:** The sources mark it as "high-priority protein". **Ambiguity:** Is this priority nutritional (appears more times) or logistical (the first thing the `Substitution Service` suggests)?
+2. **The Weight of the Traffic Light:** If a food is nutritionally "Green" (AOVE) but its `environmentalScore` is low (<30), what color should the traffic light be? According to "Dual Ranking" logic, the traffic light is medical, but the ranking penalizes sustainability. Confusing this would send contradictory messages to the patient.
+3. **Conditional Deficit:** A 600 kcal reduction is imposed if BMI > 25. **Ambiguity:** Is it a fixed or dynamic cut? The sources say glucose recording should "recalibrate the engine" in real time, implying complex reactive logic, not just a static calculation.
 
-**Conclusión del Arquitecto:** Para que este sistema sea una "herramienta de ingeniería médica de alta precisión", el código debe hablar el lenguaje de **erMedDiet**. La **Screaming Architecture** detectada en las fuentes es la defensa principal contra estos nudos semánticos, obligando a que cada carpeta de funcionalidad (`features/`) sea un silo de significado coherente.
+---
+
+## 4. Scenario Simulation (Semantic Untangling)
+
+Before writing `SubstitutionService.ts`, we must resolve these mental scenarios:
+
+- **Scenario A: "The Fruit Error":** A piece of fruit has a high glycemic load. The system fires a `SafetyAlert`. If the developer treats it as a generic "system notification", the user might ignore it. It must be a **Domain Block**, since it is a biological restriction.
+- **Scenario B: "The Invisible Sugar":** A yogurt has 0% fat (looks healthy) but has glucose syrup in the ingredients. The nutritional context must "win" over the macro-label context. The domain model must have an `IngredientAnalyzer` that is independent from the `MacroCalculator`.
+
+**Architect's Conclusion:** For this system to be a "high-precision medical engineering tool", the code must speak the language of **erMedDiet**. The **Screaming Architecture** detected in the sources is the primary defense against these semantic knots, forcing each feature folder (`features/`) to be a silo of coherent meaning.

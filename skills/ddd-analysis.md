@@ -1,26 +1,26 @@
-# Domain-Driven Development — Análisis Semántico
+# Domain-Driven Development — Semantic Analysis
 
-## Cuándo usar
+## When to use
 
-- Requisitos crudos o ambiguos.
-- Diferentes stakeholders usan la misma palabra con distinto significado.
-- Múltiples documentos describen conceptos solapados con nombres inconsistentes.
-- Una feature se siente enredada — el conflicto real es de lenguaje, no de lógica.
+- Raw or ambiguous requirements.
+- Different stakeholders use the same word with different meaning.
+- Multiple documents describe overlapping concepts with inconsistent names.
+- A feature feels tangled — the real conflict is about language, not logic.
 
 ## Workflow
 
-1. **Extraer términos del dominio** — todo sustantivo y verbo con significado de negocio
-2. **Detectar polisemia** — ¿un nutriólogo y un desarrollador entienden lo mismo?
-3. **Agrupar en Bounded Contexts** — por lenguaje ubicuo, reglas coherentes, ciclo de vida independiente
-4. **Señalar conflictos** — nombre de contextos, explicar por qué colisionan, proponer término canónico
+1. **Extract domain terms** — every noun and verb with business meaning
+2. **Detect polysemy** — does a nutritionist and a developer understand the same thing?
+3. **Group into Bounded Contexts** — by ubiquitous language, coherent rules, independent lifecycle
+4. **Flag conflicts** — name contexts, explain why they collide, propose canonical term
 
-## Output esperado
+## Expected output
 
-- **Términos polisémicos**: tabla con Término, Significado Contexto A, Significado Contexto B, Conflicto
-- **Bounded Context Map**: contextos, términos core, relaciones (upstream/downstream, shared kernel)
-- **Nudos semánticos**: términos que bloquean el progreso por significar cosas incompatibles
-- **Sugerencias de desambiguación**: resolución propuesta para cada conflicto
+- **Polysemic terms**: table with Term, Meaning Context A, Meaning Context B, Conflict
+- **Bounded Context Map**: contexts, core terms, relationships (upstream/downstream, shared kernel)
+- **Semantic knots**: terms that block progress by meaning incompatible things
+- **Disambiguation suggestions**: proposed resolution for each conflict
 
-## Regla dura
+## Hard rule
 
-**Desatar el nudo semántico antes de programar.** Sin código. Solo análisis.
+**Untie the semantic knot before coding.** No code. Analysis only.
