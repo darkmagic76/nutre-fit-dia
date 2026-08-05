@@ -9,18 +9,31 @@ interface NudgeEngineViewProps {
 }
 
 /**
- * Resolve an i18n key to its translated string.
+ * Safe i18n lookup for dynamic keys (nudge rule titles/bodies).
+ *
+ * Nudge rules store i18n keys as plain strings (e.g. 'nudge.title.fruitsGlycemicAlert').
+ * Since TypeScript can't prove that a runtime string is a valid Translations key,
+ * we use a typed fallback: return the key itself if not found.
+ *
+ * DO NOT use for static keys known at compile time — use `t['static.key']` directly.
+ */
+function tKey(t: Translations, key: string): string {
+  return (t as unknown as Record<string, string>)[key] ?? key;
+}
+
+/**
+ * Resolve an i18n body key with optional placeholder replacement.
  * If the key contains '|', the part before '|' is the key and after is
  * a comma-separated replacement for {names} (used by SUSTAINABLE_SUBSTITUTION).
  */
-function translateBody(t: Record<string, string>, raw: string): string {
+function translateBody(t: Translations, raw: string): string {
   const pipeIdx = raw.indexOf('|');
   if (pipeIdx === -1) {
-    return (t as unknown as Record<string, string>)[raw] ?? raw;
+    return tKey(t, raw);
   }
   const key = raw.slice(0, pipeIdx);
   const replacements = raw.slice(pipeIdx + 1);
-  return ((t as unknown as Record<string, string>)[key] ?? key).replace('{names}', replacements);
+  return tKey(t, key).replace('{names}', replacements);
 }
 
 export function NudgeEngineView({
@@ -58,19 +71,16 @@ export function NudgeEngineView({
         >
           <div className="min-w-0">
             <p className="font-medium text-sm text-stone-800 dark:text-zinc-200">
-              {(t as unknown as Record<string, string>)[nudge.title] ?? nudge.title}
+              {tKey(t, nudge.title)}
             </p>
             <p className="text-xs text-stone-500 dark:text-zinc-400 mt-0.5">
-              {translateBody(t as unknown as Record<string, string>, nudge.body)}
+              {translateBody(t, nudge.body)}
             </p>
           </div>
           <button
             onClick={() => onDismiss(nudge.id)}
             className="text-xs text-stone-400 dark:text-zinc-500 hover:text-stone-600 dark:hover:text-zinc-300 underline shrink-0 min-h-[44px] min-w-[44px] flex items-center justify-center"
-            aria-label={t['nudges.dismissAria'].replace(
-              '{title}',
-              (t as unknown as Record<string, string>)[nudge.title] ?? nudge.title,
-            )}
+            aria-label={t['nudges.dismissAria'].replace('{title}', tKey(t, nudge.title))}
           >
             ✕
           </button>
@@ -92,9 +102,7 @@ export function NudgeEngineView({
                 key={entry.id}
                 className="text-xs text-stone-400 dark:text-zinc-500 border-l-2 border-stone-200 dark:border-zinc-700 pl-2"
               >
-                <span className="text-stone-500 dark:text-zinc-400">
-                  {(t as unknown as Record<string, string>)[entry.title] ?? entry.title}
-                </span>
+                <span className="text-stone-500 dark:text-zinc-400">{tKey(t, entry.title)}</span>
                 <span className="ml-1">
                   {entry.dismissedAt
                     ? `— ${t['nudges.dismissed']}`
