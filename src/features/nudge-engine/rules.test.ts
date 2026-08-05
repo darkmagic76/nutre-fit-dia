@@ -351,3 +351,44 @@ describe('SUSTAINABLE_SUBSTITUTION', () => {
     expect(body).toBe('nudge.body.sustainableSubstitution|');
   });
 });
+
+describe('LEGUME_CARB_SOURCE', () => {
+  const rule = () => NUDGE_RULES.find((r) => r.id === 'LEGUME_CARB_SOURCE');
+
+  it('exists with correct id', () => {
+    expect(rule()).toBeDefined();
+  });
+
+  it('fires when legumes > 0 and cereals < 3', () => {
+    const ctx = makeContext({
+      counts: {
+        ...defaultRationCounts(),
+        [FoodCategory.LEGUMES]: 1,
+        [FoodCategory.CEREALS]: 2,
+      },
+    });
+    expect(rule()!.condition(ctx)).toBe(true);
+  });
+
+  it('does NOT fire when legumes = 0 (even if cereals < 3)', () => {
+    const ctx = makeContext({
+      counts: {
+        ...defaultRationCounts(),
+        [FoodCategory.LEGUMES]: 0,
+        [FoodCategory.CEREALS]: 2,
+      },
+    });
+    expect(rule()!.condition(ctx)).toBe(false);
+  });
+
+  it('does NOT fire when cereals = 3 (exact boundary, even with legumes > 0)', () => {
+    const ctx = makeContext({
+      counts: {
+        ...defaultRationCounts(),
+        [FoodCategory.LEGUMES]: 1,
+        [FoodCategory.CEREALS]: 3,
+      },
+    });
+    expect(rule()!.condition(ctx)).toBe(false);
+  });
+});

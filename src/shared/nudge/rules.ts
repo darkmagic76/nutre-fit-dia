@@ -49,6 +49,26 @@ export const NUDGE_RULES: SafetyRule[] = [
   },
   {
     /**
+     * LEGUME_CARB_SOURCE — complements CEREALS_DEFICIT. Fires when the user has
+     * eaten legumes today but is below the cereal minimum. Reinforces the AESAN
+     * 2022 recommendation that legumes can substitute cereal rations (L1368) and
+     * that legumes provide lower-GI, slower-digestion carbohydrates (L430-436).
+     *
+     * Co-fires with CEREALS_DEFICIT by design — they are complementary, not
+     * conflicting. CEREALS_DEFICIT alerts on deficit; LEGUME_CARB_SOURCE educates
+     * about legumes as an alternative slow-carb source.
+     */
+    id: 'LEGUME_CARB_SOURCE',
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
+    cooldown: COOLDOWN_6H,
+    title: 'nudge.title.legumeCarbSource',
+    body: 'nudge.body.legumeCarbSource',
+    condition: (ctx) =>
+      ctx.counts[FoodCategory.LEGUMES] > 0 && ctx.counts[FoodCategory.CEREALS] < CEREAL_MIN_RATIONS,
+  },
+  {
+    /**
      * FRUITS_GLYCEMIC_ALERT — log-time nudge for high-glycemic fruit.
      *
      * Design note: this is the LOG EVALUATION counterpart to `checkSafetyAlerts()`

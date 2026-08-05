@@ -226,6 +226,7 @@ export const en: Translations = {
   'nudge.title.whiteMeatRestrict': 'Restrict white meat',
   'nudge.title.hcInactivityAdjust': 'Insufficient physical activity',
   'nudge.title.sustainableSubstitution': 'Smart substitution',
+  'nudge.title.legumeCarbSource': 'Legumes are also a source of carbohydrates',
 
   // Nudge bodies
   'nudge.body.cerealsRestriction':
@@ -256,6 +257,8 @@ export const en: Translations = {
   'nudge.body.hcInactivityAdjust':
     'You have not reached 150 min/week of moderate activity. Consider reducing carbohydrate intake.',
   'nudge.body.sustainableSubstitution': 'Consider more sustainable alternatives: {names}',
+  'nudge.body.legumeCarbSource':
+    "You've eaten legumes today. Legumes provide slower-digesting carbohydrates with a lower glycemic index than refined cereals. They can help complement your cereal intake.",
 
   // Activity — extended
   'activity.streakWeeksAria': 'Streak of {streak} weeks',

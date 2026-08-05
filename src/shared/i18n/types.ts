@@ -236,7 +236,7 @@ export interface Translations {
   // Metabolic — extended
   'metabolic.formAriaLabel': string;
 
-  // Nudge rule titles (17 rules)
+  // Nudge rule titles (18 rules)
   'nudge.title.cerealsRestriction': string;
   'nudge.title.cerealsDeficit': string;
   'nudge.title.fruitsGlycemicAlert': string;
@@ -254,6 +254,7 @@ export interface Translations {
   'nudge.title.whiteMeatRestrict': string;
   'nudge.title.hcInactivityAdjust': string;
   'nudge.title.sustainableSubstitution': string;
+  'nudge.title.legumeCarbSource': string;
 
   // Nudge rule bodies (static)
   'nudge.body.cerealsRestriction': string;
@@ -272,6 +273,7 @@ export interface Translations {
   'nudge.body.eggsRedMeatAlt': string;
   'nudge.body.whiteMeatRestrict': string;
   'nudge.body.hcInactivityAdjust': string;
+  'nudge.body.legumeCarbSource': string;
 
   // Nudge rule bodies (dynamic — key used as format string with {names} placeholder)
   'nudge.body.sustainableSubstitution': string;

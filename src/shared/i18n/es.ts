@@ -230,6 +230,7 @@ export const es: Translations = {
   'nudge.title.whiteMeatRestrict': 'Restringir carnes blancas',
   'nudge.title.hcInactivityAdjust': 'Actividad física insuficiente',
   'nudge.title.sustainableSubstitution': 'Sustitución inteligente',
+  'nudge.title.legumeCarbSource': 'Las legumbres también aportan hidratos de carbono',
 
   // Nudge bodies
   'nudge.body.cerealsRestriction':
@@ -261,6 +262,8 @@ export const es: Translations = {
   'nudge.body.hcInactivityAdjust':
     'No has alcanzado los 150 min/semana de actividad moderada. Considera reducir carga de HC.',
   'nudge.body.sustainableSubstitution': 'Considera alternativas más sostenibles: {names}',
+  'nudge.body.legumeCarbSource':
+    'Has consumido legumbres hoy. Las legumbres son una fuente de hidratos de carbono de digestión más lenta y menor índice glucémico que los cereales refinados. Pueden ayudarte a completar tu ingesta de cereales.',
 
   // Activity — extended
   'activity.streakWeeksAria': 'Racha de {streak} semanas',
