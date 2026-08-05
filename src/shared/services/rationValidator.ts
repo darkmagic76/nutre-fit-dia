@@ -257,7 +257,7 @@ export const AESAN_GRAM_STANDARDS: Record<FoodCategoryType, { min: number; max: 
   [FoodCategory.FRUITS]: { min: 120, max: 200 },
   [FoodCategory.OLIVE_OIL]: { min: 10, max: 15 },
   [FoodCategory.DAIRY]: { min: 200, max: 250 },
-  [FoodCategory.LEGUMES]: { min: 60, max: 80 },
+  [FoodCategory.LEGUMES]: { min: 50, max: 60 },
   [FoodCategory.FISH]: { min: 150, max: 200 },
   [FoodCategory.EGGS]: { min: 50, max: 100 },
   [FoodCategory.WHITE_MEAT]: { min: 100, max: 150 },

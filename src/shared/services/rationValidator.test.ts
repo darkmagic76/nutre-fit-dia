@@ -276,6 +276,10 @@ describe('rationValidator', () => {
     it('has valid fish range (150-200g)', () => {
       expect(AESAN_GRAM_STANDARDS[FoodCategory.FISH]).toEqual({ min: 150, max: 200 });
     });
+
+    it('has valid legume range (50-60g dry per AESAN 2022)', () => {
+      expect(AESAN_GRAM_STANDARDS[FoodCategory.LEGUMES]).toEqual({ min: 50, max: 60 });
+    });
   });
 
   describe('validateFoodPortions', () => {
