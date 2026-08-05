@@ -48,6 +48,17 @@ export const NUDGE_RULES: SafetyRule[] = [
     condition: (ctx) => ctx.counts[FoodCategory.CEREALS] < CEREAL_MIN_RATIONS,
   },
   {
+    /**
+     * FRUITS_GLYCEMIC_ALERT — log-time nudge for high-glycemic fruit.
+     *
+     * Design note: this is the LOG EVALUATION counterpart to `checkSafetyAlerts()`
+     * in `src/features/nutritional-traffic-light/services/safetyCheck.ts`, which
+     * runs at SCAN time. Both use HIGH_GLYCEMIC_FRUIT_NAMES as canonical source.
+     * They are intentionally separate: scan-time warning vs post-add nudge panel.
+     *
+     * severity=SOFT_WARN means this auto-resolves when the fruit is removed from
+     * the daily log (see auto-resolve logic in engine.ts:144-152).
+     */
     id: 'FRUITS_GLYCEMIC_ALERT',
     type: NotificationType.SAFETY_ALERT,
     severity: NotificationSeverity.SOFT_WARN,

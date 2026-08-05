@@ -3,7 +3,7 @@ import { countRations } from '@shared/services/rationValidator';
 import {
   FoodCategory,
   ANIMAL_PROTEIN_CATEGORIES,
-  NotificationType,
+  NotificationSeverity,
   type Food,
   type SystemNotification,
 } from '@shared/domain';
@@ -141,9 +141,12 @@ export function evaluateAndEnqueue(food?: Food): void {
     resetCooldown: (id) => useNudgeStore.getState().resetCooldown(id),
   });
 
-  // 1. Auto-resolve stale nudges: non-safety pending whose rule condition is no longer met
+  // 1. Auto-resolve stale nudges: pending whose rule condition is no longer met.
+  //    Only HARD_BLOCK severity is excluded — they require explicit user acknowledgement.
+  //    SOFT_WARN and INFO auto-resolve when the triggering condition disappears
+  //    (e.g., removing a high-glycemic fruit from the daily log clears the alert).
   for (const nudge of pending) {
-    if (nudge.type === NotificationType.SAFETY_ALERT) continue;
+    if (nudge.severity === NotificationSeverity.HARD_BLOCK) continue;
 
     const rule = NUDGE_RULES.find((r) => r.id === nudge.ruleSource);
     if (rule && !rule.condition(ctx)) {

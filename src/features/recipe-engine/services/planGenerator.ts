@@ -238,18 +238,6 @@ export function generateWeeklyPlan(caloricRestrictionActive: boolean, mealCount 
   return { days, dailyResults, weeklyResult, valid };
 }
 
-// ---- Backward-compat: buildDailyTemplate delegates to buildMealSlots ----
-
-/**
- * @deprecated Use {@link buildMealSlots} instead.
- */
-export function buildDailyTemplate(
-  caloricRestrictionActive: boolean,
-  mealCount = 4,
-): TemplateSlot[] {
-  return buildMealSlots(mealCount, caloricRestrictionActive);
-}
-
 /**
  * Weekly slots distributed across days to satisfy weekly minimums.
  * Ensures legumes ≥4/week, fish ≥3/week, eggs ≤4, white meat ≤3, dairy ≤3/day.
