@@ -77,10 +77,12 @@ src/features/<feature>/
 
 ## Testing
 
+- **Vitest config está en `vite.config.ts`** (campo `test`). No hay `vitest.config.ts` separado.
 - **Vitest globals**: `describe`, `it`, `expect` sin imports (config: `globals: true`).
-- **jsdom + setup.ts**: el setup provee localStorage shim y mock de Web Crypto. Tests que usan el `storage.ts` (AES-GCM) dependen de este mock exacto.
+- **jsdom + setup.ts**: el setup en `src/test/setup.ts` provee localStorage shim y mock de Web Crypto (AES-GCM con XOR+checksum). Tests que usan `src/infrastructure/storage.ts` (AES-GCM) dependen de este mock exacto.
 - **Fixtures**: `makeFood(overrides)`, `makeEntries(category, n)`, `makeCaloricTargetOutput()`, `makeMetricsFormState()`, `makeViolation()`, `makeValidationResult()` en `src/test/fixtures.ts`.
-- **Coverage thresholds en CI**: statements 80%, branches 80%, **functions 100%**. Romper cualquiera = CI rojo.
+- **Coverage thresholds**: statements 80%, branches 80%, functions 100%, lines 80%. Romper cualquiera = CI rojo.
+- **VITE_STORAGE_PREFIX**: el config de tests setea `VITE_STORAGE_PREFIX=nutrefitdia`. Tests de stores que persisten en localStorage necesitan este prefijo.
 - **Playwright**: el config arranca `pnpm dev` automáticamente (`webServer`). E2E tests en `e2e/`.
 
 ## TypeScript & linting
