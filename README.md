@@ -144,7 +144,7 @@ Core principles and development rules live in dedicated, modular files — loade
 1. **Domain Modeling** — Strict types: metabolic profiles, AESAN portions, food types, notifications
 2. **Domain Services & Containers** — erMedDiet logic, Container/Presentational split, Zustand stores
 3. **ADR Scaffolding** — ScannerAdapter, Activity Tracker, Sustainability, Nudge Engine
-4. **Tests & Error Handling** — 730 tests (72 files), 80%+ coverage, i18n ES/EN, ErrorBoundary
+4. **Tests & Error Handling** — 731 tests (72 files), 80%+ coverage, i18n ES/EN, ErrorBoundary
 5. **E2E & Accessibility** — Playwright smoke tests, WCAG 2.1 AA compliance
 
 ### Clinical Foundation
@@ -171,7 +171,7 @@ Push/PR → ✅ Quality Gate → 🏗️ Build
               ├ format:check       ├ vite build
               ├ lint (oxlint)      └ dist/ artifact
               ├ typecheck
-              └ unit tests (730)
+              └ unit tests (731)
 ```
 
 **Deployment**: separate workflow (`deploy.yml`) deploys to GitHub Pages on push to `main`.

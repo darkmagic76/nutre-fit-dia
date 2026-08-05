@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features by Functional Criticality
 
-Generated: 2026-07-17 | Updated: 2026-08-02 | Branch: `develop` | Tests: 730 ✅ (72 files) | Lint: 0 (oxlint) | Typecheck: clean | Coverage: Stmts/Branches/Funcs/Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/
+Generated: 2026-07-17 | Updated: 2026-08-05 | Branch: `develop` | Tests: 731 ✅ (72 files) | Lint: 0 (oxlint) | Typecheck: clean | Coverage: Stmts/Branches/Funcs/Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/
 
 ---
 
@@ -106,7 +106,7 @@ Phase 4 — Polish (LOW)
 
 ## Notes
 
-- **730 green tests (72 files)**: any new feature must maintain strict TDD (RED → GREEN → TRIANGULATE → REFACTOR).
+- **731 green tests (72 files)**: any new feature must maintain strict TDD (RED → GREEN → TRIANGULATE → REFACTOR).
 - **Scope Rule**: code used by 1 feature → inside that feature. Used by 2+ → `shared/` with domain module structure. Nudge engine extracted to `src/shared/nudge/` (2026-07-23). `planStore` moved to `features/recipe-engine/store/` (2026-08-02).
 - **Nudge engine**: pure `buildNudgeContext()` via `ContextInput`. `CooldownTracker` with dependency injection (`CooldownOps`). `biomarkerTrackingService` removed (Middle Man — inlined in `trackerStore`).
 - **FR-5.1 Export**: `useExportData` connected to "📥 Exportar datos" button in Metabolic Profile. Downloads JSON with 6 stores.

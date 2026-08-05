@@ -27,7 +27,7 @@ Si una decisión contradice un skill, el skill tiene razón. Siempre.
 ## Setup & toolchain
 
 - **pnpm obligatorio**. No usar npm ni yarn. El pre-commit hook hardcodea `$HOME/.local/share/pnpm:$PATH`.
-- Node: `.nvmrc` dice `25` (autoritativo para dev local). CI usa 22.
+- Node: `.nvmrc` dice `22` (autoritativo para dev local). CI usa 22.
 - `pnpm install --frozen-lockfile` en CI; localmente `pnpm install`.
 - Si después de un `git pull` ves blank screen, corré `pnpm install` — seguro `pnpm-lock.yaml` cambió.
 
@@ -123,16 +123,17 @@ src/features/<feature>/
 
 Cada documento tiene un propósito específico. No duplicar — leer el que aplica.
 
-| Documento                                              | Propósito                                                                                                                              |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| [`README.md`](README.md)                               | Visión general, features, stack, PWA, CI/CD, OWASP                                                                                     |
-| [`SETUP.md`](SETUP.md)                                 | Instalación paso a paso, troubleshooting                                                                                               |
-| [`SPECS_RF.md`](SPECS_RF.md)                           | Requisitos funcionales del TFM                                                                                                         |
-| [`SPECS_TECH.md`](SPECS_TECH.md)                       | Especificaciones técnicas                                                                                                              |
-| [`TASKS.md`](TASKS.md)                                 | Lista de tareas del proyecto                                                                                                           |
-| [`INFORME_ADR.md`](INFORME_ADR.md)                     | Informe completo de Architecture Decision Records                                                                                      |
-| [`adr/`](adr/)                                         | 11 ADRs individuales + [`FR-MATRIX-trazabilidad.md`](adr/FR-MATRIX-trazabilidad.md) + [`reconciliation.json`](adr/reconciliation.json) |
-| [`docs/domain/DDD-INTRO.md`](docs/domain/DDD-INTRO.md) | Análisis DDD: bounded contexts, polisemia, desambiguación                                                                              |
-| [`openspec/specs/`](openspec/specs/)                   | 37 especificaciones de dominio (spec-driven development)                                                                               |
-| [`docs/slides/`](docs/slides/)                         | Presentación PowerPoint del TFM                                                                                                        |
-| [`docs/fuentes/`](docs/fuentes/)                       | Fuentes y referencias científicas                                                                                                      |
+| Documento                                                                        | Propósito                                                                                                                              |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [`README.md`](README.md)                                                         | Visión general, features, stack, PWA, CI/CD, OWASP                                                                                     |
+| [`SETUP.md`](SETUP.md)                                                           | Instalación paso a paso, troubleshooting                                                                                               |
+| [`SPECS_RF.md`](SPECS_RF.md)                                                     | Requisitos funcionales del TFM                                                                                                         |
+| [`SPECS_TECH.md`](SPECS_TECH.md)                                                 | Especificaciones técnicas                                                                                                              |
+| [`TASKS.md`](TASKS.md)                                                           | Lista de tareas del proyecto                                                                                                           |
+| [`INFORME_ADR.md`](INFORME_ADR.md)                                               | Informe completo de Architecture Decision Records                                                                                      |
+| [`INFORME_RECOMENDACIONES_DIETETICAS.md`](INFORME_RECOMENDACIONES_DIETETICAS.md) | Informe oficial AESAN 2022 — fuente primaria de recomendaciones dietéticas                                                             |
+| [`adr/`](adr/)                                                                   | 11 ADRs individuales + [`FR-MATRIX-trazabilidad.md`](adr/FR-MATRIX-trazabilidad.md) + [`reconciliation.json`](adr/reconciliation.json) |
+| [`docs/domain/DDD-INTRO.md`](docs/domain/DDD-INTRO.md)                           | Análisis DDD: bounded contexts, polisemia, desambiguación                                                                              |
+| [`openspec/specs/`](openspec/specs/)                                             | 37 especificaciones de dominio (spec-driven development)                                                                               |
+| [`docs/slides/`](docs/slides/)                                                   | Presentación PowerPoint del TFM                                                                                                        |
+| [`docs/fuentes/`](docs/fuentes/)                                                 | Fuentes y referencias científicas                                                                                                      |
