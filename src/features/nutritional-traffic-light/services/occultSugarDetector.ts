@@ -7,7 +7,7 @@
  * Detection is language-aware: matches both Spanish ingredient labels.
  */
 
-import { SUGAR_ALIASES } from '@shared/domain/sugarAliases';
+import { SUGAR_ALIASES } from '../data/sugarAliases';
 
 const TRANS_FAT_PATTERNS = [
   'grasa hidrogenada',

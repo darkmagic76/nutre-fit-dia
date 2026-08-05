@@ -3,7 +3,7 @@ import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import { useTrackerStore } from '@shared/stores/trackerStore';
-import { generateWeeklyPlan, type WeeklyPlan } from '@shared/services/planGenerator';
+import { generateWeeklyPlan, type WeeklyPlan } from '../services/planGenerator';
 
 interface PlanState {
   weeklyPlan: WeeklyPlan | null;
