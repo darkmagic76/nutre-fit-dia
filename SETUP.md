@@ -120,7 +120,7 @@ pnpm quality
   ├── pnpm format:check → Prettier
   ├── pnpm lint         → Oxlint (Rust, ultra-fast)
   ├── pnpm typecheck    → TypeScript 6 (erasableSyntaxOnly)
-  └── pnpm test:run     → Vitest (731 tests)
+  └── pnpm test:run     → Vitest (735 tests)
 ```
 
 ---
@@ -214,7 +214,7 @@ nutre-fit-dia/
 │   │   ├── med-diet-validator/         ← AESAN 2022 validation
 │   │   ├── recipe-engine/              ← Weekly plan + UNESCO badges + ZeroWaste
 │   │   ├── activity-tracker/           ← WHO 150-300 min + strength (H1, M6)
-│   │   ├── nudge-engine/               ← 17 rules + panel UI (H2, H6, H7, M2)
+│   │   ├── nudge-engine/               ← 18 rules + panel UI (H2, H6, H7, M2)
 │   │   └── sustainability/             ← Eco Dashboard + scoring (ADR-007)
 │   ├── shared/
 │   │   ├── constants/         ← 14 clinical thresholds (AESAN/WHO/PREDIMED-Plus)
@@ -266,7 +266,7 @@ nutre-fit-dia/
 | Scanner        | Mock → ONNX (V2)                                   | ADR-003  |
 | Activity       | GoalTracker manual V1                              | ADR-006  |
 | Sustainability | EnvironmentalScore + substitutionService V1        | ADR-007  |
-| Notifications  | 17 rules: SafetyAlert/SystemAction/BehavioralNudge | ADR-008  |
+| Notifications  | 18 rules: SafetyAlert/SystemAction/BehavioralNudge | ADR-008  |
 
 ---
 

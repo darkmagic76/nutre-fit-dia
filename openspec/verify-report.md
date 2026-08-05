@@ -158,7 +158,7 @@ The store-architecture spec R1 scenario for `activityStore` says it "MUST NOT ex
 | ADR-005 | FoodCategory — 11-Group Model | ✅ PASS | All 11 groups including RED_MEAT. Zod schema covers all. No feature creates own subset. |
 | ADR-006 | Activity Tracking Strategy | ✅ PASS | V1: ActivityGoalTracker (manual entry, weekly compliance). BasalPAF unchanged. V2 deferred. |
 | ADR-007 | Sustainability Scoring | ✅ PASS | `shared/sustainability/` module with scoringService + substitutionService + PROTEIN_EMISSION_RATIOS. All consumers use single module. |
-| ADR-008 | Nudge Taxonomy | ✅ PASS | 17 rules across 3 NotificationTypes (SAFETY_ALERT, SYSTEM_ACTION, BEHAVIORAL_NUDGE). 3 severity levels. Cooldown per rule. |
+| ADR-008 | Nudge Taxonomy | ✅ PASS | 18 rules across 3 NotificationTypes (SAFETY_ALERT, SYSTEM_ACTION, BEHAVIORAL_NUDGE). 3 severity levels. Cooldown per rule. |
 | ADR-009 | Technology Stack | ✅ PASS | React 19, TS6, Vite 8, Zod 4, Zustand 5, Tailwind 4, Vitest 4. PWA via manifest+service worker. |
 | ADR-010 | PWA Install Strategy | ✅ PASS | `useInstallPrompt` hook with `beforeinstallprompt` capture, 7-day dismiss cooldown, `InstallPrompt` component. |
 | ADR-011 | Production Readiness — Deploy & Supabase V2 | ✅ PASS | GitHub Pages deployment with HTTPS enforced. Supabase deferred to V2 via ports/adapters pattern. Static SPA = offline-first clinical feature. |
@@ -202,7 +202,7 @@ The store-architecture spec R1 scenario for `activityStore` says it "MUST NOT ex
 |------------|--------|----------|
 | §2: Metabolic profile + PREDIMED-Plus trigger | ✅ | `trackerStore` + `caloricTargetService` |
 | §3: Scanner traffic light + occult detection | ✅ | `classificationService` (22 tests) + `occultSugarDetector` (9 tests) |
-| §4: Nudge system + intelligent substitution | ✅ | 17 rules in `shared/nudge/rules.ts` + `SUSTAINABLE_SUBSTITUTION` nudge |
+| §4: Nudge system + intelligent substitution | ✅ | 18 rules in `shared/nudge/rules.ts` + `SUSTAINABLE_SUBSTITUTION` nudge |
 | §5: Meal structure + ration control | ✅ | `MealType` distribution + `AESAN_GRAM_STANDARDS` + fractioning |
 | §6: Activity tracking + lifestyle | ✅ | `activity-tracker` feature + WHO 150-300 min + 2 strength days |
 | §7: Legal + governance | ✅ | `LegalDisclaimer` + `RNF-01` compliance |

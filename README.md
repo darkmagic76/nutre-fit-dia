@@ -85,7 +85,7 @@ src/
 │   │   ├── ActivityTrackerView.tsx       # UI: WHO goals + form
 │   │   ├── hooks/useActivityTracker.ts   # Hook: compliance %, streak, weeklyGoal
 │   │   └── types.ts                      # ActivityEntry, WeeklyGoal, ComplianceReport
-│   ├── nudge-engine/                    # 17 rules + panel UI (ADR-008)
+│   ├── nudge-engine/                    # 18 rules + panel UI (ADR-008)
 │   │   ├── NudgeEngineContainer.tsx      # Logic: pending nudges + history
 │   │   ├── NudgeEngineView.tsx           # UI: list + dismiss + counter badge
 │   │   └── index.ts                      # Barrel re-export
@@ -121,7 +121,7 @@ src/
 - **Mediterranean Diet Validator**: Validates daily/weekly frequencies per AESAN 2022 matrix. Exact gram-portion control.
 - **Recipe Engine**: Weekly plans with caloric restriction. Dual health+sustainability ranking. **3-6 daily meal split** with kcal per meal. UNESCO cultural badges (🏺👥🌿). AOVE mandatory in every main meal.
 - **Activity Goal Tracker**: WHO 150-300 min/week tracking. Compliance % and streak. Dashboard tab.
-- **Nudge Engine**: 17 rules (SafetyAlert + BehavioralNudge + SystemAction). Panel UI with counter badge + engagement history. Smart substitution (M2): sustainable alternatives when environmentalScore < 30.
+- **Nudge Engine**: 18 rules (SafetyAlert + BehavioralNudge + SystemAction). Panel UI with counter badge + engagement history. Smart substitution (M2): sustainable alternatives when environmentalScore < 30.
 - **Sustainability Scoring**: `computeEnvironmentalScore()` with AESAN/EAT-Lancet constants. Configurable 50/30/20 weights. Integrated into RecipeEngine (dual ranking).
 - **Substitution Service**: `suggestAlternative(food)` — WHITE_MEAT → LEGUMES + blue FISH (AESAN 2.4.2.1). Environmental score ranking. Top 3 alternatives.
 - **Conviviality**: UNESCO textual suggestions in PlanView: "Ideal for sharing meals" + cooking techniques (stew, steam, boil, grill, raw).
@@ -144,7 +144,7 @@ Core principles and development rules live in dedicated, modular files — loade
 1. **Domain Modeling** — Strict types: metabolic profiles, AESAN portions, food types, notifications
 2. **Domain Services & Containers** — erMedDiet logic, Container/Presentational split, Zustand stores
 3. **ADR Scaffolding** — ScannerAdapter, Activity Tracker, Sustainability, Nudge Engine
-4. **Tests & Error Handling** — 731 tests (72 files), 80%+ coverage, i18n ES/EN, ErrorBoundary
+4. **Tests & Error Handling** — 735 tests (72 files), 80%+ coverage, i18n ES/EN, ErrorBoundary
 5. **E2E & Accessibility** — Playwright smoke tests, WCAG 2.1 AA compliance
 
 ### Clinical Foundation

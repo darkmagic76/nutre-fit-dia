@@ -15,7 +15,7 @@ Generated: 2026-07-17 | Updated: 2026-08-05 | Branch: `develop` | Tests: 731 ✅
 | Domain Types                    | ✅ Implemented — FoodCategory, TrafficLight, Notification, Zod schemas, domain errors                                                                          |
 | UI Primitives                   | ✅ Implemented — 7 components with unit tests                                                                                                                  |
 | Activity Tracker                | ✅ Implemented (H1) — useActivityTracker, compliance %, streak, dashboard tab                                                                                  |
-| Nudge Engine                    | ✅ Complete (H2+H6+H7) — 17 rules, CooldownTracker, NudgeStore, NudgePanel UI with badge + history                                                             |
+| Nudge Engine                    | ✅ Complete (H2+H6+H7) — 18 rules, CooldownTracker, NudgeStore, NudgePanel UI with badge + history                                                             |
 | Sustainability                  | ✅ Implemented (H3) — computeEnvironmentalScore, PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS, integrated in RecipeEngine (dual ranking)                           |
 | UserProfile + Phenotypic Filter | ✅ Implemented (C1) — UserProfileSchema (Zod), diagnosisAge, phenotypic filter                                                                                 |
 | Legal Disclaimer                | ✅ Implemented (C3) — RNF-01 persistent banner in Dashboard + Plan                                                                                             |
