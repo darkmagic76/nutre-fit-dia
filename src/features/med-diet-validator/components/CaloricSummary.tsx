@@ -1,6 +1,6 @@
 import { useT } from '@shared/i18n';
 import { StatCard } from '@shared/ui';
-import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
+import type { CaloricTargetOutput } from '../../../domain/caloricTargetService';
 
 interface CaloricSummaryProps {
   caloricTarget: CaloricTargetOutput;

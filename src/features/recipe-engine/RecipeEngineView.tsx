@@ -3,7 +3,7 @@ import type { Food } from '@shared/domain';
 import { Card, PrimaryButton, ViolationList } from '@shared/ui';
 import { formatViolation } from '@shared/ui/formatters/formatViolation';
 import { MealType, type MealEntry, type WeeklyPlan } from './services/planGenerator';
-import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
+import type { CaloricTargetOutput } from '../../domain/caloricTargetService';
 import { CulturalBadges } from './components/CulturalBadges';
 import { ZeroWasteBadges } from './components/ZeroWasteBadges';
 

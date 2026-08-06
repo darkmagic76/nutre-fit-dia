@@ -1,13 +1,13 @@
 /** ADR-008: Nudge engine contract — rules and context */
 
-import type { CountByCategory } from '@shared/services/rationValidator';
+import type { CountByCategory } from '../../domain/rationValidator';
 import type {
   NotificationSeverity,
   NotificationType,
   SystemNotification,
   Food,
 } from '@shared/domain';
-import type { BiomarkerTrend } from '@shared/services/biomarkerTypes';
+import type { BiomarkerTrend } from '../../domain/biomarkerTypes';
 
 // ─── Domain input contracts (engine receives data, never reads stores) ───
 

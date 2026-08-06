@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { NUDGE_RULES } from '@shared/nudge/rules';
-import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits';
-import { defaultRationCounts } from '@shared/services/rationValidator';
+import { NUDGE_RULES } from '../../infrastructure/nudge/rules';
+import { HIGH_GLYCEMIC_FRUIT_NAMES } from '../../domain/glycemicFruits';
+import { defaultRationCounts } from '../../domain/rationValidator';
 import { FoodCategory } from '@shared/domain';
 import type { NudgeContext } from '@shared/nudge';
 

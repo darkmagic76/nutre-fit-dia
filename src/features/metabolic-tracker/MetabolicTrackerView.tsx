@@ -1,5 +1,5 @@
 import type { Translations } from '@shared/i18n';
-import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
+import type { CaloricTargetOutput } from '../../domain/caloricTargetService';
 import { Card } from '@shared/ui';
 import type { ValidationError } from '@shared/errors';
 import type { UserMetricsFormState } from '@shared/domain';

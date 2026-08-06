@@ -1,6 +1,6 @@
 import { useT } from '@shared/i18n';
 import { formatSafetyAlert } from '@shared/ui/formatters/formatViolation';
-import type { SafetyAlert } from '@shared/services/rationValidator';
+import type { SafetyAlert } from '../../../domain/rationValidator';
 
 interface SafetyAlertDisplayProps {
   alerts: SafetyAlert[];

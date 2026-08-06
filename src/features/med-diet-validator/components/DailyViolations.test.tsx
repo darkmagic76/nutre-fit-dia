@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { DailyViolations } from './DailyViolations';
 import { makeRationValidationResult, makeViolation } from '@/test/fixtures';
-import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
+import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '../../../domain/clinical';
 import { FoodCategory } from '@shared/domain';
 
 describe('DailyViolations', () => {

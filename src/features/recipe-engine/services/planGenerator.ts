@@ -1,7 +1,7 @@
 import type { Food } from '@shared/domain';
 import { FoodCategory } from '@shared/domain';
 import { foods } from '@shared/data/foods';
-import { CEREAL_RESTRICTED_MAX } from '@shared/constants/clinical';
+import { CEREAL_RESTRICTED_MAX } from '../../../domain/clinical';
 import {
   validateRations,
   validateWeeklyRations,
@@ -9,7 +9,7 @@ import {
   defaultRationCounts,
   type CountByCategory,
   type RationValidationResult,
-} from '@shared/services/rationValidator';
+} from '../../../domain/rationValidator';
 import { computeEnvironmentalScore } from '@shared/sustainability';
 
 export const MealType = {

@@ -1,5 +1,5 @@
 import type { Translations } from '@shared/i18n/types';
-import type { RationViolation, SafetyAlert } from '@shared/services/rationValidator';
+import type { RationViolation, SafetyAlert } from '../../../domain/rationValidator';
 
 // ─── Shared interpolation ────────────────────────────────────────────────
 

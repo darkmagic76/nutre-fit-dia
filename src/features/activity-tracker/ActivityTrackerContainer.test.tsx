@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { ActivityTrackerContainer } from './ActivityTrackerContainer';
 import { I18nProvider } from '@shared/i18n';
 import { type ReactElement } from 'react';
-import { useActivityStore } from '@shared/stores/activityStore';
+import { useActivityStore } from '@infrastructure/stores/activityStore';
 
 function renderContainer(ui: ReactElement) {
   return render(<I18nProvider>{ui}</I18nProvider>);

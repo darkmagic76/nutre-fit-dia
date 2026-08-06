@@ -1,8 +1,8 @@
 import { useT } from '@shared/i18n';
 import { ViolationList } from '@shared/ui';
 import { formatViolation } from '@shared/ui/formatters/formatViolation';
-import type { RationValidationResult } from '@shared/services/rationValidator';
-import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/constants/clinical';
+import type { RationValidationResult } from '../../../domain/rationValidator';
+import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '../../../domain/clinical';
 
 /**
  * Renders ration-limit breach feedback to the user.

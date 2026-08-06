@@ -33,7 +33,9 @@
       "@/*": ["./src/*"],
       "@features/*": ["./src/features/*"],
       "@shared/*": ["./src/shared/*"],
-      "@infrastructure/*": ["./src/infrastructure/*"]
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@domain/*": ["./src/domain/*"],
+      "@application/*": ["./src/application/*"]
     }
   },
   "include": ["src"],

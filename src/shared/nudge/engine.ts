@@ -1,5 +1,5 @@
 import { useTrackerStore, useLogStore, useActivityStore } from '@shared/stores';
-import { countRations } from '@shared/services/rationValidator';
+import { countRations } from '../../domain/rationValidator';
 import {
   FoodCategory,
   ANIMAL_PROTEIN_CATEGORIES,
@@ -9,12 +9,12 @@ import {
 } from '@shared/domain';
 import { computeEnvironmentalScore, suggestAlternative } from '@shared/sustainability';
 import { useBiomarkerStore } from '@shared/stores';
-import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits';
-import { NUDGE_RULES } from './rules';
-import { CooldownTracker } from './cooldownTracker';
+import { HIGH_GLYCEMIC_FRUIT_NAMES } from '../../domain/glycemicFruits';
+import { NUDGE_RULES } from '../../infrastructure/nudge/rules';
+import { CooldownTracker } from '../../domain/cooldownTracker';
 import { useNudgeStore } from '@shared/stores';
 import type { ContextInput, NudgeContext, NudgeEvaluation, SafetyRule } from './types';
-import type { CooldownTracker as CooldownTrackerType } from './cooldownTracker';
+import type { CooldownTracker as CooldownTrackerType } from '../../domain/cooldownTracker';
 
 /**
  * Build the current nudge context from pure input data.

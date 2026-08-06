@@ -1,5 +1,5 @@
 export { NudgeEngineContainer } from './NudgeEngineContainer';
-export { useNudgeStore } from '@shared/stores';
+export { useNudgeStore } from '@infrastructure/stores';
 export {
   CooldownTracker,
   NUDGE_RULES,

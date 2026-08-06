@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { useTrackerStore } from '@shared/stores/trackerStore';
-import { useLogStore } from '@shared/stores/logStore';
-import { useNudgeStore } from '@shared/stores/nudgeStore';
-import { useActivityStore } from '@shared/stores/activityStore';
-import { usePlanStore } from '@features/recipe-engine/store/planStore';
-import { useBiomarkerStore } from '@shared/stores/biomarkerStore';
+import { useTrackerStore } from '@infrastructure/stores/trackerStore';
+import { useLogStore } from '@infrastructure/stores/logStore';
+import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
+import { useActivityStore } from '@infrastructure/stores/activityStore';
+import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
+import { usePlanStore } from '@infrastructure/stores/planStore';
 
 function stripActions<T extends object>(state: T): Partial<T> {
   const result: Record<string, unknown> = {};

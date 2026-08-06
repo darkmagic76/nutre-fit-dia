@@ -3,7 +3,7 @@ import type { Food } from '@shared/domain';
 import { Card, SelectField, PrimaryButton } from '@shared/ui';
 import { SafetyAlertDisplay } from './components/SafetyAlertDisplay';
 import type { ClassificationResult } from './services/classificationService';
-import type { SafetyAlert } from '@shared/services/rationValidator';
+import type { SafetyAlert } from '../../domain/rationValidator';
 import type { Translations } from '@shared/i18n';
 
 const TRAFFIC_COLORS: Record<string, string> = {

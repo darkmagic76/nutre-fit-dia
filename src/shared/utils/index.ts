@@ -5,6 +5,6 @@ export {
   IMC_UNDERWEIGHT,
   IMC_NORMAL_MAX,
   IMC_OVERWEIGHT,
-} from './imc';
-export { defineEnum } from './enum';
-export type { ValuesOf } from './enum';
+} from '../../domain/imc';
+export { defineEnum } from '../../domain/enum';
+export type { ValuesOf } from '../../domain/enum';

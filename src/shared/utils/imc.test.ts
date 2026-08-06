@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeIMC, isRestrictionCandidate } from './imc';
+import { computeIMC, isRestrictionCandidate } from '../../domain/imc';
 
 describe('computeIMC', () => {
   it('computes IMC correctly (80kg, 170cm)', () => {

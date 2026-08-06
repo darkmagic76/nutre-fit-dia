@@ -7,7 +7,7 @@ import { useLogStore } from '@shared/stores';
 import { evaluateAndEnqueue } from '@shared/nudge';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import { NutritionalTrafficLightView } from './NutritionalTrafficLightView';
-import type { SafetyAlert } from '@shared/services/rationValidator';
+import type { SafetyAlert } from '../../domain/rationValidator';
 
 export function NutritionalTrafficLightContainer() {
   const t = useT();

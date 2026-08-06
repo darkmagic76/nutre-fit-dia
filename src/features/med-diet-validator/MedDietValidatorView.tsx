@@ -1,8 +1,8 @@
 import type { Translations } from '@shared/i18n';
 import { Card } from '@shared/ui';
 import type { Food } from '@shared/domain';
-import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
-import type { RationValidationResult } from '@shared/services/rationValidator';
+import type { CaloricTargetOutput } from '../../domain/caloricTargetService';
+import type { RationValidationResult } from '../../domain/rationValidator';
 import { CaloricSummary } from './components/CaloricSummary';
 import { FoodList } from './components/FoodList';
 import { DailyViolations } from './components/DailyViolations';

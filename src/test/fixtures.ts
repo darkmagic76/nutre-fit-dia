@@ -1,8 +1,8 @@
 import { FoodCategory } from '@shared/domain';
 import type { Food } from '@shared/domain';
-import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
-import type { UserMetricsFormState } from '@shared/domain/metrics';
-import type { RationValidationResult, RationViolation } from '@shared/services/rationValidator';
+import type { CaloricTargetOutput } from '../domain/caloricTargetService';
+import type { UserMetricsFormState } from '../domain/metrics';
+import type { RationValidationResult, RationViolation } from '../domain/rationValidator';
 
 // ---------------------------------------------------------------------------
 // Food fixtures

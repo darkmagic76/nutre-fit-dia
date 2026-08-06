@@ -1,6 +1,6 @@
 import type { Food } from '@shared/domain';
-import type { SafetyAlert } from '@shared/services/rationValidator';
-import { HIGH_GLYCEMIC_FRUIT_NAMES } from '@shared/domain/glycemicFruits';
+import type { SafetyAlert } from '../../../domain/rationValidator';
+import { HIGH_GLYCEMIC_FRUIT_NAMES } from '../../../domain/glycemicFruits';
 
 /**
  * Check a scanned food for safety concerns.
