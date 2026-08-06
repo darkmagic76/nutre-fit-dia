@@ -9,67 +9,69 @@ Defines Zustand store placement rules per the Scope Rule (ADR-001) and per-featu
 | # | Requirement | Keyword |
 |---|-------------|---------|
 | R1 | Stores used by a single feature MUST live in that feature's directory; stores with 2+ consumers are NOT feature-scoped | MUST |
-| R2 | Stores used by 2+ features MUST live in `src/shared/stores/` | MUST |
-| R3 | `shared/` MUST NOT import from any `@features/` path | MUST NOT |
+| R2 | Stores used by 2+ features MUST live in `src/infrastructure/stores/` (was `src/shared/stores/`) | MUST |
+| R3 | `application/` MUST import from ports, not from stores directly | MUST |
 | R4 | Relocated stores MUST preserve all existing APIs unchanged | MUST |
 | R5 | The full test suite MUST pass after relocation | MUST |
 | R6 | `pnpm typecheck` and `pnpm build` MUST succeed | MUST |
 | R7 | Stores moved to shared MUST have a feature barrel re-exporting from `@shared/stores/` for backward compatibility | MUST |
 | R8 | Lint and typecheck MUST block any `@features/` import within `src/shared/` | MUST |
 
-### R1: Feature-Scoped Store Placement
+### R1: Feature-Scoped Store Placement (unchanged)
 
 Stores with exactly one consumer feature MUST live in that feature's directory. PlanStore has 2+ consumers and is therefore NOT feature-scoped.
 
-#### Scenario: planStore is now a shared store
+#### Scenario: planStore is now an infrastructure store
 
 - GIVEN `planStore.ts` is consumed by `recipe-engine` (feature) and `useExportData` (shared hook)
 - WHEN the refactor is complete
-- THEN `planStore.ts` MUST exist at `src/shared/stores/planStore.ts`
-- AND the barrel at `src/features/recipe-engine/planStore.ts` SHALL re-export from shared
-- AND `src/shared/stores/planStore.ts` MUST NOT import from `@features/`
+- THEN `planStore.ts` MUST exist at `src/infrastructure/stores/planStore.ts`
+- AND the barrel at `src/features/recipe-engine/planStore.ts` SHALL re-export from infrastructure
 
-#### Scenario: activityStore stays in feature
+#### Scenario: activityStore stays in feature (unchanged)
 
 - GIVEN `activityStore.ts` has exactly one consumer feature (`activity-tracker`)
 - WHEN the refactor is complete
 - THEN `activityStore.ts` MUST exist at `src/features/activity-tracker/activityStore.ts`
 
-### R2: Shared Store Retention
+### R2: Shared Store Retention → Infrastructure Stores
 
-Stores with 2+ feature consumers MUST remain in `shared/stores/`.
+Stores with 2+ feature consumers MUST live in `src/infrastructure/stores/`.
 
-#### Scenario: planStore added to shared
+(Previously: Stores with 2+ feature consumers MUST remain in `shared/stores/`.)
 
-- GIVEN `planStore.ts` is consumed by `recipe-engine` (generates weekly plan) AND `useExportData` (exports all store state)
-- AND data-export is in `shared/hooks/` — a second consumer
-- WHEN the refactor is complete
-- THEN `planStore.ts` MUST exist at `src/shared/stores/planStore.ts`
-- AND `recipe-engine` SHALL import planStore from `@shared/stores`
-
-#### Scenario: trackerStore and logStore stay in shared
+#### Scenario: trackerStore and logStore in infrastructure
 
 - GIVEN `trackerStore.ts` is used by 4+ features
 - AND `logStore.ts` is used by 3+ features
 - WHEN the refactor is complete
-- THEN both files SHALL remain at `src/shared/stores/`
+- THEN both files SHALL exist at `src/infrastructure/stores/`
 
-### R3: Import Direction Integrity
+#### Scenario: planStore in infrastructure
 
-No file in `src/shared/` MUST import from `@features/`. This includes stores, hooks, services, and utilities.
-
-#### Scenario: Zero reverse dependencies after refactor
-
-- GIVEN a grep for `from.*@features` in `src/shared/`
+- GIVEN `planStore.ts` is consumed by `recipe-engine` AND `useExportData`
 - WHEN the refactor is complete
-- THEN the result MUST be empty
+- THEN `planStore.ts` MUST exist at `src/infrastructure/stores/planStore.ts`
 
-#### Scenario: useExportData imports planStore from shared
+### R3: Application Consumes Ports, Not Stores
 
-- GIVEN `useExportData.ts` is in `src/shared/hooks/`
-- WHEN it needs planStore state
-- THEN it SHALL import `usePlanStore` from `@shared/stores/planStore`
-- AND the import SHALL NOT reference `@features/recipe-engine`
+`application/use-cases/` MUST import from `application/ports/`, not from store modules. Use cases SHALL receive ports as parameters. This extends the original R3 (shared/ MUST NOT import from @features/) to the new application layer.
+
+(Previously: `shared/` MUST NOT import from any `@features/` path.)
+
+#### Scenario: Use cases import ports, not stores
+
+- GIVEN any file under `src/application/use-cases/`
+- WHEN inspecting imports
+- THEN zero imports from `@infrastructure/stores` or `@shared/stores` SHALL exist
+- AND all data access SHALL go through port interfaces
+
+#### Scenario: Application → Infrastructure import blocked
+
+- GIVEN `application/use-cases/exportData.ts`
+- WHEN inspecting imports
+- THEN zero imports from `@infrastructure/stores/*` SHALL exist
+- AND a lint rule SHALL block such imports
 
 ### R4: API Preservation
 

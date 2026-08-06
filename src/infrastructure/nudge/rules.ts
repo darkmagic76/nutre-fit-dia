@@ -172,7 +172,7 @@ export const NUDGE_RULES: SafetyRule[] = [
     cooldown: COOLDOWN_24H,
     title: 'nudge.title.aoveTagging',
     body: 'nudge.body.aoveTagging',
-    condition: (ctx) => ctx.counts[FoodCategory.OLIVE_OIL] === 0,
+    condition: (ctx) => ctx.counts[FoodCategory.OLIVE_OIL] < 3,
   },
   {
     id: 'LEGUMES_GLYCEMIC_BASE',

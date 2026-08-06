@@ -29,28 +29,46 @@ Each numeric field MUST sanitize input via `sanitizeNumeric()` before storing.
 
 ### Requirement: Caloric Target Computation
 
-`calculateTarget()` MUST read all profile fields, sanitize them, compute IMC via `profileService.computeIMC()`, validate via `profileService.validateProfile()`, and call `computeCaloricTarget()` from the domain service. Error messages MUST use i18n keys.
+`calculateTarget()` SHALL delegate to the `calculateTarget` use case in `application/use-cases/`. The use case MUST read all profile fields, sanitize them, compute IMC via `computeIMC()`, validate via `validateProfile()`, and call `computeCaloricTarget()` from the domain service. Error messages MUST use i18n keys.
 
-#### Scenario: Happy path calculation
+(Previously: `calculateTarget()` MUST read all profile fields, sanitize them, compute IMC via `profileService.computeIMC()`, validate via `profileService.validateProfile()`, and call `computeCaloricTarget()` from the domain service. Error messages MUST use i18n keys.)
+
+#### Scenario: Happy path calculation (unchanged)
 
 - GIVEN weight=80, height=170, age=55, gender="male", paf="1.2"
 - WHEN `calculateTarget()` is called
 - THEN `caloricTarget` SHALL contain `bmr`, `tdee`, `deficit`, `target`, and `restrictionActive`
 - AND `restrictionActive` SHALL be `true` (IMC ~27.7 > 25)
-- AND IMC SHALL be computed by `profileService.computeIMC`
 
-#### Scenario: Insufficient fields returns early
+#### Scenario: Insufficient fields returns early (unchanged)
 
 - GIVEN weight is empty string
 - WHEN `calculateTarget()` is called
 - THEN `caloricTarget` SHALL remain `null`
 
-#### Scenario: Invalid gender triggers i18n error
+#### Scenario: Invalid gender triggers i18n error (unchanged)
 
 - GIVEN an invalid gender value
 - WHEN the trackerStore validates
 - THEN the error message SHALL come from i18n key `errors.invalidGender`
-- AND the message SHALL be displayable in both Spanish and English
+
+### Requirement: Use Case Delegation for calculateTarget
+
+The trackerStore SHALL delegate `calculateTarget()` to the `application/use-cases/calculateTarget.ts` use case. The store SHALL hold state only — orchestration logic lives in the use case.
+
+#### Scenario: Store calls use case
+
+- GIVEN `trackerStore.calculateTarget()` is invoked
+- WHEN the store executes
+- THEN it SHALL call the `calculateTarget` use case with profile inputs, `BiomarkerRepository`, and `translate`
+- AND the store SHALL NOT contain BMR/TDEE/deficit formula logic
+
+#### Scenario: Use case receives ports as params
+
+- GIVEN the `calculateTarget` use case
+- WHEN inspecting its signature
+- THEN it SHALL accept `ProfileInput`, `BiomarkerRepository`, and `translate`
+- AND SHALL NOT import Zustand, `useTrackerStore`, or any `@shared/stores/*`
 
 ### Requirement: Persist Middleware
 
@@ -83,26 +101,22 @@ The trackerStore MUST use `zustand/persist` middleware with `createPersistConfig
 
 ### Requirement: Domain Delegation to profileService
 
-The trackerStore MUST delegate IMC computation, profile validation, and caloric target calculation to external pure services instead of implementing them inline.
+The trackerStore SHALL delegate IMC computation, profile validation, and caloric target calculation to the use case, which in turn delegates to external pure services.
 
-#### Scenario: IMC computed by profileService
+(Previously: The trackerStore MUST delegate IMC computation, profile validation, and caloric target calculation to external pure services instead of implementing them inline.)
+
+#### Scenario: IMC computed by profileService (unchanged)
 
 - GIVEN weight=80, height=170
-- WHEN the trackerStore needs IMC
-- THEN it SHALL call `computeIMC(80, 170)` from `profileService`
+- WHEN the use case needs IMC
+- THEN it SHALL call `computeIMC(80, 170)` from domain
 - AND the result SHALL be 27.7
 
-#### Scenario: Validation delegated to profileService
+#### Scenario: Caloric target delegated to caloricTargetService (unchanged)
 
-- GIVEN the trackerStore validates profile inputs
-- WHEN `validateProfile` from `profileService` is available
-- THEN the store SHALL call it rather than duplicating validation logic inline
-
-#### Scenario: Caloric target delegated to caloricTargetService
-
-- GIVEN the trackerStore calculates the caloric target
+- GIVEN the use case calculates the caloric target
 - WHEN all required fields are populated
-- THEN the calculation SHALL delegate to `caloricTargetService` (already in `shared/services/`)
+- THEN the calculation SHALL delegate to `caloricTargetService` (in `domain/`)
 
 ### Requirement: I18n Error Messages
 

@@ -8,7 +8,7 @@
 
 | # | Requirement | Keyword |
 |---|-------------|---------|
-| R1 | `createPersistConfig(name, opts)` MUST return a valid Zustand persist config with encrypted storage layer | MUST |
+| R1 | `createPersistConfig(name, { sensitiveFields, partialize })` MUST wrap `createJSONStorage(() => localStorage)` with an encryption layer; store consumers import from `@infrastructure/stores/` | MUST |
 | R2 | `encryptSensitive(data)` MUST encrypt with AES-256-GCM using the Web Crypto generated key from IndexedDB | MUST |
 | R3 | `decryptSensitive(data)` MUST decrypt with the Web Crypto key; old-format data SHALL produce a clear migration error | MUST |
 | R4 | Encrypted values MUST be distinguishable from plaintext in localStorage | MUST |
@@ -20,16 +20,18 @@
 
 ### R1: createPersistConfig
 
-`createPersistConfig(name, { sensitiveFields, partialize })` MUST wrap `createJSONStorage(() => localStorage)` with an encryption layer. On write: `partialize` → `JSON.stringify` → encrypt sensitive fields → write. On read: read → decrypt → `JSON.parse` → hydrate.
+`createPersistConfig(name, { sensitiveFields, partialize })` MUST wrap `createJSONStorage(() => localStorage)` with an encryption layer. Import paths for store consumers SHALL update from `@shared/stores/` to `@infrastructure/stores/`. No behavioral change.
 
-#### Scenario: Plaintext fields stay plaintext
+(Previously: `createPersistConfig(name, opts)` MUST return a valid Zustand persist config with encrypted storage layer.)
+
+#### Scenario: Plaintext fields stay plaintext (unchanged)
 
 - GIVEN `sensitiveFields = ['weight', 'glucose']`
 - WHEN state `{ weight: '80', gender: 'male' }` is persisted
 - THEN `gender` SHALL be stored as plaintext in localStorage
 - AND `weight` SHALL be stored as encrypted ciphertext
 
-#### Scenario: Store rehydrates correctly
+#### Scenario: Store rehydrates correctly (unchanged)
 
 - GIVEN encrypted data in localStorage under `nutrifit-tracker`
 - WHEN the store initializes via `persist`
@@ -130,3 +132,21 @@ The old compile-time `KEY_MATERIAL` constant MUST be removed from the source cod
 - GIVEN the refactor is applied
 - WHEN searching for `KEY_MATERIAL` across the codebase
 - THEN zero occurrences SHALL be found in source files
+
+### Requirement: Import Path Update for Store Consumers
+
+Stores calling `createPersistConfig()` SHALL import it from `@infrastructure/storage`. Store files themselves SHALL live at `@infrastructure/stores/`. The encryption logic in `storage.ts` remains unchanged.
+
+#### Scenario: trackerStore imports storage from infrastructure
+
+- GIVEN `trackerStore.ts` at `src/infrastructure/stores/`
+- WHEN inspecting imports
+- THEN `createPersistConfig` SHALL be imported from `@infrastructure/storage`
+- AND the import path SHALL NOT reference `@shared/stores`
+
+#### Scenario: All 5 stores import from @infrastructure/storage
+
+- GIVEN trackerStore, logStore, nudgeStore, activityStore, biomarkerStore
+- WHEN all are relocated to `@infrastructure/stores/`
+- THEN each SHALL import `createPersistConfig` from `@infrastructure/storage`
+- AND the encryption behavior SHALL be identical to pre-refactor

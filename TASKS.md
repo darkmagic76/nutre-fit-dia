@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features by Functional Criticality
 
-Generated: 2026-07-17 | Updated: 2026-08-05 | Branch: `develop` | Tests: 731 ✅ (72 files) | Lint: 0 (oxlint) | Typecheck: clean | Coverage: Stmts/Branches/Funcs/Lines | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/
+Generated: 2026-07-17 | Updated: 2026-08-06 | Branch: `develop` | Tests: 773 ✅ (76 files) | Lint: 0 (oxlint) | Typecheck: clean | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/ | ADRs: 12
 
 ---
 
@@ -15,7 +15,7 @@ Generated: 2026-07-17 | Updated: 2026-08-05 | Branch: `develop` | Tests: 731 ✅
 | Domain Types                    | ✅ Implemented — FoodCategory, TrafficLight, Notification, Zod schemas, domain errors                                                                          |
 | UI Primitives                   | ✅ Implemented — 7 components with unit tests                                                                                                                  |
 | Activity Tracker                | ✅ Implemented (H1) — useActivityTracker, compliance %, streak, dashboard tab                                                                                  |
-| Nudge Engine                    | ✅ Complete (H2+H6+H7) — 18 rules, CooldownTracker, NudgeStore, NudgePanel UI with badge + history                                                             |
+| Nudge Engine                    | ✅ Complete (H2+H6+H7) — 19 rules, CooldownTracker, NudgeStore, NudgePanel UI with badge + history                                                             |
 | Sustainability                  | ✅ Implemented (H3) — computeEnvironmentalScore, PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS, integrated in RecipeEngine (dual ranking)                           |
 | UserProfile + Phenotypic Filter | ✅ Implemented (C1) — UserProfileSchema (Zod), diagnosisAge, phenotypic filter                                                                                 |
 | Legal Disclaimer                | ✅ Implemented (C3) — RNF-01 persistent banner in Dashboard + Plan                                                                                             |
@@ -27,6 +27,9 @@ Generated: 2026-07-17 | Updated: 2026-08-05 | Branch: `develop` | Tests: 731 ✅
 | Coverage Zombie Cleanup         | ✅ Implemented — 4 zombie files removed from `features/nudge-engine/`, 5 imports corrected to `@shared/nudge`                                                  |
 | i18n Violation Messages (ES/EN) | ✅ Implemented — `formatViolation()` utility, 8 new i18n keys, violations and safety alerts in English and Spanish, `CATEGORY_DISPLAY_NAMES` deprecated        |
 | Statement Coverage 100% Lines   | ✅ Implemented — 3 files to 100% statements (ErrorBoundary, ScannerView, installPrompt, rationValidator, planGenerator), 17 new tests                          |
+| Legume-Carb-Source Nudge        | ✅ Implemented (2026-08-05) — `LEGUME_CARB_SOURCE` rule, 4 tests, co-fires with CEREALS_DEFICIT                                                                |
+| AOVE_TAGGING Fix                | ✅ Fixed (2026-08-06) — condition `=== 0` → `< 3` to match AESAN minimum (3 rations), 5 tests                                                                  |
+| Clean Architecture Refactor     | ✅ Implemented (2026-08-06) — ADR-012: domain/application/infrastructure layers, 5 ports, 5 adapters, composition root, 3 use cases, 35 new tests, 130 files   |
 
 ---
 

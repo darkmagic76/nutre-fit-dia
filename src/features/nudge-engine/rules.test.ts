@@ -183,8 +183,41 @@ describe('ADHERENCE_WEIGHT', () => {
 
 describe('AOVE_TAGGING', () => {
   const rule = NUDGE_RULES.find((r) => r.id === 'AOVE_TAGGING');
-  it('fires when olive_oil count is 0', () => {
+
+  it('fires when olive_oil is 0 (below minimum)', () => {
     expect(rule!.condition(makeContext())).toBe(true);
+  });
+
+  it('fires when olive_oil is 1 (below minimum)', () => {
+    expect(
+      rule!.condition(
+        makeContext({ counts: { ...defaultRationCounts(), [FoodCategory.OLIVE_OIL]: 1 } }),
+      ),
+    ).toBe(true);
+  });
+
+  it('fires when olive_oil is 2 (below minimum)', () => {
+    expect(
+      rule!.condition(
+        makeContext({ counts: { ...defaultRationCounts(), [FoodCategory.OLIVE_OIL]: 2 } }),
+      ),
+    ).toBe(true);
+  });
+
+  it('does NOT fire at exact minimum (3 rations)', () => {
+    expect(
+      rule!.condition(
+        makeContext({ counts: { ...defaultRationCounts(), [FoodCategory.OLIVE_OIL]: 3 } }),
+      ),
+    ).toBe(false);
+  });
+
+  it('does NOT fire above minimum (4 rations)', () => {
+    expect(
+      rule!.condition(
+        makeContext({ counts: { ...defaultRationCounts(), [FoodCategory.OLIVE_OIL]: 4 } }),
+      ),
+    ).toBe(false);
   });
 });
 

@@ -58,60 +58,84 @@ pnpm verify         # quality + build</repo-url>
 
 ```text
 src/
-├── features/
-│   ├── nutritional-traffic-light/       # Nutritional Traffic Light + Dual Scan (H4)
-│   │   ├── NutritionalTrafficLightContainer.tsx  # Logic: scan, classify, add to log
-│   │   ├── NutritionalTrafficLightView.tsx       # Pure UI: select, classify, alerts
-│   │   ├── components/SafetyAlertDisplay.tsx     # High-glycemic fruit warnings
-│   │   ├── data/sugarAliases.ts                  # 19 occult sugar keywords (local)
-│   │   └── services/                             # classificationService, occultSugarDetector, safetyCheck
+├── domain/                              # Pure TypeScript + zod — entities, value objects, domain services
+│   ├── index.ts                         # Barrel: re-exports everything
+│   ├── enum.ts                          # defineEnum, ValuesOf (moved from shared/utils)
+│   ├── food.ts + foodCategory.ts        # Food entity, FoodCategory enum (11 AESAN groups), Zod schemas
+│   ├── metrics.ts                       # UserMetrics, UserProfile, UserMetricsFormState
+│   ├── activity.ts                      # ActivityEntry, WeeklyGoal (WHO 150-300 min)
+│   ├── notification.ts                  # NotificationType, NotificationSeverity, SystemNotification
+│   ├── trafficLight.ts                  # TrafficLightColor (green/orange/red)
+│   ├── glucoseInput.ts                  # Branded type for glucose (mg/dL)
+│   ├── glycemicFruits.ts                # High-glycemic fruit names (Set)
+│   ├── clinical.ts                      # 14 clinical thresholds (AESAN/WHO/PREDIMED-Plus)
+│   ├── imc.ts                           # computeIMC, isRestrictionCandidate
+│   ├── caloricTargetService.ts          # Mifflin-St Jeor + PREDIMED-Plus deficit (ADR-004)
+│   ├── profileService.ts                # Profile validation
+│   ├── rationValidator.ts               # AESAN 2022 ration limits + validation (ADR-005)
+│   ├── biomarkerTypes.ts                # GlucoseReading, WeightReading, BiomarkerTrend
+│   ├── cooldownTracker.ts               # CooldownTracker class (DI ops)
+│   ├── cooldownDurations.ts             # Cooldown constants (24h, 12h, 6h, etc.)
+│   ├── nudgeContext.ts + nudgeTypes.ts  # ContextInput, NudgeContext, SafetyRule types
+│   ├── nudgeContextBuilder.ts           # buildNudgeContext() — pure function
+│   └── nudgeEvaluator.ts                # evaluateRules() — pure function
+│
+├── application/                         # Use cases + ports — zero framework imports
+│   ├── ports/
+│   │   ├── notificationRepository.ts    # NotificationRepository interface
+│   │   ├── activityRepository.ts        # ActivityRepository interface
+│   │   ├── logRepository.ts             # LogRepository interface
+│   │   ├── planRepository.ts            # PlanRepository interface
+│   │   └── biomarkerRepository.ts       # BiomarkerRepository interface
+│   ├── use-cases/
+│   │   ├── calculateTarget.ts           # Pure use case — caloric target (ADR-004)
+│   │   ├── evaluateNudges.ts            # Pure use case — nudge pipeline (ADR-008)
+│   │   └── exportData.ts                # Pure use case — data export
+│   └── dtos/                            # (reserved for future DTOs)
+│
+├── infrastructure/                      # Adaptadores + persistencia — conoce frameworks
+│   ├── compositionRoot.ts               # createContainer() — wiring factory (ADR-012)
+│   ├── env.ts                           # VITE_ env validation (Zod)
+│   ├── storage.ts                       # AES-256-GCM encrypted Zustand persist
+│   ├── ml/                              # ScannerAdapter + MockScannerAdapter (ADR-003)
+│   ├── stores/                          # Zustand stores (6)
+│   │   ├── trackerStore.ts + logStore.ts + nudgeStore.ts
+│   │   ├── activityStore.ts + biomarkerStore.ts + planStore.ts
+│   │   └── index.ts                     # Barrel
+│   ├── nudge/
+│   │   └── rules.ts                     # NUDGE_RULES — 19 data-driven rules
+│   └── adapters/                        # Zustand-backed port implementations (ADR-012)
+│       ├── zustandNotificationRepository.ts
+│       ├── zustandActivityRepository.ts
+│       ├── zustandLogRepository.ts
+│       ├── zustandBiomarkerRepository.ts
+│       ├── zustandPlanRepository.ts
+│       └── contract.test.ts             # 5 structural compatibility tests
+│
+├── features/                            # Screaming Architecture (7 bounded contexts)
+│   ├── nutritional-traffic-light/       # Scanner + Traffic Light + Dual Scan (H4)
 │   ├── metabolic-tracker/               # Phenotypic profile + biomarkers
-│   │   ├── MetabolicTrackerContainer.tsx # Logic: metabolic profile
-│   │   ├── MetabolicTrackerView.tsx      # UI: form + results
-│   │   ├── components/                   # ProfileForm, ProfileResults, ProfileError
-│   │   └── types.ts                      # MetabolicMetrics, GlucoseContext
-│   ├── med-diet-validator/              # AESAN 2022 ration validation
-│   │   ├── MedDietValidatorContainer.tsx # Logic: daily log + removal triggers nudge re-eval
-│   │   ├── MedDietValidatorView.tsx      # UI: food list + violation display
-│   │   └── components/                   # FoodList, DailyViolations, CaloricSummary
+│   ├── med-diet-validator/              # AESAN 2022 daily log + ration validation
 │   ├── recipe-engine/                   # Weekly erMedDiet plan + M7 meal splitting
-│   │   ├── RecipeEngineContainer.tsx     # Logic: generate plan, toggle restriction
-│   │   ├── RecipeEngineView.tsx          # UI: plan display, cultural/sustainability badges
-│   │   ├── components/                   # CulturalBadges, ZeroWasteBadges
-│   │   ├── store/planStore.ts            # weeklyPlan (Zustand)
-│   │   └── services/planGenerator.ts     # Meal slot distribution, food assignment
 │   ├── activity-tracker/                # WHO 150-300 min + strength (ADR-006)
-│   │   ├── ActivityTrackerContainer.tsx  # Logic: compliance + streak
-│   │   ├── ActivityTrackerView.tsx       # UI: WHO goals + form
-│   │   ├── hooks/useActivityTracker.ts   # Hook: compliance %, streak, weeklyGoal
-│   │   └── types.ts                      # ActivityEntry, WeeklyGoal, ComplianceReport
-│   ├── nudge-engine/                    # 18 rules + panel UI (ADR-008)
-│   │   ├── NudgeEngineContainer.tsx      # Logic: pending nudges + history
-│   │   ├── NudgeEngineView.tsx           # UI: list + dismiss + counter badge
-│   │   └── index.ts                      # Barrel re-export
+│   ├── nudge-engine/                    # 19 rules + NudgePanel UI (ADR-008)
 │   └── sustainability/                  # Eco Dashboard + scoring (ADR-007)
-│       ├── SustainabilityContainer.tsx   # Logic: scoring + zero-waste + emissions
-│       └── SustainabilityView.tsx        # UI: sustainability tabs
-├── shared/
-│   ├── constants/clinical.ts             # 14 clinical thresholds (AESAN/WHO/PREDIMED-Plus)
-│   ├── data/foods.ts                     # 39-food AESAN catalog
-│   ├── domain/                           # FoodCategory, Food (Zod), TrafficLight, Notification, branded types
-│   ├── errors.ts                         # DomainError, ValidationError, NotFoundError
-│   ├── hooks/                            # Cross-feature hooks (useExportData, useFoodName, useInstallPrompt)
-│   ├── i18n/                             # ES/EN (useT, I18nProvider, 150+ keys)
-│   ├── nudge/                            # Nudge engine core: rules, context, cooldowns, engine
-│   ├── services/                         # rationValidator, caloricTargetService, profileService
-│   ├── stores/                           # Zustand stores (log, tracker, activity, nudge, biomarker)
-│   ├── sustainability/                   # EnvironmentalScore, substitutionService, constants
-│   ├── ui/                               # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
-│   └── utils/                            # sanitize, imc, enum helpers (defineEnum, ValuesOf)
-├── infrastructure/
-│   ├── storage.ts                        # AES-256-GCM encrypted Zustand persist
-│   ├── env.ts                            # VITE_ env validation (Zod)
-│   └── ml/                               # ScannerAdapter + MockScannerAdapter (ADR-003)
-└── test/
-    ├── setup.ts                          # jsdom + localStorage shim + Web Crypto mock (AES-GCM XOR+checksum)
-    └── fixtures.ts                       # makeFood, makeEntries, makeCaloricTargetOutput, makeViolation
+│
+├── shared/                              # Presentation layer — UI + i18n + hooks
+│   ├── ui/                              # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
+│   ├── i18n/                            # ES/EN (useT, I18nProvider, 150+ keys)
+│   ├── hooks/                           # Cross-feature hooks (useExportData, useFoodName, useInstallPrompt)
+│   ├── data/foods.ts                    # 39-food AESAN catalog
+│   ├── errors.ts                        # DomainError, ValidationError, NotFoundError
+│   ├── sustainability/                  # EnvironmentalScore, substitutionService, constants
+│   └── utils/                           # sanitize, barrel re-exports for backward compat
+│
+├── test/
+│   ├── setup.ts                         # jsdom + localStorage shim + Web Crypto mock
+│   └── fixtures.ts                      # makeFood, makeEntries, makeCaloricTargetOutput, etc.
+│
+├── App.tsx                              # Root component — 7 tabs via Container/Presentational
+└── main.tsx                             # Entry point — wires ErrorBoundary → I18nProvider → App
 ```
 
 ## Key Features
@@ -121,7 +145,7 @@ src/
 - **Mediterranean Diet Validator**: Validates daily/weekly frequencies per AESAN 2022 matrix. Exact gram-portion control.
 - **Recipe Engine**: Weekly plans with caloric restriction. Dual health+sustainability ranking. **3-6 daily meal split** with kcal per meal. UNESCO cultural badges (🏺👥🌿). AOVE mandatory in every main meal.
 - **Activity Goal Tracker**: WHO 150-300 min/week tracking. Compliance % and streak. Dashboard tab.
-- **Nudge Engine**: 18 rules (SafetyAlert + BehavioralNudge + SystemAction). Panel UI with counter badge + engagement history. Smart substitution (M2): sustainable alternatives when environmentalScore < 30.
+- **Nudge Engine**: 19 rules (SafetyAlert + BehavioralNudge + SystemAction). Panel UI with counter badge + engagement history. Smart substitution (M2): sustainable alternatives when environmentalScore < 30.
 - **Sustainability Scoring**: `computeEnvironmentalScore()` with AESAN/EAT-Lancet constants. Configurable 50/30/20 weights. Integrated into RecipeEngine (dual ranking).
 - **Substitution Service**: `suggestAlternative(food)` — WHITE_MEAT → LEGUMES + blue FISH (AESAN 2.4.2.1). Environmental score ranking. Top 3 alternatives.
 - **Conviviality**: UNESCO textual suggestions in PlanView: "Ideal for sharing meals" + cooking techniques (stew, steam, boil, grill, raw).

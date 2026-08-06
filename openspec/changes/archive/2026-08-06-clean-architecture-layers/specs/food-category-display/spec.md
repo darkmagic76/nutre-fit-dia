@@ -1,10 +1,6 @@
-# Food Category Display Specification
+# Delta for Food Category Display
 
-## Purpose
-
-Canonical Spanish display names for all 11 FoodCategory groups, extracted from duplicated constants across 3 containers. Category display names are now also resolvable through the i18n system for both English and Spanish locales.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: `CATEGORY_DISPLAY_NAMES`
 
@@ -38,20 +34,18 @@ All feature containers MUST import display names via i18n `category.*` keys. `CA
 - THEN no local `CATEGORY_NAMES` definition SHALL exist
 - AND containers SHALL resolve category names via i18n
 
-### Requirement: I18N Category Resolution
+### Requirement: I18N Category Resolution (unchanged)
 
 Food category display names MUST be resolvable through the i18n system for both English and Spanish locales.
 
-#### Scenario: English category keys exist
+#### Scenario: English category keys exist (unchanged)
 
 - GIVEN the English locale is loaded
 - THEN `t['category.cereals']` SHALL return "Cereals"
-- AND `t['category.vegetables']` SHALL return "Vegetables"
 - AND all 11 FoodCategory values SHALL have English translations
 
-#### Scenario: Spanish category keys exist
+#### Scenario: Spanish category keys exist (unchanged)
 
 - GIVEN the Spanish locale is loaded
 - THEN `t['category.cereals']` SHALL return "Cereales"
-- AND `t['category.vegetables']` SHALL return "Verduras"
 - AND all 11 FoodCategory values SHALL have Spanish translations

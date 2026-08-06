@@ -1,17 +1,26 @@
-# Data Export Specification
+# Delta for Data Export
 
-## Purpose
+## ADDED Requirements
 
-`useExportData()` hook — aggregates all store states into a JSON blob and triggers a browser download. Zero dependencies. All data stays on-device.
+### Requirement: Use Case Extraction
 
-## Requirements
+`application/use-cases/exportData.ts` MUST contain the data aggregation and download logic as a pure function receiving repository ports. `useExportData()` hook SHALL become a thin React wrapper that calls the use case.
 
-| # | Requirement | Keyword |
-|---|-------------|---------|
-| R1 | `useExportData()` MUST return `{ exportAllData, isExporting }`; SHALL delegate to the `exportData` use case with repository ports from the composition root | MUST |
-| R2 | `exportAllData()` MUST aggregate all persisted stores into one JSON object via repository ports | MUST |
-| R3 | Exported JSON MUST trigger a browser download via `Blob` + `<a download>` | MUST |
-| R4 | Offline-first: export MUST work without internet | MUST |
+#### Scenario: Use case independent of React and stores
+
+- GIVEN `exportData` use case source
+- WHEN inspecting imports
+- THEN zero imports from `react`, `zustand`, `@features/*`, or `@infrastructure/stores/*` SHALL exist
+- AND it SHALL accept 6 repository ports as parameters
+
+#### Scenario: Scope Rule violation fixed
+
+- GIVEN `exportData` use case source
+- WHEN inspecting imports
+- THEN zero imports from `@features/recipe-engine` SHALL exist
+- AND plan data SHALL be accessed via a `planRepository` port parameter
+
+## MODIFIED Requirements
 
 ### R1: Hook API
 
@@ -50,36 +59,3 @@
 - GIVEN all stores are at defaults
 - WHEN `exportAllData()` is called
 - THEN JSON SHALL be valid with all six top-level keys present
-
-### R3: Browser Download
-
-`exportAllData()` MUST create a `Blob` with MIME type `application/json`, generate an object URL, create an `<a>` element with `download="nutrifit-export-{date}.json"`, trigger click, and revoke the URL.
-
-#### Scenario: Download triggered
-
-- GIVEN `exportAllData()` is called
-- WHEN the Blob is created and linked
-- THEN browser SHALL initiate a file download
-- AND the filename SHALL match pattern `nutrifit-export-YYYY-MM-DD.json`
-
-### R4: Offline-First
-
-Export uses `Blob`, `URL.createObjectURL`, and DOM APIs — no server interaction.
-
-### Requirement: Use Case Extraction
-
-`application/use-cases/exportData.ts` MUST contain the data aggregation and download logic as a pure function receiving repository ports. `useExportData()` hook SHALL become a thin React wrapper that calls the use case.
-
-#### Scenario: Use case independent of React and stores
-
-- GIVEN `exportData` use case source
-- WHEN inspecting imports
-- THEN zero imports from `react`, `zustand`, `@features/*`, or `@infrastructure/stores/*` SHALL exist
-- AND it SHALL accept 6 repository ports as parameters
-
-#### Scenario: Scope Rule violation fixed
-
-- GIVEN `exportData` use case source
-- WHEN inspecting imports
-- THEN zero imports from `@features/recipe-engine` SHALL exist
-- AND plan data SHALL be accessed via a `planRepository` port parameter

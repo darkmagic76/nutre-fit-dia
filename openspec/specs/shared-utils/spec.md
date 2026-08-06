@@ -40,3 +40,14 @@ The function MUST compute `weight(kg) / (height(m))²`, rounded to 1 decimal.
 - GIVEN weight=80, height=170
 - WHEN `computeIMC(80, 170)` is called
 - THEN the result SHALL be `27.7`
+
+### Requirement: Re-export Barrel for Backward Compatibility
+
+`src/shared/utils/index.ts` SHALL re-export `defineEnum` and `ValuesOf` from `@domain/enum` to preserve existing imports during migration.
+
+#### Scenario: Backward-compat re-export resolves
+
+- GIVEN a consumer imports `{ defineEnum } from '@shared/utils'`
+- WHEN the import resolves
+- THEN `defineEnum` SHALL be the same function exported from `@domain/enum`
+- AND no runtime breakage SHALL occur for pre-migration consumers

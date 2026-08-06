@@ -134,7 +134,7 @@ describe('evaluateRules', () => {
     const ctx: NudgeContext = {
       ...baseCtx,
       caloricRestrictionActive: true,
-      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
+      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 3 },
     };
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
@@ -150,11 +150,12 @@ describe('evaluateRules', () => {
     const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     cooldown.register('CEREALS_RESTRICTION');
     cooldown.register('FRUITS_DEFICIT');
+    cooldown.register('AOVE_TAGGING');
 
     const ctx: NudgeContext = {
       ...baseCtx,
       caloricRestrictionActive: true,
-      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5 },
+      counts: { ...baseCtx.counts, [FoodCategory.CEREALS]: 5, [FoodCategory.OLIVE_OIL]: 3 },
     };
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
@@ -165,7 +166,7 @@ describe('evaluateRules', () => {
     const cooldown = new CooldownTracker(fakeCooldownOps(), () => 0);
     const ctx: NudgeContext = {
       ...baseCtx,
-      counts: { ...baseCtx.counts, [FoodCategory.FRUITS]: 3 },
+      counts: { ...baseCtx.counts, [FoodCategory.FRUITS]: 3, [FoodCategory.OLIVE_OIL]: 3 },
     };
 
     const results = evaluateRules(ctx, NUDGE_RULES, cooldown);
@@ -218,7 +219,8 @@ describe('evaluateRules', () => {
 
     // Should match: CEREALS_RESTRICTION, FRUITS_GLYCEMIC_ALERT, VEGETABLES_DEFICIT
     // + ADHERENCE_GLUCOSE + ADHERENCE_WEIGHT + WATER_HYDRATION + AOVE_TAGGING
-    expect(results).toHaveLength(7);
+    // + FRUITS_DEFICIT (8 total)
+    expect(results).toHaveLength(8);
     const matchedIds = results.map((r) => r.rule.id);
     expect(matchedIds).toContain('CEREALS_RESTRICTION');
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT');
