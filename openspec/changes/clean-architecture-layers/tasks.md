@@ -37,10 +37,10 @@ Chain strategy: feature-branch-chain
 
 ## Phase 3: Use Case Extraction
 
-- [ ] 3.1 [RED→GREEN] Extract `trackerStore.ts:103-196` → `application/use-cases/calculateTarget.ts`. Accepts `ProfileInput`, `BiomarkerRepository`, `translate`. Store delegates via container.
-- [ ] 3.2 [RED→GREEN] Extract `useExportData.ts:29-62` → `application/use-cases/exportData.ts`. Accepts 6 ports. Hook becomes thin `container.exportData()` wrapper.
-- [ ] 3.3 Split `engine.ts`: `buildNudgeContext` → `domain/nudgeContextBuilder.ts`, `evaluateRules` → `domain/nudgeEvaluator.ts`, `evaluateAndEnqueue` → `application/use-cases/evaluateNudges.ts`. Split types → `application/dtos/`.
-- [ ] 3.4 `pnpm test:run` green. `pnpm quality`.
+- [x] 3.1 [RED→GREEN] Extract `trackerStore.ts:103-196` → `application/use-cases/calculateTarget.ts`. Accepts `ProfileInput`, `BiomarkerRepository`, `translate`. Store delegates via container.
+- [x] 3.2 [RED→GREEN] Extract `useExportData.ts:29-62` → `application/use-cases/exportData.ts`. Accepts 6 ports. Hook becomes thin `container.exportData()` wrapper.
+- [x] 3.3 Split `engine.ts`: `buildNudgeContext` → `domain/nudgeContextBuilder.ts`, `evaluateRules` → `domain/nudgeEvaluator.ts`, `evaluateAndEnqueue` → `application/use-cases/evaluateNudges.ts`. Split types → `application/dtos/`.
+- [x] 3.4 `pnpm test:run` green. `pnpm quality`.
 
 ## Phase 4: Ports & Adapters
 
