@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { MetabolicTrackerContainer } from './MetabolicTrackerContainer';
-import { useTrackerStore } from '@shared/stores';
+import { useTrackerStore } from '@infrastructure/stores/trackerStore';
 import { makeCaloricTargetOutput } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { ValidationError } from '@shared/errors';

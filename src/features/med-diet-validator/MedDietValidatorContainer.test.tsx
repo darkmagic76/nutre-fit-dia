@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { screen } from '@testing-library/react';
 import { MedDietValidatorContainer } from './MedDietValidatorContainer';
-import { useLogStore, useTrackerStore } from '@shared/stores';
+import { useLogStore, useTrackerStore } from '@infrastructure/stores';
 import { FoodCategory } from '@shared/domain';
 import { makeFood, makeCaloricTargetOutput, makeRationValidationResult } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';

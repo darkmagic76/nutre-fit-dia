@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { CooldownTracker } from '@shared/nudge';
 import type { CooldownOps } from '@shared/nudge';
-import { useNudgeStore } from '@shared/stores';
+import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
 
 /** Build CooldownOps backed by the real persisted nudgeStore (integration test). */
 function storeOps(): CooldownOps {

@@ -2,22 +2,10 @@ import { buildNudgeContext } from '@domain/nudgeContextBuilder';
 import { evaluateRules } from '@domain/nudgeEvaluator';
 import { CooldownTracker } from '@domain/cooldownTracker';
 import { NotificationSeverity } from '@domain/index';
-import type { SystemNotification } from '@domain/index';
 import type { ContextInput } from '@domain/nudgeContext';
 import type { SafetyRule } from '@domain/nudgeTypes';
 import type { CooldownTracker as CooldownTrackerType } from '@domain/cooldownTracker';
-
-// ─── Minimal port interface (inline until Phase 4) ────────────────────────
-
-/** Notification repository — port for nudge side effects. */
-export interface NotificationRepository {
-  enqueue(notification: SystemNotification): void;
-  acknowledge(id: string): void;
-  getPending(): SystemNotification[];
-  getCooldowns(): Record<string, number>;
-  registerCooldown(id: string, timestamp: number): void;
-  resetCooldown(id?: string): void;
-}
+import type { NotificationRepository } from '@application/ports/notificationRepository';
 
 // ─── Use Case ──────────────────────────────────────────────────────────────
 

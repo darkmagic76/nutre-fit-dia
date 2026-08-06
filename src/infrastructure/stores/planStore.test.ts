@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { usePlanStore, PlanStateSchema } from './planStore';
-import { useTrackerStore } from '@shared/stores';
+import { useTrackerStore } from '@infrastructure/stores/trackerStore';
 
 describe('planStore', () => {
   const STORAGE_KEY = 'nutrefitdia-plan';

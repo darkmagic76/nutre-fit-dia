@@ -7,8 +7,12 @@ import { es as DEFAULT_TRANSLATIONS } from '@shared/i18n/es';
 // ─── In-memory fake BiomarkerRepository ────────────────────────────────────
 
 interface FakeBiomarkerRepo extends BiomarkerRepository {
-  glucoseReadings: Array<{ value: number; timestamp: number; context: 'fasting' | 'postprandial' }>;
-  weightReadings: Array<{ weight: number; height: number }>;
+  _glucoseReadings: Array<{
+    value: number;
+    timestamp: number;
+    context: 'fasting' | 'postprandial';
+  }>;
+  _weightReadings: Array<{ weight: number; height: number }>;
   thresholdCrossing: 'crossed_above' | 'crossed_below' | null;
 }
 
@@ -16,14 +20,34 @@ function makeFakeBiomarkerRepo(
   thresholdCrossing: 'crossed_above' | 'crossed_below' | null = null,
 ): FakeBiomarkerRepo {
   return {
-    glucoseReadings: [],
-    weightReadings: [],
+    _glucoseReadings: [],
+    _weightReadings: [],
     thresholdCrossing,
+    getGlucoseHistory() {
+      return this._glucoseReadings;
+    },
+    getWeightHistory() {
+      return this._weightReadings.map((r) => ({
+        value: r.weight,
+        timestamp: Date.now(),
+        imc: 0,
+      }));
+    },
+    getTrend() {
+      return {
+        glucoseAvg7d: null,
+        glucoseLatest: null,
+        weightAvg7d: null,
+        weightLatest: null,
+        weightTrend: null,
+      };
+    },
     recordGlucose(input) {
-      this.glucoseReadings.push(input);
+      this._glucoseReadings.push(input);
     },
     recordWeight(weight, height) {
-      this.weightReadings.push({ weight, height });
+      this._weightReadings.push({ weight, height });
+      return { value: weight, timestamp: Date.now(), imc: 0 };
     },
     detectIMCThresholdCrossing() {
       return this.thresholdCrossing;
@@ -88,18 +112,18 @@ describe('calculateTarget (use case)', () => {
   it('records glucose via the biomarker repository', () => {
     calculateTarget(defaultInput({ glucose: '110' }), repo, t());
 
-    expect(repo.glucoseReadings).toHaveLength(1);
-    expect(repo.glucoseReadings[0].value).toBe(110);
-    expect(repo.glucoseReadings[0].context).toBe('fasting');
-    expect(repo.glucoseReadings[0].timestamp).toBeGreaterThan(0);
+    expect(repo._glucoseReadings).toHaveLength(1);
+    expect(repo._glucoseReadings[0].value).toBe(110);
+    expect(repo._glucoseReadings[0].context).toBe('fasting');
+    expect(repo._glucoseReadings[0].timestamp).toBeGreaterThan(0);
   });
 
   it('records weight and height via the biomarker repository', () => {
     calculateTarget(defaultInput({ weight: '85', height: '175' }), repo, t());
 
-    expect(repo.weightReadings).toHaveLength(1);
-    expect(repo.weightReadings[0].weight).toBe(85);
-    expect(repo.weightReadings[0].height).toBe(175);
+    expect(repo._weightReadings).toHaveLength(1);
+    expect(repo._weightReadings[0].weight).toBe(85);
+    expect(repo._weightReadings[0].height).toBe(175);
   });
 
   it('returns IMC threshold crossing message when crossing detected', () => {
@@ -214,7 +238,7 @@ describe('calculateTarget (use case)', () => {
     const result = calculateTarget(defaultInput(), repo, t());
 
     expect(result.caloricTarget).not.toBeNull();
-    expect(repo.glucoseReadings).toHaveLength(1);
-    expect(repo.weightReadings).toHaveLength(1);
+    expect(repo._glucoseReadings).toHaveLength(1);
+    expect(repo._weightReadings).toHaveLength(1);
   });
 });

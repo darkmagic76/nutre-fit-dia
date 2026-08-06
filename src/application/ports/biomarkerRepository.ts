@@ -1,14 +1,21 @@
-/** BiomarkerRepository — application port for biomarker side effects. */
-export interface BiomarkerRepository {
-  /** Record a glucose reading (mg/dL, timestamp, fasting/postprandial). */
-  recordGlucose(input: {
-    value: number;
-    timestamp: number;
-    context: 'fasting' | 'postprandial';
-  }): void;
+import type { GlucoseReading, WeightReading, BiomarkerTrend } from '@domain/index';
 
-  /** Record a weight reading (kg, cm). */
-  recordWeight(weight: number, height: number): void;
+/** BiomarkerRepository — application port for biomarker data access. */
+export interface BiomarkerRepository {
+  /** Get glucose reading history. */
+  getGlucoseHistory(): GlucoseReading[];
+
+  /** Get weight reading history. */
+  getWeightHistory(): WeightReading[];
+
+  /** Get computed biomarker trend (7d glucose avg, 30d weight trend, etc.). */
+  getTrend(): BiomarkerTrend;
+
+  /** Record a glucose reading. */
+  recordGlucose(reading: GlucoseReading): void;
+
+  /** Record a weight reading (returns the created WeightReading). */
+  recordWeight(kg: number, cm: number): WeightReading;
 
   /** Detect if IMC has crossed a clinical threshold since last reading. */
   detectIMCThresholdCrossing(): 'crossed_above' | 'crossed_below' | null;

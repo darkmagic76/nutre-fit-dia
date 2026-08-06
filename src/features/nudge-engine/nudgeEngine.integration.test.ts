@@ -3,10 +3,11 @@ import { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from '@shared/nu
 import { CooldownTracker } from '@shared/nudge';
 import type { CooldownOps, ContextInput } from '@shared/nudge';
 import { NUDGE_RULES } from '../../infrastructure/nudge/rules';
-import { useTrackerStore, useLogStore } from '@shared/stores';
+import { useTrackerStore } from '@infrastructure/stores/trackerStore';
+import { useLogStore } from '@infrastructure/stores/logStore';
 import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
-import { useBiomarkerStore } from '@shared/stores';
-import { useActivityStore } from '@shared/stores';
+import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
+import { useActivityStore } from '@infrastructure/stores/activityStore';
 import { FoodCategory, NotificationType } from '@shared/domain';
 import { makeFood } from '@/test/fixtures';
 

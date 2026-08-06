@@ -14,7 +14,7 @@ import { useBiomarkerStore } from '@shared/stores';
 import { useNudgeStore } from '@shared/stores';
 import { NUDGE_RULES } from '../../infrastructure/nudge/rules';
 import { evaluateNudges } from '../../application/use-cases/evaluateNudges';
-import type { NotificationRepository } from '../../application/use-cases/evaluateNudges';
+import type { NotificationRepository } from '../../application/ports/notificationRepository';
 import type { Food } from '@shared/domain';
 import type { ContextInput } from '../../domain/nudgeContext';
 
@@ -33,7 +33,9 @@ function makeNotificationPort(): NotificationRepository {
   return {
     enqueue: (n) => useNudgeStore.getState().enqueue(n),
     acknowledge: (id) => useNudgeStore.getState().acknowledge(id),
+    dismiss: (id) => useNudgeStore.getState().dismiss(id),
     getPending: () => useNudgeStore.getState().pending,
+    getHistory: () => useNudgeStore.getState().history,
     getCooldowns: () => useNudgeStore.getState().cooldowns,
     registerCooldown: (id, t) => useNudgeStore.getState().registerCooldown(id, t),
     resetCooldown: (id) => useNudgeStore.getState().resetCooldown(id),

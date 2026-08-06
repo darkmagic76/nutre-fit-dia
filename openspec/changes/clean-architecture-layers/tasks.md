@@ -44,19 +44,19 @@ Chain strategy: feature-branch-chain
 
 ## Phase 4: Ports & Adapters
 
-- [ ] 4.1 Create `application/ports/{notification,activity,log,biomarker,plan}Repository.ts` — pure interfaces. Create `application/dtos/{ProfileInput,CaloricTargetOutput,ContextInput,NudgeTypes}.ts`.
-- [ ] 4.2 Create `infrastructure/adapters/zustand{Notification,Activity,Log,Biomarker,Plan}Repository.ts` — thin `getState()` wrappers. Zero new logic.
-- [ ] 4.3 `pnpm test:run` green. `pnpm quality`.
+- [x] 4.1 Create `application/ports/{notification,activity,log,biomarker,plan}Repository.ts` — pure interfaces. Create `application/dtos/{ProfileInput,CaloricTargetOutput,ContextInput,NudgeTypes}.ts`.
+- [x] 4.2 Create `infrastructure/adapters/zustand{Notification,Activity,Log,Biomarker,Plan}Repository.ts` — thin `getState()` wrappers. Zero new logic.
+- [x] 4.3 `pnpm test:run` green. `pnpm quality`.
 
 ## Phase 5: Composition Root
 
 - [x] 5.1 Add `@domain/*`, `@application/*` aliases to `tsconfig.app.json` + `vite.config.ts`.
-- [ ] 5.2 Create `infrastructure/compositionRoot.ts`: factory wires 5 adapters → 3 use cases. Export `container` singleton. Update `main.tsx`.
-- [ ] 5.3 `pnpm test:run` green. `pnpm build`.
+- [x] 5.2 Create `infrastructure/compositionRoot.ts`: factory wires 5 adapters → 3 use cases. Export `container` singleton. Update `main.tsx`.
+- [x] 5.3 `pnpm test:run` green. `pnpm build`.
 
 ## Phase 6: Testing & Cleanup
 
-- [ ] 6.1 In-memory fake tests for `calculateTarget`, `evaluateNudges`, `exportData` — zero jsdom, zero Zustand.
-- [ ] 6.2 Contract tests: assign each adapter to port-typed variable → TS acceptance.
-- [ ] 6.3 Update store test imports: `@shared/stores` → `@infrastructure/stores`.
-- [ ] 6.4 `pnpm verify`: 735 green, coverage ≥ 80%.
+- [x] 6.1 In-memory fake tests for `calculateTarget`, `evaluateNudges`, `exportData` — zero jsdom, zero Zustand.
+- [x] 6.2 Contract tests: assign each adapter to port-typed variable → TS acceptance.
+- [x] 6.3 Update store test imports: `@shared/stores` → `@infrastructure/stores`.
+- [x] 6.4 `pnpm verify`: 735 green, coverage ≥ 80%.

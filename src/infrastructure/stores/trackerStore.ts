@@ -89,6 +89,9 @@ export const useTrackerStore = create<TrackerState>()(
 
         // Thin adapter: biomarkerStore → BiomarkerRepository port
         const biomarkerRepo: BiomarkerRepository = {
+          getGlucoseHistory: () => useBiomarkerStore.getState().glucoseHistory,
+          getWeightHistory: () => useBiomarkerStore.getState().weightHistory,
+          getTrend: () => useBiomarkerStore.getState().getTrend(),
           recordGlucose: (input) => useBiomarkerStore.getState().recordGlucose(input),
           recordWeight: (w, h) => useBiomarkerStore.getState().recordWeight(w, h),
           detectIMCThresholdCrossing: () =>

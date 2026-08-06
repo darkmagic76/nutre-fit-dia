@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { NutritionalTrafficLightContainer } from './NutritionalTrafficLightContainer';
-import { useLogStore } from '@shared/stores';
+import { useLogStore } from '@infrastructure/stores/logStore';
 import { evaluateAndEnqueue } from '@shared/nudge';
 
 // Mock only evaluateAndEnqueue — the container is the sole consumer of this export
