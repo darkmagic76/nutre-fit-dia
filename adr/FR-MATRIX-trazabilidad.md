@@ -40,7 +40,7 @@ Generated: 2026-07-12 | Updated: 2026-08-06 | Branch: `develop` | Tests: 773 ✅
 | **ARC-4** | Composition Root (`createContainer()`)                        | ADR-012 | ✅ Completed | `infrastructure/compositionRoot.ts`, wired in `main.tsx`                                                                              |
 | **ARC-5** | Use cases extracted from stores                               | ADR-012 | ✅ Completed | `application/use-cases/{calculateTarget,evaluateNudges,exportData}.ts` (30 tests, in-memory fakes)                                    |
 | **ARC-6** | Path aliases (`@domain/*`, `@application/*`)                  | ADR-012 | ✅ Completed | `tsconfig.app.json` + `vite.config.ts`                                                                                                |
-| **ARC-7** | Skills restructured (flat → subdir/SKILL.md)                  | ADR-012 | ✅ Completed | `skills/{name}/SKILL.md` (7 skills)                                                                                                   |
+| **ARC-7** | Skills structure (flat .md files)                             | ADR-012 | ✅ Completed | `skills/{name}.md` (7 skills)                                                                                                         |
 | **ARC-8** | Domain purity (zero shared/utils imports)                     | ADR-012 | ✅ Completed | `src/domain/` imports only `zod` + internal modules                                                                                   |
 
 ## SPEC_TECH: New verified information

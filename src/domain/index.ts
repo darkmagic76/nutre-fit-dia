@@ -10,13 +10,7 @@ export type {
   NotificationSeverity as NotificationSeverityType,
   SystemNotification,
 } from './notification';
-export type {
-  UserMetrics,
-  UserMetricsFormData,
-  UserMetricsFormSetters,
-  UserMetricsFormState,
-  UserProfile,
-} from './metrics';
+export type { UserMetrics, UserProfile } from './metrics';
 export { UserProfileSchema } from './metrics';
 export { HIGH_GLYCEMIC_FRUIT_NAMES } from './glycemicFruits';
 export type { ActivityEntry, WeeklyGoal } from './activity';
@@ -52,6 +46,18 @@ export {
   IMC_NORMAL_MAX,
   IMC_OVERWEIGHT,
 } from './imc';
+
+// Plan types
+export { MealType } from './plan';
+export type {
+  MealType as MealTypeType,
+  MealSlot,
+  MealEntry,
+  DailyMeal,
+  WeeklyPlan,
+  TemplateSlot,
+  WeekPlanContext,
+} from './plan';
 
 // Services
 export { computeCaloricTarget, getDiagnosisModifier } from './caloricTargetService';

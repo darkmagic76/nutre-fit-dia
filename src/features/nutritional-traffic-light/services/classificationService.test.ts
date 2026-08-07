@@ -3,7 +3,7 @@ import { classifyFood, classifyFoodWithReasons } from './classificationService';
 import { TrafficLightColor, FoodCategory } from '@shared/domain';
 import { foodsById } from '@shared/data/foods';
 import { makeFood } from '@/test/fixtures';
-import { Seasonality, Proximity, PackagingLevel } from '@shared/sustainability';
+import { Seasonality, Proximity, PackagingLevel } from '@domain/sustainability';
 
 describe('classificationService', () => {
   describe('classifyFood', () => {

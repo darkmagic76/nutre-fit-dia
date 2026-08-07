@@ -3,10 +3,8 @@ import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import { useTrackerStore } from './trackerStore';
-import {
-  generateWeeklyPlan,
-  type WeeklyPlan,
-} from '../../features/recipe-engine/services/planGenerator';
+import type { WeeklyPlan } from '@domain/plan';
+import { generateWeeklyPlan } from '../../features/recipe-engine/services/planGenerator';
 
 interface PlanState {
   weeklyPlan: WeeklyPlan | null;

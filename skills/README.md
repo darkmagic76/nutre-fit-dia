@@ -11,6 +11,7 @@ Modular skills index. Load only the one that applies to the current context.
 | [`ddd-analysis.md`](ddd-analysis.md)                         | Universal      | Analyze requirements, detect polysemy, bounded contexts |
 | [`code-smells.md`](code-smells.md)                           | Universal      | Detect and fix bad practices                            |
 | [`work-methodology.md`](work-methodology.md)                 | Project        | Work methodology, roles, development cycle              |
+| [`clean-architecture-audit.md`](clean-architecture-audit.md) | Project        | Audit dependencies, layers, ports, and anti-patterns    |
 
 **Classification by Scope Rule:**
 

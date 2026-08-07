@@ -156,12 +156,12 @@ src/
 
 Core principles and development rules live in dedicated, modular files — loaded per-context to save tokens and keep focus:
 
-| Resource                             | Content                                                                                        |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| [`skills/`](skills/)                 | Development rules: Scope Rule, TDD, DDD, architecture decisions, code smells, work methodology |
-| [`adr/`](adr/)                       | 11 Architecture Decision Records with traceability matrix                                      |
-| [`openspec/specs/`](openspec/specs/) | 37 domain specifications (spec-driven development)                                             |
-| [`docs/domain/`](docs/domain/)       | DDD analysis: bounded contexts, polysemy detection, semantic untangling                        |
+| Resource                             | Content                                                                                                            |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| [`skills/`](skills/)                 | Development rules: Scope Rule, TDD, DDD, Clean Architecture, architecture decisions, code smells, work methodology |
+| [`adr/`](adr/)                       | 11 Architecture Decision Records with traceability matrix                                                          |
+| [`openspec/specs/`](openspec/specs/) | 37 domain specifications (spec-driven development)                                                                 |
+| [`docs/domain/`](docs/domain/)       | DDD analysis: bounded contexts, polysemy detection, semantic untangling                                            |
 
 ### Implementation Phases (Complete ✅)
 

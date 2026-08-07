@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { buildNudgeContext, evaluateRules, evaluateAndEnqueue } from '@shared/nudge/engine';
+import { buildNudgeContext, evaluateRules } from '@shared/nudge/engine';
+import { container } from '@infrastructure/compositionRoot';
 import { CooldownTracker } from '@shared/nudge';
 import type { CooldownOps, ContextInput } from '@shared/nudge';
 import { NUDGE_RULES } from '../../infrastructure/nudge/rules';
@@ -154,8 +155,9 @@ describe('Nudge Engine Integration', () => {
         ],
       });
 
-      // evaluateAndEnqueue reads stores → should auto-resolve WATER_HYDRATION
-      evaluateAndEnqueue();
+      // container.evaluateNudges reads stores via adapter → should auto-resolve WATER_HYDRATION
+      const input = storeContextInput();
+      container.evaluateNudges(input);
 
       const waterStillPending = useNudgeStore
         .getState()

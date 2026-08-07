@@ -6,9 +6,9 @@ import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
 import { type ReactElement } from 'react';
 import type { SystemNotification } from '@shared/domain';
 
-// Mock evaluateAndEnqueue to prevent auto-enqueue on mount
-vi.mock('@shared/nudge', () => ({
-  evaluateAndEnqueue: vi.fn(),
+// Mock useNudgeTrigger to prevent auto-enqueue on mount
+vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+  useNudgeTrigger: vi.fn(() => vi.fn()),
 }));
 
 function renderContainer(ui: ReactElement) {

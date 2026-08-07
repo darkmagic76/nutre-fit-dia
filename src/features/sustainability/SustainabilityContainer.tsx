@@ -1,6 +1,6 @@
 import { useT } from '@shared/i18n';
 import { foods } from '@shared/data/foods';
-import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability';
+import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@domain/sustainability';
 import { SustainabilityView } from './SustainabilityView';
 
 export function SustainabilityContainer() {

@@ -1,7 +1,7 @@
 import { useTrackerStore } from '@shared/stores';
 import { useT } from '@shared/i18n';
 import { useExportData } from '@shared/hooks/useExportData';
-import { evaluateAndEnqueue } from '@shared/nudge';
+import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import type { FormEvent } from 'react';
 
@@ -29,11 +29,12 @@ export function MetabolicTrackerContainer() {
     calculateTarget,
   } = useTrackerStore();
   const { exportAllData, isExporting } = useExportData();
+  const trigger = useNudgeTrigger();
 
   const handleCalculate = (e: FormEvent) => {
     e.preventDefault();
     calculateTarget();
-    evaluateAndEnqueue();
+    trigger();
   };
 
   const canCalculate = glucose.trim().length > 0;

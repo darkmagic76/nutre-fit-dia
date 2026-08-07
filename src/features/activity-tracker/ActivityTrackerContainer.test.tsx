@@ -1,9 +1,13 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ActivityTrackerContainer } from './ActivityTrackerContainer';
 import { I18nProvider } from '@shared/i18n';
 import { type ReactElement } from 'react';
 import { useActivityStore } from '@infrastructure/stores/activityStore';
+
+vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+  useNudgeTrigger: () => vi.fn(),
+}));
 
 function renderContainer(ui: ReactElement) {
   return render(<I18nProvider>{ui}</I18nProvider>);

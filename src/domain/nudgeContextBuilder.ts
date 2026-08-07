@@ -1,7 +1,7 @@
 import { countRations } from './rationValidator';
 import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES } from './index';
 import { HIGH_GLYCEMIC_FRUIT_NAMES } from './glycemicFruits';
-import { computeEnvironmentalScore, suggestAlternative } from '@shared/sustainability';
+import { computeEnvironmentalScore, suggestAlternative } from './sustainability';
 import type { ContextInput } from './nudgeContext';
 import type { NudgeContext } from './nudgeContext';
 
@@ -38,7 +38,7 @@ export function buildNudgeContext(input: ContextInput): NudgeContext {
 
   if (food) {
     const envResult = computeEnvironmentalScore(food);
-    const altResults = suggestAlternative(food);
+    const altResults = suggestAlternative(food, input.catalog ?? []);
     environmentalScore = envResult.score;
     alternatives = altResults.length > 0 ? altResults.map((f) => f.name) : null;
   }

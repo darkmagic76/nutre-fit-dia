@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SustainabilityView } from './SustainabilityView';
 import { es } from '@shared/i18n/es';
-import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@shared/sustainability';
+import { PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS } from '@domain/sustainability';
 import type { Translations } from '@shared/i18n';
 
 const t = es as Translations;

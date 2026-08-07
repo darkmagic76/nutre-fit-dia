@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { ProfileForm } from './ProfileForm';
 import { makeMetricsFormState } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
-import type { UserMetricsFormState } from '@shared/domain';
+import type { UserMetricsFormState } from '../types';
 
 describe('ProfileForm', () => {
   let onSubmit: ReturnType<typeof vi.fn>;

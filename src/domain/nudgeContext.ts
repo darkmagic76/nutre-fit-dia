@@ -11,6 +11,8 @@ export interface ContextInput {
   weeklyMinutes: number;
   trends: BiomarkerTrend;
   food?: Food;
+  /** Food catalog for sustainability substitution lookups. Injected by caller. */
+  catalog?: Food[];
 }
 
 export interface NudgeContext {

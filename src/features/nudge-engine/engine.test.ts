@@ -93,7 +93,13 @@ describe('buildNudgeContext', () => {
       category: FoodCategory.RED_MEAT,
       carbonFootprint: 8.0,
     });
-    const input = makeContextInput({ food: highCarbonFood });
+    const altFood = makeFood({
+      id: 'lentejas',
+      name: 'Lentejas',
+      category: FoodCategory.LEGUMES,
+      carbonFootprint: 0.8,
+    });
+    const input = makeContextInput({ food: highCarbonFood, catalog: [highCarbonFood, altFood] });
     const ctx = buildNudgeContext(input);
 
     expect(ctx.environmentalScore).toBeGreaterThanOrEqual(0);

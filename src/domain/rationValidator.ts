@@ -2,7 +2,6 @@ import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES } from './foodCategory';
 import { CEREAL_RESTRICTED_MAX } from './clinical';
 import type { FoodCategory as FoodCategoryType } from './foodCategory';
 import type { Food } from './food';
-import type { Translations } from '@shared/i18n/types';
 
 /**
  * Ration limits per INFORME_ADR FR-2 and ADR-005.
@@ -94,6 +93,9 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
   },
 };
 
+/** Cross-category violation keys. Each value maps to a `validation.*` i18n key. */
+export type RationViolationKey = 'validation.crossRule.whiteMeatFish';
+
 export interface RationViolation {
   category: FoodCategoryType;
   current: number;
@@ -103,7 +105,7 @@ export interface RationViolation {
   /** @deprecated Use formatViolation(t, v) instead — locale-aware message formatting at UI layer. */
   message?: string;
   /** Cross-category i18n key (e.g. whiteMeatFish). Bypasses template interpolation. */
-  messageKey?: keyof Translations;
+  messageKey?: RationViolationKey;
 }
 
 export interface RationValidationResult {

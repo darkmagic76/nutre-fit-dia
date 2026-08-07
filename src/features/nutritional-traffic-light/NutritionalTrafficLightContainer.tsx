@@ -4,7 +4,7 @@ import { foodsById } from '@shared/data/foods';
 import { classifyFoodWithReasons } from './services/classificationService';
 import { checkSafetyAlerts } from './services/safetyCheck';
 import { useLogStore } from '@shared/stores';
-import { evaluateAndEnqueue } from '@shared/nudge';
+import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import { NutritionalTrafficLightView } from './NutritionalTrafficLightView';
 import type { SafetyAlert } from '../../domain/rationValidator';
@@ -16,6 +16,7 @@ export function NutritionalTrafficLightContainer() {
   const [safetyAlerts, setSafetyAlerts] = useState<SafetyAlert[]>([]);
   const addFoodToLog = useLogStore((s) => s.addFoodToLog);
   const getFoodName = useFoodName;
+  const trigger = useNudgeTrigger();
 
   const options = Array.from(foodsById.entries()).map(([id, food]) => ({
     value: id,
@@ -28,13 +29,13 @@ export function NutritionalTrafficLightContainer() {
     if (!selected) return;
     setResult(classifyFoodWithReasons(selected));
     setSafetyAlerts(checkSafetyAlerts(selected));
-    evaluateAndEnqueue(selected);
+    trigger(selected);
   };
 
   const handleAddToLog = () => {
     if (!selected) return;
     addFoodToLog(selected);
-    evaluateAndEnqueue();
+    trigger();
   };
 
   const handleSelect = (id: string) => {

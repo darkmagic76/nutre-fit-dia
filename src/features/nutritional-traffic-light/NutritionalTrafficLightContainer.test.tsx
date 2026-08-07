@@ -4,11 +4,11 @@ import userEvent from '@testing-library/user-event';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { NutritionalTrafficLightContainer } from './NutritionalTrafficLightContainer';
 import { useLogStore } from '@infrastructure/stores/logStore';
-import { evaluateAndEnqueue } from '@shared/nudge';
 
-// Mock only evaluateAndEnqueue — the container is the sole consumer of this export
-vi.mock('@shared/nudge', () => ({
-  evaluateAndEnqueue: vi.fn(),
+const mockTrigger = vi.fn();
+
+vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+  useNudgeTrigger: () => mockTrigger,
 }));
 
 describe('NutritionalTrafficLightContainer', () => {
@@ -30,7 +30,7 @@ describe('NutritionalTrafficLightContainer', () => {
     await user.click(screen.getByText('Clasificar'));
 
     // spec REQ-CONTAINER-CLASSIFY: evaluateAndEnqueue called with selected food
-    expect(evaluateAndEnqueue).toHaveBeenCalledWith(
+    expect(mockTrigger).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'cereal-pan-integral' }),
     );
 
@@ -55,6 +55,6 @@ describe('NutritionalTrafficLightContainer', () => {
     expect(log[0].id).toBe('cereal-pan-integral');
 
     // spec REQ-CONTAINER-LOG: evaluateAndEnqueue called with no args
-    expect(evaluateAndEnqueue).toHaveBeenCalledWith();
+    expect(mockTrigger).toHaveBeenCalledWith();
   });
 });

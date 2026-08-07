@@ -1,4 +1,4 @@
-import type { WeeklyPlan } from '@features/recipe-engine/services/planGenerator';
+import type { WeeklyPlan } from '@domain/plan';
 
 /** PlanRepository — application port for meal plan access. */
 export interface PlanRepository {

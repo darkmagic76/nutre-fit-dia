@@ -12,6 +12,10 @@ function renderApp() {
   );
 }
 
+vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+  useNudgeTrigger: () => vi.fn(),
+}));
+
 describe('App integration', () => {
   beforeEach(() => {
     vi.stubGlobal('localStorage', createLocalStorage());

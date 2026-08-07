@@ -1,8 +1,8 @@
 import type { Food } from '@shared/domain';
 import { FoodCategory, TrafficLightColor } from '@shared/domain';
 import { detectOccultFromFood } from './occultSugarDetector';
-import { computeEnvironmentalScore } from '@shared/sustainability';
-import type { EnvironmentalScore } from '@shared/sustainability';
+import { computeEnvironmentalScore } from '@domain/sustainability';
+import type { EnvironmentalScore } from '@domain/sustainability';
 
 /**
  * Classifies a food into Green/Orange/Red per FR-3.1 (Semáforo Nutricional, Modelo Hospital Rey Juan Carlos)

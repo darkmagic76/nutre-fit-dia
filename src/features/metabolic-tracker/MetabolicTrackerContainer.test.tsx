@@ -10,10 +10,9 @@ vi.mock('@shared/hooks/useExportData', () => ({
   useExportData: () => ({ exportAllData: vi.fn(), isExporting: false }),
 }));
 
-vi.mock('@shared/nudge', async () => {
-  const actual = await vi.importActual('@shared/nudge');
-  return { ...actual, evaluateAndEnqueue: vi.fn() };
-});
+vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+  useNudgeTrigger: () => vi.fn(),
+}));
 
 describe('MetabolicTrackerContainer', () => {
   beforeEach(() => {

@@ -21,27 +21,3 @@ export const UserProfileSchema = z.object({
 });
 
 export type UserProfile = z.infer<typeof UserProfileSchema>;
-
-export interface UserMetricsFormData {
-  weight: string;
-  height: string;
-  age: string;
-  gender: 'male' | 'female';
-  paf: string;
-  diagnosisAge: string;
-  glucose: string;
-  glucoseContext: 'fasting' | 'postprandial';
-}
-
-export interface UserMetricsFormSetters {
-  setWeight: (v: string) => void;
-  setHeight: (v: string) => void;
-  setAge: (v: string) => void;
-  setGender: (v: string) => void;
-  setPaf: (v: string) => void;
-  setDiagnosisAge: (v: string) => void;
-  setGlucose: (v: string) => void;
-  setGlucoseContext: (v: 'fasting' | 'postprandial') => void;
-}
-
-export interface UserMetricsFormState extends UserMetricsFormData, UserMetricsFormSetters {}

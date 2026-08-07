@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useT } from '@shared/i18n';
 import { useActivityTracker } from './hooks/useActivityTracker';
-import { evaluateAndEnqueue } from '@shared/nudge';
+import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
 import { ActivityTrackerView } from './ActivityTrackerView';
 import { ModerateMinutes } from './types';
 
@@ -17,6 +17,7 @@ export function ActivityTrackerContainer() {
     meetsStrength,
     addEntry,
   } = useActivityTracker();
+  const trigger = useNudgeTrigger();
 
   const [minutes, setMinutes] = useState('');
   const [sessions, setSessions] = useState('');
@@ -30,7 +31,7 @@ export function ActivityTrackerContainer() {
       setMinutes('');
       setSessions('');
       // FR-4.3: re-evaluate nudges after logging activity (HC_INACTIVITY_ADJUST)
-      evaluateAndEnqueue();
+      trigger();
     }
   };
 

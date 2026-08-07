@@ -1,20 +1,19 @@
-export { Seasonality, Proximity, PackagingLevel } from './types';
-
-export type {
-  Seasonality as SeasonalityType,
-  Proximity as ProximityType,
-  PackagingLevel as PackagingLevelType,
-  EnvironmentalScore,
-} from './types';
-
+// Re-export barrel — delegates to @domain/sustainability
 export {
+  Seasonality,
+  Proximity,
+  PackagingLevel,
+  type SeasonalityType,
+  type ProximityType,
+  type PackagingLevelType,
+  type EnvironmentalScore,
   PROTEIN_EMISSION_RATIOS,
   CARBON_THRESHOLDS,
   CARBON_CATEGORY_SCORES,
   SCORING_WEIGHTS,
   SEASONALITY_SCORES,
   PROXIMITY_SCORES,
-} from './constants';
-
-export { computeEnvironmentalScore } from './scoringService';
-export { suggestAlternative, BLUE_FISH_IDS } from './substitutionService';
+  computeEnvironmentalScore,
+  suggestAlternative,
+  BLUE_FISH_IDS,
+} from '../../domain/sustainability/index';

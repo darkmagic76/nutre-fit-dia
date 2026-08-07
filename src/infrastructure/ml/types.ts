@@ -1,4 +1,4 @@
-import type { EnvironmentalScore } from '@shared/sustainability';
+import type { EnvironmentalScore } from '@domain/sustainability';
 
 /** ADR-003: ML pipeline abstraction — scanner adapter contract */
 

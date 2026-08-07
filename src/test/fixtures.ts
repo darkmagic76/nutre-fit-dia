@@ -1,7 +1,7 @@
 import { FoodCategory } from '@shared/domain';
 import type { Food } from '@shared/domain';
 import type { CaloricTargetOutput } from '../domain/caloricTargetService';
-import type { UserMetricsFormState } from '../domain/metrics';
+import type { UserMetricsFormState } from '../features/metabolic-tracker/types';
 import type { RationValidationResult, RationViolation } from '../domain/rationValidator';
 
 // ---------------------------------------------------------------------------

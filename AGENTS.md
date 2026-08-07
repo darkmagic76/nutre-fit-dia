@@ -17,6 +17,7 @@ Todo agente DEBE leer los skills en este orden lógico antes de cualquier acció
 | 5   | [`skills/ddd-analysis.md`](skills/ddd-analysis.md)                         | Analizar requisitos, desambiguar lenguaje              | Universal      |
 | 6   | [`skills/code-smells.md`](skills/code-smells.md)                           | Detectar y corregir malas prácticas                    | Universal      |
 | 7   | [`skills/work-methodology.md`](skills/work-methodology.md)                 | Roles, ciclo RED→GREEN→REFACTOR, verification pipeline | Proyecto       |
+| 8   | [`skills/clean-architecture-audit.md`](skills/clean-architecture-audit.md) | Auditar dependencias, capas, puertos y antipatrones    | Proyecto       |
 
 **El índice completo de skills está en [`skills/README.md`](skills/README.md).**
 

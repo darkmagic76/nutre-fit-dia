@@ -1,5 +1,5 @@
 import { PrimaryButton, NumberField, SelectField } from '@shared/ui';
-import type { UserMetricsFormState } from '@shared/domain';
+import type { UserMetricsFormState } from '../types';
 import type { FormEvent } from 'react';
 import { useT } from '@shared/i18n';
 

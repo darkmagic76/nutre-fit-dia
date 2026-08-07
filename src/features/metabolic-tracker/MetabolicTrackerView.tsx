@@ -2,7 +2,7 @@ import type { Translations } from '@shared/i18n';
 import type { CaloricTargetOutput } from '../../domain/caloricTargetService';
 import { Card } from '@shared/ui';
 import type { ValidationError } from '@shared/errors';
-import type { UserMetricsFormState } from '@shared/domain';
+import type { UserMetricsFormState } from './types';
 import type { FormEvent } from 'react';
 import { ProfileForm } from './components/ProfileForm';
 import { ProfileError } from './components/ProfileError';
