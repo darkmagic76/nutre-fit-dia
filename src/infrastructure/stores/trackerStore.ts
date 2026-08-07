@@ -4,7 +4,6 @@ import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import { ValidationError } from '@shared/errors';
 import { calculateTarget as calculateTargetUseCase } from '@application/use-cases/calculateTarget';
-import { useBiomarkerStore } from './biomarkerStore';
 import type { Translations } from '@shared/i18n/types';
 import { es as DEFAULT_TRANSLATIONS } from '@shared/i18n/es';
 import type { BiomarkerRepository } from '@application/ports/biomarkerRepository';
@@ -40,7 +39,7 @@ interface TrackerState {
   setGlucose: (v: string) => void;
   setGlucoseContext: (v: 'fasting' | 'postprandial') => void;
   setRestrictionActive: (v: boolean) => void;
-  calculateTarget: (translate?: Translations) => void;
+  calculateTarget: (biomarkerRepo: BiomarkerRepository, translate?: Translations) => void;
 }
 
 export const useTrackerStore = create<TrackerState>()(
@@ -83,20 +82,9 @@ export const useTrackerStore = create<TrackerState>()(
       setGlucoseContext: (v) => set({ glucoseContext: v }),
       setRestrictionActive: (v) => set({ caloricRestrictionActive: v }),
 
-      calculateTarget: (translate) => {
+      calculateTarget: (biomarkerRepo, translate) => {
         const t = translate ?? DEFAULT_TRANSLATIONS;
         const { weight, height, age, diagnosisAge, gender, paf, glucose, glucoseContext } = get();
-
-        // Thin adapter: biomarkerStore → BiomarkerRepository port
-        const biomarkerRepo: BiomarkerRepository = {
-          getGlucoseHistory: () => useBiomarkerStore.getState().glucoseHistory,
-          getWeightHistory: () => useBiomarkerStore.getState().weightHistory,
-          getTrend: () => useBiomarkerStore.getState().getTrend(),
-          recordGlucose: (input) => useBiomarkerStore.getState().recordGlucose(input),
-          recordWeight: (w, h) => useBiomarkerStore.getState().recordWeight(w, h),
-          detectIMCThresholdCrossing: () =>
-            useBiomarkerStore.getState().detectIMCThresholdCrossing(),
-        };
 
         const result = calculateTargetUseCase(
           { weight, height, age, diagnosisAge, gender, paf, glucose, glucoseContext },

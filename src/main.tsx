@@ -2,13 +2,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { I18nProvider } from '@shared/i18n';
 import { ErrorBoundary } from '@shared/ui';
+import { ContainerProvider } from '@shared/context/ContainerContext';
 import { container } from '@infrastructure/compositionRoot';
 import './index.css';
 import App from './App';
-
-// Container is imported for future use by feature containers (Phase 6+).
-// Prevent unused-import error until consumers are wired.
-void container;
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Fatal: #root element not found — cannot mount application');
@@ -35,9 +32,11 @@ createRoot(root).render(
         </div>
       )}
     >
-      <I18nProvider>
-        <App />
-      </I18nProvider>
+      <ContainerProvider value={container}>
+        <I18nProvider>
+          <App />
+        </I18nProvider>
+      </ContainerProvider>
     </ErrorBoundary>
   </StrictMode>,
 );

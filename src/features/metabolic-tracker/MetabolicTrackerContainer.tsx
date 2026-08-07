@@ -2,11 +2,13 @@ import { useTrackerStore } from '@shared/stores';
 import { useT } from '@shared/i18n';
 import { useExportData } from '@shared/hooks/useExportData';
 import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
+import { useContainer } from '@shared/context/ContainerContext';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import type { FormEvent } from 'react';
 
 export function MetabolicTrackerContainer() {
   const t = useT();
+  const { biomarkerRepo } = useContainer();
   const {
     weight,
     height,
@@ -33,7 +35,7 @@ export function MetabolicTrackerContainer() {
 
   const handleCalculate = (e: FormEvent) => {
     e.preventDefault();
-    calculateTarget();
+    calculateTarget(biomarkerRepo, t);
     trigger();
   };
 

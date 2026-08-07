@@ -7,6 +7,13 @@ import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
 import { useActivityStore } from '@infrastructure/stores/activityStore';
 import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
 import { usePlanStore } from '@infrastructure/stores/planStore';
+import { ContainerProvider } from '@shared/context/ContainerContext';
+import { container } from '@infrastructure/compositionRoot';
+import { type ReactElement } from 'react';
+
+const wrapper = ({ children }: { children: ReactElement }) => (
+  <ContainerProvider value={container}>{children}</ContainerProvider>
+);
 
 describe('useExportData', () => {
   let originalCreateObjectURL: typeof URL.createObjectURL;
@@ -54,7 +61,7 @@ describe('useExportData', () => {
   });
 
   it('returns exportAllData function', () => {
-    const { result } = renderHook(() => useExportData());
+    const { result } = renderHook(() => useExportData(), { wrapper });
 
     expect(result.current.exportAllData).toBeInstanceOf(Function);
   });
@@ -82,7 +89,7 @@ describe('useExportData', () => {
       return originalCreateElement(tag);
     }) as typeof document.createElement;
 
-    const { result } = renderHook(() => useExportData());
+    const { result } = renderHook(() => useExportData(), { wrapper });
 
     await act(async () => {
       result.current.exportAllData();
@@ -139,7 +146,7 @@ describe('useExportData', () => {
       return originalCreateElement(tag);
     }) as typeof document.createElement;
 
-    const { result } = renderHook(() => useExportData());
+    const { result } = renderHook(() => useExportData(), { wrapper });
     await act(async () => result.current.exportAllData());
 
     document.createElement = originalCreateElement;
@@ -177,7 +184,7 @@ describe('useExportData', () => {
     // Verify the concept: export should include a timestamp
     const before = new Date().toISOString();
 
-    const { result } = renderHook(() => useExportData());
+    const { result } = renderHook(() => useExportData(), { wrapper });
 
     // After export, we can check the timestamp is recent
     // The hook should include exportedAt in the output
@@ -208,7 +215,7 @@ describe('useExportData', () => {
       return originalCreateElement(tag);
     }) as typeof document.createElement;
 
-    const { result } = renderHook(() => useExportData());
+    const { result } = renderHook(() => useExportData(), { wrapper });
 
     await act(async () => {
       result.current.exportAllData();

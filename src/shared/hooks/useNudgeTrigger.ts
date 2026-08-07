@@ -1,5 +1,4 @@
 import { useCallback, useMemo } from 'react';
-import { container } from '@infrastructure/compositionRoot';
 import { useTrackerStore } from '@infrastructure/stores/trackerStore';
 import { useLogStore } from '@infrastructure/stores/logStore';
 import { useActivityStore } from '@infrastructure/stores/activityStore';
@@ -8,6 +7,7 @@ import { foods } from '@shared/data/foods';
 import type { Food } from '@domain/food';
 import type { ContextInput } from '@domain/nudgeContext';
 import { computeBiomarkerTrend } from '@domain/biomarkerTypes';
+import { useContainer } from '@shared/context/ContainerContext';
 
 /**
  * Cross-cutting hook: triggers nudge evaluation for the current store state.
@@ -20,6 +20,7 @@ import { computeBiomarkerTrend } from '@domain/biomarkerTypes';
  *          substitution. Call with no args to trigger a general nudge cycle.
  */
 export function useNudgeTrigger() {
+  const { evaluateNudges } = useContainer();
   const caloricRestrictionActive = useTrackerStore((s) => s.caloricRestrictionActive);
   const todayLog = useLogStore((s) => s.todayLog);
   const weeklyMinutes = useActivityStore((s) => s.weeklyMinutes);
@@ -41,8 +42,8 @@ export function useNudgeTrigger() {
         food,
         catalog: foods,
       };
-      container.evaluateNudges(input);
+      evaluateNudges(input);
     },
-    [caloricRestrictionActive, todayLog, weeklyMinutes, trends],
+    [evaluateNudges, caloricRestrictionActive, todayLog, weeklyMinutes, trends],
   );
 }

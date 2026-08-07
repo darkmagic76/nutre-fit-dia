@@ -3,12 +3,16 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { createLocalStorage, createMatchMedia } from './test/test-helpers';
 import App from './App';
 import { I18nProvider } from '@shared/i18n';
+import { ContainerProvider } from '@shared/context/ContainerContext';
+import { container } from '@infrastructure/compositionRoot';
 
 function renderApp() {
   return render(
-    <I18nProvider>
-      <App />
-    </I18nProvider>,
+    <ContainerProvider value={container}>
+      <I18nProvider>
+        <App />
+      </I18nProvider>
+    </ContainerProvider>,
   );
 }
 

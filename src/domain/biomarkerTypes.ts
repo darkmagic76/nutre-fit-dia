@@ -61,9 +61,7 @@ export function computeBiomarkerTrend(
     const last = sorted[sorted.length - 1];
     const daysElapsed = (last.timestamp - first.timestamp) / (24 * 60 * 60 * 1000);
     weightTrend =
-      daysElapsed > 0
-        ? Math.round(((last.value - first.value) / daysElapsed) * 100) / 100
-        : 0;
+      daysElapsed > 0 ? Math.round(((last.value - first.value) / daysElapsed) * 100) / 100 : 0;
   }
 
   return {

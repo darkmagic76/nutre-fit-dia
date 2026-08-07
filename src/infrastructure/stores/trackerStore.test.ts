@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useTrackerStore } from './trackerStore';
 import { useBiomarkerStore } from './biomarkerStore';
 import { z } from 'zod';
+import type { BiomarkerRepository } from '@application/ports/biomarkerRepository';
 
 const defaults = {
   weight: '80',
@@ -16,6 +17,16 @@ const defaults = {
   caloricRestrictionActive: false,
   profileError: null,
 };
+
+// Mock BiomarkerRepository for testing
+const createMockBiomarkerRepo = (): BiomarkerRepository => ({
+  getGlucoseHistory: () => useBiomarkerStore.getState().glucoseHistory,
+  getWeightHistory: () => useBiomarkerStore.getState().weightHistory,
+  getTrend: () => useBiomarkerStore.getState().getTrend(),
+  recordGlucose: (reading) => useBiomarkerStore.getState().recordGlucose(reading),
+  recordWeight: (kg, cm) => useBiomarkerStore.getState().recordWeight(kg, cm),
+  detectIMCThresholdCrossing: () => useBiomarkerStore.getState().detectIMCThresholdCrossing(),
+});
 
 // --- Zod schema for persisted state (structural integrity only) ---
 export const TrackerStateSchema = z.object({
@@ -126,9 +137,11 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setGlucose('100');
     };
 
+    const mockRepo = createMockBiomarkerRepo();
+
     it('calculates caloric target with default values', () => {
       setDefaults();
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.caloricTarget).not.toBeNull();
       expect(state.caloricTarget!.bmr).toBeGreaterThan(0);
@@ -140,7 +153,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setWeight('abc');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('100');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
     });
@@ -148,11 +161,11 @@ describe('trackerStore', () => {
     it('clears profileError on successful recalculate', () => {
       useTrackerStore.getState().setWeight('abc');
       useTrackerStore.getState().setGlucose('100');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       expect(useTrackerStore.getState().profileError).not.toBeNull();
 
       useTrackerStore.getState().setWeight('80');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       expect(useTrackerStore.getState().profileError).toBeNull();
     });
 
@@ -160,7 +173,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setWeight('95');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('100');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       expect(useTrackerStore.getState().caloricRestrictionActive).toBe(true);
       expect(useTrackerStore.getState().caloricTarget!.deficit).toBeGreaterThan(0);
     });
@@ -169,7 +182,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setWeight('65');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('100');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       expect(useTrackerStore.getState().caloricRestrictionActive).toBe(false);
       expect(useTrackerStore.getState().caloricTarget!.deficit).toBe(0);
     });
@@ -182,7 +195,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setWeight('80');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('100');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
       expect(state.profileError!.message).toContain('Error al procesar');
@@ -194,7 +207,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setAge('40');
       useTrackerStore.getState().setDiagnosisAge('45');
       useTrackerStore.getState().setGlucose('100');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
       expect(state.profileError!.message).toContain('edad de diagnóstico');
@@ -206,7 +219,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setAge('50');
       useTrackerStore.getState().setDiagnosisAge('50');
       useTrackerStore.getState().setGlucose('100');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.caloricTarget).not.toBeNull();
       expect(state.profileError).toBeNull();
@@ -216,7 +229,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setWeight('80');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
       expect(state.profileError!.message).toContain('glucosa es obligatoria');
@@ -226,7 +239,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().setWeight('80');
       useTrackerStore.getState().setHeight('170');
       useTrackerStore.getState().setGlucose('abc');
-      useTrackerStore.getState().calculateTarget();
+      useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
       expect(state.profileError!.message).toContain('valor positivo');

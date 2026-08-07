@@ -1,11 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useTrackerStore } from '@infrastructure/stores/trackerStore';
-import { useLogStore } from '@infrastructure/stores/logStore';
-import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
-import { useActivityStore } from '@infrastructure/stores/activityStore';
-import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
-import { usePlanStore } from '@infrastructure/stores/planStore';
-import { exportData as exportDataUseCase } from '@application/use-cases/exportData';
+import { useContainer } from '@shared/context/ContainerContext';
 
 function formatDate(date: Date): string {
   const y = date.getFullYear();
@@ -16,20 +10,13 @@ function formatDate(date: Date): string {
 
 export function useExportData() {
   const [isExporting, setIsExporting] = useState(false);
+  const { exportData } = useContainer();
 
   const exportAllData = useCallback(() => {
     setIsExporting(true);
 
     try {
-      // Delegate data aggregation to the use case — thin adapter wrapping Zustand stores
-      const json = exportDataUseCase(
-        useTrackerStore,
-        useLogStore,
-        useNudgeStore,
-        useActivityStore,
-        usePlanStore,
-        useBiomarkerStore,
-      );
+      const json = exportData();
 
       // Download logic stays in the hook (Web APIs are presentation-layer)
       const blob = new Blob([json], { type: 'application/json' });
@@ -42,7 +29,7 @@ export function useExportData() {
     } finally {
       setIsExporting(false);
     }
-  }, []);
+  }, [exportData]);
 
   return { exportAllData, isExporting };
 }
