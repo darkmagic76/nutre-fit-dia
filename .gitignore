@@ -47,3 +47,6 @@ dev-sw.js
 
 # OpenCode temporary files
 .opencode/
+
+# Outdated documentation (pending update)
+docs/domain/DDD-INTRO.md

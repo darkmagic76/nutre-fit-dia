@@ -1,5 +1,7 @@
 # Especificación Funcional: Plataforma Digital de Salud Metabólica basada en erMedDiet
 
+> **Nota histórica:** Este documento es el informe fundacional del proyecto. Contiene los primeros Requisitos Funcionales (RF) y Requisitos No Funcionales (RNF) que definieron la visión completa de la plataforma. Todas las especificaciones técnicas posteriores (SPECS_RF.md, SPECS_TECH.md, openspec/specs/, ADRs) derivan de este documento original.
+
 ## 1. Fundamentos Médicos y Objetivos Estratégicos
 
 La presente especificación técnica define los requisitos funcionales para una solución digital de salud orientada al manejo de la Diabetes Tipo 2 (DT2). El núcleo clínico se basa en la Dieta Mediterránea con reducción de energía (**erMedDiet**), un modelo que integra la alta calidad nutricional del patrón mediterráneo con una restricción calórica estratégica y actividad física protocolizada. A diferencia de las intervenciones convencionales, este sistema aborda la DT2 como una patología heterogénea influenciada por variantes genéticas y fenotípicas, priorizando la mejora de la sensibilidad a la insulina y la reducción de la adiposidad visceral mediante la sinergia de alimentos completos en lugar del simple conteo de macronutrientes aislados.
