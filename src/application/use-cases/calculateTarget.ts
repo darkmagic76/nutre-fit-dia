@@ -1,8 +1,7 @@
 import type { CaloricTargetOutput } from '@domain/caloricTargetService';
 import type { BiomarkerRepository } from '@application/ports/biomarkerRepository';
-import type { Translations } from '@shared/i18n/types';
-import { ValidationError } from '@shared/errors';
-import { parseNumeric } from '@shared/utils';
+import { ValidationError } from '@domain/errors';
+import { parseNumeric } from '@domain/inputParsing';
 import { computeIMC } from '@domain/imc';
 import { validateProfile } from '@domain/profileService';
 import { computeCaloricTarget } from '@domain/caloricTargetService';
@@ -47,7 +46,6 @@ export interface CalculateTargetResult {
 export function calculateTarget(
   input: ProfileInput,
   biomarkerRepo: BiomarkerRepository,
-  t: Translations,
 ): CalculateTargetResult {
   const { weight, height, age, diagnosisAge, gender, paf, glucose, glucoseContext } = input;
 
@@ -66,9 +64,7 @@ export function calculateTarget(
       profileError:
         e instanceof ValidationError
           ? e
-          : new ValidationError(
-              t['errors.processingError'].replace('{message}', (e as Error).message),
-            ),
+          : new ValidationError('INVALID_NUMERIC_INPUT', { error: (e as Error).message }),
     };
   }
 
@@ -78,7 +74,7 @@ export function calculateTarget(
     return {
       caloricTarget: null,
       caloricRestrictionActive: false,
-      profileError: new ValidationError(t['errors.glucoseRequiredForMetabolicProfile']),
+      profileError: new ValidationError('GLUCOSE_REQUIRED'),
     };
   }
 
@@ -88,7 +84,7 @@ export function calculateTarget(
     return {
       caloricTarget: null,
       caloricRestrictionActive: false,
-      profileError: new ValidationError(t['errors.glucoseMustBePositive']),
+      profileError: new ValidationError('GLUCOSE_MUST_BE_POSITIVE'),
     };
   }
 
@@ -107,7 +103,7 @@ export function calculateTarget(
     return {
       caloricTarget: null,
       caloricRestrictionActive: false,
-      profileError: new ValidationError(t['errors.diagnosisAgeExceedsCurrentAge'], {
+      profileError: new ValidationError('DIAGNOSIS_AGE_EXCEEDS_CURRENT_AGE', {
         diagnosisAge: da,
         currentAge: a,
       }),
@@ -132,18 +128,21 @@ export function calculateTarget(
   // 6. Record weight + detect threshold crossing
   biomarkerRepo.recordWeight(w, h);
   const crossing = biomarkerRepo.detectIMCThresholdCrossing();
-  const crossedMessage =
-    crossing === 'crossed_above'
-      ? t['errors.imcThresholdCrossedUp']
-      : crossing === 'crossed_below'
-        ? t['errors.imcThresholdCrossedDown']
-        : null;
+
+  if (crossing) {
+    return {
+      caloricTarget: target,
+      caloricRestrictionActive: target.caloricRestrictionActive,
+      profileError: new ValidationError('IMC_THRESHOLD_CROSSED', {
+        direction: crossing,
+        prevIMC: 'see history',
+      }),
+    };
+  }
 
   return {
     caloricTarget: target,
     caloricRestrictionActive: target.caloricRestrictionActive,
-    profileError: crossedMessage
-      ? new ValidationError(crossedMessage, { crossing, prevIMC: 'see history' })
-      : null,
+    profileError: null,
   };
 }

@@ -22,7 +22,6 @@ import { usePlanStore } from '@infrastructure/stores/planStore';
 import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
-import type { Translations } from '@shared/i18n/types';
 import type { ContextInput } from '@domain/nudgeContext';
 import type { ProfileInput } from '@application/use-cases/calculateTarget';
 
@@ -41,8 +40,7 @@ export function createContainer() {
   const planRepo = createZustandPlanRepository();
 
   // 2. Use cases — receive ports, never import stores directly
-  const calculateTarget = (input: ProfileInput, t: Translations) =>
-    calculateTargetUseCase(input, biomarkerRepo, t);
+  const calculateTarget = (input: ProfileInput) => calculateTargetUseCase(input, biomarkerRepo);
 
   const evaluateNudges = (input: ContextInput) =>
     evaluateNudgesUseCase(input, NUDGE_RULES, notificationRepo);

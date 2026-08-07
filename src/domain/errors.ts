@@ -1,4 +1,20 @@
-/** Base error for all domain-level failures. Never exposes implementation details. */
+/**
+ * Domain error codes — union type for all domain-level errors.
+ *
+ * These codes are used by use cases to return structured errors
+ * without depending on i18n (Translations). The UI layer translates
+ * these codes to user-facing messages.
+ */
+export type DomainErrorCode =
+  | 'GLUCOSE_REQUIRED'
+  | 'GLUCOSE_MUST_BE_POSITIVE'
+  | 'DIAGNOSIS_AGE_EXCEEDS_CURRENT_AGE'
+  | 'IMC_THRESHOLD_CROSSED'
+  | 'INVALID_NUMERIC_INPUT';
+
+/**
+ * Base error for all domain-level failures. Never exposes implementation details.
+ */
 export class DomainError extends Error {
   readonly code: string;
   readonly context?: unknown;
@@ -30,10 +46,29 @@ export class DomainError extends Error {
  *
  * {@link ValidationError} is NEVER used for ration-limit violations — it is
  * exclusively for user-input structural failures.
+ *
+ * ## Constructor overloads
+ *
+ * - `new ValidationError(message: string, context?: unknown)` — backward compat, code = 'VALIDATION_ERROR'
+ * - `new ValidationError(code: DomainErrorCode, context?: unknown)` — new API, code = specific error code
  */
 export class ValidationError extends DomainError {
-  constructor(message: string, context?: unknown) {
-    super(message, 'VALIDATION_ERROR', context);
+  constructor(codeOrMessage: DomainErrorCode | string, context?: unknown) {
+    // If it's a known DomainErrorCode, use it as both code and message
+    // Otherwise, treat it as a message and use 'VALIDATION_ERROR' as code
+    const isErrorCode = [
+      'GLUCOSE_REQUIRED',
+      'GLUCOSE_MUST_BE_POSITIVE',
+      'DIAGNOSIS_AGE_EXCEEDS_CURRENT_AGE',
+      'IMC_THRESHOLD_CROSSED',
+      'INVALID_NUMERIC_INPUT',
+    ].includes(codeOrMessage);
+
+    if (isErrorCode) {
+      super(codeOrMessage, codeOrMessage, context);
+    } else {
+      super(codeOrMessage, 'VALIDATION_ERROR', context);
+    }
     this.name = 'ValidationError';
   }
 }

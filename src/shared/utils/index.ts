@@ -1,4 +1,3 @@
-export { parseNumeric } from './sanitize';
 export {
   computeIMC,
   isRestrictionCandidate,

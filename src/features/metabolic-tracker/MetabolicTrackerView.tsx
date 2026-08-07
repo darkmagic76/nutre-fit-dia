@@ -1,7 +1,7 @@
 import type { Translations } from '@shared/i18n';
 import type { CaloricTargetOutput } from '../../domain/caloricTargetService';
 import { Card } from '@shared/ui';
-import type { ValidationError } from '@shared/errors';
+import type { ValidationError } from '@domain/errors';
 import type { UserMetricsFormState } from './types';
 import type { FormEvent } from 'react';
 import { ProfileForm } from './components/ProfileForm';

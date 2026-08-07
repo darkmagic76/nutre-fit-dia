@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
-import { ValidationError } from '@shared/errors';
+import { ValidationError } from '@domain/errors';
 import { calculateTarget as calculateTargetUseCase } from '@application/use-cases/calculateTarget';
 import type { Translations } from '@shared/i18n/types';
 import { es as DEFAULT_TRANSLATIONS } from '@shared/i18n/es';
@@ -39,7 +39,7 @@ interface TrackerState {
   setGlucose: (v: string) => void;
   setGlucoseContext: (v: 'fasting' | 'postprandial') => void;
   setRestrictionActive: (v: boolean) => void;
-  calculateTarget: (biomarkerRepo: BiomarkerRepository, translate?: Translations) => void;
+  calculateTarget: (biomarkerRepo: BiomarkerRepository) => void;
 }
 
 export const useTrackerStore = create<TrackerState>()(
@@ -82,14 +82,12 @@ export const useTrackerStore = create<TrackerState>()(
       setGlucoseContext: (v) => set({ glucoseContext: v }),
       setRestrictionActive: (v) => set({ caloricRestrictionActive: v }),
 
-      calculateTarget: (biomarkerRepo, translate) => {
-        const t = translate ?? DEFAULT_TRANSLATIONS;
+      calculateTarget: (biomarkerRepo) => {
         const { weight, height, age, diagnosisAge, gender, paf, glucose, glucoseContext } = get();
 
         const result = calculateTargetUseCase(
           { weight, height, age, diagnosisAge, gender, paf, glucose, glucoseContext },
           biomarkerRepo,
-          t,
         );
 
         set({

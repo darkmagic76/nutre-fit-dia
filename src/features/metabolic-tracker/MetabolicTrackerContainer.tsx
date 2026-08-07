@@ -35,7 +35,7 @@ export function MetabolicTrackerContainer() {
 
   const handleCalculate = (e: FormEvent) => {
     e.preventDefault();
-    calculateTarget(biomarkerRepo, t);
+    calculateTarget(biomarkerRepo);
     trigger();
   };
 

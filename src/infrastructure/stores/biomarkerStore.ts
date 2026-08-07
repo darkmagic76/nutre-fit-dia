@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { z } from 'zod';
-import { computeIMC, IMC_NORMAL_MAX } from '@shared/utils';
+import { computeIMC, IMC_NORMAL_MAX } from '@domain/imc';
 import type { GlucoseReading, WeightReading, BiomarkerTrend } from '../../domain/biomarkerTypes';
 import { computeBiomarkerTrend } from '../../domain/biomarkerTypes';
 import { createPersistConfig } from '@infrastructure/storage';

@@ -17,7 +17,7 @@ describe('DomainError', () => {
 });
 
 describe('ValidationError', () => {
-  it('has VALIDATION_ERROR code', () => {
+  it('has VALIDATION_ERROR code when constructed with message', () => {
     const err = new ValidationError('invalid input', { field: 'weight' });
     expect(err.code).toBe('VALIDATION_ERROR');
     expect(err.message).toBe('invalid input');
@@ -27,6 +27,12 @@ describe('ValidationError', () => {
     const err = new ValidationError('invalid');
     expect(err).toBeInstanceOf(DomainError);
     expect(err).toBeInstanceOf(Error);
+  });
+
+  it('accepts error code and context', () => {
+    const err = new ValidationError('GLUCOSE_REQUIRED', { field: 'glucose' });
+    expect(err.code).toBe('GLUCOSE_REQUIRED');
+    expect(err.context).toEqual({ field: 'glucose' });
   });
 });
 

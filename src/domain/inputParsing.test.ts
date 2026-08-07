@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { parseNumeric } from './sanitize';
-import { ValidationError } from '@shared/errors';
+import { parseNumeric } from './inputParsing';
+import { ValidationError } from './errors';
 
 describe('parseNumeric', () => {
   it('parses a valid decimal value', () => {

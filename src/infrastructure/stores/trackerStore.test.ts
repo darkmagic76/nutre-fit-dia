@@ -188,8 +188,8 @@ describe('trackerStore', () => {
     });
 
     it('handles non-ValidationError from parseNumeric gracefully', async () => {
-      const utils = await import('@shared/utils');
-      vi.spyOn(utils, 'parseNumeric').mockImplementationOnce(() => {
+      const inputParsing = await import('@domain/inputParsing');
+      vi.spyOn(inputParsing, 'parseNumeric').mockImplementationOnce(() => {
         throw new Error('runtime error');
       });
       useTrackerStore.getState().setWeight('80');
@@ -198,7 +198,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
-      expect(state.profileError!.message).toContain('Error al procesar');
+      expect(state.profileError!.code).toBe('INVALID_NUMERIC_INPUT');
     });
 
     it('rejects diagnosisAge greater than current age', () => {
@@ -210,7 +210,8 @@ describe('trackerStore', () => {
       useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
-      expect(state.profileError!.message).toContain('edad de diagnóstico');
+      expect(state.profileError!.code).toBe('DIAGNOSIS_AGE_EXCEEDS_CURRENT_AGE');
+      expect(state.profileError!.context).toEqual({ diagnosisAge: 45, currentAge: 40 });
     });
 
     it('accepts diagnosisAge equal to current age', () => {
@@ -232,7 +233,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
-      expect(state.profileError!.message).toContain('glucosa es obligatoria');
+      expect(state.profileError!.code).toBe('GLUCOSE_REQUIRED');
     });
 
     it('sets profileError when glucose is NaN or non-positive (FR-5.1)', () => {
@@ -242,7 +243,7 @@ describe('trackerStore', () => {
       useTrackerStore.getState().calculateTarget(mockRepo);
       const state = useTrackerStore.getState();
       expect(state.profileError).toBeInstanceOf(Error);
-      expect(state.profileError!.message).toContain('valor positivo');
+      expect(state.profileError!.code).toBe('GLUCOSE_MUST_BE_POSITIVE');
     });
   });
 

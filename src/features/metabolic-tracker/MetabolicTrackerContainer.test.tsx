@@ -4,7 +4,7 @@ import { MetabolicTrackerContainer } from './MetabolicTrackerContainer';
 import { useTrackerStore } from '@infrastructure/stores/trackerStore';
 import { makeCaloricTargetOutput } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
-import { ValidationError } from '@shared/errors';
+import { ValidationError } from '@domain/errors';
 
 vi.mock('@shared/hooks/useExportData', () => ({
   useExportData: () => ({ exportAllData: vi.fn(), isExporting: false }),
@@ -67,22 +67,24 @@ describe('MetabolicTrackerContainer', () => {
 
   it('renders ProfileError with alert when store has profileError', () => {
     useTrackerStore.setState({
-      profileError: new ValidationError('El peso debe ser un número válido'),
+      profileError: new ValidationError('INVALID_NUMERIC_INPUT', {
+        error: 'El peso debe ser un número válido',
+      }),
     });
 
     renderContainer();
 
-    // Error alert visible with correct message
+    // Error alert visible with translated message
     const alert = screen.getByRole('alert');
     expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('El peso debe ser un número válido');
+    expect(alert).toHaveTextContent('Error al procesar');
   });
 
   it('renders restriction warning when IMC crossing is detected and restriction is active', () => {
     useTrackerStore.setState({
       caloricTarget: makeCaloricTargetOutput({ caloricRestrictionActive: true, deficit: 600 }),
-      profileError: new ValidationError('IMC ha superado 25 — restricción calórica activada', {
-        crossing: 'crossed_above',
+      profileError: new ValidationError('IMC_THRESHOLD_CROSSED', {
+        direction: 'crossed_above',
         prevIMC: 'see history',
       }),
     });
@@ -91,7 +93,7 @@ describe('MetabolicTrackerContainer', () => {
 
     // IMC crossing warning visible as alert
     const alert = screen.getByRole('alert');
-    expect(alert).toHaveTextContent('IMC ha superado 25');
+    expect(alert).toHaveTextContent('IMC');
 
     // Restriction subtext visible on deficit card
     const deficitCard = screen.getByRole('status', { name: /Déficit:/ });
@@ -102,7 +104,7 @@ describe('MetabolicTrackerContainer', () => {
   it('renders both ProfileResults and ProfileError simultaneously when both exist in store', () => {
     useTrackerStore.setState({
       caloricTarget: makeCaloricTargetOutput({ caloricRestrictionActive: false, deficit: 0 }),
-      profileError: new ValidationError('Glucosa en ayunas elevada — consulte con su médico'),
+      profileError: new ValidationError('GLUCOSE_MUST_BE_POSITIVE'),
     });
 
     renderContainer();
@@ -111,6 +113,6 @@ describe('MetabolicTrackerContainer', () => {
     expect(screen.getByRole('status', { name: 'BMR: 1400 kcal' })).toBeInTheDocument();
     const alert = screen.getByRole('alert');
     expect(alert).toBeInTheDocument();
-    expect(alert).toHaveTextContent('Glucosa en ayunas elevada');
+    expect(alert).toHaveTextContent('valor positivo');
   });
 });

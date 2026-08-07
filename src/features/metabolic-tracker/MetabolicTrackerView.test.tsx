@@ -3,10 +3,10 @@ import { screen } from '@testing-library/react';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import { makeCaloricTargetOutput, makeMetricsFormState } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
-import { ValidationError } from '@shared/errors';
+import { ValidationError } from '@domain/errors';
 import { es } from '@shared/i18n/es';
 import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
-import type { ValidationError as ValidationErrorType } from '@shared/errors';
+import type { ValidationError as ValidationErrorType } from '@domain/errors';
 
 describe('MetabolicTrackerView', () => {
   const form = makeMetricsFormState();
@@ -48,7 +48,7 @@ describe('MetabolicTrackerView', () => {
   });
 
   it('renders ProfileForm and ProfileError when error is present and no caloricTarget', () => {
-    const error = new ValidationError('Validation failed: invalid weight');
+    const error = new ValidationError('GLUCOSE_REQUIRED');
     renderView(null, error);
 
     // ProfileForm visible
@@ -56,7 +56,7 @@ describe('MetabolicTrackerView', () => {
 
     // ProfileError visible with alert
     expect(screen.getByRole('alert')).toBeInTheDocument();
-    expect(screen.getByRole('alert')).toHaveTextContent('Validation failed: invalid weight');
+    expect(screen.getByRole('alert')).toHaveTextContent('glucosa es obligatoria');
 
     // ProfileResults NOT rendered
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
