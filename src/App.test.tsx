@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nProvider } from '@shared/i18n';
+import { ContainerProvider } from '@shared/context/ContainerContext';
+import { container } from '@infrastructure/compositionRoot';
 import { createLocalStorage, createMatchMedia } from './test/test-helpers';
 import App from './App';
 import indexHtml from '../index.html?raw';
@@ -21,9 +23,11 @@ describe('App', () => {
 
   it('renders and shows locale toggle button', () => {
     render(
-      <I18nProvider>
-        <App />
-      </I18nProvider>,
+      <ContainerProvider value={container}>
+        <I18nProvider>
+          <App />
+        </I18nProvider>
+      </ContainerProvider>,
     );
 
     expect(screen.getByText('🇬🇧 EN')).toBeInTheDocument();
@@ -31,9 +35,11 @@ describe('App', () => {
 
   it('toggles locale from ES to EN when button is clicked', () => {
     render(
-      <I18nProvider>
-        <App />
-      </I18nProvider>,
+      <ContainerProvider value={container}>
+        <I18nProvider>
+          <App />
+        </I18nProvider>
+      </ContainerProvider>,
     );
 
     const toggle = screen.getByText('🇬🇧 EN');
@@ -46,9 +52,11 @@ describe('App', () => {
 
   it('renders footer with TFM and security link', () => {
     render(
-      <I18nProvider>
-        <App />
-      </I18nProvider>,
+      <ContainerProvider value={container}>
+        <I18nProvider>
+          <App />
+        </I18nProvider>
+      </ContainerProvider>,
     );
 
     // Footer should exist with at least 2 paragraphs (TFM + disclaimer)

@@ -187,7 +187,7 @@ describe('onRehydrateStorage', () => {
     const STORAGE_KEY = 'nutrefitdia-log';
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ state: { todayLog: 'not-an-array' }, version: 0 }),
+      JSON.stringify({ state: { todayLog: 'not-an-array' }, version: 1 }),
     );
     vi.resetModules();
     const mod = await import('./logStore');

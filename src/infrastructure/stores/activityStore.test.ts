@@ -174,7 +174,7 @@ describe('onRehydrateStorage', () => {
     const STORAGE_KEY = 'nutrefitdia-activity';
     localStorage.setItem(
       STORAGE_KEY,
-      JSON.stringify({ state: { weeklyMinutes: 'bad' }, version: 0 }),
+      JSON.stringify({ state: { weeklyMinutes: 'bad' }, version: 1 }),
     );
     vi.resetModules();
     const mod = await import('./activityStore');

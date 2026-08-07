@@ -285,7 +285,7 @@ describe('NudgeStateSchema', () => {
 describe('onRehydrateStorage', () => {
   it('resets to defaults when stored data fails schema validation', async () => {
     const STORAGE_KEY = 'nutrefitdia-nudge';
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: { pending: 'bad' }, version: 0 }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ state: { pending: 'bad' }, version: 1 }));
     vi.resetModules();
     const mod = await import('./nudgeStore');
     const state = mod.useNudgeStore.getState();

@@ -7,7 +7,7 @@ import { foods } from '@shared/data/foods';
 import type { Food } from '@domain/food';
 import type { ContextInput } from '@domain/nudgeContext';
 import { computeBiomarkerTrend } from '@domain/biomarkerTypes';
-import { useContainer } from '@shared/context/ContainerContext';
+import { useContainer } from '@shared/context/useContainer';
 
 /**
  * Cross-cutting hook: triggers nudge evaluation for the current store state.

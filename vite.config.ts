@@ -41,7 +41,7 @@ export default defineConfig({
     env: {
       VITE_STORAGE_PREFIX: 'nutrefitdia',
     },
-    exclude: ['e2e/**', 'node_modules/**'],
+    exclude: ['e2e/**', '**/node_modules/**'],
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],

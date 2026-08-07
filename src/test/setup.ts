@@ -131,17 +131,6 @@ if (originalSubtle) {
       }
       return Promise.resolve(payload.buffer as ArrayBuffer);
     },
-    getRandomValues: <T extends ArrayBufferView>(array: T): T => {
-      const view = new Uint8Array(array.buffer, array.byteOffset, array.byteLength);
-      // Use a global counter so each call produces different bytes,
-      // simulating the non-determinism of real crypto.getRandomValues
-      const base = (getRandomValues as unknown as { _counter: number })._counter ?? 0;
-      (getRandomValues as unknown as { _counter: number })._counter = base + view.length;
-      for (let i = 0; i < view.length; i++) {
-        view[i] = (base + i + 1) & 0xff;
-      }
-      return array;
-    },
   };
 
   Object.defineProperty(globalThis.crypto, 'subtle', {

@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useT } from '@shared/i18n';
 import { Card } from '@shared/ui';
 import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
-import { useNudgeStore } from '@shared/stores';
+import { useNudgeStore } from '@infrastructure/stores';
 import { NudgeEngineView } from './NudgeEngineView';
 
 export function NudgeEngineContainer() {
@@ -11,10 +11,14 @@ export function NudgeEngineContainer() {
   const dismiss = useNudgeStore((s) => s.dismiss);
   const t = useT();
   const trigger = useNudgeTrigger();
+  const triggerRef = useRef(trigger);
 
-  // Evaluate nudges on mount so initial conditions (water, glucose, weight, activity) are checked
   useEffect(() => {
-    trigger();
+    triggerRef.current = trigger;
+  }, [trigger]);
+
+  useEffect(() => {
+    triggerRef.current();
   }, []);
 
   return (
