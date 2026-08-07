@@ -3,7 +3,7 @@
 **Fecha:** 2026-08-07  
 **Autor:** Auditoría automatizada (SDD)  
 **Skills auditados:** `skills/clean-architecture-audit.md` + `skills/architecture-decisions.md`  
-**Estado:** 803 tests pasando | 78 archivos de test | 12 violaciones detectadas
+**Estado:** 808 tests pasando | 78 archivos de test | 12 violaciones detectadas | Fases 1-3 completadas
 
 ---
 
@@ -11,12 +11,19 @@
 
 Se auditaron **7 principios de Clean Architecture** y **4 pilares de Architecture Decisions** contra el código fuente completo de NutreFitDia. Se encontraron **12 violaciones** (7 HIGH, 4 MEDIUM, 1 LOW) que afectan la regla de dependencias, la inversión de control, y los barrels cross-layer.
 
-**Dominio:** ✅ Puro, rico, sin anemia. Reglas de negocio correctamente aisladas.  
-**Application:** ⚠️ Parcial. `calculateTarget` y `exportData` tienen dependencias indebidas hacia `@shared/`.  
-**Infrastructure:** ❌ 2 imports directos desde features (violación de la regla de dependencias).  
-**Composition Root:** ❌ Código muerto. Existe, está testeado, pero ningún feature lo consume.
+**Progreso de refactorización:**
 
-**Impacto:** Las violaciones HIGH comprometen la mantenibilidad a largo plazo y la capacidad de evolucionar la tecnología sin tocar reglas de negocio.
+- ✅ **Fase 1 completada** (2026-08-07): Rotas dependencias Infra→Features (planGenerator, sugarAliases)
+- ✅ **Fase 2 completada** (2026-08-07): Composition Root activada via React Context
+- ✅ **Fase 3 completada** (2026-08-07): Application layer limpia (errors → domain, parseNumeric → domain, calculateTarget sin Translations)
+- ⏳ **Fase 4 pendiente**: Reemplazar StoreSnapshot con puertos reales en exportData
+
+**Dominio:** ✅ Puro, rico, sin anemia. Reglas de negocio correctamente aisladas.  
+**Application:** ✅ Limpio. Use cases no importan de `@shared/` (excepto datos de dominio compartidos).  
+**Infrastructure:** ❌ 2 imports directos desde features (violación de la regla de dependencias).  
+**Composition Root:** ✅ Activa. Features consumen el container via useContainer().
+
+**Impacto:** Las violaciones HIGH originales han sido reducidas de 7 a 2 (solo quedan las de Infrastructure→Features).
 
 ---
 
