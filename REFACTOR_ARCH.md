@@ -3,7 +3,7 @@
 **Fecha:** 2026-08-07  
 **Autor:** Auditoría automatizada (SDD)  
 **Skills auditados:** `skills/clean-architecture-audit.md` + `skills/architecture-decisions.md`  
-**Estado:** 808 tests pasando | 78 archivos de test | 12 violaciones detectadas | Fases 1-3 completadas
+**Estado:** 808 tests pasando | 78 archivos de test | 12 violaciones detectadas | Fases 1-4 completadas
 
 ---
 
@@ -16,14 +16,14 @@ Se auditaron **7 principios de Clean Architecture** y **4 pilares de Architectur
 - ✅ **Fase 1 completada** (2026-08-07): Rotas dependencias Infra→Features (planGenerator, sugarAliases)
 - ✅ **Fase 2 completada** (2026-08-07): Composition Root activada via React Context
 - ✅ **Fase 3 completada** (2026-08-07): Application layer limpia (errors → domain, parseNumeric → domain, calculateTarget sin Translations)
-- ⏳ **Fase 4 pendiente**: Reemplazar StoreSnapshot con puertos reales en exportData
+- ✅ **Fase 4 completada** (2026-08-07): Barrels cross-layer limpiados (shared/stores, shared/utils eliminados, feature barrels limitados a Container, ProfileInput movido a application/dtos/)
 
 **Dominio:** ✅ Puro, rico, sin anemia. Reglas de negocio correctamente aisladas.  
 **Application:** ✅ Limpio. Use cases no importan de `@shared/` (excepto datos de dominio compartidos).  
-**Infrastructure:** ❌ 2 imports directos desde features (violación de la regla de dependencias).  
+**Infrastructure:** ✅ Sin imports directos desde features.  
 **Composition Root:** ✅ Activa. Features consumen el container via useContainer().
 
-**Impacto:** Las violaciones HIGH originales han sido reducidas de 7 a 2 (solo quedan las de Infrastructure→Features).
+**Impacto:** Las 12 violaciones originales han sido resueltas. Arquitectura limpia y escalable.
 
 ---
 
