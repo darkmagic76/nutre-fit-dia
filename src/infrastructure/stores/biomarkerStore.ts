@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { z } from 'zod';
 import { computeIMC, IMC_NORMAL_MAX } from '@shared/utils';
 import type { GlucoseReading, WeightReading, BiomarkerTrend } from '../../domain/biomarkerTypes';
+import { computeBiomarkerTrend } from '../../domain/biomarkerTypes';
 import { createPersistConfig } from '@infrastructure/storage';
 
 // Zod schema for persisted state (structural integrity only — not business rules)
@@ -55,47 +56,9 @@ export const useBiomarkerStore = create<BiomarkerState>()(
         return reading;
       },
 
-      getTrend: () => {
+      getTrend: (): BiomarkerTrend => {
         const { glucoseHistory, weightHistory } = get();
-        const now = Date.now();
-        const sevenDays = 7 * 24 * 60 * 60 * 1000;
-        const thirtyDays = 30 * 24 * 60 * 60 * 1000;
-
-        const recentGlucose = glucoseHistory.filter((r) => now - r.timestamp <= sevenDays);
-        const recentWeight = weightHistory.filter((r) => now - r.timestamp <= sevenDays);
-        const thirtyDayWeights = weightHistory.filter((r) => now - r.timestamp <= thirtyDays);
-
-        const glucoseAvg7d =
-          recentGlucose.length >= 2
-            ? Math.round(recentGlucose.reduce((s, r) => s + r.value, 0) / recentGlucose.length)
-            : null;
-
-        const weightAvg7d =
-          recentWeight.length >= 2
-            ? Math.round(
-                (recentWeight.reduce((s, r) => s + r.value, 0) / recentWeight.length) * 10,
-              ) / 10
-            : null;
-
-        let weightTrend: number | null = null;
-        if (thirtyDayWeights.length >= 2) {
-          const sorted = [...thirtyDayWeights].sort((a, b) => a.timestamp - b.timestamp);
-          const first = sorted[0];
-          const last = sorted[sorted.length - 1];
-          const daysElapsed = (last.timestamp - first.timestamp) / (24 * 60 * 60 * 1000);
-          weightTrend =
-            daysElapsed > 0
-              ? Math.round(((last.value - first.value) / daysElapsed) * 100) / 100
-              : 0;
-        }
-
-        return {
-          glucoseAvg7d,
-          glucoseLatest: glucoseHistory.at(-1) ?? null,
-          weightAvg7d,
-          weightLatest: weightHistory.at(-1) ?? null,
-          weightTrend,
-        };
+        return computeBiomarkerTrend(glucoseHistory, weightHistory);
       },
 
       detectIMCThresholdCrossing: () => {
