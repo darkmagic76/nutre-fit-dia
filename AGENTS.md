@@ -58,6 +58,8 @@ Definidos en `tsconfig.app.json` y `vite.config.ts` (deben mantenerse sincroniza
 | `@features/*`       | `src/features/*`       |
 | `@shared/*`         | `src/shared/*`         |
 | `@infrastructure/*` | `src/infrastructure/*` |
+| `@domain/*`         | `src/domain/*`         |
+| `@application/*`    | `src/application/*`    |
 
 ## Arquitectura de features
 
@@ -75,6 +77,14 @@ src/features/<feature>/
 ```
 
 **Scope Rule**: 1 feature usa algo → queda local en esa feature. 2+ features lo usan → va a `shared/`. No mover a shared "por si acaso".
+
+## Dependency Injection
+
+- **Composition Root** en `infrastructure/compositionRoot.ts` — crea el container con todos los adapters y use cases.
+- **React Context** en `shared/context/ContainerContext.tsx` — provee el container al árbol de React.
+- **Hook `useContainer()`** — inyecta dependencias en componentes. Úsalo en lugar de importar stores directamente.
+- **NO importar `container` directamente** — es un anti-pattern singleton. Siempre usar `useContainer()`.
+- **main.tsx** wrappea `<App />` con `<ContainerProvider value={container}>`.
 
 ## Testing
 

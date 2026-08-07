@@ -73,12 +73,18 @@ src/
 │   ├── caloricTargetService.ts          # Mifflin-St Jeor + PREDIMED-Plus deficit (ADR-004)
 │   ├── profileService.ts                # Profile validation
 │   ├── rationValidator.ts               # AESAN 2022 ration limits + validation (ADR-005)
-│   ├── biomarkerTypes.ts                # GlucoseReading, WeightReading, BiomarkerTrend
+│   ├── biomarkerTypes.ts                # GlucoseReading, WeightReading, BiomarkerTrend, computeBiomarkerTrend
 │   ├── cooldownTracker.ts               # CooldownTracker class (DI ops)
 │   ├── cooldownDurations.ts             # Cooldown constants (24h, 12h, 6h, etc.)
 │   ├── nudgeContext.ts + nudgeTypes.ts  # ContextInput, NudgeContext, SafetyRule types
 │   ├── nudgeContextBuilder.ts           # buildNudgeContext() — pure function
-│   └── nudgeEvaluator.ts                # evaluateRules() — pure function
+│   ├── nudgeEvaluator.ts                # evaluateRules() — pure function
+│   ├── plan.ts                          # MealType, WeeklyPlan, MealEntry, TemplateSlot, WeekPlanContext
+│   └── sustainability/                  # Environmental scoring (ADR-007)
+│       ├── constants.ts                 # CARBON_THRESHOLDS, SCORING_WEIGHTS, PROTEIN_EMISSION_RATIOS
+│       ├── scoringService.ts            # computeEnvironmentalScore()
+│       ├── substitutionService.ts       # suggestAlternative() — RED_MEAT → LEGUMES + blue FISH
+│       └── types.ts                     # Seasonality, Proximity, PackagingLevel, EnvironmentalScore
 │
 ├── application/                         # Use cases + ports — zero framework imports
 │   ├── ports/
@@ -91,6 +97,8 @@ src/
 │   │   ├── calculateTarget.ts           # Pure use case — caloric target (ADR-004)
 │   │   ├── evaluateNudges.ts            # Pure use case — nudge pipeline (ADR-008)
 │   │   └── exportData.ts                # Pure use case — data export
+│   ├── services/
+│   │   └── planGenerator.ts             # Weekly erMedDiet plan generation (moved from features)
 │   └── dtos/                            # (reserved for future DTOs)
 │
 ├── infrastructure/                      # Adaptadores + persistencia — conoce frameworks
@@ -124,10 +132,14 @@ src/
 ├── shared/                              # Presentation layer — UI + i18n + hooks
 │   ├── ui/                              # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
 │   ├── i18n/                            # ES/EN (useT, I18nProvider, 150+ keys)
-│   ├── hooks/                           # Cross-feature hooks (useExportData, useFoodName, useInstallPrompt)
-│   ├── data/foods.ts                    # 39-food AESAN catalog
+│   ├── hooks/                           # Cross-feature hooks (useExportData, useFoodName, useInstallPrompt, useNudgeTrigger)
+│   ├── context/
+│   │   └── ContainerContext.tsx         # React Context for DI (useContainer hook)
+│   ├── data/
+│   │   ├── foods.ts                     # 39-food AESAN catalog
+│   │   └── sugarAliases.ts              # Canonical sugar alias list (moved from features)
 │   ├── errors.ts                        # DomainError, ValidationError, NotFoundError
-│   ├── sustainability/                  # EnvironmentalScore, substitutionService, constants
+│   ├── sustainability/                  # Barrel re-exporting from domain/sustainability
 │   └── utils/                           # sanitize, barrel re-exports for backward compat
 │
 ├── test/
@@ -135,7 +147,7 @@ src/
 │   └── fixtures.ts                      # makeFood, makeEntries, makeCaloricTargetOutput, etc.
 │
 ├── App.tsx                              # Root component — 7 tabs via Container/Presentational
-└── main.tsx                             # Entry point — wires ErrorBoundary → I18nProvider → App
+└── main.tsx                             # Entry point — wires ErrorBoundary → ContainerProvider → I18nProvider → App
 ```
 
 ## Key Features

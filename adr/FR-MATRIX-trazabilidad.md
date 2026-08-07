@@ -6,7 +6,7 @@ Source documents:
 - `SPECS_TECH.md` — erMedDiet Technical Manual
 - `SPECS_RF.md` — Functional and Non-Functional Requirements (RF-01 → RF-03, RNF-01 → RNF-03)
 
-Generated: 2026-07-12 | Updated: 2026-08-06 | Branch: `develop` | Tests: 773 ✅ (76 files) | Lint: 0 | Typecheck: clean | ADRs: 12
+Generated: 2026-07-12 | Updated: 2026-08-07 | Branch: `develop` | Tests: 803 ✅ (78 files) | Lint: 0 | Typecheck: clean | ADRs: 12
 
 ## Status by Requirement
 
@@ -37,38 +37,40 @@ Generated: 2026-07-12 | Updated: 2026-08-06 | Branch: `develop` | Tests: 773 ✅
 | **ARC-1** | Clean Architecture layers (domain/application/infrastructure) | ADR-012 | ✅ Completed | `src/domain/` (28 files), `src/application/` (ports + use cases + dtos), `src/infrastructure/` (stores + adapters + composition root) |
 | **ARC-2** | Port interfaces (5 repositorios)                              | ADR-012 | ✅ Completed | `application/ports/{notification,activity,log,plan,biomarker}Repository.ts`                                                           |
 | **ARC-3** | Adapters (5 Zustand wrappers)                                 | ADR-012 | ✅ Completed | `infrastructure/adapters/zustand*.ts` + `contract.test.ts` (5 tests)                                                                  |
-| **ARC-4** | Composition Root (`createContainer()`)                        | ADR-012 | ✅ Completed | `infrastructure/compositionRoot.ts`, wired in `main.tsx`                                                                              |
+| **ARC-4** | Composition Root (`createContainer()`)                        | ADR-012 | ✅ Completed | `infrastructure/compositionRoot.ts`, wired in `main.tsx` via `ContainerProvider` (React Context DI)                                   |
 | **ARC-5** | Use cases extracted from stores                               | ADR-012 | ✅ Completed | `application/use-cases/{calculateTarget,evaluateNudges,exportData}.ts` (30 tests, in-memory fakes)                                    |
 | **ARC-6** | Path aliases (`@domain/*`, `@application/*`)                  | ADR-012 | ✅ Completed | `tsconfig.app.json` + `vite.config.ts`                                                                                                |
-| **ARC-7** | Skills structure (flat .md files)                             | ADR-012 | ✅ Completed | `skills/{name}.md` (7 skills)                                                                                                         |
+| **ARC-7** | Skills structure (flat .md files)                             | ADR-012 | ✅ Completed | `skills/{name}.md` (8 skills)                                                                                                         |
 | **ARC-8** | Domain purity (zero shared/utils imports)                     | ADR-012 | ✅ Completed | `src/domain/` imports only `zod` + internal modules                                                                                   |
 
 ## SPEC_TECH: New verified information
 
-| SPEC_TECH Requirement                                  | Status | Coverage                                                                  |
-| ------------------------------------------------------ | ------ | ------------------------------------------------------------------------- |
-| Dual Qualification (health + environmental)            | ✅     | H4 `ClassificationResult.environmentalScore`                              |
-| Hyperglycemia Nudge (glucose → walk/fiber)             | ✅     | H2 PR2 `HYPERGLYCEMIA_NUDGE`                                              |
-| Bacalao Optimization (0.7% fat)                        | ✅     | H2 PR3 `FISH_COD_TAG` + `classificationService` GREEN                     |
-| Carb adjustment by activity (< 150 min → reduce carbs) | ✅     | H2 PR3 `HC_INACTIVITY_ADJUST`                                             |
-| 3-6 daily meal fractionation                           | ✅     | M7 `MealType` + `buildDailyTemplate(mealCount)` + `enforceAOVE`           |
-| Strength training 2 days/week                          | ✅     | M6 — already implemented in H1 `useActivityTracker`                       |
-| Smart Substitution (Red_Meat → Legume/BlueFish)        | ✅     | M1 `suggestAlternative` + M2 `SUSTAINABLE_SUBSTITUTION` nudge             |
-| Deficit Nudge: Cereals < 3/day (2026-07-23)            | ✅     | `CEREALS_DEFICIT` rule, cooldown 6h                                       |
-| Deficit Nudge: Fruits < 2/day (2026-07-23)             | ✅     | `FRUITS_DEFICIT` rule, cooldown 6h                                        |
-| Vegetable Nudge: threshold 20h→14h (2026-07-23)        | ✅     | `VEGETABLE_NUDGE_HOUR_THRESHOLD` lowered from 20 to 14                    |
-| Scope Rule: nudge engine → shared/nudge/ (2026-07-23)  | ✅     | Rule engine extracted to `src/shared/nudge/`                              |
-| i18n: 0 hardcoded strings (2026-07-23)                 | ✅     | 12 strings → i18n keys + categories in ES/EN                              |
-| streakCount → Zustand (2026-07-23)                     | ✅     | Streak state moved to `activityStore`                                     |
-| Vegetable Nudge: UX time gate (2026-07-24)             | ✅     | DailyViolations reports time gate 14:00 (2 i18n messages)                 |
-| Coverage: zombies removed (2026-07-24)                 | ✅     | 4 zombies deleted, 5 imports corrected, 3 Boy Scout tests                 |
-| Coverage: views at 100% stmts (2026-07-24)             | ✅     | ErrorBoundary, ScannerView, Container + tests (556→561 tests)             |
-| Coverage: easy gaps (2026-07-24)                       | ✅     | installPrompt, rationValidator, planGenerator (561→578 tests)             |
-| i18n: violations ES/EN (2026-07-24)                    | ✅     | formatViolation(), 8 keys, CATEGORY_DISPLAY_NAMES deprecated              |
-| Coverage: 100% lines, 99.76% stmts (2026-07-24)        | ✅     | 578 tests (59 files), green pipeline, Scope Rule 0 violations             |
-| Legume-Carb-Source Nudge (2026-08-05)                  | ✅     | `LEGUME_CARB_SOURCE` rule, 4 tests, co-fires with CEREALS_DEFICIT         |
-| AOVE_TAGGING fix: `=== 0` → `< 3` (2026-08-06)         | ✅     | `AOVE_TAGGING` condition corrected to AESAN min (3 rations), 5 tests      |
-| Clean Architecture refactor (2026-08-06)               | ✅     | ADR-012: 3 layers, 5 ports, 5 adapters, composition root, 773 tests green |
+| SPEC_TECH Requirement                                  | Status | Coverage                                                                    |
+| ------------------------------------------------------ | ------ | --------------------------------------------------------------------------- |
+| Dual Qualification (health + environmental)            | ✅     | H4 `ClassificationResult.environmentalScore`                                |
+| Hyperglycemia Nudge (glucose → walk/fiber)             | ✅     | H2 PR2 `HYPERGLYCEMIA_NUDGE`                                                |
+| Bacalao Optimization (0.7% fat)                        | ✅     | H2 PR3 `FISH_COD_TAG` + `classificationService` GREEN                       |
+| Carb adjustment by activity (< 150 min → reduce carbs) | ✅     | H2 PR3 `HC_INACTIVITY_ADJUST`                                               |
+| 3-6 daily meal fractionation                           | ✅     | M7 `MealType` + `buildDailyTemplate(mealCount)` + `enforceAOVE`             |
+| Strength training 2 days/week                          | ✅     | M6 — already implemented in H1 `useActivityTracker`                         |
+| Smart Substitution (Red_Meat → Legume/BlueFish)        | ✅     | M1 `suggestAlternative` + M2 `SUSTAINABLE_SUBSTITUTION` nudge               |
+| Deficit Nudge: Cereals < 3/day (2026-07-23)            | ✅     | `CEREALS_DEFICIT` rule, cooldown 6h                                         |
+| Deficit Nudge: Fruits < 2/day (2026-07-23)             | ✅     | `FRUITS_DEFICIT` rule, cooldown 6h                                          |
+| Vegetable Nudge: threshold 20h→14h (2026-07-23)        | ✅     | `VEGETABLE_NUDGE_HOUR_THRESHOLD` lowered from 20 to 14                      |
+| Scope Rule: nudge engine → shared/nudge/ (2026-07-23)  | ✅     | Rule engine extracted to `src/shared/nudge/`                                |
+| i18n: 0 hardcoded strings (2026-07-23)                 | ✅     | 12 strings → i18n keys + categories in ES/EN                                |
+| streakCount → Zustand (2026-07-23)                     | ✅     | Streak state moved to `activityStore`                                       |
+| Vegetable Nudge: UX time gate (2026-07-24)             | ✅     | DailyViolations reports time gate 14:00 (2 i18n messages)                   |
+| Coverage: zombies removed (2026-07-24)                 | ✅     | 4 zombies deleted, 5 imports corrected, 3 Boy Scout tests                   |
+| Coverage: views at 100% stmts (2026-07-24)             | ✅     | ErrorBoundary, ScannerView, Container + tests (556→561 tests)               |
+| Coverage: easy gaps (2026-07-24)                       | ✅     | installPrompt, rationValidator, planGenerator (561→578 tests)               |
+| i18n: violations ES/EN (2026-07-24)                    | ✅     | formatViolation(), 8 keys, CATEGORY_DISPLAY_NAMES deprecated                |
+| Coverage: 100% lines, 99.76% stmts (2026-07-24)        | ✅     | 578 tests (59 files), green pipeline, Scope Rule 0 violations               |
+| Legume-Carb-Source Nudge (2026-08-05)                  | ✅     | `LEGUME_CARB_SOURCE` rule, 4 tests, co-fires with CEREALS_DEFICIT           |
+| AOVE_TAGGING fix: `=== 0` → `< 3` (2026-08-06)         | ✅     | `AOVE_TAGGING` condition corrected to AESAN min (3 rations), 5 tests        |
+| Clean Architecture refactor (2026-08-06)               | ✅     | ADR-012: 3 layers, 5 ports, 5 adapters, composition root, 773 tests green   |
+| Fase 1: break Infra→Features (2026-08-07)              | ✅     | planGenerator → application/services, sugarAliases → shared/data, 803 tests |
+| Fase 2: activate Composition Root (2026-08-07)         | ✅     | ContainerContext + useContainer DI, React Context wiring, 803 tests green   |
 
 ## Legend
 
