@@ -23,7 +23,7 @@ import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 import type { ContextInput } from '@domain/nudgeContext';
-import type { ProfileInput } from '@application/use-cases/calculateTarget';
+import type { ProfileInput } from '@application/dtos/ProfileInput';
 
 /**
  * Composition root — single factory that wires adapters → use cases.

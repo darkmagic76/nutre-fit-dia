@@ -3,7 +3,7 @@ import { useT } from '@shared/i18n';
 import { foodsById } from '@shared/data/foods';
 import { classifyFoodWithReasons } from './services/classificationService';
 import { checkSafetyAlerts } from './services/safetyCheck';
-import { useLogStore } from '@shared/stores';
+import { useLogStore } from '@infrastructure/stores';
 import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import { NutritionalTrafficLightView } from './NutritionalTrafficLightView';

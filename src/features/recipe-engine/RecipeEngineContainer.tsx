@@ -1,7 +1,7 @@
 import { useT } from '@shared/i18n';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import { usePlanStore } from './store/planStore';
-import { useTrackerStore } from '@shared/stores';
+import { useTrackerStore } from '@infrastructure/stores';
 import { RecipeEngineView } from './RecipeEngineView';
 
 export function RecipeEngineContainer() {

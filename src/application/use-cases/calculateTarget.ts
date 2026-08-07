@@ -7,6 +7,7 @@ import { validateProfile } from '@domain/profileService';
 import { computeCaloricTarget } from '@domain/caloricTargetService';
 import type { GlucoseInput } from '@domain/glucoseInput';
 import { GlucoseInput as coerceGlucoseInput } from '@domain/glucoseInput';
+import type { ProfileInput } from '@application/dtos/ProfileInput';
 
 // ─── Constants (extracted from trackerStore) ───────────────────────────────
 
@@ -22,18 +23,6 @@ const DIAGNOSIS_AGE_MIN = 0;
 const DIAGNOSIS_AGE_MAX = 120;
 
 // ─── Types ─────────────────────────────────────────────────────────────────
-
-/** Input shape for the calculateTarget use case — raw form fields. */
-export interface ProfileInput {
-  weight: string;
-  height: string;
-  age: string;
-  diagnosisAge: string;
-  gender: 'male' | 'female';
-  paf: string;
-  glucose: string;
-  glucoseContext: 'fasting' | 'postprandial';
-}
 
 export interface CalculateTargetResult {
   caloricTarget: CaloricTargetOutput | null;

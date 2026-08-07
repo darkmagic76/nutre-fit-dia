@@ -1,5 +1,5 @@
 import { useT } from '@shared/i18n';
-import { useLogStore, useTrackerStore } from '@shared/stores';
+import { useLogStore, useTrackerStore } from '@infrastructure/stores';
 import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
 import { MedDietValidatorView } from './MedDietValidatorView';
 
