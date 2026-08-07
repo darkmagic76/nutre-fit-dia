@@ -44,3 +44,6 @@ dev-sw.js
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# OpenCode temporary files
+.opencode/

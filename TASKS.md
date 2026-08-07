@@ -32,6 +32,7 @@ Generated: 2026-07-17 | Updated: 2026-08-07 | Branch: `develop` | Tests: 808 ✅
 | Clean Architecture Refactor     | ✅ Implemented (2026-08-06) — ADR-012: domain/application/infrastructure layers, 5 ports, 5 adapters, composition root, 3 use cases, 35 new tests, 130 files                                                                                         |
 | Clean Architecture Fases 1-2    | ✅ Implemented (2026-08-07) — Fase 1: break Infra→Features (planGenerator → application/services, sugarAliases → shared/data). Fase 2: activate Composition Root via React Context (ContainerContext, useContainer DI). 7 commits, 803 tests         |
 | Clean Architecture Fase 3       | ✅ Implemented (2026-08-07) — Clean Application Layer: move errors to domain/errors.ts, move parseNumeric to domain/inputParsing.ts, remove Translations from calculateTarget (error codes + context), ProfileError translates via useT(). 808 tests |
+| Clean Architecture Fase 4       | ✅ Implemented (2026-08-07) — Clean Barrels Cross-Layer: eliminados shared/stores/index.ts y shared/utils/index.ts, feature barrels limitados a solo Container, ProfileInput movido a application/dtos/. 808 tests                                   |
 
 ---
 
