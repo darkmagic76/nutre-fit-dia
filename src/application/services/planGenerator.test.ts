@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { generateWeeklyPlan, getWeeklyCounts, MealType, enforceAOVE } from './planGenerator';
-import { FoodCategory } from '@shared/domain';
+import { generateWeeklyPlan, getWeeklyCounts, enforceAOVE } from './planGenerator';
+import { MealType } from '@domain/plan';
+import { FoodCategory } from '@domain/foodCategory';
 import { foods } from '@shared/data/foods';
 
 describe('planGenerator', () => {

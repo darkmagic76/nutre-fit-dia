@@ -1,56 +1,24 @@
-import type { Food } from '@shared/domain';
-import { FoodCategory } from '@shared/domain';
+import type { Food } from '@domain/food';
+import { FoodCategory } from '@domain/foodCategory';
 import { foods } from '@shared/data/foods';
-import { CEREAL_RESTRICTED_MAX } from '../../../domain/clinical';
+import { CEREAL_RESTRICTED_MAX } from '@domain/clinical';
 import {
   validateRations,
   validateWeeklyRations,
   countRations,
   defaultRationCounts,
   type CountByCategory,
-  type RationValidationResult,
-} from '../../../domain/rationValidator';
-import { computeEnvironmentalScore } from '@shared/sustainability';
-
-export const MealType = {
-  BREAKFAST: 'BREAKFAST',
-  LUNCH: 'LUNCH',
-  DINNER: 'DINNER',
-  SNACK: 'SNACK',
-} as const;
-
-export type MealType = (typeof MealType)[keyof typeof MealType];
-
-export interface MealSlot {
-  meal: MealType;
-  rations: number;
-}
-
-/**
- * Simplified meal plan entry.
- */
-export interface MealEntry {
-  food: Food;
-  rations: number;
-  mealType?: MealType;
-}
-
-export interface DailyMeal {
-  day: number; // 1..7
-  entries: MealEntry[];
-}
-
-export interface WeeklyPlan {
-  days: DailyMeal[];
-  dailyResults: RationValidationResult[];
-  weeklyResult: RationValidationResult;
-  valid: boolean;
-}
-
-export interface TemplateSlot {
-  category: FoodCategory;
-  mealSlots: MealSlot[];
-}
+} from '@domain/rationValidator';
+import { computeEnvironmentalScore } from '@domain/sustainability';
+import {
+  MealType,
+  type MealSlot,
+  type MealEntry,
+  type DailyMeal,
+  type WeeklyPlan,
+  type TemplateSlot,
+  type WeekPlanContext,
+} from '@domain/plan';
 
 const DAYS_IN_WEEK = 7;
 const BASE_MEAL_COUNT = 3; // breakfast + lunch + dinner
@@ -151,16 +119,6 @@ export function assignFoodsToMeals(template: TemplateSlot[], day: number): MealE
 }
 
 // ---- Refactored: generateWeeklyPlan → initializeWeekPlan + buildDayPlan ----
-
-export interface WeekPlanContext {
-  dailyTemplate: TemplateSlot[];
-  weeklySlots: {
-    day: number;
-    category: FoodCategory;
-    rations: number;
-    mealType: MealType;
-  }[];
-}
 
 /**
  * Initialize the week plan context: builds the daily template and weekly slot distribution.

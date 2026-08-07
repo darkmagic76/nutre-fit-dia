@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, type RenderOptions } from '@testing-library/react';
 import { RecipeEngineView } from './RecipeEngineView';
 import { FoodCategory, food } from '@shared/domain';
-import { MealType, type WeeklyPlan } from './services/planGenerator';
+import { MealType, type WeeklyPlan } from '@domain/plan';
 import { I18nProvider } from '@shared/i18n';
 import { es } from '@shared/i18n/es';
 import { type ReactElement } from 'react';

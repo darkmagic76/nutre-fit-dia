@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 
 vi.mock('@shared/data/foods', () => ({
   foods: [

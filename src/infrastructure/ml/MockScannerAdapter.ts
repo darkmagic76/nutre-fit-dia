@@ -1,5 +1,5 @@
 import type { ScannerAdapter, ScanInput, ScanResult, ModelInfo } from './types';
-import { SUGAR_ALIASES } from '../../features/nutritional-traffic-light/data/sugarAliases';
+import { SUGAR_ALIASES } from '@shared/data/sugarAliases';
 
 const MOCK_DELAY_MS = 300;
 
