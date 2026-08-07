@@ -6,9 +6,8 @@
  * Pure function — zero side effects, reads the in-memory food catalog.
  */
 
-import type { Food } from '@shared/domain';
-import { FoodCategory } from '@shared/domain';
-import { foods } from '@shared/data/foods';
+import type { Food } from '../food';
+import { FoodCategory } from '../foodCategory';
 import { computeEnvironmentalScore } from './scoringService';
 
 /**
@@ -41,14 +40,14 @@ function isBlueFish(food: Food): boolean {
  * @param food - The input food to find substitutes for.
  * @returns At most 3 Food items sorted by score descending, or [] if no trigger or no candidates.
  */
-export function suggestAlternative(food: Food): Food[] {
+export function suggestAlternative(food: Food, catalog: Food[]): Food[] {
   // Step 1: Trigger gate — only high-carbon or white_meat foods trigger substitution
   if (!isTriggerFood(food)) {
     return [];
   }
 
   // Step 2: Filter candidates — LEGUMES + blue FISH, exclude self
-  const candidates = foods.filter(
+  const candidates = catalog.filter(
     (f) => f.id !== food.id && (f.category === FoodCategory.LEGUMES || isBlueFish(f)),
   );
 

@@ -1,7 +1,7 @@
 /** ADR-007: Sustainability scoring — domain types aligned with EAT-Lancet and ODS 2030 */
 
-import { defineEnum } from '@shared/utils';
-import type { ValuesOf } from '@shared/utils';
+import { defineEnum } from '../enum';
+import type { ValuesOf } from '../enum';
 
 export const Seasonality = defineEnum({
   IN_SEASON: 'in_season',

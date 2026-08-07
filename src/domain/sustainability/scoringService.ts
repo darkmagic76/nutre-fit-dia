@@ -1,6 +1,6 @@
 /** ADR-007: Sustainability scoring service — V1 simplified */
 
-import type { Food } from '@shared/domain';
+import type { Food } from '../food';
 import { Seasonality, Proximity, PackagingLevel, type EnvironmentalScore } from './types';
 import {
   CARBON_THRESHOLDS,

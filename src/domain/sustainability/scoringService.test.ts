@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { computeEnvironmentalScore } from './scoringService';
 import { Seasonality, Proximity, PackagingLevel } from './types';
-import { food } from '@shared/domain';
+import { food } from '../food';
 
 describe('computeEnvironmentalScore', () => {
   // ─── Carbon footprint categorization ───

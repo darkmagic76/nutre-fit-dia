@@ -1,23 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { food } from '@shared/domain';
-import type { Food } from '@shared/domain';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { food } from '../food';
+import type { Food } from '../food';
 import { computeEnvironmentalScore } from './scoringService';
 
 /**
- * Mutable catalog used by the mocked @shared/data/foods module.
+ * Mutable catalog passed as parameter to suggestAlternative.
  * Each test sets up its own catalog via beforeEach.
  */
 const testFoods: Food[] = [];
 
-vi.mock('@shared/data/foods', () => ({
-  get foods() {
-    return testFoods;
-  },
-  foodsById: new Map(),
-}));
-
 // Dynamic import so the test file can be parsed before ./substitutionService exists
-let suggestAlternative: (food: Food) => Food[];
+let suggestAlternative: (food: Food, catalog: Food[]) => Food[];
 
 /**
  * Helper: create a Food with defaults for fields not relevant to tests.
@@ -68,7 +61,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 0.5,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result).toEqual([]);
   });
@@ -94,7 +87,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 27,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result).toEqual([]);
   });
@@ -140,7 +133,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 27,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result.length).toBeGreaterThan(0);
     // Every result must be either LEGUMES or blue FISH
@@ -179,7 +172,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 27,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     const resultIds = result.map((r) => r.id);
     expect(resultIds).not.toContain('meat-ternera');
@@ -220,7 +213,7 @@ describe('suggestAlternative', () => {
     );
 
     const input = testFoods[0]; // ternera
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result.length).toBeGreaterThanOrEqual(2);
     for (let i = 1; i < result.length; i++) {
@@ -279,7 +272,7 @@ describe('suggestAlternative', () => {
     );
 
     const input = testFoods[0]; // ternera
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result.length).toBeLessThanOrEqual(3);
     expect(result.length).toBeGreaterThan(0);
@@ -334,7 +327,7 @@ describe('suggestAlternative', () => {
     );
 
     const input = testFoods[0]; // ternera
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     const resultIds = result.map((r) => r.id);
     expect(resultIds).toContain('fish-salmon');
@@ -354,7 +347,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 27,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result).toEqual([]);
   });
@@ -373,7 +366,7 @@ describe('suggestAlternative', () => {
     );
 
     const input = f({ id: 'c1', name: 'Arroz', category: 'cereals' });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result).toEqual([]);
   });
@@ -405,7 +398,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 8.0,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result.length).toBeGreaterThan(0);
   });
@@ -430,7 +423,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 4.0,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result).toEqual([]);
   });
@@ -455,7 +448,7 @@ describe('suggestAlternative', () => {
       carbonFootprint: 8.0,
       isSeasonal: true,
     });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result).toEqual([]);
   });
@@ -474,7 +467,7 @@ describe('suggestAlternative', () => {
     );
 
     const input = f({ id: 'cerdo', name: 'Cerdo', category: 'red_meat' });
-    const result = suggestAlternative(input);
+    const result = suggestAlternative(input, testFoods);
 
     expect(result.length).toBeGreaterThan(0);
   });
