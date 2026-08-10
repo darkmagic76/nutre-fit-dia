@@ -1,5 +1,19 @@
 #!/usr/bin/env sh
+
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 export PATH="$HOME/.local/share/pnpm:$PATH"
-pnpm quality
+
+echo "🔍 Running Quality Gates (pre-commit)..."
+
+pnpm quality || {
+    echo "❌ Quality gates failed! Fix issues before committing."
+    exit 1
+}
+
+pnpm verify || {
+    echo "❌ Verification failed! Ensure code meets standards."
+    exit 1
+}
+
+echo "✅ All pre-commit gates passed!"

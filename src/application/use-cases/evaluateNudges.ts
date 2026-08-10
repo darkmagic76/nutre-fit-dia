@@ -4,7 +4,7 @@ import { CooldownTracker } from '@domain/cooldownTracker';
 import { NotificationSeverity } from '@domain/index';
 import type { ContextInput } from '@domain/nudgeContext';
 import type { SafetyRule } from '@domain/nudgeTypes';
-import type { CooldownTracker as CooldownTrackerType } from '@domain/cooldownTracker';
+import type { CooldownOps } from '@domain/cooldownTracker';
 import type { NotificationRepository } from '@application/ports/notificationRepository';
 
 // ─── Use Case ──────────────────────────────────────────────────────────────
@@ -19,6 +19,15 @@ import type { NotificationRepository } from '@application/ports/notificationRepo
  * @param rules  Safety rules to evaluate against
  * @param notifRepo  NotificationRepository port for side effects
  */
+/** Factory for CooldownOps from NotificationRepository — pure, testable. */
+export function createCooldownOps(notifRepo: NotificationRepository): CooldownOps {
+  return {
+    registerCooldown: (id, t) => notifRepo.registerCooldown(id, t),
+    getCooldowns: () => notifRepo.getCooldowns(),
+    resetCooldown: (id) => notifRepo.resetCooldown(id),
+  };
+}
+
 export function evaluateNudges(
   input: ContextInput,
   rules: SafetyRule[],
@@ -26,11 +35,7 @@ export function evaluateNudges(
 ): void {
   const ctx = buildNudgeContext(input);
 
-  const cooldown: CooldownTrackerType = new CooldownTracker({
-    registerCooldown: (id, t) => notifRepo.registerCooldown(id, t),
-    getCooldowns: () => notifRepo.getCooldowns(),
-    resetCooldown: (id) => notifRepo.resetCooldown(id),
-  });
+  const cooldown = new CooldownTracker(createCooldownOps(notifRepo));
 
   const pending = notifRepo.getPending();
 

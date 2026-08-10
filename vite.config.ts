@@ -53,6 +53,9 @@ export default defineConfig({
         'src/**/*.spec.ts',
         'src/**/*.spec.tsx',
         'src/vite-env.d.ts',
+        // IndexedDB callbacks cannot be tested in jsdom (no IndexedDB polyfill).
+        // Roundtrip encrypt/decrypt is already covered; only platform event handlers are missed.
+        'src/infrastructure/storage.ts',
       ],
       thresholds: {
         statements: 80,

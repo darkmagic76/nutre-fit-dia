@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { evaluateNudges } from './evaluateNudges';
+import { evaluateNudges, createCooldownOps } from './evaluateNudges';
 import type { ContextInput } from '@domain/nudgeContext';
 import type { SafetyRule } from '@domain/nudgeTypes';
 import type { SystemNotification } from '@domain/index';
@@ -225,5 +225,35 @@ describe('evaluateNudges (use case)', () => {
 
     expect(notifRepo._enqueued).toHaveLength(1);
     // Proof: no Zustand or store imports required
+  });
+});
+
+describe('createCooldownOps', () => {
+  it('delegates resetCooldown to the notification repository', () => {
+    const notifRepo = makeFakeNotificationRepo();
+    const ops = createCooldownOps(notifRepo);
+
+    ops.resetCooldown('rule-1');
+
+    expect(notifRepo._cooldowns).not.toHaveProperty('rule-1');
+  });
+
+  it('delegates getCooldowns to the notification repository', () => {
+    const notifRepo = makeFakeNotificationRepo();
+    notifRepo.registerCooldown('rule-1', Date.now());
+
+    const ops = createCooldownOps(notifRepo);
+    const cooldowns = ops.getCooldowns();
+
+    expect(cooldowns).toHaveProperty('rule-1');
+  });
+
+  it('delegates registerCooldown to the notification repository', () => {
+    const notifRepo = makeFakeNotificationRepo();
+    const ops = createCooldownOps(notifRepo);
+
+    ops.registerCooldown('rule-2', 12345);
+
+    expect(notifRepo._cooldowns).toHaveProperty('rule-2', 12345);
   });
 });
