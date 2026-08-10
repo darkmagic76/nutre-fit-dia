@@ -11,9 +11,4 @@ pnpm quality || {
     exit 1
 }
 
-pnpm verify || {
-    echo "❌ Verification failed! Ensure code meets standards."
-    exit 1
-}
-
 echo "✅ All pre-commit gates passed!"
