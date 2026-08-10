@@ -6,20 +6,9 @@ export PATH="$HOME/.local/share/pnpm:$PATH"
 
 echo "🚀 Running Quality Gates (pre-push)..."
 
-# Gate 4: Coverage Check
-echo "📊 Checking test coverage..."
-pnpm run test:coverage || {
-    echo "❌ Coverage not met! Improve tests."
-    exit 1
-}
-
-# Gate 5: E2E Tests
-echo "🎭 Running E2E tests (chromium only)..."
-pnpm run test:e2e --project=chromium || {
-    echo "❌ E2E failed! User journeys must work."
+pnpm quality || {
+    echo "❌ Quality gates failed! Fix issues before pushing."
     exit 1
 }
 
 echo "✅ All pre-push gates passed!"
-
-pnpm quality
