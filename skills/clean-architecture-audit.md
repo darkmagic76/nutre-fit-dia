@@ -6,7 +6,7 @@ Tu objetivo es hacer un análisis preciso sobre los Principios Clave (Clean Arch
 
 ## Reglas de Clean Architecture
 
-- Arranque del QUÉ al CÓMO
+- Separar el QUÉ del CÓMO
 
 ## Idea Principal y cumplimiento
 
