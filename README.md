@@ -79,15 +79,12 @@ src/
 │   ├── nudgeContext.ts + nudgeTypes.ts  # ContextInput, NudgeContext, SafetyRule types
 │   ├── nudgeContextBuilder.ts           # buildNudgeContext() — pure function
 │   ├── nudgeEvaluator.ts                # evaluateRules() — pure function
-│   ├── inputParsing.ts                  # Safe input parsing (replaces sanitize.ts)
-│   ├── errors.ts                        # DomainError, ValidationError, NotFoundError
 │   ├── plan.ts                          # MealType, WeeklyPlan, MealEntry, TemplateSlot, WeekPlanContext
 │   └── sustainability/                  # Environmental scoring (ADR-007)
 │       ├── constants.ts                 # CARBON_THRESHOLDS, SCORING_WEIGHTS, PROTEIN_EMISSION_RATIOS
 │       ├── scoringService.ts            # computeEnvironmentalScore()
 │       ├── substitutionService.ts       # suggestAlternative() — RED_MEAT → LEGUMES + blue FISH
-│       ├── types.ts                     # Seasonality, Proximity, PackagingLevel, EnvironmentalScore
-│       └── index.ts                     # Barrel
+│       └── types.ts                     # Seasonality, Proximity, PackagingLevel, EnvironmentalScore
 │
 ├── application/                         # Use cases + ports — zero framework imports
 │   ├── ports/
@@ -95,19 +92,16 @@ src/
 │   │   ├── activityRepository.ts        # ActivityRepository interface
 │   │   ├── logRepository.ts             # LogRepository interface
 │   │   ├── planRepository.ts            # PlanRepository interface
-│   │   ├── biomarkerRepository.ts       # BiomarkerRepository interface
-│   │   ├── stateExporter.ts             # StateExporter interface
-│   │   └── container.ts                 # Container interface + factory
+│   │   └── biomarkerRepository.ts       # BiomarkerRepository interface
 │   ├── use-cases/
 │   │   ├── calculateTarget.ts           # Pure use case — caloric target (ADR-004)
 │   │   ├── evaluateNudges.ts            # Pure use case — nudge pipeline (ADR-008)
 │   │   └── exportData.ts                # Pure use case — data export
 │   ├── services/
 │   │   └── planGenerator.ts             # Weekly erMedDiet plan generation (moved from features)
-│   └── dtos/
-│       └── ProfileInput.ts              # Profile input DTO
+│   └── dtos/                            # (reserved for future DTOs)
 │
-├── infrastructure/                      # Adapters + persistence — knows frameworks
+├── infrastructure/                      # Adaptadores + persistencia — conoce frameworks
 │   ├── compositionRoot.ts               # createContainer() — wiring factory (ADR-012)
 │   ├── env.ts                           # VITE_ env validation (Zod)
 │   ├── storage.ts                       # AES-256-GCM encrypted Zustand persist
@@ -118,16 +112,13 @@ src/
 │   │   └── index.ts                     # Barrel
 │   ├── nudge/
 │   │   └── rules.ts                     # NUDGE_RULES — 19 data-driven rules
-│   ├── adapters/                        # Zustand-backed port implementations (ADR-012)
-│   │   ├── zustandNotificationRepository.ts
-│   │   ├── zustandActivityRepository.ts
-│   │   ├── zustandLogRepository.ts
-│   │   ├── zustandBiomarkerRepository.ts
-│   │   ├── zustandPlanRepository.ts
-│   │   ├── zustandTrackerExporter.ts
-│   │   └── contract.test.ts             # 5 structural compatibility tests
-│   └── hooks/
-│       └── useNudgeTrigger.ts           # React hook for nudge triggering
+│   └── adapters/                        # Zustand-backed port implementations (ADR-012)
+│       ├── zustandNotificationRepository.ts
+│       ├── zustandActivityRepository.ts
+│       ├── zustandLogRepository.ts
+│       ├── zustandBiomarkerRepository.ts
+│       ├── zustandPlanRepository.ts
+│       └── contract.test.ts             # 5 structural compatibility tests
 │
 ├── features/                            # Screaming Architecture (7 bounded contexts)
 │   ├── nutritional-traffic-light/       # Scanner + Traffic Light + Dual Scan (H4)
@@ -140,17 +131,16 @@ src/
 │
 ├── shared/                              # Presentation layer — UI + i18n + hooks
 │   ├── ui/                              # Card, SelectField, TabButton, StatCard, LegalDisclaimer, etc.
-│   │   └── formatters/
-│   │       └── formatViolation.ts       # Human-readable violation formatting
 │   ├── i18n/                            # ES/EN (useT, I18nProvider, 150+ keys)
 │   ├── hooks/                           # Cross-feature hooks (useExportData, useFoodName, useInstallPrompt, useNudgeTrigger)
 │   ├── context/
-│   │   ├── ContainerContext.tsx         # React Context for DI
-│   │   └── useContainer.ts              # Hook to inject dependencies
+│   │   └── ContainerContext.tsx         # React Context for DI (useContainer hook)
 │   ├── data/
-│   │   ├── foods.ts                     # 39-food AESAN catalog (foods-data.ts)
+│   │   ├── foods.ts                     # 39-food AESAN catalog
 │   │   └── sugarAliases.ts              # Canonical sugar alias list (moved from features)
-│   └── sustainability/                  # Barrel re-exporting from domain/sustainability
+│   ├── errors.ts                        # DomainError, ValidationError, NotFoundError
+│   ├── sustainability/                  # Barrel re-exporting from domain/sustainability
+│   └── utils/                           # sanitize, barrel re-exports for backward compat
 │
 ├── test/
 │   ├── setup.ts                         # jsdom + localStorage shim + Web Crypto mock
@@ -181,7 +171,7 @@ Core principles and development rules live in dedicated, modular files — loade
 | Resource                             | Content                                                                                                            |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | [`skills/`](skills/)                 | Development rules: Scope Rule, TDD, DDD, Clean Architecture, architecture decisions, code smells, work methodology |
-| [`adr/`](adr/)                       | 12 Architecture Decision Records with traceability matrix                                                          |
+| [`adr/`](adr/)                       | 11 Architecture Decision Records with traceability matrix                                                          |
 | [`openspec/specs/`](openspec/specs/) | 37 domain specifications (spec-driven development)                                                                 |
 
 ### Implementation Phases (Complete ✅)
@@ -191,11 +181,10 @@ Core principles and development rules live in dedicated, modular files — loade
 3. **ADR Scaffolding** — ScannerAdapter, Activity Tracker, Sustainability, Nudge Engine
 4. **Tests & Error Handling** — 818 tests (80 files), 80%+ coverage, i18n ES/EN, ErrorBoundary
 5. **E2E & Accessibility** — Playwright smoke tests, WCAG 2.1 AA compliance
-6. **Clean Architecture Refactor** (ADR-012) — Domain/Application/Infrastructure layers, ports + adapters, Composition Root, DI via `useContainer()`
 
 ### Clinical Foundation
 
-Built on **erMedDiet** (energy-reduced Mediterranean Diet) with evidence from **PREDIMED-Plus** and **ProDiGY** studies. Enforces 600 kcal conditional deficit (BMI > 25) with phenotypic filtering by diagnosis age. All clinical thresholds centralized in `src/domain/clinical.ts` with AESAN/WHO citations.
+Built on **erMedDiet** (energy-reduced Mediterranean Diet) with evidence from **PREDIMED-Plus** and **ProDiGY** studies. Enforces 600 kcal conditional deficit (BMI > 25) with phenotypic filtering by diagnosis age. All clinical thresholds centralized in `src/shared/constants/clinical.ts` with AESAN/WHO citations.
 
 ## PWA — Mobile Device Installation
 
@@ -209,27 +198,7 @@ The application is a **Progressive Web App (PWA)** with full offline support via
 
 ## 10. CI/CD — Continuous Integration and Delivery
 
-Automated pipeline in **GitHub Actions** (`.github/workflows/`):
-
-### Workflows
-
-| Workflow      | Trigger                          | What it does                                                 |
-| ------------- | -------------------------------- | ------------------------------------------------------------ |
-| `ci.yml`      | Push to `develop` / PR to `main` | Quality gate → Build → Deploy staging (develop only)         |
-| `deploy.yml`  | Push to `main`                   | Quality gate → Build → Deploy production (GitHub Pages root) |
-| `release.yml` | Push tag `v*`                    | Creates GitHub Release with auto-generated changelog         |
-
-### Release Cycle
-
-```text
-develop → staging (local merge)
-  → PR staging → main (GitHub UI)
-  → CI runs (quality + build)
-  → Merge to main → deploy.yml → production
-  → git tag v1.0.x → release.yml → GitHub Release
-```
-
-**Branch protection**: `main` requires PR + passing status checks. Direct push is blocked.
+Automated pipeline in **GitHub Actions** (`.github/workflows/ci.yml`):
 
 ```text
 Push/PR → ✅ Quality Gate → 🏗️ Build
@@ -240,10 +209,7 @@ Push/PR → ✅ Quality Gate → 🏗️ Build
               └ unit tests (818)
 ```
 
-**Husky hooks** (local):
-
-- `pre-commit`: `pnpm quality` (format + lint + typecheck + tests)
-- `pre-push`: `pnpm quality` (same gate, ensures nothing broken reaches remote)
+**Deployment**: separate workflow (`deploy.yml`) deploys to GitHub Pages on push to `main`.
 
 ## 11. OWASP 2025 Security
 
