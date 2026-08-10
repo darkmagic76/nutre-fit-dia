@@ -84,7 +84,7 @@ describe('Nudge Engine Integration', () => {
     const eveningCtx = { ...ctx, currentHour: 21, dayOfWeek: 4 };
     const results = evaluateRules(eveningCtx, NUDGE_RULES, cooldown);
 
-    expect(results).toHaveLength(9);
+    expect(results).toHaveLength(10);
     const matchedIds = results.map((r) => r.rule.id);
     expect(matchedIds).toContain('CEREALS_RESTRICTION');
     expect(matchedIds).toContain('FRUITS_GLYCEMIC_ALERT');
@@ -102,13 +102,13 @@ describe('Nudge Engine Integration', () => {
     const daytimeCtx = { ...ctx, currentHour: 12, dayOfWeek: 4 };
 
     const firstPass = evaluateRules(daytimeCtx, NUDGE_RULES, cooldown);
-    expect(firstPass).toHaveLength(7);
+    expect(firstPass).toHaveLength(8);
     expect(firstPass[0].rule.id).toBe('CEREALS_RESTRICTION');
 
     cooldown.register('CEREALS_RESTRICTION');
 
     const secondPass = evaluateRules(daytimeCtx, NUDGE_RULES, cooldown);
-    expect(secondPass).toHaveLength(6);
+    expect(secondPass).toHaveLength(7);
   });
 
   it('does not match when no rules trigger', () => {
@@ -120,7 +120,7 @@ describe('Nudge Engine Integration', () => {
     const morningCtx = { ...ctx, currentHour: 12, dayOfWeek: 4 };
 
     const results = evaluateRules(morningCtx, NUDGE_RULES, cooldown);
-    expect(results).toHaveLength(7);
+    expect(results).toHaveLength(8);
   });
 
   describe('auto-resolution', () => {

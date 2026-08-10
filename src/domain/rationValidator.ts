@@ -1,5 +1,5 @@
 import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES } from './foodCategory';
-import { CEREAL_RESTRICTED_MAX } from './clinical';
+import { CEREAL_RESTRICTED_MAX, NUTS_MAX_DAILY } from './clinical';
 import type { FoodCategory as FoodCategoryType } from './foodCategory';
 import type { Food } from './food';
 
@@ -7,7 +7,7 @@ import type { Food } from './food';
  * Ration limits per INFORME_ADR FR-2 and ADR-005.
  *
  * Daily limits: per-day constraints (most groups)
- * Weekly limits: per-week constraints (legumes, fish, eggs, white meat)
+ * Weekly limits: per-week constraints (legumes, fish, eggs, white meat, nuts)
  *
  * ## "validation" polysemy note
  *
@@ -91,6 +91,10 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
     max: 8,
     unit: 'day',
   },
+  [FoodCategory.NUTS]: {
+    min: 3,
+    unit: 'week',
+  },
 };
 
 /** Cross-category violation keys. Each value maps to a `validation.*` i18n key. */
@@ -126,6 +130,7 @@ export interface CountByCategory {
   [FoodCategory.WHITE_MEAT]: number;
   [FoodCategory.RED_MEAT]: number;
   [FoodCategory.WATER]: number;
+  [FoodCategory.NUTS]: number;
 }
 
 export function defaultRationCounts(): CountByCategory {
@@ -141,6 +146,7 @@ export function defaultRationCounts(): CountByCategory {
     [FoodCategory.WHITE_MEAT]: 0,
     [FoodCategory.RED_MEAT]: 0,
     [FoodCategory.WATER]: 0,
+    [FoodCategory.NUTS]: 0,
   };
 }
 
@@ -208,6 +214,17 @@ export function validateRations(
     violations.push(...checkCategoryLimits(counts, category, limit, { effectiveMax }));
   }
 
+  // NUTS has a daily max (≤1/día) even though its primary unit is 'week'
+  if (counts[FoodCategory.NUTS] > NUTS_MAX_DAILY) {
+    violations.push({
+      category: FoodCategory.NUTS,
+      current: counts[FoodCategory.NUTS],
+      limit: NUTS_MAX_DAILY,
+      direction: 'over',
+      unit: 'day',
+    });
+  }
+
   const animalProteinCount = ANIMAL_PROTEIN_CATEGORIES.reduce((sum, cat) => sum + counts[cat], 0);
 
   return { valid: violations.length === 0, violations, animalProteinCount };
@@ -222,6 +239,7 @@ export function validateWeeklyRations(counts: CountByCategory): RationValidation
     FoodCategory.EGGS,
     FoodCategory.WHITE_MEAT,
     FoodCategory.RED_MEAT,
+    FoodCategory.NUTS,
   ];
 
   for (const category of weeklyCategories) {
@@ -265,6 +283,7 @@ export const AESAN_GRAM_STANDARDS: Record<FoodCategoryType, { min: number; max: 
   [FoodCategory.WHITE_MEAT]: { min: 100, max: 150 },
   [FoodCategory.RED_MEAT]: { min: 100, max: 150 },
   [FoodCategory.WATER]: { min: 200, max: 250 },
+  [FoodCategory.NUTS]: { min: 20, max: 30 },
 };
 
 export type SafetyAlertSeverity = 'critical' | 'warning';

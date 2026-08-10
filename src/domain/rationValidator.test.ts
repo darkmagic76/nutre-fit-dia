@@ -134,6 +134,7 @@ describe('rationValidator', () => {
         [FoodCategory.FISH]: 3,
         [FoodCategory.EGGS]: 3,
         [FoodCategory.WHITE_MEAT]: 2,
+        [FoodCategory.NUTS]: 3,
       });
       const result = validateWeeklyRations(counts);
       expect(result.valid).toBe(true);
@@ -193,6 +194,7 @@ describe('rationValidator', () => {
         [FoodCategory.LEGUMES]: 4,
         [FoodCategory.FISH]: 3,
         [FoodCategory.RED_MEAT]: 3,
+        [FoodCategory.NUTS]: 3,
       });
       const result = validateWeeklyRations(counts);
       expect(result.valid).toBe(true);
@@ -265,8 +267,8 @@ describe('rationValidator', () => {
   });
 
   describe('AESAN_GRAM_STANDARDS', () => {
-    it('covers all 11 food categories', () => {
-      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(11);
+    it('covers all 12 food categories', () => {
+      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(12);
     });
 
     it('has valid bread range (40-60g)', () => {

@@ -178,6 +178,7 @@ export const en: Translations = {
   'category.white_meat': 'White Meat',
   'category.red_meat': 'Red Meat',
   'category.water': 'Water',
+  'category.nuts': 'Nuts',
 
   'alert.severityCritical': 'Critical',
   'alert.severityWarning': 'Warning',
@@ -227,6 +228,8 @@ export const en: Translations = {
   'nudge.title.hcInactivityAdjust': 'Insufficient physical activity',
   'nudge.title.sustainableSubstitution': 'Smart substitution',
   'nudge.title.legumeCarbSource': 'Legumes are also a source of carbohydrates',
+  'nudge.title.nutsDeficit': 'Insufficient nuts',
+  'nudge.title.nutsExcess': 'Excess nuts today',
 
   // Nudge bodies
   'nudge.body.cerealsRestriction':
@@ -259,6 +262,10 @@ export const en: Translations = {
   'nudge.body.sustainableSubstitution': 'Consider more sustainable alternatives: {names}',
   'nudge.body.legumeCarbSource':
     "You've eaten legumes today. Legumes provide slower-digesting carbohydrates with a lower glycemic index than refined cereals. They can help complement your cereal intake.",
+  'nudge.body.nutsDeficit':
+    "You've had fewer than 3 servings of nuts this week. Nuts provide healthy fats, fiber, and antioxidants.",
+  'nudge.body.nutsExcess':
+    "You've exceeded the daily maximum for nuts (1 serving/day). Remember: no added salt or sugars.",
 
   // Activity — extended
   'activity.streakWeeksAria': 'Streak of {streak} weeks',

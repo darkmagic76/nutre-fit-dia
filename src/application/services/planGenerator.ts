@@ -225,6 +225,10 @@ function getWeeklySlots(): {
     // White meat: 2/week (under max 3)
     { day: 3, category: FoodCategory.WHITE_MEAT, rations: 1 },
     { day: 7, category: FoodCategory.WHITE_MEAT, rations: 1 },
+    // Nuts: 3/week minimum (AESAN 2022: frutos secos) — Mon/Wed/Fri
+    { day: 1, category: FoodCategory.NUTS, rations: 1 },
+    { day: 3, category: FoodCategory.NUTS, rations: 1 },
+    { day: 5, category: FoodCategory.NUTS, rations: 1 },
   ];
 
   // Alternating mealType per day: first → LUNCH, second → DINNER, third → LUNCH, etc.
@@ -256,6 +260,7 @@ function pickSustainableFood(category: FoodCategory, day: number): Food {
   if (options.length === 0) {
     // Fallback to first in category, including processed if no natural
     const fallback = foods.filter((f) => f.category === category);
+    if (fallback.length === 0) throw new Error(`No foods available for category: ${category}`);
     return fallback[day % fallback.length];
   }
   return options[day % options.length];
@@ -275,7 +280,12 @@ export function enforceAOVE(entries: MealEntry[], day: number): MealEntry[] {
       (e) => e.mealType === meal && e.food.category === FoodCategory.OLIVE_OIL,
     );
     if (!hasAOVE) {
-      const aoveFood = pickSustainableFood(FoodCategory.OLIVE_OIL, day);
+      let aoveFood: Food | undefined;
+      try {
+        aoveFood = pickSustainableFood(FoodCategory.OLIVE_OIL, day);
+      } catch {
+        // No OLIVE_OIL foods available — skip silently
+      }
       if (aoveFood) {
         result.push({ food: aoveFood, rations: 1, mealType: meal });
       }

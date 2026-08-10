@@ -78,3 +78,34 @@ describe('FoodSchema isHighPriority', () => {
     expect(result.isHighPriority).toBe(false);
   });
 });
+
+describe('FoodCategory NUTS (AESAN 2022: frutos secos)', () => {
+  it('accepts "nuts" as a valid category in FoodSchema', () => {
+    const result = FoodSchema.parse({
+      id: 'test-almonds',
+      name: 'Almendras crudas',
+      category: 'nuts',
+      gramsPerRation: 25,
+      kcalPer100g: 575,
+      proteinPer100g: 21,
+      carbsPer100g: 22,
+      fatPer100g: 49,
+    });
+    expect(result.category).toBe('nuts');
+  });
+
+  it('creates a NUTS food via food() factory', () => {
+    const result = food({
+      id: 'test-walnuts',
+      name: 'Nueces',
+      category: 'nuts',
+      gramsPerRation: 25,
+      kcalPer100g: 650,
+      proteinPer100g: 15,
+      carbsPer100g: 14,
+      fatPer100g: 65,
+    });
+    expect(result.category).toBe('nuts');
+    expect(result.isProcessed).toBe(false);
+  });
+});

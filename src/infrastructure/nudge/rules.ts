@@ -14,6 +14,8 @@ import {
   WEEKLY_ACTIVITY_MINUTES_TARGET,
   MAX_ALTERNATIVES_TO_SHOW,
   LOW_ENVIRONMENTAL_SCORE_THRESHOLD,
+  NUTS_MIN_WEEKLY,
+  NUTS_MAX_DAILY,
 } from '../../domain/clinical';
 import {
   COOLDOWN_24H,
@@ -241,5 +243,28 @@ export const NUDGE_RULES: SafetyRule[] = [
       ctx.environmentalScore < LOW_ENVIRONMENTAL_SCORE_THRESHOLD &&
       ctx.alternatives !== null &&
       ctx.alternatives.length > 0,
+  },
+
+  // ─── NUTS: AESAN 2022 (frutos secos) ───
+
+  {
+    id: 'NUTS_DEFICIT',
+    type: NotificationType.BEHAVIORAL_NUDGE,
+    severity: NotificationSeverity.INFO,
+    cooldown: COOLDOWN_24H,
+    title: 'nudge.title.nutsDeficit',
+    body: 'nudge.body.nutsDeficit',
+    condition: (ctx) =>
+      ctx.dayOfWeek >= LEGUMES_CHECK_DAY_THRESHOLD &&
+      ctx.counts[FoodCategory.NUTS] < NUTS_MIN_WEEKLY,
+  },
+  {
+    id: 'NUTS_EXCESS',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: COOLDOWN_12H,
+    title: 'nudge.title.nutsExcess',
+    body: 'nudge.body.nutsExcess',
+    condition: (ctx) => ctx.counts[FoodCategory.NUTS] > NUTS_MAX_DAILY,
   },
 ];

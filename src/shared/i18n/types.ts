@@ -98,6 +98,7 @@ export interface Translations {
   'category.white_meat': string;
   'category.red_meat': string;
   'category.water': string;
+  'category.nuts': string;
 
   // Activity
   'activity.title': string;
@@ -255,6 +256,8 @@ export interface Translations {
   'nudge.title.hcInactivityAdjust': string;
   'nudge.title.sustainableSubstitution': string;
   'nudge.title.legumeCarbSource': string;
+  'nudge.title.nutsDeficit': string;
+  'nudge.title.nutsExcess': string;
 
   // Nudge rule bodies (static)
   'nudge.body.cerealsRestriction': string;
@@ -274,6 +277,8 @@ export interface Translations {
   'nudge.body.whiteMeatRestrict': string;
   'nudge.body.hcInactivityAdjust': string;
   'nudge.body.legumeCarbSource': string;
+  'nudge.body.nutsDeficit': string;
+  'nudge.body.nutsExcess': string;
 
   // Nudge rule bodies (dynamic — key used as format string with {names} placeholder)
   'nudge.body.sustainableSubstitution': string;

@@ -180,6 +180,7 @@ export const es: Translations = {
   'category.white_meat': 'Carne blanca',
   'category.red_meat': 'Carne roja',
   'category.water': 'Agua',
+  'category.nuts': 'Frutos secos',
 
   'alert.severityCritical': 'Crítico',
   'alert.severityWarning': 'Advertencia',
@@ -231,6 +232,8 @@ export const es: Translations = {
   'nudge.title.hcInactivityAdjust': 'Actividad física insuficiente',
   'nudge.title.sustainableSubstitution': 'Sustitución inteligente',
   'nudge.title.legumeCarbSource': 'Las legumbres también aportan hidratos de carbono',
+  'nudge.title.nutsDeficit': 'Frutos secos insuficientes',
+  'nudge.title.nutsExcess': 'Exceso de frutos secos hoy',
 
   // Nudge bodies
   'nudge.body.cerealsRestriction':
@@ -264,6 +267,10 @@ export const es: Translations = {
   'nudge.body.sustainableSubstitution': 'Considera alternativas más sostenibles: {names}',
   'nudge.body.legumeCarbSource':
     'Has consumido legumbres hoy. Las legumbres son una fuente de hidratos de carbono de digestión más lenta y menor índice glucémico que los cereales refinados. Pueden ayudarte a completar tu ingesta de cereales.',
+  'nudge.body.nutsDeficit':
+    'Llevas menos de 3 raciones de frutos secos esta semana. Los frutos secos aportan grasas saludables, fibra y antioxidantes.',
+  'nudge.body.nutsExcess':
+    'Has superado la ración diaria máxima de frutos secos (1 ración/día). Recuerda: sin sal ni azúcares añadidos.',
 
   // Activity — extended
   'activity.streakWeeksAria': 'Racha de {streak} semanas',

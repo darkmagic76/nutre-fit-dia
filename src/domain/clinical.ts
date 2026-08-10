@@ -52,3 +52,11 @@ export const MAX_ALTERNATIVES_TO_SHOW = 3;
 
 /** Environmental score below this triggers sustainable substitution nudge (Carbon footprint threshold) */
 export const LOW_ENVIRONMENTAL_SCORE_THRESHOLD = 30;
+
+// ─── Nuts thresholds (AESAN 2022: frutos secos) ───
+
+/** Minimum nuts count per week (AESAN 2022: ≥3 raciones/semana de frutos secos) */
+export const NUTS_MIN_WEEKLY = 3;
+
+/** Maximum nuts per day (AESAN 2022: máx 1 ración diaria de frutos secos) */
+export const NUTS_MAX_DAILY = 1;
