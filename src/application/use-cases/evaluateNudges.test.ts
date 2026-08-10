@@ -4,40 +4,56 @@ import type { ContextInput } from '@domain/nudgeContext';
 import type { SafetyRule } from '@domain/nudgeTypes';
 import type { SystemNotification } from '@domain/index';
 import { NotificationSeverity, NotificationType } from '@domain/index';
+import type { NotificationRepository } from '@application/ports/notificationRepository';
 
-// ─── Types matching inline port interfaces ─────────────────────────────────
+// ─── In-memory fake implementing NotificationRepository ────────────────────
 
-interface FakeNotificationRepo {
-  enqueued: SystemNotification[];
-  acknowledged: string[];
-  pending: SystemNotification[];
-  cooldowns: Record<string, number>;
-}
+function makeFakeNotificationRepo(pending: SystemNotification[] = []): NotificationRepository {
+  const enqueued: SystemNotification[] = [];
+  const acknowledged: string[] = [];
+  const history: SystemNotification[] = [];
+  const cooldowns: Record<string, number> = {};
 
-function makeFakeNotificationRepo(pending: SystemNotification[] = []): FakeNotificationRepo {
   return {
-    enqueued: [],
-    acknowledged: [],
-    pending,
-    cooldowns: {},
-    enqueue(n: SystemNotification) {
-      this.enqueued.push(n);
+    getPending: () => pending,
+    getHistory: () => history,
+    enqueue: (n: SystemNotification) => {
+      enqueued.push(n);
     },
-    acknowledge(id: string) {
-      this.acknowledged.push(id);
+    acknowledge: (id: string) => {
+      acknowledged.push(id);
     },
-    getPending() {
-      return this.pending;
+    dismiss: (id: string) => {
+      history.push({
+        id,
+        type: NotificationType.SYSTEM_ACTION,
+        severity: NotificationSeverity.INFO,
+        target: 'user',
+        title: 'Dismissed',
+        body: '',
+        ruleSource: 'test',
+        triggeredAt: new Date(),
+      } as SystemNotification);
     },
-    getCooldowns() {
-      return this.cooldowns;
+    getCooldowns: () => cooldowns,
+    registerCooldown: (id: string, timestamp: number) => {
+      cooldowns[id] = timestamp;
     },
-    registerCooldown(id: string, timestamp: number) {
-      this.cooldowns[id] = timestamp;
+    resetCooldown: (id?: string) => {
+      if (id) {
+        delete cooldowns[id];
+      } else {
+        Object.keys(cooldowns).forEach((k) => delete cooldowns[k]);
+      }
     },
-    resetCooldown(id: string) {
-      delete this.cooldowns[id];
-    },
+    // Expose internals for test assertions
+    _enqueued: enqueued,
+    _acknowledged: acknowledged,
+    _cooldowns: cooldowns,
+  } as NotificationRepository & {
+    _enqueued: SystemNotification[];
+    _acknowledged: string[];
+    _cooldowns: Record<string, number>;
   };
 }
 
@@ -82,7 +98,11 @@ const NEVER_MATCH_RULE: SafetyRule = {
 // ─── Tests ─────────────────────────────────────────────────────────────────
 
 describe('evaluateNudges (use case)', () => {
-  let notifRepo: FakeNotificationRepo;
+  let notifRepo: NotificationRepository & {
+    _enqueued: SystemNotification[];
+    _acknowledged: string[];
+    _cooldowns: Record<string, number>;
+  };
 
   beforeEach(() => {
     notifRepo = makeFakeNotificationRepo();
@@ -92,42 +112,42 @@ describe('evaluateNudges (use case)', () => {
     const ctx = makeContextInput({ caloricRestrictionActive: true });
     const rules: SafetyRule[] = [ALWAYS_MATCH_RULE];
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, notifRepo);
 
-    expect(notifRepo.enqueued).toHaveLength(1);
-    expect(notifRepo.enqueued[0].ruleSource).toBe('ALWAYS_MATCH');
-    expect(notifRepo.enqueued[0].title).toBe('Always match');
+    expect(notifRepo._enqueued).toHaveLength(1);
+    expect(notifRepo._enqueued[0].ruleSource).toBe('ALWAYS_MATCH');
+    expect(notifRepo._enqueued[0].title).toBe('Always match');
   });
 
   it('does not enqueue when no rules match', () => {
     const ctx = makeContextInput();
     const rules: SafetyRule[] = [NEVER_MATCH_RULE];
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, notifRepo);
 
-    expect(notifRepo.enqueued).toHaveLength(0);
+    expect(notifRepo._enqueued).toHaveLength(0);
   });
 
   it('honours cooldown — does not re-enqueue cooldowned rules', () => {
     // Pre-set cooldown so the rule is blocked
-    notifRepo.cooldowns['ALWAYS_MATCH'] = Date.now() + 60000; // expires in 60s
+    notifRepo._cooldowns['ALWAYS_MATCH'] = Date.now() + 60000; // expires in 60s
 
     const ctx = makeContextInput();
     const rules: SafetyRule[] = [ALWAYS_MATCH_RULE];
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, notifRepo);
 
-    expect(notifRepo.enqueued).toHaveLength(0);
+    expect(notifRepo._enqueued).toHaveLength(0);
   });
 
   it('registers cooldown after enqueue', () => {
     const ctx = makeContextInput();
     const rules: SafetyRule[] = [ALWAYS_MATCH_RULE];
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, notifRepo);
 
-    expect(notifRepo.cooldowns['ALWAYS_MATCH']).toBeDefined();
-    expect(notifRepo.cooldowns['ALWAYS_MATCH']).toBeGreaterThan(0);
+    expect(notifRepo._cooldowns['ALWAYS_MATCH']).toBeDefined();
+    expect(notifRepo._cooldowns['ALWAYS_MATCH']).toBeGreaterThan(0);
   });
 
   it('auto-resolves stale nudges when condition no longer met', () => {
@@ -142,14 +162,15 @@ describe('evaluateNudges (use case)', () => {
       triggeredAt: new Date(),
     };
 
-    notifRepo.pending = [pendingNudge];
+    // Use the repo's pending mechanism via a fresh fake with pre-set pending
+    const repoWithPending = makeFakeNotificationRepo([pendingNudge]);
     const ctx = makeContextInput();
     const rules: SafetyRule[] = [NEVER_MATCH_RULE]; // NEVER_MATCH condition returns false
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, repoWithPending);
 
     // Stale nudge should be auto-resolved (condition no longer met)
-    expect(notifRepo.acknowledged).toContain('stale-1');
+    expect(repoWithPending._acknowledged).toContain('stale-1');
   });
 
   it('does not auto-resolve HARD_BLOCK severity nudges', () => {
@@ -164,14 +185,14 @@ describe('evaluateNudges (use case)', () => {
       triggeredAt: new Date(),
     };
 
-    notifRepo.pending = [hardBlockNudge];
+    const repoWithPending = makeFakeNotificationRepo([hardBlockNudge]);
     const ctx = makeContextInput();
     const rules: SafetyRule[] = [NEVER_MATCH_RULE];
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, repoWithPending);
 
     // HARD_BLOCK should NOT be auto-resolved
-    expect(notifRepo.acknowledged).not.toContain('hard-block-1');
+    expect(repoWithPending._acknowledged).not.toContain('hard-block-1');
   });
 
   it('does not auto-resolve when rule not found', () => {
@@ -186,23 +207,23 @@ describe('evaluateNudges (use case)', () => {
       triggeredAt: new Date(),
     };
 
-    notifRepo.pending = [orphanNudge];
+    const repoWithPending = makeFakeNotificationRepo([orphanNudge]);
     const ctx = makeContextInput();
     const rules: SafetyRule[] = [ALWAYS_MATCH_RULE];
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, repoWithPending);
 
     // Orphan should NOT be auto-resolved (rule not found → skip)
-    expect(notifRepo.acknowledged).not.toContain('orphan-1');
+    expect(repoWithPending._acknowledged).not.toContain('orphan-1');
   });
 
   it('is testable with in-memory fake (zero Zustand)', () => {
     const ctx = makeContextInput({ caloricRestrictionActive: true });
     const rules: SafetyRule[] = [ALWAYS_MATCH_RULE];
 
-    evaluateNudges(ctx, rules, notifRepo as any);
+    evaluateNudges(ctx, rules, notifRepo);
 
-    expect(notifRepo.enqueued).toHaveLength(1);
+    expect(notifRepo._enqueued).toHaveLength(1);
     // Proof: no Zustand or store imports required
   });
 });

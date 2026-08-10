@@ -4,6 +4,7 @@ import { createZustandActivityRepository } from '@infrastructure/adapters/zustan
 import { createZustandLogRepository } from '@infrastructure/adapters/zustandLogRepository';
 import { createZustandBiomarkerRepository } from '@infrastructure/adapters/zustandBiomarkerRepository';
 import { createZustandPlanRepository } from '@infrastructure/adapters/zustandPlanRepository';
+import { createZustandTrackerExporter } from '@infrastructure/adapters/zustandTrackerExporter';
 
 // ─── Use cases ──────────────────────────────────────────────────────────────
 import { calculateTarget as calculateTargetUseCase } from '@application/use-cases/calculateTarget';
@@ -12,14 +13,6 @@ import { exportData as exportDataUseCase } from '@application/use-cases/exportDa
 
 // ─── Infrastructure data ────────────────────────────────────────────────────
 import { NUDGE_RULES } from '@infrastructure/nudge/rules';
-
-// ─── Stores (used directly by exportData which needs getState()) ────────────
-import { useTrackerStore } from '@infrastructure/stores/trackerStore';
-import { useLogStore } from '@infrastructure/stores/logStore';
-import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
-import { useActivityStore } from '@infrastructure/stores/activityStore';
-import { usePlanStore } from '@infrastructure/stores/planStore';
-import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 import type { ContextInput } from '@domain/nudgeContext';
@@ -39,6 +32,7 @@ export function createContainer(): Container {
   const logRepo = createZustandLogRepository();
   const biomarkerRepo = createZustandBiomarkerRepository();
   const planRepo = createZustandPlanRepository();
+  const trackerExporter = createZustandTrackerExporter();
 
   // 2. Use cases — receive ports, never import stores directly
   const calculateTarget = (input: ProfileInput) => calculateTargetUseCase(input, biomarkerRepo);
@@ -46,15 +40,15 @@ export function createContainer(): Container {
   const evaluateNudges = (input: ContextInput) =>
     evaluateNudgesUseCase(input, NUDGE_RULES, notificationRepo);
 
-  // exportData needs store.getState() — pass the actual Zustand store modules
+  // exportData receives StateExporter adapters — no direct Zustand store access
   const exportAllData = () =>
     exportDataUseCase(
-      useTrackerStore,
-      useLogStore,
-      useNudgeStore,
-      useActivityStore,
-      usePlanStore,
-      useBiomarkerStore,
+      trackerExporter,
+      logRepo,
+      notificationRepo,
+      activityRepo,
+      planRepo,
+      biomarkerRepo,
     );
 
   return {
@@ -70,5 +64,22 @@ export function createContainer(): Container {
   };
 }
 
-/** Singleton container — instantiated once, consumed by the React tree. */
+/**
+ * Singleton container — instantiated once at module load, consumed by the
+ * React tree via `<ContainerProvider value={container}>`.
+ *
+ * Why a singleton?
+ * - The application has exactly one runtime state (single user, single device).
+ * - React Context providers need a stable reference across renders.
+ * - All Zustand stores are already module-level singletons; the container
+ *   merely wires them into use cases.
+ *
+ * When to use `createContainer()` instead:
+ * - Tests call `createContainer()` to get a fresh wired instance without
+ *   polluting the global singleton state.
+ * - Each call returns a new container with its own adapter instances,
+ *   useful for parallel test isolation.
+ *
+ * @see {@link createContainer} for the factory used in tests
+ */
 export const container = createContainer();

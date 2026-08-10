@@ -1,9 +1,4 @@
-// ─── Minimal port interfaces (inline until Phase 4) ───────────────────────
-
-interface StoreSnapshot {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getState(): any;
-}
+import type { StateExporter } from '@application/ports/stateExporter';
 
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
@@ -34,12 +29,12 @@ function stripActions<T extends object>(state: T): Partial<T> {
  * @returns JSON string ready for download
  */
 export function exportData(
-  trackerRepo: StoreSnapshot,
-  logRepo: StoreSnapshot,
-  nudgeRepo: StoreSnapshot,
-  activityRepo: StoreSnapshot,
-  planRepo: StoreSnapshot,
-  biomarkerRepo: StoreSnapshot,
+  trackerRepo: StateExporter,
+  logRepo: StateExporter,
+  nudgeRepo: StateExporter,
+  activityRepo: StateExporter,
+  planRepo: StateExporter,
+  biomarkerRepo: StateExporter,
 ): string {
   const tracker = stripActions(trackerRepo.getState());
   const log = stripActions(logRepo.getState());

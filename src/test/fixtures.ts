@@ -93,7 +93,7 @@ export function makeMetricsFormState(
 
 export function makeViolation(overrides: Partial<RationViolation> = {}): RationViolation {
   return {
-    category: FoodCategory.CEREALS as unknown as RationViolation['category'],
+    category: FoodCategory.CEREALS,
     current: 5,
     limit: 4,
     direction: 'over',

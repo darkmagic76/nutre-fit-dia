@@ -1,13 +1,13 @@
 import type { LogRepository } from '@application/ports/logRepository';
+import type { StateExporter } from '@application/ports/stateExporter';
 import { useLogStore } from '@infrastructure/stores/logStore';
 
 /**
- * Zustand-backed adapter for LogRepository.
+ * Zustand-backed adapter for LogRepository + StateExporter.
  *
  * Thin wrapper — delegates every call to `useLogStore.getState()`.
- * Reads caloricRestrictionActive from trackerStore to satisfy the logStore API.
  */
-export function createZustandLogRepository(): LogRepository {
+export function createZustandLogRepository(): LogRepository & StateExporter {
   return {
     getTodayLog: () => useLogStore.getState().todayLog,
     addFood: (food, caloricRestrictionActive) =>
@@ -15,5 +15,6 @@ export function createZustandLogRepository(): LogRepository {
     removeFood: (index, caloricRestrictionActive) =>
       useLogStore.getState().removeFoodFromLog(index, caloricRestrictionActive),
     clearLog: () => useLogStore.setState({ todayLog: [], todayValidation: null }),
+    getState: () => useLogStore.getState() as unknown as Record<string, unknown>,
   };
 }

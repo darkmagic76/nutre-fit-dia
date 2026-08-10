@@ -1,32 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { exportData } from './exportData';
-
-// ─── Minimal port interfaces ───────────────────────────────────────────────
-
-interface StoreSnapshot {
-  /** Returns a plain data snapshot (no functions). */
-  getState(): Record<string, unknown>;
-}
-
-interface PlanSnapshot {
-  getState(): Record<string, unknown>;
-}
-
-interface BiomarkerSnapshot {
-  getState(): Record<string, unknown>;
-}
+import type { StateExporter } from '@application/ports/stateExporter';
 
 // ─── In-memory fakes ───────────────────────────────────────────────────────
 
-function makeFakeStore<T extends Record<string, unknown>>(data: T): StoreSnapshot {
-  return { getState: () => ({ ...data }) as Record<string, unknown> };
-}
-
-function makeFakePlanStore<T extends Record<string, unknown>>(data: T): PlanSnapshot {
-  return { getState: () => ({ ...data }) as Record<string, unknown> };
-}
-
-function makeFakeBiomarkerStore<T extends Record<string, unknown>>(data: T): BiomarkerSnapshot {
+function makeFakeExporter<T extends Record<string, unknown>>(data: T): StateExporter {
   return { getState: () => ({ ...data }) as Record<string, unknown> };
 }
 
@@ -35,20 +13,20 @@ function makeFakeBiomarkerStore<T extends Record<string, unknown>>(data: T): Bio
 // ─── Tests ─────────────────────────────────────────────────────────────────
 
 describe('exportData (use case)', () => {
-  let trackerRepo: StoreSnapshot;
-  let logRepo: StoreSnapshot;
-  let nudgeRepo: StoreSnapshot;
-  let activityRepo: StoreSnapshot;
-  let planRepo: PlanSnapshot;
-  let biomarkerRepo: BiomarkerSnapshot;
+  let trackerRepo: StateExporter;
+  let logRepo: StateExporter;
+  let nudgeRepo: StateExporter;
+  let activityRepo: StateExporter;
+  let planRepo: StateExporter;
+  let biomarkerRepo: StateExporter;
 
   beforeEach(() => {
-    trackerRepo = makeFakeStore({ weight: '80', height: '170' });
-    logRepo = makeFakeStore({ todayLog: [] });
-    nudgeRepo = makeFakeStore({ pending: [], history: [] });
-    activityRepo = makeFakeStore({ weeklyMinutes: 0 });
-    planRepo = makeFakePlanStore({ weeklyPlan: {} });
-    biomarkerRepo = makeFakeBiomarkerStore({ glucoseHistory: [], weightHistory: [] });
+    trackerRepo = makeFakeExporter({ weight: '80', height: '170' });
+    logRepo = makeFakeExporter({ todayLog: [] });
+    nudgeRepo = makeFakeExporter({ pending: [], history: [] });
+    activityRepo = makeFakeExporter({ weeklyMinutes: 0 });
+    planRepo = makeFakeExporter({ weeklyPlan: {} });
+    biomarkerRepo = makeFakeExporter({ glucoseHistory: [], weightHistory: [] });
   });
 
   it('returns JSON string with all six domain keys plus exportedAt', () => {
@@ -74,7 +52,7 @@ describe('exportData (use case)', () => {
   });
 
   it('strips functions from store state', () => {
-    const storeWithFn = makeFakeStore({
+    const storeWithFn = makeFakeExporter({
       data: 'value',
       setData: () => {},
       getSomething: () => 'x',
