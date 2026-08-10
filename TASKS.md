@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features by Functional Criticality
 
-Generated: 2026-07-17 | Updated: 2026-08-10 | Branch: `develop` | Tests: 816 ✅ (80 files) | Lint: 0 (oxlint) | Typecheck: clean | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/ | ADRs: 12
+Generated: 2026-07-17 | Updated: 2026-08-10 | Branch: `develop` | Tests: 818 ✅ (80 files) | Lint: 0 (oxlint) | Typecheck: clean | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/ | ADRs: 12
 
 ---
 
@@ -12,10 +12,10 @@ Generated: 2026-07-17 | Updated: 2026-08-10 | Branch: `develop` | Tests: 816 ✅
 | Metabolic Tracker               | ✅ Implemented (FR-4.2, RF-02) — caloricTargetService with conditional deficit BMI > 25                                                                                                                                                              |
 | Med Diet Validator              | ✅ Implemented — rationValidator cross-feature, DailyLog with Container/Presentational                                                                                                                                                               |
 | Recipe Engine                   | ✅ Implemented — planGenerator + PlanContainer, sustainability badges, 3-6 meal fractionation (M7)                                                                                                                                                   |
-| Domain Types                    | ✅ Implemented — FoodCategory, TrafficLight, Notification, Zod schemas, domain errors                                                                                                                                                                |
+| Domain Types                    | ✅ Implemented — FoodCategory (12 categories incl. NUTS), TrafficLight, Notification, Zod schemas, domain errors                                                                                                                                     |
 | UI Primitives                   | ✅ Implemented — 7 components with unit tests                                                                                                                                                                                                        |
 | Activity Tracker                | ✅ Implemented (H1) — useActivityTracker, compliance %, streak, dashboard tab                                                                                                                                                                        |
-| Nudge Engine                    | ✅ Complete (H2+H6+H7) — 19 rules, CooldownTracker, NudgeStore, NudgePanel UI with badge + history                                                                                                                                                   |
+| Nudge Engine                    | ✅ Complete (H2+H6+H7) — 21 rules (incl. NUTS_DEFICIT + NUTS_EXCESS), CooldownTracker, NudgeStore, NudgePanel UI with badge + history                                                                                                                |
 | Sustainability                  | ✅ Implemented (H3) — computeEnvironmentalScore, PROTEIN_EMISSION_RATIOS, SCORING_WEIGHTS, integrated in RecipeEngine (dual ranking)                                                                                                                 |
 | UserProfile + Phenotypic Filter | ✅ Implemented (C1) — UserProfileSchema (Zod), diagnosisAge, phenotypic filter                                                                                                                                                                       |
 | Legal Disclaimer                | ✅ Implemented (C3) — RNF-01 persistent banner in Dashboard + Plan                                                                                                                                                                                   |
@@ -37,6 +37,7 @@ Generated: 2026-07-17 | Updated: 2026-08-10 | Branch: `develop` | Tests: 816 ✅
 | Clean Architecture Phase 2      | ✅ Implemented (2026-08-10) — Type safety: remove `any` from exportData, create StateExporter port, fix test mocks (8× `as any` → typed fakes), document singleton. 809 tests                                                                        |
 | Clean Architecture Phase 3.1    | ✅ Implemented (2026-08-10) — Fix Container/Presentational: move `<Card>` from NudgeEngineContainer to NudgeEngineView. Container 100% pure logic, View renders all JSX. Regression test added. 810 tests                                            |
 | Coverage Functions 100%         | ✅ Implemented (2026-08-10) — `storage.ts` excluded from coverage (IndexedDB callbacks not testable in jsdom). Functions 100% (351/351), Statements 98.73%, Branches 92.84%, Lines 99.59%. 816 tests (80 files).                                     |
+| NUTS Food Category (AESAN 2022) | ✅ Implemented (2026-08-10) — 12th food category with validation (≥3/sem, ≤1/día), 5 catalog foods, 2 nudge rules, traffic light GREEN, i18n ES/EN. 818 tests (80 files).                                                                            |
 
 ---
 
@@ -116,9 +117,10 @@ Phase 4 — Polish (LOW)
 
 ## Notes
 
-- **731 green tests (72 files)**: any new feature must maintain strict TDD (RED → GREEN → TRIANGULATE → REFACTOR).
+- **818 green tests (80 files)**: any new feature must maintain strict TDD (RED → GREEN → TRIANGULATE → REFACTOR).
 - **Scope Rule**: code used by 1 feature → inside that feature. Used by 2+ → `shared/` with domain module structure. Nudge engine extracted to `src/shared/nudge/` (2026-07-23). `planStore` moved to `features/recipe-engine/store/` (2026-08-02).
 - **Nudge engine**: pure `buildNudgeContext()` via `ContextInput`. `CooldownTracker` with dependency injection (`CooldownOps`). `biomarkerTrackingService` removed (Middle Man — inlined in `trackerStore`).
 - **FR-5.1 Export**: `useExportData` connected to "📥 Exportar datos" button in Metabolic Profile. Downloads JSON with 6 stores.
 - **Infra**: `tsconfig.app.json` excludes tests from build. Husky active: pre-commit (lint) + pre-push (quality). `coverage/` in `.gitignore`.
-- **i18n**: 0 hardcoded strings. Food categories (11 keys) with ES/EN translation. `AOVE` is kept as a clinical term in both languages.
+- **i18n**: 0 hardcoded strings. Food categories (12 keys) with ES/EN translation. `AOVE` is kept as a clinical term in both languages.
+- **NUTS category** (2026-08-10): 12th food category per AESAN 2022. `FoodCategory.NUTS`, validation (≥3/sem, ≤1/día), 5 catalog foods, 2 nudge rules, traffic light GREEN, i18n ES/EN. Commit `46cf44b`.

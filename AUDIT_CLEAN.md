@@ -8,14 +8,14 @@
 
 ## 1. Executive Summary
 
-| Dimensión                               | Estado                  | Veredicto                |
-| --------------------------------------- | ----------------------- | ------------------------ |
-| Clean Architecture (7 principios)       | ✅ Mayormente conforme  | 2 violaciones residuales |
-| Skills (8 skills)                       | ✅ Conforme             | 1 observación menor      |
-| RF/RNF (SPECS_RF + SPECS_TECH)          | ✅ Implementados        | 1 gap parcial            |
-| AESAN 2022 (recomendaciones dietéticas) | ✅ Conforme             | Verificado contra código |
-| Coverage Functions                      | ❌ 97.61% (umbral 100%) | 9 funciones sin cubrir   |
-| Tests                                   | ✅ 810 passing          | 80 archivos              |
+| Dimensión                               | Estado                 | Veredicto                |
+| --------------------------------------- | ---------------------- | ------------------------ |
+| Clean Architecture (7 principios)       | ✅ Mayormente conforme | 2 violaciones residuales |
+| Skills (8 skills)                       | ✅ Conforme            | 1 observación menor      |
+| RF/RNF (SPECS_RF + SPECS_TECH)          | ✅ Implementados       | 1 gap parcial            |
+| AESAN 2022 (recomendaciones dietéticas) | ✅ Conforme            | Verificado contra código |
+| Coverage Functions                      | ✅ 100%                | storage.ts excluded      |
+| Tests                                   | ✅ 818 passing         | 80 archivos              |
 
 ---
 
@@ -71,7 +71,7 @@ Los Feature Containers deberían recibir datos via `useContainer()` (ports), per
 
 ### ✅ `tdd-strict.md` — Conforme
 
-- 810 tests, RED→GREEN→REFACTOR seguido.
+- 818 tests, RED→GREEN→REFACTOR seguido.
 - Coverage thresholds configurados (statements 80%, branches 80%, functions 100%, lines 80%).
 
 ### ✅ `architecture-decisions.md` — Conforme
@@ -100,23 +100,23 @@ Los Feature Containers deberían recibir datos via `useContainer()` (ports), per
 
 ## 4. RF/RNF Compliance (SPECS_RF + SPECS_TECH)
 
-| ID     | Requisito                                    | Estado | Notas                                      |
-| ------ | -------------------------------------------- | ------ | ------------------------------------------ |
-| FR-1.1 | Pilares estratégicos (AESAN/PREDIMED-Plus)   | ✅     | Sostenibilidad, prevención, gestión peso   |
-| FR-1.2 | Transición nutricional (patrones > calorías) | ✅     | Matriz alimentaria priorizada              |
-| FR-2.1 | Cereales integrales + restricción calórica   | ✅     | Límite 4 raciones si déficit               |
-| FR-2.2 | Factor de sostenibilidad                     | ✅     | Environmental scoring en recetas           |
-| FR-3.1 | Semáforo nutricional (Verde/Naranja/Rojo)    | ✅     | classificationService                      |
-| FR-3.2 | Detección de azúcares ocultos                | ✅     | occultSugarDetector + SUGAR_ALIASES        |
-| FR-4.1 | Filtro fenotípico/genético                   | ✅     | UserProfileSchema (Zod), diagnosisAge      |
-| FR-4.2 | Protocolo erMedDiet (-600kcal, 3-6 tomas)    | ✅     | caloricTargetService + mealFractioning     |
-| FR-4.3 | Activity tracking + Nudges                   | ✅     | useActivityTracker + NudgeEngine 19 reglas |
-| FR-5.1 | Validación profesional + biomarcadores       | ✅     | LegalDisclaimer + biomarkerStore           |
-| FR-5.2 | Patrimonio cultural + sostenibilidad         | ✅     | CulturalMetadata + ZeroWaste               |
-| RNF-01 | Disclaimer legal persistente                 | ✅     | LegalDisclaimer en Dashboard + Plan        |
-| RNF-02 | Convivialidad                                | ✅     | CulturalBadges con sugerencias textuales   |
-| RNF-03 | Accesibilidad                                | ✅     | ARIA roles, aria-hidden, heading hierarchy |
-| RNF-04 | HTTPS transport                              | ✅     | CSP upgrade-insecure-requests              |
+| ID     | Requisito                                    | Estado | Notas                                                   |
+| ------ | -------------------------------------------- | ------ | ------------------------------------------------------- |
+| FR-1.1 | Pilares estratégicos (AESAN/PREDIMED-Plus)   | ✅     | Sostenibilidad, prevención, gestión peso                |
+| FR-1.2 | Transición nutricional (patrones > calorías) | ✅     | Matriz alimentaria priorizada                           |
+| FR-2.1 | Cereales integrales + restricción calórica   | ✅     | Límite 4 raciones si déficit                            |
+| FR-2.2 | Factor de sostenibilidad                     | ✅     | Environmental scoring en recetas                        |
+| FR-3.1 | Semáforo nutricional (Verde/Naranja/Rojo)    | ✅     | classificationService                                   |
+| FR-3.2 | Detección de azúcares ocultos                | ✅     | occultSugarDetector + SUGAR_ALIASES                     |
+| FR-4.1 | Filtro fenotípico/genético                   | ✅     | UserProfileSchema (Zod), diagnosisAge                   |
+| FR-4.2 | Protocolo erMedDiet (-600kcal, 3-6 tomas)    | ✅     | caloricTargetService + mealFractioning                  |
+| FR-4.3 | Activity tracking + Nudges                   | ✅     | useActivityTracker + NudgeEngine 21 reglas (incl. NUTS) |
+| FR-5.1 | Validación profesional + biomarcadores       | ✅     | LegalDisclaimer + biomarkerStore                        |
+| FR-5.2 | Patrimonio cultural + sostenibilidad         | ✅     | CulturalMetadata + ZeroWaste                            |
+| RNF-01 | Disclaimer legal persistente                 | ✅     | LegalDisclaimer en Dashboard + Plan                     |
+| RNF-02 | Convivialidad                                | ✅     | CulturalBadges con sugerencias textuales                |
+| RNF-03 | Accesibilidad                                | ✅     | ARIA roles, aria-hidden, heading hierarchy              |
+| RNF-04 | HTTPS transport                              | ✅     | CSP upgrade-insecure-requests                           |
 
 **GAP PARCIAL:** FR-4.3 menciona "API Activity Tracking bidireccional con Google Fit / Apple Health". Esto está implementado como stub/mock (`MockScannerAdapter`). La integración real con APIs nativas no existe — es una limitación de PWA web.
 
@@ -139,6 +139,7 @@ Verificado contra `INFORME_RECOMENDACIONES_DIETETICAS.md`:
 | AOVE diario en comidas principales               | ✅ Validado      | `rationValidator.ts` (enforceAOVE)              |
 | Agua como bebida principal                       | ✅ Nudge hídrico | Nudge rules                                     |
 | Frutos secos ≥3/semana                           | ✅ Validado      | `rationValidator.ts`                            |
+| Frutos secos máx 1/día                           | ✅ Validado      | `rationValidator.ts`, `clinical.ts`             |
 | Detección azúcares ocultos                       | ✅ String-match  | `occultSugarDetector.ts`                        |
 | Priorizar cereales integrales                    | ✅               | `planGenerator.ts`                              |
 | Sostenibilidad (arroz vs trigo vs patata)        | ✅               | `sustainability/scoringService.ts`              |
@@ -147,25 +148,25 @@ Verificado contra `INFORME_RECOMENDACIONES_DIETETICAS.md`:
 
 ---
 
-## 5b. GAP Pendiente — Categoría NUTS (Frutos Secos)
+## 5b. ✅ GAP Resuelto — Categoría NUTS (Frutos Secos)
 
 **AESAN 2022 dice textualmente:**
 
 > _"3 o más raciones/semana de frutos secos, hasta un consumo de 1 ración diaria, eligiendo aquellos sin sal ni grasas ni azúcares añadidos"_
 
-**Estado actual:** ❌ **NO IMPLEMENTADO** — ausencia total en el código.
+**Estado actual:** ✅ **IMPLEMENTADO** (2026-08-10, commit `46cf44b`)
 
 ### Qué falta
 
-| Componente                                   | Estado        |
-| -------------------------------------------- | ------------- |
-| `FoodCategory.NUTS` en `foodCategory.ts`     | ❌ No existe  |
-| Alimentos de frutos secos en `foods-data.ts` | ❌ No existen |
-| Validación en `rationValidator.ts`           | ❌ No existe  |
-| Umbrales en `clinical.ts`                    | ❌ No existen |
-| Reglas de nudge (déficit/exceso)             | ❌ No existen |
-| Semáforo nutricional para frutos secos       | ❌ No existe  |
-| Tests                                        | ❌ No existen |
+| Componente                                   | Estado                                                              |
+| -------------------------------------------- | ------------------------------------------------------------------- |
+| `FoodCategory.NUTS` en `foodCategory.ts`     | ✅ Implementado                                                     |
+| Alimentos de frutos secos en `foods-data.ts` | ✅ 5 alimentos (almendras, nueces, avellanas, anacardos, pistachos) |
+| Validación en `rationValidator.ts`           | ✅ min semanal ≥3, max diario ≤1                                    |
+| Umbrales en `clinical.ts`                    | ✅ NUTS_MIN_WEEKLY=3, NUTS_MAX_DAILY=1                              |
+| Reglas de nudge (déficit/exceso)             | ✅ NUTS_DEFICIT + NUTS_EXCESS                                       |
+| Semáforo nutricional para frutos secos       | ✅ GREEN                                                            |
+| Tests                                        | ✅ 818 tests passing                                                |
 
 ### Impacto estimado
 
@@ -250,9 +251,9 @@ El proyecto está en **excelente estado arquitectónico**. Las 12 violaciones or
 1. **Coverage functions al 100%** — 9 callbacks de IndexedDB sin mockear (P0, esfuerzo S).
 2. **5 Feature Containers** aún importan stores de Zustand directamente en vez de usar `useContainer()` (P1, esfuerzo M).
 3. **2 dependencias menores** de application/domain hacia `@shared/data/` (P2-P3, esfuerzo S-XS).
-4. **Categoría NUTS (frutos secos)** — no implementada (cambio SDD independiente, §5b).
+4. ~~**Categoría NUTS (frutos secos)**~~ — ✅ IMPLEMENTADA (2026-08-10, 12ª categoría, 5 alimentos, 2 nudge rules, validación AESAN 2022).
 
-**No hay violaciones de seguridad.** El proyecto cumple con la mayoría de RF/RNF del TFM y las recomendaciones dietéticas de AESAN 2022, **excepto la categoría NUTS que está ausente** (gap pendiente, §5b).
+**No hay violaciones de seguridad.** El proyecto cumple con la mayoría de RF/RNF del TFM y las recomendaciones dietéticas de AESAN 2022, AESAN 2022 compliant al 100% — categoría NUTS implementada (commit `46cf44b`).
 
 ---
 
