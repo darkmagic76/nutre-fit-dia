@@ -3,7 +3,6 @@ import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import type { Food } from '@shared/domain';
-import { useTrackerStore } from './trackerStore';
 import {
   countRations,
   validateRations,
@@ -14,8 +13,8 @@ interface LogState {
   todayLog: Food[];
   todayValidation: RationValidationResult | null;
 
-  addFoodToLog: (food: Food) => void;
-  removeFoodFromLog: (index: number) => void;
+  addFoodToLog: (food: Food, caloricRestrictionActive: boolean) => void;
+  removeFoodFromLog: (index: number, caloricRestrictionActive: boolean) => void;
 }
 
 // Zod schema for persisted state (structural integrity only — not business rules)
@@ -40,8 +39,14 @@ const LogStateSchema = z.object({
   todayValidation: z.any().nullable(),
 });
 
-function evaluateLog(log: Food[]) {
-  const { caloricRestrictionActive } = useTrackerStore.getState();
+/**
+ * Pure function: evaluate log against AESAN ration limits.
+ * Decoupled from any store — receives caloricRestrictionActive as parameter.
+ */
+export function evaluateLog(
+  log: Food[],
+  caloricRestrictionActive: boolean,
+): RationValidationResult {
   const counts = countRations(log);
   return validateRations(counts, caloricRestrictionActive);
 }
@@ -52,16 +57,16 @@ export const useLogStore = create<LogState>()(
       todayLog: [],
       todayValidation: null,
 
-      addFoodToLog: (food) => {
+      addFoodToLog: (food, caloricRestrictionActive) => {
         const { todayLog } = get();
         const log = [...todayLog, food];
-        set({ todayLog: log, todayValidation: evaluateLog(log) });
+        set({ todayLog: log, todayValidation: evaluateLog(log, caloricRestrictionActive) });
       },
 
-      removeFoodFromLog: (index) => {
+      removeFoodFromLog: (index, caloricRestrictionActive) => {
         const { todayLog } = get();
         const log = todayLog.filter((_, i) => i !== index);
-        set({ todayLog: log, todayValidation: evaluateLog(log) });
+        set({ todayLog: log, todayValidation: evaluateLog(log, caloricRestrictionActive) });
       },
     }),
     {

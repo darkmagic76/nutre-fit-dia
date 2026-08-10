@@ -1,5 +1,6 @@
 import { useContext } from 'react';
-import { ContainerContext, type Container } from './containerContext';
+import { ContainerContext } from './containerContext';
+import type { Container } from '@application/ports/container';
 
 export function useContainer(): Container {
   const ctx = useContext(ContainerContext);

@@ -16,7 +16,7 @@ function renderApp() {
   );
 }
 
-vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+vi.mock('@infrastructure/hooks/useNudgeTrigger', () => ({
   useNudgeTrigger: () => vi.fn(),
 }));
 

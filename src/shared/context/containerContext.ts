@@ -1,6 +1,4 @@
 import { createContext } from 'react';
-import type { createContainer } from '@infrastructure/compositionRoot';
-
-export type Container = ReturnType<typeof createContainer>;
+import type { Container } from '@application/ports/container';
 
 export const ContainerContext = createContext<Container | null>(null);

@@ -10,7 +10,7 @@ vi.mock('@shared/hooks/useExportData', () => ({
   useExportData: () => ({ exportAllData: vi.fn(), isExporting: false }),
 }));
 
-vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+vi.mock('@infrastructure/hooks/useNudgeTrigger', () => ({
   useNudgeTrigger: () => vi.fn(),
 }));
 

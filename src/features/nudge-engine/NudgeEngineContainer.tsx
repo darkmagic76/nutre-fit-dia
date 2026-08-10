@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useT } from '@shared/i18n';
 import { Card } from '@shared/ui';
-import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
+import { useNudgeTrigger } from '@infrastructure/hooks/useNudgeTrigger';
 import { useNudgeStore } from '@infrastructure/stores';
 import { NudgeEngineView } from './NudgeEngineView';
 

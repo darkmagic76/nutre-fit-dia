@@ -58,7 +58,7 @@ describe('logStore', () => {
 
   it('adds food to log and validates', () => {
     const { addFoodToLog } = useLogStore.getState();
-    addFoodToLog(mockFood);
+    addFoodToLog(mockFood, false);
 
     const state = useLogStore.getState();
     expect(state.todayLog).toHaveLength(1);
@@ -68,10 +68,10 @@ describe('logStore', () => {
 
   it('removes food from log by index', () => {
     const { addFoodToLog, removeFoodFromLog } = useLogStore.getState();
-    addFoodToLog(mockFood);
-    addFoodToLog({ ...mockFood, id: 'test-food-2', name: 'AOVE' });
+    addFoodToLog(mockFood, false);
+    addFoodToLog({ ...mockFood, id: 'test-food-2', name: 'AOVE' }, false);
 
-    removeFoodFromLog(0);
+    removeFoodFromLog(0, false);
 
     const state = useLogStore.getState();
     expect(state.todayLog).toHaveLength(1);
@@ -80,22 +80,20 @@ describe('logStore', () => {
 
   it('revalidates after removal', () => {
     const { addFoodToLog, removeFoodFromLog } = useLogStore.getState();
-    addFoodToLog(mockFood);
+    addFoodToLog(mockFood, false);
     expect(useLogStore.getState().todayValidation).not.toBeNull();
 
-    removeFoodFromLog(0);
+    removeFoodFromLog(0, false);
     expect(useLogStore.getState().todayValidation).not.toBeNull();
   });
 
-  it('reads caloricRestrictionActive from trackerStore cross-feature', () => {
-    useTrackerStore.setState({ caloricRestrictionActive: true });
-
+  it('validates with caloric restriction active', () => {
     const { addFoodToLog } = useLogStore.getState();
-    addFoodToLog(mockFood);
-    addFoodToLog({ ...mockFood, id: 'c2', name: 'Pan 2' });
-    addFoodToLog({ ...mockFood, id: 'c3', name: 'Pan 3' });
-    addFoodToLog({ ...mockFood, id: 'c4', name: 'Pan 4' });
-    addFoodToLog({ ...mockFood, id: 'c5', name: 'Pan 5' });
+    addFoodToLog(mockFood, true);
+    addFoodToLog({ ...mockFood, id: 'c2', name: 'Pan 2' }, true);
+    addFoodToLog({ ...mockFood, id: 'c3', name: 'Pan 3' }, true);
+    addFoodToLog({ ...mockFood, id: 'c4', name: 'Pan 4' }, true);
+    addFoodToLog({ ...mockFood, id: 'c5', name: 'Pan 5' }, true);
 
     const state = useLogStore.getState();
     expect(state.todayLog).toHaveLength(5);

@@ -1,7 +1,7 @@
 import { useTrackerStore } from '@infrastructure/stores';
 import { useT } from '@shared/i18n';
 import { useExportData } from '@shared/hooks/useExportData';
-import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
+import { useNudgeTrigger } from '@infrastructure/hooks/useNudgeTrigger';
 import { useContainer } from '@shared/context/useContainer';
 import { MetabolicTrackerView } from './MetabolicTrackerView';
 import type { FormEvent } from 'react';

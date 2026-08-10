@@ -7,7 +7,7 @@ import { type ReactElement } from 'react';
 import type { SystemNotification } from '@shared/domain';
 
 // Mock useNudgeTrigger to prevent auto-enqueue on mount
-vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+vi.mock('@infrastructure/hooks/useNudgeTrigger', () => ({
   useNudgeTrigger: vi.fn(() => vi.fn()),
 }));
 

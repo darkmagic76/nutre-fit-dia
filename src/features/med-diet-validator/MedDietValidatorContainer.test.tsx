@@ -6,7 +6,7 @@ import { FoodCategory } from '@shared/domain';
 import { makeFood, makeCaloricTargetOutput, makeRationValidationResult } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 
-vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+vi.mock('@infrastructure/hooks/useNudgeTrigger', () => ({
   useNudgeTrigger: () => vi.fn(),
 }));
 

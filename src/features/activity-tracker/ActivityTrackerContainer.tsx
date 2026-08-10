@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useT } from '@shared/i18n';
 import { useActivityTracker } from './hooks/useActivityTracker';
-import { useNudgeTrigger } from '@shared/hooks/useNudgeTrigger';
+import { useNudgeTrigger } from '@infrastructure/hooks/useNudgeTrigger';
 import { ActivityTrackerView } from './ActivityTrackerView';
 import { ModerateMinutes } from './types';
 

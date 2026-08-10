@@ -5,7 +5,7 @@ import { I18nProvider } from '@shared/i18n';
 import { type ReactElement } from 'react';
 import { useActivityStore } from '@infrastructure/stores/activityStore';
 
-vi.mock('@shared/hooks/useNudgeTrigger', () => ({
+vi.mock('@infrastructure/hooks/useNudgeTrigger', () => ({
   useNudgeTrigger: () => vi.fn(),
 }));
 

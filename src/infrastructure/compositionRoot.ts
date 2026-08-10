@@ -24,6 +24,7 @@ import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
 // ─── Types ──────────────────────────────────────────────────────────────────
 import type { ContextInput } from '@domain/nudgeContext';
 import type { ProfileInput } from '@application/dtos/ProfileInput';
+import type { Container } from '@application/ports/container';
 
 /**
  * Composition root — single factory that wires adapters → use cases.
@@ -31,7 +32,7 @@ import type { ProfileInput } from '@application/dtos/ProfileInput';
  * Called once at application startup. The returned container provides
  * fully-wired use case functions that React components / hooks consume.
  */
-export function createContainer() {
+export function createContainer(): Container {
   // 1. Adapters — thin Zustand wrappers implementing port interfaces
   const notificationRepo = createZustandNotificationRepository();
   const activityRepo = createZustandActivityRepository();
