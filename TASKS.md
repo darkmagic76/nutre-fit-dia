@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features by Functional Criticality
 
-Generated: 2026-07-17 | Updated: 2026-08-07 | Branch: `develop` | Tests: 808 ✅ (78 files) | Lint: 0 (oxlint) | Typecheck: clean | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/ | ADRs: 12
+Generated: 2026-07-17 | Updated: 2026-08-10 | Branch: `develop` | Tests: 809 ✅ (79 files) | Lint: 0 (oxlint) | Typecheck: clean | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/ | ADRs: 12
 
 ---
 
@@ -33,6 +33,8 @@ Generated: 2026-07-17 | Updated: 2026-08-07 | Branch: `develop` | Tests: 808 ✅
 | Clean Architecture Fases 1-2    | ✅ Implemented (2026-08-07) — Fase 1: break Infra→Features (planGenerator → application/services, sugarAliases → shared/data). Fase 2: activate Composition Root via React Context (ContainerContext, useContainer DI). 7 commits, 803 tests         |
 | Clean Architecture Fase 3       | ✅ Implemented (2026-08-07) — Clean Application Layer: move errors to domain/errors.ts, move parseNumeric to domain/inputParsing.ts, remove Translations from calculateTarget (error codes + context), ProfileError translates via useT(). 808 tests |
 | Clean Architecture Fase 4       | ✅ Implemented (2026-08-07) — Clean Barrels Cross-Layer: eliminados shared/stores/index.ts y shared/utils/index.ts, feature barrels limitados a solo Container, ProfileInput movido a application/dtos/. 808 tests                                   |
+| Clean Architecture Phase 1      | ✅ Implemented (2026-08-10) — Decouple stores (logStore from trackerStore), extract Container port to application/ports/container.ts, move useNudgeTrigger to infrastructure/hooks/. 809 tests                                                       |
+| Clean Architecture Phase 2      | ✅ Implemented (2026-08-10) — Type safety: remove `any` from exportData, create StateExporter port, fix test mocks (8× `as any` → typed fakes), document singleton. 809 tests                                                                        |
 
 ---
 

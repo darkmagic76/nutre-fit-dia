@@ -3,7 +3,7 @@
 **Fecha:** 2026-08-07  
 **Autor:** Auditoría automatizada (SDD)  
 **Skills auditados:** `skills/clean-architecture-audit.md` + `skills/architecture-decisions.md`  
-**Estado:** 808 tests pasando | 78 archivos de test | 12 violaciones detectadas | Fases 1-4 completadas
+**Estado:** 809 tests pasando | 79 archivos de test | 12 violaciones detectadas | Fases 1-4 completadas + Phase 1-2 (type safety) completadas
 
 ---
 
@@ -17,6 +17,8 @@ Se auditaron **7 principios de Clean Architecture** y **4 pilares de Architectur
 - ✅ **Fase 2 completada** (2026-08-07): Composition Root activada via React Context
 - ✅ **Fase 3 completada** (2026-08-07): Application layer limpia (errors → domain, parseNumeric → domain, calculateTarget sin Translations)
 - ✅ **Fase 4 completada** (2026-08-07): Barrels cross-layer limpiados (shared/stores, shared/utils eliminados, feature barrels limitados a Container, ProfileInput movido a application/dtos/)
+- ✅ **Phase 1 completada** (2026-08-10): Decouple stores (logStore 100% independiente de trackerStore), extract Container port a `application/ports/container.ts`, move `useNudgeTrigger` a `infrastructure/hooks/`. 809 tests, `pnpm quality` limpio.
+- ✅ **Phase 2 completada** (2026-08-10): Type safety — eliminado `any` de `exportData` (StateExporter port), fixeados 8× `as any` en tests (`FakeNotificationRepo` implementa port completo), removido `as unknown as` innecesario en fixtures, documentado singleton `container` con JSDoc. 809 tests, `pnpm quality` limpio.
 
 **Dominio:** ✅ Puro, rico, sin anemia. Reglas de negocio correctamente aisladas.  
 **Application:** ✅ Limpio. Use cases no importan de `@shared/` (excepto datos de dominio compartidos).  
