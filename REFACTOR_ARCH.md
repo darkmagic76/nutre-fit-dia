@@ -19,6 +19,7 @@ Se auditaron **7 principios de Clean Architecture** y **4 pilares de Architectur
 - ✅ **Fase 4 completada** (2026-08-07): Barrels cross-layer limpiados (shared/stores, shared/utils eliminados, feature barrels limitados a Container, ProfileInput movido a application/dtos/)
 - ✅ **Phase 1 completada** (2026-08-10): Decouple stores (logStore 100% independiente de trackerStore), extract Container port a `application/ports/container.ts`, move `useNudgeTrigger` a `infrastructure/hooks/`. 809 tests, `pnpm quality` limpio.
 - ✅ **Phase 2 completada** (2026-08-10): Type safety — eliminado `any` de `exportData` (StateExporter port), fixeados 8× `as any` en tests (`FakeNotificationRepo` implementa port completo), removido `as unknown as` innecesario en fixtures, documentado singleton `container` con JSDoc. 809 tests, `pnpm quality` limpio.
+- ✅ **Phase 3.1 completada** (2026-08-10): Fix Container/Presentational — `<Card>` movido de `NudgeEngineContainer` a `NudgeEngineView`. Container 100% pura lógica, View 100% presentación. Agregado test de regresión. 810 tests, `pnpm quality` limpio.
 
 **Dominio:** ✅ Puro, rico, sin anemia. Reglas de negocio correctamente aisladas.  
 **Application:** ✅ Limpio. Use cases no importan de `@shared/` (excepto datos de dominio compartidos).  
