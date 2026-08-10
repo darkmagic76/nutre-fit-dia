@@ -23,7 +23,15 @@ describe('NudgeEngineView', () => {
     history: [] as SystemNotification[],
     onDismiss: vi.fn(),
     translate: es,
+    title: '🔔 Nudges',
+    description: 'Panel de notificaciones',
   };
+
+  it('renders the card title and description', () => {
+    renderWithI18n(<NudgeEngineView {...defaultProps} />);
+    expect(screen.getByText('🔔 Nudges')).toBeInTheDocument();
+    expect(screen.getByText('Panel de notificaciones')).toBeInTheDocument();
+  });
 
   it('shows empty state when no nudges (ES default)', () => {
     renderWithI18n(<NudgeEngineView {...defaultProps} />);

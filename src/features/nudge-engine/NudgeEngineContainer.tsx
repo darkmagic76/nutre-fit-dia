@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { useT } from '@shared/i18n';
-import { Card } from '@shared/ui';
 import { useNudgeTrigger } from '@infrastructure/hooks/useNudgeTrigger';
 import { useNudgeStore } from '@infrastructure/stores';
 import { NudgeEngineView } from './NudgeEngineView';
@@ -22,8 +21,13 @@ export function NudgeEngineContainer() {
   }, []);
 
   return (
-    <Card title={t['nudges.title']} description={t['nudges.description']}>
-      <NudgeEngineView pending={pending} history={history} onDismiss={dismiss} translate={t} />
-    </Card>
+    <NudgeEngineView
+      pending={pending}
+      history={history}
+      onDismiss={dismiss}
+      translate={t}
+      title={t['nudges.title']}
+      description={t['nudges.description']}
+    />
   );
 }
