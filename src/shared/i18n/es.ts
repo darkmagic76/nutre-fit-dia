@@ -181,6 +181,7 @@ export const es: Translations = {
   'category.red_meat': 'Carne roja',
   'category.water': 'Agua',
   'category.nuts': 'Frutos secos',
+  'category.tubers': 'Tubérculos',
 
   'alert.severityCritical': 'Crítico',
   'alert.severityWarning': 'Advertencia',
@@ -234,6 +235,7 @@ export const es: Translations = {
   'nudge.title.legumeCarbSource': 'Las legumbres también aportan hidratos de carbono',
   'nudge.title.nutsDeficit': 'Frutos secos insuficientes',
   'nudge.title.nutsExcess': 'Exceso de frutos secos hoy',
+  'nudge.title.tubersExcess': 'Exceso de tubérculos esta semana',
 
   // Nudge bodies
   'nudge.body.cerealsRestriction':
@@ -271,6 +273,8 @@ export const es: Translations = {
     'Llevas menos de 3 raciones de frutos secos esta semana. Los frutos secos aportan grasas saludables, fibra y antioxidantes.',
   'nudge.body.nutsExcess':
     'Has superado la ración diaria máxima de frutos secos (1 ración/día). Recuerda: sin sal ni azúcares añadidos.',
+  'nudge.body.tubersExcess':
+    'Has superado las 5 raciones semanales de tubérculos. Los tubérculos son consumo moderado según AESAN 2022.',
 
   // Activity — extended
   'activity.streakWeeksAria': 'Racha de {streak} semanas',

@@ -268,4 +268,16 @@ export const NUDGE_RULES: SafetyRule[] = [
     body: 'nudge.body.nutsExcess',
     condition: (ctx) => ctx.counts[FoodCategory.NUTS] > NUTS_MAX_DAILY,
   },
+
+  // ─── TUBERS: AESAN 2022 (tubérculos, consumo moderado) ───
+
+  {
+    id: 'TUBERS_EXCESS',
+    type: NotificationType.SYSTEM_ACTION,
+    severity: NotificationSeverity.INFO,
+    cooldown: COOLDOWN_24H,
+    title: 'nudge.title.tubersExcess',
+    body: 'nudge.body.tubersExcess',
+    condition: (ctx) => ctx.counts[FoodCategory.TUBERS] > 5,
+  },
 ];
