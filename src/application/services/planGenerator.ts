@@ -229,6 +229,9 @@ function getWeeklySlots(): {
     { day: 1, category: FoodCategory.NUTS, rations: 1 },
     { day: 3, category: FoodCategory.NUTS, rations: 1 },
     { day: 5, category: FoodCategory.NUTS, rations: 1 },
+    // Tubers: 2/week (consumo moderado) — Tue/Fri
+    { day: 2, category: FoodCategory.TUBERS, rations: 1 },
+    { day: 5, category: FoodCategory.TUBERS, rations: 1 },
   ];
 
   // Alternating mealType per day: first → LUNCH, second → DINNER, third → LUNCH, etc.
