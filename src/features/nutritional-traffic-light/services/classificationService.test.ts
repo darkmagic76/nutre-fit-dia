@@ -90,6 +90,20 @@ describe('classificationService', () => {
       const food = makeFood({ category: FoodCategory.VEGETABLES, isProcessed: false });
       expect(classifyFood(food)).toBe(TrafficLightColor.GREEN);
     });
+
+    // ─── TUBERS: GREEN default ───
+    it('classifies raw tuber (patata) as GREEN', () => {
+      const patata = foodsById.get('tuber-patata')!;
+      expect(classifyFood(patata)).toBe(TrafficLightColor.GREEN);
+    });
+
+    it('classifies processed tuber with occult sugars as RED', () => {
+      const food = makeFood({
+        category: FoodCategory.TUBERS,
+        harmfulIngredients: ['sacarosa'],
+      });
+      expect(classifyFood(food)).toBe(TrafficLightColor.RED);
+    });
   });
 
   describe('classifyFoodWithReasons', () => {
