@@ -60,10 +60,6 @@ describe('planGenerator', () => {
 
     it('TUBERS slots are on different days', () => {
       const plan = generateWeeklyPlan(false);
-      const tuberEntries = plan.days.flatMap((d) =>
-        d.entries.filter((e) => e.food.category === FoodCategory.TUBERS),
-      );
-      const tuberDays = [...new Set(tuberEntries.map((e) => e.food.category))];
       // At least 2 different days should have tuber entries
       const daysWithTubers = plan.days.filter((d) =>
         d.entries.some((e) => e.food.category === FoodCategory.TUBERS),
