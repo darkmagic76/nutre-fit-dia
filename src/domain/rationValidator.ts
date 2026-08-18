@@ -246,6 +246,7 @@ export function validateWeeklyRations(counts: CountByCategory): RationValidation
     FoodCategory.WHITE_MEAT,
     FoodCategory.RED_MEAT,
     FoodCategory.NUTS,
+    FoodCategory.TUBERS,
   ];
 
   for (const category of weeklyCategories) {

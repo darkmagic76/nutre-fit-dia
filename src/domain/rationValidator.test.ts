@@ -210,6 +210,40 @@ describe('rationValidator', () => {
       expect(result.valid).toBe(false);
       expect(result.violations.some((v) => v.category === FoodCategory.RED_MEAT)).toBe(true);
     });
+
+    it('fails when TUBERS exceed 5/week', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.TUBERS]: 6,
+      });
+      const result = validateWeeklyRations(counts);
+      expect(result.valid).toBe(false);
+      const tuberViolation = result.violations.find((v) => v.category === FoodCategory.TUBERS);
+      expect(tuberViolation).toBeDefined();
+      expect(tuberViolation!.direction).toBe('over');
+      expect(tuberViolation!.limit).toBe(5);
+    });
+
+    it('passes when TUBERS at exactly 5/week', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.TUBERS]: 5,
+      });
+      const result = validateWeeklyRations(counts);
+      expect(result.violations.some((v) => v.category === FoodCategory.TUBERS)).toBe(false);
+    });
+
+    it('passes when TUBERS at 0 (no minimum for tubers)', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.TUBERS]: 0,
+      });
+      const result = validateWeeklyRations(counts);
+      expect(result.violations.some((v) => v.category === FoodCategory.TUBERS)).toBe(false);
+    });
   });
 
   describe('animalProteinCount', () => {
