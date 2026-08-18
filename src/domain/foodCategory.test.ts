@@ -15,3 +15,18 @@ describe('FoodCategory.RED_MEAT', () => {
     expect(ANIMAL_PROTEIN_CATEGORIES).toContain(FoodCategory.RED_MEAT);
   });
 });
+
+describe('FoodCategory.TUBERS', () => {
+  it('has TUBERS enum member with value "tubers"', () => {
+    expect(FoodCategory.TUBERS).toBe('tubers');
+  });
+
+  it('Zod schema parses "tubers" successfully', () => {
+    expect(() => FoodCategorySchema.parse('tubers')).not.toThrow();
+    expect(FoodCategorySchema.parse('tubers')).toBe('tubers');
+  });
+
+  it('Zod schema rejects "tuber" (singular typo)', () => {
+    expect(() => FoodCategorySchema.parse('tuber')).toThrow();
+  });
+});

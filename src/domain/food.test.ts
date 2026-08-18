@@ -109,3 +109,50 @@ describe('FoodCategory NUTS (AESAN 2022: frutos secos)', () => {
     expect(result.isProcessed).toBe(false);
   });
 });
+
+describe('FoodSchema preparationState', () => {
+  it('defaults preparationState to "as-stored" when omitted', () => {
+    const result = FoodSchema.parse({
+      id: 'test-food',
+      name: 'Test Food',
+      category: 'vegetables',
+      gramsPerRation: 100,
+      kcalPer100g: 50,
+      proteinPer100g: 2,
+      carbsPer100g: 10,
+      fatPer100g: 0.5,
+    });
+    expect(result.preparationState).toBe('as-stored');
+  });
+
+  it('accepts preparationState: "cooked"', () => {
+    const result = FoodSchema.parse({
+      id: 'test-cooked',
+      name: 'Test Cooked',
+      category: 'legumes',
+      gramsPerRation: 150,
+      kcalPer100g: 93,
+      proteinPer100g: 6.5,
+      carbsPer100g: 14,
+      fatPer100g: 0.5,
+      preparationState: 'cooked',
+    });
+    expect(result.preparationState).toBe('cooked');
+  });
+
+  it('rejects invalid preparationState value "raw"', () => {
+    expect(() =>
+      FoodSchema.parse({
+        id: 'test-raw',
+        name: 'Test Raw',
+        category: 'legumes',
+        gramsPerRation: 150,
+        kcalPer100g: 93,
+        proteinPer100g: 6.5,
+        carbsPer100g: 14,
+        fatPer100g: 0.5,
+        preparationState: 'raw',
+      }),
+    ).toThrow();
+  });
+});

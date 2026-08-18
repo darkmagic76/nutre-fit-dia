@@ -95,6 +95,10 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
     min: 3,
     unit: 'week',
   },
+  [FoodCategory.TUBERS]: {
+    max: 5,
+    unit: 'week',
+  },
 };
 
 /** Cross-category violation keys. Each value maps to a `validation.*` i18n key. */
@@ -131,6 +135,7 @@ export interface CountByCategory {
   [FoodCategory.RED_MEAT]: number;
   [FoodCategory.WATER]: number;
   [FoodCategory.NUTS]: number;
+  [FoodCategory.TUBERS]: number;
 }
 
 export function defaultRationCounts(): CountByCategory {
@@ -147,6 +152,7 @@ export function defaultRationCounts(): CountByCategory {
     [FoodCategory.RED_MEAT]: 0,
     [FoodCategory.WATER]: 0,
     [FoodCategory.NUTS]: 0,
+    [FoodCategory.TUBERS]: 0,
   };
 }
 
@@ -284,6 +290,7 @@ export const AESAN_GRAM_STANDARDS: Record<FoodCategoryType, { min: number; max: 
   [FoodCategory.RED_MEAT]: { min: 100, max: 150 },
   [FoodCategory.WATER]: { min: 200, max: 250 },
   [FoodCategory.NUTS]: { min: 20, max: 30 },
+  [FoodCategory.TUBERS]: { min: 150, max: 200 },
 };
 
 export type SafetyAlertSeverity = 'critical' | 'warning';

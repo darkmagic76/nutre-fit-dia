@@ -19,6 +19,7 @@ export const FoodCategory = defineEnum({
   RED_MEAT: 'red_meat',
   WATER: 'water',
   NUTS: 'nuts',
+  TUBERS: 'tubers',
 });
 
 export type FoodCategory = ValuesOf<typeof FoodCategory>;
@@ -36,6 +37,7 @@ export const FoodCategorySchema = z.enum([
   'red_meat',
   'water',
   'nuts',
+  'tubers',
 ]);
 
 /** Groups that count toward animal protein (for NudgeEngine: "si Animal_Protein > 2, sugerir calcio vegetal") */

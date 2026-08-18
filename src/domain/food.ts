@@ -58,6 +58,8 @@ export const FoodSchema = z.object({
   carbonFootprint: z.number().min(0).optional(),
   /** Whether in season for Iberian peninsula (simplified) */
   isSeasonal: z.boolean().default(false),
+  /** Preparation state: 'as-stored' (dry/raw) or 'cooked' (ready-to-eat). Default 'as-stored'. */
+  preparationState: z.enum(['as-stored', 'cooked']).default('as-stored'),
   /** Cultural and social metadata (FR-5.2, UNESCO). Present on traditional preparations, not raw ingredients. */
   culturalMetadata: CulturalMetadataSchema.optional(),
 });

@@ -241,6 +241,16 @@ describe('rationValidator', () => {
       const counts = defaultRationCounts();
       expect(Object.keys(counts)).toContain(FoodCategory.RED_MEAT);
     });
+
+    it('includes TUBERS key defaulting to 0', () => {
+      const counts = defaultRationCounts();
+      expect(counts[FoodCategory.TUBERS]).toBe(0);
+    });
+
+    it('has TUBERS key in defaultRationCounts', () => {
+      const counts = defaultRationCounts();
+      expect(Object.keys(counts)).toContain(FoodCategory.TUBERS);
+    });
   });
 
   describe('countRations', () => {
@@ -264,11 +274,41 @@ describe('rationValidator', () => {
       const counts = countRations(entries);
       expect(counts[FoodCategory.RED_MEAT]).toBe(2);
     });
+
+    it('counts TUBERS entries', () => {
+      const entries = [
+        ...makeEntries(FoodCategory.TUBERS, 2),
+        ...makeEntries(FoodCategory.CEREALS, 1),
+      ];
+      const counts = countRations(entries);
+      expect(counts[FoodCategory.TUBERS]).toBe(2);
+    });
+
+    it('counts mixed tuber and non-tuber entries correctly', () => {
+      const entries = [
+        ...makeEntries(FoodCategory.TUBERS, 1),
+        ...makeEntries(FoodCategory.LEGUMES, 1),
+        ...makeEntries(FoodCategory.FRUITS, 1),
+      ];
+      const counts = countRations(entries);
+      expect(counts[FoodCategory.TUBERS]).toBe(1);
+      expect(counts[FoodCategory.LEGUMES]).toBe(1);
+      expect(counts[FoodCategory.FRUITS]).toBe(1);
+    });
+  });
+
+  describe('RATION_LIMITS TUBERS', () => {
+    it('TUBERS weekly limit is max 5 with no min', () => {
+      const limit = RATION_LIMITS[FoodCategory.TUBERS];
+      expect(limit.max).toBe(5);
+      expect(limit.unit).toBe('week');
+      expect(limit.min).toBeUndefined();
+    });
   });
 
   describe('AESAN_GRAM_STANDARDS', () => {
-    it('covers all 12 food categories', () => {
-      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(12);
+    it('covers all 13 food categories', () => {
+      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(13);
     });
 
     it('has valid bread range (40-60g)', () => {
@@ -281,6 +321,10 @@ describe('rationValidator', () => {
 
     it('has valid legume range (50-60g dry per AESAN 2022)', () => {
       expect(AESAN_GRAM_STANDARDS[FoodCategory.LEGUMES]).toEqual({ min: 50, max: 60 });
+    });
+
+    it('has TUBERS gram range (150-200g per AESAN 2022)', () => {
+      expect(AESAN_GRAM_STANDARDS[FoodCategory.TUBERS]).toEqual({ min: 150, max: 200 });
     });
   });
 
