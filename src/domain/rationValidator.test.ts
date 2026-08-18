@@ -444,4 +444,75 @@ describe('rationValidator', () => {
       expect(alerts).toEqual([]);
     });
   });
+
+  describe('validateFoodPortions with preparationState', () => {
+    it('skips gram validation for cooked legume (150g would normally exceed dry range)', () => {
+      const cookedLegume = makeFood({
+        category: FoodCategory.LEGUMES,
+        gramsPerRation: 150,
+        preparationState: 'cooked',
+      });
+      expect(validateFoodPortions([cookedLegume])).toEqual([]);
+    });
+
+    it('skips gram validation for cooked cereal (180g would normally exceed dry range)', () => {
+      const cookedCereal = makeFood({
+        category: FoodCategory.CEREALS,
+        gramsPerRation: 180,
+        preparationState: 'cooked',
+      });
+      expect(validateFoodPortions([cookedCereal])).toEqual([]);
+    });
+
+    it('still validates dry legume at 30g (below min 50g)', () => {
+      const dryLegume = makeFood({
+        category: FoodCategory.LEGUMES,
+        gramsPerRation: 30,
+        preparationState: 'as-stored',
+      });
+      const alerts = validateFoodPortions([dryLegume]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_SMALL');
+    });
+
+    it('still validates dry legume at 150g (above max 60g)', () => {
+      const dryLegume = makeFood({
+        category: FoodCategory.LEGUMES,
+        gramsPerRation: 150,
+        preparationState: 'as-stored',
+      });
+      const alerts = validateFoodPortions([dryLegume]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_LARGE');
+    });
+
+    it('tuber food at 175g produces no alerts (within 150-200)', () => {
+      const tuber = makeFood({
+        category: FoodCategory.TUBERS,
+        gramsPerRation: 175,
+      });
+      expect(validateFoodPortions([tuber])).toEqual([]);
+    });
+
+    it('tuber food at 100g produces PORTION_TOO_SMALL warning', () => {
+      const tuber = makeFood({
+        category: FoodCategory.TUBERS,
+        gramsPerRation: 100,
+      });
+      const alerts = validateFoodPortions([tuber]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_SMALL');
+    });
+
+    it('tuber food at 250g produces PORTION_TOO_LARGE critical alert', () => {
+      const tuber = makeFood({
+        category: FoodCategory.TUBERS,
+        gramsPerRation: 250,
+      });
+      const alerts = validateFoodPortions([tuber]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_LARGE');
+      expect(alerts[0].severity).toBe('critical');
+    });
+  });
 });

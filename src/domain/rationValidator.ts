@@ -320,6 +320,9 @@ export function validateFoodPortions(foods: Food[]): SafetyAlert[] {
   const alerts: SafetyAlert[] = [];
 
   for (const food of foods) {
+    // Skip gram validation for cooked-preparation entries — AESAN standards are dry-weight only
+    if (food.preparationState === 'cooked') continue;
+
     const standard = AESAN_GRAM_STANDARDS[food.category];
     if (!standard) continue;
 
