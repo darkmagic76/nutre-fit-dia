@@ -1,6 +1,6 @@
 import { useT } from '@shared/i18n';
 import { useFoodName } from '@shared/hooks/useFoodName';
-import { usePlanStore } from './store/planStore';
+import { usePlanStore } from '@infrastructure/stores/planStore';
 import { useTrackerStore } from '@infrastructure/stores';
 import { RecipeEngineView } from './RecipeEngineView';
 
