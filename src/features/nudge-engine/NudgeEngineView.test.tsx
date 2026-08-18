@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { NudgeEngineView } from './NudgeEngineView';
-import type { SystemNotification } from '@shared/domain';
+import type { SystemNotification } from '@domain/notification';
 import { es } from '@shared/i18n/es';
 
 const makeNudge = (overrides: Partial<SystemNotification> = {}): SystemNotification => ({

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { checkSafetyAlerts } from './safetyCheck';
 import { makeFood } from '@/test/fixtures';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 
 describe('checkSafetyAlerts', () => {
   it('returns empty for regular food', () => {

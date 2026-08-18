@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { CooldownTracker } from '@shared/nudge';
-import type { CooldownOps } from '@shared/nudge';
+import { CooldownTracker } from '@domain/cooldownTracker';
+import type { CooldownOps } from '@domain/cooldownTracker';
 import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
 
 /** Build CooldownOps backed by the real persisted nudgeStore (integration test). */

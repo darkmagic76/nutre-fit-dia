@@ -1,5 +1,6 @@
-import type { Food } from '@shared/domain';
-import { FoodCategory, TrafficLightColor } from '@shared/domain';
+import type { Food } from '@domain/food';
+import { FoodCategory } from '@domain/foodCategory';
+import { TrafficLightColor } from '@domain/trafficLight';
 import { detectOccultFromFood } from './occultSugarDetector';
 import { computeEnvironmentalScore } from '@domain/sustainability';
 import type { EnvironmentalScore } from '@domain/sustainability';

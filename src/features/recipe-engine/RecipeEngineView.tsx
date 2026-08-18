@@ -1,5 +1,5 @@
 import type { Translations } from '@shared/i18n';
-import type { Food } from '@shared/domain';
+import type { Food } from '@domain/food';
 import { Card, PrimaryButton, ViolationList } from '@shared/ui';
 import { formatViolation } from '@shared/ui/formatters/formatViolation';
 import { MealType, type MealEntry, type WeeklyPlan } from '@domain/plan';

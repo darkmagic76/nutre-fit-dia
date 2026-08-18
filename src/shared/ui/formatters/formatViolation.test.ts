@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { formatViolation, formatSafetyAlert } from './formatViolation';
 import { en } from '@shared/i18n/en';
 import { es } from '@shared/i18n/es';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 import type { RationViolation, SafetyAlert } from '../../../domain/rationValidator';
 
 function makeViolation(overrides: Partial<RationViolation> = {}): RationViolation {

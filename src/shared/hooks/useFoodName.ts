@@ -1,6 +1,6 @@
 import { useLocale } from '@shared/i18n';
 import { FOOD_NAMES_EN } from '@shared/data/foodNamesEn';
-import type { Food } from '@shared/domain';
+import type { Food } from '@domain/food';
 
 /**
  * Returns the localized display name for a food item.

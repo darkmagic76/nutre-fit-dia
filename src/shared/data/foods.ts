@@ -1,4 +1,4 @@
-import { food } from '@shared/domain';
+import { food } from '@domain/food';
 import { foodsRaw } from './foods-data';
 
 export const foods = foodsRaw.map((f) => food(f));

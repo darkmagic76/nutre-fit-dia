@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { MedDietValidatorView } from './MedDietValidatorView';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 import { makeFood, makeCaloricTargetOutput, makeRationValidationResult } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { es } from '@shared/i18n/es';

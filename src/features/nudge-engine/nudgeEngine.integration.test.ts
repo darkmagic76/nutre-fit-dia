@@ -1,15 +1,18 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { buildNudgeContext, evaluateRules } from '@shared/nudge/engine';
+import { buildNudgeContext } from '@domain/nudgeContextBuilder';
+import { evaluateRules } from '@domain/nudgeEvaluator';
 import { container } from '@infrastructure/compositionRoot';
-import { CooldownTracker } from '@shared/nudge';
-import type { CooldownOps, ContextInput } from '@shared/nudge';
+import { CooldownTracker } from '@domain/cooldownTracker';
+import type { CooldownOps } from '@domain/cooldownTracker';
+import type { ContextInput } from '@domain/nudgeContext';
 import { NUDGE_RULES } from '../../infrastructure/nudge/rules';
 import { useTrackerStore } from '@infrastructure/stores/trackerStore';
 import { useLogStore } from '@infrastructure/stores/logStore';
 import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
 import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
 import { useActivityStore } from '@infrastructure/stores/activityStore';
-import { FoodCategory, NotificationType } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
+import { NotificationType } from '@domain/notification';
 import { makeFood } from '@/test/fixtures';
 
 /** Build ContextInput from current store state — integration helper. */

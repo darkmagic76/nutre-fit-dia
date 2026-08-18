@@ -1,4 +1,4 @@
-import type { Food } from '@shared/domain';
+import type { Food } from '@domain/food';
 import type { SafetyAlert } from '../../../domain/rationValidator';
 import { HIGH_GLYCEMIC_FRUIT_NAMES } from '../../../domain/glycemicFruits';
 

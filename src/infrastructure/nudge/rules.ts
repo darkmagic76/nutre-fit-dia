@@ -1,4 +1,5 @@
-import { NotificationType, NotificationSeverity, FoodCategory } from '@shared/domain';
+import { NotificationType, NotificationSeverity } from '@domain/notification';
+import { FoodCategory } from '@domain/foodCategory';
 import {
   CEREAL_RESTRICTED_MAX,
   CEREAL_MIN_RATIONS,
@@ -26,7 +27,7 @@ import {
   COOLDOWN_7D,
   COOLDOWN_NONE,
 } from '../../domain/cooldownDurations';
-import type { SafetyRule } from '@shared/nudge/types';
+import type { SafetyRule } from '@domain/nudgeTypes';
 
 /** All nudge rules evaluated by the engine. Titles and bodies use i18n keys resolved at display time. */
 export const NUDGE_RULES: SafetyRule[] = [

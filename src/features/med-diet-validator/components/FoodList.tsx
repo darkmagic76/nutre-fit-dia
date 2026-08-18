@@ -1,6 +1,6 @@
 import { useT } from '@shared/i18n';
 import { useFoodName } from '@shared/hooks/useFoodName';
-import type { Food } from '@shared/domain';
+import type { Food } from '@domain/food';
 
 interface FoodListProps {
   foods: Food[];

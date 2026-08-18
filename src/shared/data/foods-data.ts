@@ -1,4 +1,4 @@
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 
 export const foodsRaw = [
   {

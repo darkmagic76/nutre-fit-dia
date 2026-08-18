@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useActivityStore } from './activityStore';
 import { z } from 'zod';
-import type { ActivityEntry } from '@shared/domain/activity';
+import type { ActivityEntry } from '@domain/activity';
 
 // --- Zod schema for persisted state (structural integrity only) ---
 const ActivityStateSchema = z.object({

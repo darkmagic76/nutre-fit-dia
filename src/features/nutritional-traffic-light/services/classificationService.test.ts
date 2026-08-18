@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { classifyFood, classifyFoodWithReasons } from './classificationService';
-import { TrafficLightColor, FoodCategory } from '@shared/domain';
+import { TrafficLightColor } from '@domain/trafficLight';
+import { FoodCategory } from '@domain/foodCategory';
 import { foodsById } from '@shared/data/foods';
 import { makeFood } from '@/test/fixtures';
 import { Seasonality, Proximity, PackagingLevel } from '@domain/sustainability';
