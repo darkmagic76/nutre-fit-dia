@@ -14,7 +14,7 @@ import { isRestrictionCandidate } from './imc';
 
 export type CaloricTargetInput = UserMetrics;
 
-// Diagnosis-age modifier brackets per FR-4.1 phenotypic filtering
+// Diagnosis-age modifier brackets (Internal design decision for phenotypic scaling — no clinical source)
 const DIAGNOSIS_AGE_EARLY_THRESHOLD = 40;
 const DIAGNOSIS_AGE_LATE_THRESHOLD = 60;
 const DEFICIT_MODIFIER_EARLY = 1.0;
@@ -47,6 +47,7 @@ function bmrMifflinStJeor({ weight, height, age, gender }: UserMetrics): number 
   return Math.round(gender === 'male' ? base + MSJ_MALE_OFFSET : base - MSJ_FEMALE_OFFSET);
 }
 
+// External clinical consensus (not in AESAN/SNS docs) — widely used minimum for safe caloric restriction
 const SAFETY_FLOOR = 1200;
 /** PREDIMED-Plus intensive intervention: 600 kcal daily deficit */
 const PREDIMED_PLUS_DEFICIT_KCAL = 600;

@@ -71,7 +71,7 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
   },
   [FoodCategory.FISH]: {
     min: 3,
-    max: 7,
+    max: 7, // Internal design decision — AESAN 2022 specifies ≥3/week with no maximum
     unit: 'week',
   },
   [FoodCategory.EGGS]: {
@@ -277,18 +277,19 @@ export function validateWeeklyRations(counts: CountByCategory): RationValidation
 /**
  * AESAN 2022 grammed portion standards per food category (pág. 52).
  * Each category has a valid gram range for one ration.
+ * Corrected 2026-08-21: meat 150→125g, fish 200→150g, eggs 50-100→53-63g, oil 15→10ml.
  */
 export const AESAN_GRAM_STANDARDS: Record<FoodCategoryType, { min: number; max: number }> = {
   [FoodCategory.CEREALS]: { min: 40, max: 60 },
   [FoodCategory.VEGETABLES]: { min: 150, max: 200 },
   [FoodCategory.FRUITS]: { min: 120, max: 200 },
-  [FoodCategory.OLIVE_OIL]: { min: 10, max: 15 },
+  [FoodCategory.OLIVE_OIL]: { min: 10, max: 10 }, // AESAN p.1501: 10 ml (1 cucharada sopera)
   [FoodCategory.DAIRY]: { min: 200, max: 250 },
   [FoodCategory.LEGUMES]: { min: 50, max: 60 },
-  [FoodCategory.FISH]: { min: 150, max: 200 },
-  [FoodCategory.EGGS]: { min: 50, max: 100 },
-  [FoodCategory.WHITE_MEAT]: { min: 100, max: 150 },
-  [FoodCategory.RED_MEAT]: { min: 100, max: 150 },
+  [FoodCategory.FISH]: { min: 125, max: 150 }, // AESAN p.1479: 125-150 g
+  [FoodCategory.EGGS]: { min: 53, max: 63 }, // AESAN p.1483: 53-63 g (1 huevo mediano)
+  [FoodCategory.WHITE_MEAT]: { min: 100, max: 125 }, // AESAN p.1493: 100-125 g
+  [FoodCategory.RED_MEAT]: { min: 100, max: 125 }, // AESAN p.1493: 100-125 g
   [FoodCategory.WATER]: { min: 200, max: 250 },
   [FoodCategory.NUTS]: { min: 20, max: 30 },
   [FoodCategory.TUBERS]: { min: 150, max: 200 },
