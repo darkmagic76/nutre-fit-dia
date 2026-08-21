@@ -16,18 +16,18 @@ export const CEREAL_MIN_RATIONS = 3;
 /** Minimum vegetable rations before nudge triggers (PREDIMED-Plus) */
 export const VEGETABLE_MIN_RATIONS = 3;
 
-/** Afternoon hour after which vegetable deficit nudge fires — 2PM allows time to correct (Internal design decision — no clinical source) */
-export const VEGETABLE_NUDGE_HOUR_THRESHOLD = 14;
+/** Evening hour after which vegetable deficit nudge fires — 20:00 allows end-of-day correction (INFORME_ADR: "Sugerir receta si Count < 3 a las 20:00h") */
+export const VEGETABLE_NUDGE_HOUR_THRESHOLD = 20;
 
 /** Fruit minimum rations before deficit nudge triggers (SPECS_RF §5) */
 export const FRUIT_MIN_RATIONS = 2;
 
-/** Minimum water rations before hydration nudge fires (Internal design decision — no clinical source) */
+/** Minimum water rations before hydration nudge fires (INFORME_ADR / SPECS_TECH §5: 1.5-2L = 4-8 vasos daily) */
 export const WATER_MIN_RATIONS = 4;
 
 // ─── Behavioral thresholds ───
 
-/** Animal protein rations above this triggers dairy/calcium nudge (Internal design decision — no clinical source) */
+/** Animal protein rations above this triggers dairy/calcium nudge (INFORME_ADR: "Si Animal_Protein > 2, sugerir fuente calcio vegetal") */
 export const ANIMAL_PROTEIN_NUDGE_THRESHOLD = 2;
 
 /** Glucose mg/dL threshold for hyperglycemia nudge (ADA glycemic targets) */

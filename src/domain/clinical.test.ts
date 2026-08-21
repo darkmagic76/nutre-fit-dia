@@ -36,25 +36,19 @@ describe('clinical constants — source attribution integrity', () => {
   const clinicalSource = readSourceFile(CLINICAL_TS);
 
   describe('invented constants re-labeled as internal design', () => {
-    it('VEGETABLE_NUDGE_HOUR_THRESHOLD comment does NOT claim "Clinical protocol"', () => {
-      expect(clinicalSource).not.toMatch(/Clinical protocol[\s\S]*?VEGETABLE_NUDGE_HOUR_THRESHOLD/);
-      expect(clinicalSource).toMatch(
-        /Internal design decision[\s\S]*?VEGETABLE_NUDGE_HOUR_THRESHOLD/,
-      );
+    it('VEGETABLE_NUDGE_HOUR_THRESHOLD cites INFORME_ADR (20:00h)', () => {
+      expect(clinicalSource).toMatch(/INFORME_ADR[\s\S]*?VEGETABLE_NUDGE_HOUR_THRESHOLD/);
+      expect(clinicalSource).toMatch(/20:00/);
     });
 
-    it('WATER_MIN_RATIONS comment does NOT claim "WHO hydration guidelines"', () => {
-      expect(clinicalSource).not.toMatch(/WHO hydration[\s\S]*?WATER_MIN_RATIONS/);
-      expect(clinicalSource).toMatch(/Internal design decision[\s\S]*?WATER_MIN_RATIONS/);
+    it('WATER_MIN_RATIONS cites INFORME_ADR / SPECS_TECH (4-8 vasos)', () => {
+      expect(clinicalSource).toMatch(/INFORME_ADR[\s\S]*?WATER_MIN_RATIONS/);
+      expect(clinicalSource).toMatch(/4-8 vasos/);
     });
 
-    it('ANIMAL_PROTEIN_NUDGE_THRESHOLD comment does NOT claim "PREDIMED-Plus protein"', () => {
-      expect(clinicalSource).not.toMatch(
-        /PREDIMED-Plus protein[\s\S]*?ANIMAL_PROTEIN_NUDGE_THRESHOLD/,
-      );
-      expect(clinicalSource).toMatch(
-        /Internal design decision[\s\S]*?ANIMAL_PROTEIN_NUDGE_THRESHOLD/,
-      );
+    it('ANIMAL_PROTEIN_NUDGE_THRESHOLD cites INFORME_ADR (Animal_Protein > 2)', () => {
+      expect(clinicalSource).toMatch(/INFORME_ADR[\s\S]*?ANIMAL_PROTEIN_NUDGE_THRESHOLD/);
+      expect(clinicalSource).toMatch(/Animal_Protein > 2/);
     });
 
     it('LEGUMES_CHECK_DAY_THRESHOLD comment does NOT claim "PREDIMED-Plus"', () => {
