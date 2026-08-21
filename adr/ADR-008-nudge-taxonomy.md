@@ -115,7 +115,7 @@ Examples from INFORME_ADR:
 ### TypeScript Model
 
 ```ts
-// src/shared/domain/notification.ts
+// src/domain/nudgeTypes.ts
 
 export const NotificationType = {
   SAFETY_ALERT: 'safety_alert',
@@ -150,7 +150,7 @@ export interface SystemNotification {
 ### NudgeEngine Contract
 
 ```ts
-// src/features/nudge-engine/services/nudgeEngine.ts
+// src/domain/nudgeEvaluator.ts
 
 interface NudgeRule {
   id: string;
