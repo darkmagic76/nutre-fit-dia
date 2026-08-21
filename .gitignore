@@ -46,7 +46,9 @@ dev-sw.js
 /playwright/.cache/
 
 # OpenCode temporary files
-.opencode/
+.opencode/node_modules/
 
 # Outdated documentation (pending update)
 docs/domain/DDD-INTRO.md
+# Local Pi runtime state
+.atl/

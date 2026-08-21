@@ -10,9 +10,10 @@ echo "🔍 Running Quality Gates (pre-commit)..."
 # If receipt-driven development is enabled, verify a review receipt exists
 # for staged changes before allowing the commit.
 REVIEW_STATUS=$(gentle-ai review mode status --cwd "$(git rev-parse --show-toplevel)" 2>&1)
-REVIEW_MODE=$(echo "$REVIEW_STATUS" | grep -oP 'global:\s+\K\S+' || echo "unset")
+# Check if the effective mode is "off" (either global or clone-local)
+EFFECTIVE_MODE=$(echo "$REVIEW_STATUS" | grep -oP 'receipt-driven development:\s+\K\S+' || echo "unknown")
 
-if [ "$REVIEW_MODE" = "on" ]; then
+if [ "$EFFECTIVE_MODE" = "on" ]; then
     echo "📋 RDD enabled — verifying review receipt..."
     
     # Bootstrapping exception: allow commits that only modify the hook itself
