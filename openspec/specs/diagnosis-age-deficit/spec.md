@@ -2,7 +2,9 @@
 
 ## Purpose
 
-FR-4.1 phenotypic filtering: use `diagnosisAge` to adjust caloric restriction aggressiveness by scaling the PREDIMED-Plus 600 kcal deficit.
+Internal design decision for phenotypic scaling: use `diagnosisAge` to adjust caloric restriction aggressiveness by scaling the PREDIMED-Plus 600 kcal deficit.
+
+> **Note**: FR-4.1 (INFORME_ADR) introduces the concept of diagnosis-age-based personalization but does not define the specific modifier values (40, 60, 1.0, 0.85, 0.7). These are internal design decisions.
 
 ## Requirements
 

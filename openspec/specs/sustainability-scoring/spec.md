@@ -1,7 +1,7 @@
 # Sustainability Scoring Specification
 
 **ADRs**: ADR-007 (scoring algorithm, weight distribution)
-**Sources**: AESAN 2022 (carbon thresholds), EAT-Lancet (planetary boundaries)
+**Sources**: Poore & Nemecek (2018), EAT-Lancet (planetary boundaries)
 
 ## Purpose
 
@@ -22,7 +22,9 @@ The system SHALL expose `Seasonality`, `Proximity`, `PackagingLevel` enums and a
 
 ### Requirement: Carbon Footprint Categorization
 
-The system MUST map `food.carbonFootprint` (kg CO₂eq/kg) to a category score using AESAN 2022 thresholds. Missing values MUST yield a neutral 50.
+The system MUST map `food.carbonFootprint` (kg CO₂eq/kg) to a category score using Poore & Nemecek (2018) emission data. Missing values MUST yield a neutral 50.
+
+> **Note**: AESAN 2022 does not publish numerical CO₂eq values — only qualitative assessments. Thresholds are derived from Poore & Nemecek (2018) and EAT-Lancet planetary boundaries.
 
 | Category | Threshold | Score |
 |----------|-----------|-------|

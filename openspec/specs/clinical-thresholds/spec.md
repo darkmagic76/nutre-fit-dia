@@ -27,7 +27,7 @@ The following nutritional minimums MUST be centralized — values unchanged, loc
 | CEREAL_MIN_RATIONS | 3 | AESAN 2022 |
 | VEGETABLE_MIN_RATIONS | 3 | PREDIMED-Plus |
 | FRUIT_MIN_RATIONS | 2 | SPECS_RF §5 |
-| WATER_MIN_RATIONS | 4 | WHO hydration |
+| WATER_MIN_RATIONS | 4 | INFORME_ADR / SPECS_TECH §5: 4-8 vasos diarios |
 
 #### Scenario: Nutritional thresholds available to all consumers
 
@@ -41,13 +41,13 @@ The following behavioral thresholds MUST be centralized:
 
 | Constant | Value | Source |
 |---|---|---|
-| ANIMAL_PROTEIN_NUDGE_THRESHOLD | 2 | PREDIMED-Plus protein guidelines |
+| ANIMAL_PROTEIN_NUDGE_THRESHOLD | 2 | INFORME_ADR: Si Animal_Protein > 2, sugerir fuente calcio vegetal |
 | HYPERGLYCEMIA_THRESHOLD_MG_DL | 180 | ADA glycemic targets |
-| LEGUMES_CHECK_DAY_THRESHOLD | 4 | PREDIMED-Plus (Thu) |
-| LEGUMES_MIN_WEEKLY_CHECK | 1 | PREDIMED-Plus legume guidance |
-| FISH_EXCESS_THRESHOLD | 7 | AESAN 2022 |
+| LEGUMES_CHECK_DAY_THRESHOLD | 4 | Internal design decision (day-of-week index) |
+| LEGUMES_MIN_WEEKLY_CHECK | 1 | Internal design decision (nudge trigger, not clinical minimum) |
+| FISH_EXCESS_THRESHOLD | 7 | Internal design decision (AESAN specifies ≥3/week with no maximum) |
 | WEEKLY_ACTIVITY_MINUTES_TARGET | 150 | WHO physical activity |
-| VEGETABLE_NUDGE_HOUR_THRESHOLD | 14 | Clinical protocol (2PM) |
+| VEGETABLE_NUDGE_HOUR_THRESHOLD | 20 | INFORME_ADR: Sugerir receta si Count < 3 a las 20:00h |
 
 ### REQ-SUSTAINABILITY-THRESHOLDS
 
@@ -56,7 +56,7 @@ The following sustainability thresholds MUST be centralized:
 | Constant | Value | Source |
 |---|---|---|
 | MAX_ALTERNATIVES_TO_SHOW | 3 | UX constraint |
-| LOW_ENVIRONMENTAL_SCORE_THRESHOLD | 30 | Carbon footprint threshold |
+| LOW_ENVIRONMENTAL_SCORE_THRESHOLD | 30 | Internal design decision |
 
 ### REQ-CEREAL-RESTRICTED-MAX-PRESERVED
 
