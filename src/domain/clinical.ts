@@ -13,6 +13,9 @@ export const CEREAL_RESTRICTED_MAX = 4;
 /** Cereal minimum rations before deficit nudge triggers (AESAN 2022 / INFORME_ADR FR-2) */
 export const CEREAL_MIN_RATIONS = 3;
 
+/** Cereal target rations per day for normal (non-restricted) plan generation (Internal design decision — midpoint of AESAN 3-6 range) */
+export const CEREAL_TARGET_NORMAL = 5;
+
 /** Minimum vegetable rations before nudge triggers (PREDIMED-Plus) */
 export const VEGETABLE_MIN_RATIONS = 3;
 

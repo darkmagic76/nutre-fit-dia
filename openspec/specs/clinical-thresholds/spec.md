@@ -16,7 +16,7 @@ All threshold constants MUST reside in `src/domain/clinical.ts`. No module-scope
 
 - GIVEN the codebase
 - WHEN a reviewer opens `src/domain/clinical.ts`
-- THEN all 14 thresholds are visible with source citations
+- THEN all 17 thresholds are visible with source citations
 
 ### REQ-NUTRITIONAL-THRESHOLDS
 
@@ -25,6 +25,7 @@ The following nutritional minimums MUST be centralized — values unchanged, loc
 | Constant | Value | Source |
 |---|---|---|
 | CEREAL_MIN_RATIONS | 3 | AESAN 2022 |
+| CEREAL_TARGET_NORMAL | 5 | Internal design decision (midpoint of AESAN 3-6 range) |
 | VEGETABLE_MIN_RATIONS | 3 | PREDIMED-Plus |
 | FRUIT_MIN_RATIONS | 2 | SPECS_RF §5 |
 | WATER_MIN_RATIONS | 4 | INFORME_ADR / SPECS_TECH §5: 4-8 vasos diarios |
@@ -33,7 +34,7 @@ The following nutritional minimums MUST be centralized — values unchanged, loc
 
 - GIVEN nudge-engine and daily-violations features
 - WHEN they import from `@domain/clinical`
-- THEN all 4 nutritional thresholds resolve at compile time
+- THEN all 5 nutritional thresholds resolve at compile time
 
 ### REQ-BEHAVIORAL-THRESHOLDS
 
@@ -65,18 +66,8 @@ The following sustainability thresholds MUST be centralized:
 #### Scenario: Existing constant untouched
 
 - GIVEN clinical.ts currently exports CEREAL_RESTRICTED_MAX=4
-- WHEN 13 new constants are appended
+- WHEN additional constants are appended
 - THEN CEREAL_RESTRICTED_MAX retains value 4 and existing import path
-
-### REQ-VEGETABLE-NUDGE-REEXPORT
-
-`VEGETABLE_NUDGE_HOUR_THRESHOLD` MUST be re-exported from `@shared/nudge/index.ts` to preserve the `REQ-VEGETABLE-NUDGE-TIMEGATE-CONSTANT` contract (openspec/specs/vegetable-nudge-timegate).
-
-#### Scenario: Import contract preserved
-
-- GIVEN DailyViolations.test.tsx imports from `@shared/nudge`
-- WHEN VEGETABLE_NUDGE_HOUR_THRESHOLD moves from rules.ts to clinical.ts
-- THEN `import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '@shared/nudge'` still resolves
 
 ### REQ-CLINICAL-IMPORT-SOURCE
 

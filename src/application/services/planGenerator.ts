@@ -1,7 +1,7 @@
 import type { Food } from '@domain/food';
 import { FoodCategory } from '@domain/foodCategory';
 import { foods } from '@shared/data/foods';
-import { CEREAL_RESTRICTED_MAX } from '@domain/clinical';
+import { CEREAL_RESTRICTED_MAX, CEREAL_TARGET_NORMAL } from '@domain/clinical';
 import {
   validateRations,
   validateWeeklyRations,
@@ -23,7 +23,6 @@ import {
 const DAYS_IN_WEEK = 7;
 const BASE_MEAL_COUNT = 3; // breakfast + lunch + dinner
 const CEREAL_NON_DINNER_RATIONS = 3; // breakfast(1) + lunch(2)
-const CEREAL_DAILY_NORMAL = 5;
 
 // ---- Refactored: buildDailyTemplate → buildMealSlots + assignFoodsToMeals ----
 
@@ -35,7 +34,7 @@ export function buildMealSlots(
   mealCount: number,
   caloricRestrictionActive = false,
 ): TemplateSlot[] {
-  const cerealMax = caloricRestrictionActive ? CEREAL_RESTRICTED_MAX : CEREAL_DAILY_NORMAL;
+  const cerealMax = caloricRestrictionActive ? CEREAL_RESTRICTED_MAX : CEREAL_TARGET_NORMAL;
   const cerealDinner = Math.max(cerealMax - CEREAL_NON_DINNER_RATIONS, 0); // 2 normally, 1 when restricted
 
   const baseSlots: TemplateSlot[] = [
