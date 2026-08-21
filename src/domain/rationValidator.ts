@@ -18,7 +18,7 @@ import type { Food } from './food';
  *    with AESAN 2022 clinical ration limits. This is *clinical rule validation*,
  *    not input validation.
  *
- * 2. **Form/domain validation** (`src/shared/errors.ts` \{
+ * 2. **Form/domain validation** (`src/domain/errors.ts` \{
  *    @link ValidationError}): user-input validation failures (missing required
  *    fields, out-of-range values, invalid profile data). Raised when raw user input
  *    fails structural checks before any domain processing.

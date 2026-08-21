@@ -15,9 +15,9 @@ import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '../../../domain/clinical';
  * pre-computed `RationValidationResult` data and renders it.
  *
  * Distinct from:
- * - **Ration-rule checks** (`src/shared/services/rationValidator.ts`): the clinical
+ * - **Ration-rule checks** (`src/domain/rationValidator.ts`): the clinical
  *   logic that computes whether AESAN 2022 limits are met
- * - **Form/input validation** (`src/shared/errors.ts` {@link ValidationError}):
+ * - **Form/input validation** (`src/domain/errors.ts` {@link ValidationError}):
  *   structural checks on raw user input before domain processing
  *
  * "Violations" here = "breaches detected by the validator, now shown to the user."

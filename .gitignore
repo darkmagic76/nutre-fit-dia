@@ -46,7 +46,8 @@ dev-sw.js
 /playwright/.cache/
 
 # OpenCode temporary files
-.opencode/node_modules/
+.opencode/
+.pi/
 
 # Outdated documentation (pending update)
 docs/domain/DDD-INTRO.md
