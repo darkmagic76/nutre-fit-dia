@@ -122,7 +122,7 @@ The EAT-Lancet Commission recommends ≤ 98g/week of red meat (beef, lamb, pork)
 - ✅ `Nudge Engine` can trigger "fuente calcio vegetal" when `Animal_Protein > 2` because it can count animal sources
 - ✅ Substitution service uses canonical category gate instead of carbon heuristic
 - ✅ SPECS_RF and SPECS_TECH views can be derived via mapping, not by mutilating the domain model
-- ❌ `classificationService.ts` must be built on these 11 categories — more work upfront than 5, but avoids rework
+- ❌ `classificationService.ts` must be built on these 13 categories — more work upfront than 5, but avoids rework
 - ❌ SPECS_RF UI will need a display mapping layer (e.g., `CEREALS` and `LEGUMES` visible as separate; `DAIRY`, `EGGS`, `WHITE_MEAT`, `RED_MEAT` visible under "Otras fuentes proteicas" or similar)
 
 ## Compliance

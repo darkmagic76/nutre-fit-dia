@@ -1,6 +1,6 @@
 # TASKS.md — Nutri-Fit-Día: Features by Functional Criticality
 
-Generated: 2026-07-17 | Updated: 2026-08-10 | Branch: `develop` | Tests: 818 ✅ (80 files) | Lint: 0 (oxlint) | Typecheck: clean | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/ | ADRs: 12
+Generated: 2026-07-17 | Updated: 2026-08-21 | Branch: `develop` | Tests: 933 ✅ (83 files) | Lint: 0 (oxlint) | Typecheck: clean | Formatter: Prettier | HTTP dev ✅ | CI/CD: ✅ | i18n: ✅ ES/EN | Deploy: https://darkmagic76.github.io/nutre-fit-dia/ | ADRs: 12
 
 ---
 
@@ -12,7 +12,7 @@ Generated: 2026-07-17 | Updated: 2026-08-10 | Branch: `develop` | Tests: 818 ✅
 | Metabolic Tracker               | ✅ Implemented (FR-4.2, RF-02) — caloricTargetService with conditional deficit BMI > 25                                                                                                                                                              |
 | Med Diet Validator              | ✅ Implemented — rationValidator cross-feature, DailyLog with Container/Presentational                                                                                                                                                               |
 | Recipe Engine                   | ✅ Implemented — planGenerator + PlanContainer, sustainability badges, 3-6 meal fractionation (M7)                                                                                                                                                   |
-| Domain Types                    | ✅ Implemented — FoodCategory (12 categories incl. NUTS), TrafficLight, Notification, Zod schemas, domain errors                                                                                                                                     |
+| Domain Types                    | ✅ Implemented — FoodCategory (13 categories incl. NUTS + TUBERS), TrafficLight, Notification, Zod schemas, domain errors                                                                                                                            |
 | UI Primitives                   | ✅ Implemented — 7 components with unit tests                                                                                                                                                                                                        |
 | Activity Tracker                | ✅ Implemented (H1) — useActivityTracker, compliance %, streak, dashboard tab                                                                                                                                                                        |
 | Nudge Engine                    | ✅ Complete (H2+H6+H7) — 21 rules (incl. NUTS_DEFICIT + NUTS_EXCESS), CooldownTracker, NudgeStore, NudgePanel UI with badge + history                                                                                                                |

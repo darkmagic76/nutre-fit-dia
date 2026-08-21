@@ -61,7 +61,7 @@ src/
 ├── domain/                              # Pure TypeScript + zod — entities, value objects, domain services
 │   ├── index.ts                         # Barrel: re-exports everything
 │   ├── enum.ts                          # defineEnum, ValuesOf (moved from shared/utils)
-│   ├── food.ts + foodCategory.ts        # Food entity, FoodCategory enum (11 AESAN groups), Zod schemas
+│   ├── food.ts + foodCategory.ts        # Food entity, FoodCategory enum (13 AESAN groups), Zod schemas
 │   ├── metrics.ts                       # UserMetrics, UserProfile, UserMetricsFormState
 │   ├── activity.ts                      # ActivityEntry, WeeklyGoal (WHO 150-300 min)
 │   ├── notification.ts                  # NotificationType, NotificationSeverity, SystemNotification
@@ -148,7 +148,7 @@ src/
 │   │   ├── ContainerContext.tsx         # React Context for DI
 │   │   └── useContainer.ts              # Hook to inject dependencies
 │   ├── data/
-│   │   ├── foods.ts                     # 39-food AESAN catalog (foods-data.ts)
+│   │   ├── foods.ts                     # 52-food AESAN catalog (foods-data.ts)
 │   │   └── sugarAliases.ts              # Canonical sugar alias list (moved from features)
 │   └── sustainability/                  # Barrel re-exporting from domain/sustainability
 │
@@ -189,7 +189,7 @@ Core principles and development rules live in dedicated, modular files — loade
 1. **Domain Modeling** — Strict types: metabolic profiles, AESAN portions, food types, notifications
 2. **Domain Services & Containers** — erMedDiet logic, Container/Presentational split, Zustand stores
 3. **ADR Scaffolding** — ScannerAdapter, Activity Tracker, Sustainability, Nudge Engine
-4. **Tests & Error Handling** — 818 tests (80 files), 80%+ coverage, i18n ES/EN, ErrorBoundary
+4. **Tests & Error Handling** — 933 tests (83 files), 80%+ coverage, i18n ES/EN, ErrorBoundary
 5. **E2E & Accessibility** — Playwright smoke tests, WCAG 2.1 AA compliance
 6. **Clean Architecture Refactor** (ADR-012) — Domain/Application/Infrastructure layers, ports + adapters, Composition Root, DI via `useContainer()`
 
@@ -237,7 +237,7 @@ Push/PR → ✅ Quality Gate → 🏗️ Build
               ├ format:check       ├ vite build
               ├ lint (oxlint)      └ dist/ artifact
               ├ typecheck
-              └ unit tests (818)
+               └ unit tests (933)
 ```
 
 **Husky hooks** (local):
