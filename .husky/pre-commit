@@ -6,6 +6,42 @@ export PATH="$HOME/.local/share/pnpm:$PATH"
 
 echo "🔍 Running Quality Gates (pre-commit)..."
 
+# ─── RDD Receipt Verification ───
+# If receipt-driven development is enabled, verify a review receipt exists
+# for staged changes before allowing the commit.
+REVIEW_STATUS=$(gentle-ai review mode status --cwd "$(git rev-parse --show-toplevel)" 2>&1)
+REVIEW_MODE=$(echo "$REVIEW_STATUS" | grep -oP 'global:\s+\K\S+' || echo "unset")
+
+if [ "$REVIEW_MODE" = "on" ]; then
+    echo "📋 RDD enabled — verifying review receipt..."
+    
+    # Bootstrapping exception: allow commits that only modify the hook itself
+    STAGED_FILES=$(git diff --cached --name-only)
+    if [ "$STAGED_FILES" = ".husky/pre-commit" ]; then
+        echo "⚠️  Bootstrapping: allowing hook modification commit"
+    else
+        RECEIPT_STATUS=$(gentle-ai review status --cwd "$(git rev-parse --show-toplevel)" --contract gentle-ai.review-integration/v2 --agent opencode --next-transition 2>&1)
+        ACTION=$(echo "$RECEIPT_STATUS" | grep -oP '"action":\s*"\K[^"]+' || echo "unknown")
+        RECEIPT_STATE=$(echo "$RECEIPT_STATUS" | grep -oP '"status":\s*"\K[^"]+' | head -1 || echo "unknown")
+        
+        if [ "$ACTION" = "start" ] && [ "$RECEIPT_STATE" != "allow" ]; then
+            echo "❌ RDD BLOCK: No review receipt found for staged changes."
+            echo ""
+            echo "Receipt-driven development is enabled. To commit, you must:"
+            echo "  1. Run: gentle-ai review status --cwd <repo> --contract gentle-ai.review-integration/v2 --agent opencode --next-transition"
+            echo "  2. Follow the review workflow (lenses → capture → finalize)"
+            echo "  3. Obtain a valid receipt before committing"
+            echo ""
+            echo "To temporarily disable RDD (not recommended):"
+            echo "  gentle-ai review mode disable --scope clone --cwd <repo>"
+            exit 1
+        fi
+        
+        echo "✅ Review receipt verified"
+    fi
+fi
+
+# ─── Standard Quality Gates ───
 pnpm quality || {
     echo "❌ Quality gates failed! Fix issues before committing."
     exit 1
