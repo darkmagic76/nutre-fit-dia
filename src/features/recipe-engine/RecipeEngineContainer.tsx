@@ -1,14 +1,18 @@
 import { useT } from '@shared/i18n';
 import { useFoodName } from '@shared/hooks/useFoodName';
-import { usePlanStore } from './store/planStore';
-import { useTrackerStore } from '@infrastructure/stores';
+import { useRecipeEngineState } from './hooks/useRecipeEngineState';
 import { RecipeEngineView } from './RecipeEngineView';
 
 export function RecipeEngineContainer() {
   const t = useT();
-  const getFoodName = useFoodName;
-  const { weeklyPlan, generatePlan } = usePlanStore();
-  const { caloricRestrictionActive, setRestrictionActive, caloricTarget } = useTrackerStore();
+  const getFoodName = useFoodName();
+  const {
+    weeklyPlan,
+    generatePlan,
+    caloricRestrictionActive,
+    setRestrictionActive,
+    caloricTarget,
+  } = useRecipeEngineState();
 
   return (
     <RecipeEngineView

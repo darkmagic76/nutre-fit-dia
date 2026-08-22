@@ -1,12 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { buildNudgeContext, evaluateRules } from '@shared/nudge/engine';
-import { CooldownTracker } from '@shared/nudge';
-import type { CooldownOps } from '@shared/nudge';
+import { buildNudgeContext } from '@domain/nudgeContextBuilder';
+import { evaluateRules } from '@domain/nudgeEvaluator';
+import { CooldownTracker } from '@domain/cooldownTracker';
+import type { CooldownOps } from '@domain/cooldownTracker';
 import { NUDGE_RULES } from '../../infrastructure/nudge/rules';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 import { makeFood } from '@/test/fixtures';
 import { defaultRationCounts } from '../../domain/rationValidator';
-import type { NudgeContext, ContextInput } from '@shared/nudge';
+import type { NudgeContext, ContextInput } from '@domain/nudgeContext';
 
 const cerealFood = makeFood({
   id: 'c1',

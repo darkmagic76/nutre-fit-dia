@@ -25,14 +25,13 @@ The tension: sustainability is **domain logic** (EAT-Lancet, AESAN 2022, ODS 203
 
 ## Decision
 
-### Placement: `src/shared/sustainability/`
+### Placement: `src/domain/sustainability/`
 
-Sustainability scoring lives in `shared/` because it is consumed by multiple features, but it is structured as a **domain module** — not a utility bag:
+Sustainability scoring lives in `domain/` as a domain module — not a utility bag:
 
 ```
-src/shared/sustainability/
+src/domain/sustainability/
 ├── types.ts          — EnvironmentalScore, Seasonality, Proximity, PackagingLevel
-├── schemas.ts        — Zod schemas for runtime validation
 ├── constants.ts      — Reference data from AESAN 2022 / EAT-Lancet
 ├── scoringService.ts — computeEnvironmentalScore(food): EnvironmentalScore
 ├── substitutionService.ts — suggestAlternative(food): Food[]
@@ -82,7 +81,7 @@ export type PackagingLevel = 'none' | 'minimal' | 'standard' | 'excessive';
 The comparative ratios from SPECS_TECH §7 are encoded as constants, not hardcoded in scoring logic:
 
 ```ts
-// src/shared/sustainability/constants.ts
+// src/domain/sustainability/constants.ts
 export const PROTEIN_EMISSION_RATIOS = {
   legumes: 1, // baseline (lowest)
   eggs: 6, // 6× legumes
@@ -123,8 +122,12 @@ function computeEnvironmentalScore(food: Food): EnvironmentalScore {
   const proximity = getProximity(food, userRegion);
 
   // Weighted composite (0–100)
+  // NOTE: the 50/30/20 weights are an internal design decision, NOT published by
+  // AESAN. AESAN 2022 qualitatively prioritises reducing environmental impact but
+  // does not publish numeric CO₂eq values or weightings. Carbon-footprint figures
+  // derive from Poore & Nemecek (2018) / EAT-Lancet (ADR-014 slice 3 — C3).
   const overallScore = round(
-    carbon.weight * 0.5 + // Carbon dominates (AESAN 2022 priority)
+    carbon.weight * 0.5 + // Carbon weighted highest (design decision)
       season.weight * 0.3 + // Seasonality second
       proximity.weight * 0.2, // Proximity third
   );
@@ -167,7 +170,7 @@ Weights are initial defaults, not hardcoded magic numbers — they come from a c
 - ✅ Emission ratios from SPECS_TECH §7 are encoded as auditable constants, not magic numbers
 - ✅ Scoring weights are configurable — clinical team can tune without touching algorithm code
 - ✅ `substitutionService` enables SPECS_RF "Sustitución Inteligente" and SPECS_TECH "IF Red_Meat THEN Suggest Legume or BlueFish"
-- ✅ All 4+ consuming features reference a single `src/shared/sustainability/` module — no duplication
+- ✅ All 4+ consuming features reference a single `src/domain/sustainability/` module — no duplication
 - ❌ V1 carbon data is static reference values, not dynamic lifecycle assessment — acceptable for TFM, insufficient for production
 - ❌ Water footprint and packaging deferred to V2 — SPECS_RF mentions them but data availability is poor
 - ❌ `overallScore` weighting is a clinical decision, not purely technical — defaults must be reviewed by a dietitian before production

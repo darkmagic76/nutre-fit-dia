@@ -1,4 +1,4 @@
-import type { Food } from '@shared/domain';
+import type { Food } from '@domain/food';
 
 export function ZeroWasteBadges({ food }: { food: Food }) {
   return (

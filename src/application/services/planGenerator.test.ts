@@ -51,6 +51,32 @@ describe('planGenerator', () => {
       // 7 days × 5 cereals = 35
       expect(counts[FoodCategory.CEREALS]).toBe(35);
     });
+
+    it('weekly plan includes exactly 2 TUBERS slots', () => {
+      const plan = generateWeeklyPlan(false);
+      const counts = getWeeklyCounts(plan);
+      expect(counts[FoodCategory.TUBERS]).toBe(2);
+    });
+
+    it('TUBERS slots are on different days', () => {
+      const plan = generateWeeklyPlan(false);
+      // At least 2 different days should have tuber entries
+      const daysWithTubers = plan.days.filter((d) =>
+        d.entries.some((e) => e.food.category === FoodCategory.TUBERS),
+      );
+      expect(daysWithTubers.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('pickSustainableFood(TUBERS) returns a non-processed tuber food', () => {
+      const plan = generateWeeklyPlan(false);
+      const tuberEntries = plan.days.flatMap((d) =>
+        d.entries.filter((e) => e.food.category === FoodCategory.TUBERS),
+      );
+      expect(tuberEntries.length).toBeGreaterThan(0);
+      for (const entry of tuberEntries) {
+        expect(entry.food.isProcessed).toBe(false);
+      }
+    });
   });
 });
 

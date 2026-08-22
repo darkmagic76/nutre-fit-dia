@@ -13,7 +13,7 @@ Project is at release v1.0.3 (580 tests, PWA offline, complete documentation). N
 | Aspect           | Reality                                                                                     |
 | ---------------- | ------------------------------------------------------------------------------------------- |
 | Supabase in code | Zero — not in `package.json`, not imported, no client initialized                           |
-| Data storage     | Static in-memory catalog (`src/shared/data/foods-data.ts`, 34 foods) + Zustand/localStorage |
+| Data storage     | Static in-memory catalog (`src/shared/data/foods-data.ts`, 52 foods) + Zustand/localStorage |
 | Authentication   | None — single-device, local-only                                                            |
 | Deployment       | GitHub Actions CI only (quality gate, no deploy step)                                       |
 | Build output     | `dist/` — pure static HTML + JS + CSS + SW                                                  |

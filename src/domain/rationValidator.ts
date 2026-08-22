@@ -1,4 +1,5 @@
-import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES } from './foodCategory';
+import { z } from 'zod';
+import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES, FoodCategorySchema } from './foodCategory';
 import { CEREAL_RESTRICTED_MAX, NUTS_MAX_DAILY } from './clinical';
 import type { FoodCategory as FoodCategoryType } from './foodCategory';
 import type { Food } from './food';
@@ -18,7 +19,7 @@ import type { Food } from './food';
  *    with AESAN 2022 clinical ration limits. This is *clinical rule validation*,
  *    not input validation.
  *
- * 2. **Form/domain validation** (`src/shared/errors.ts` \{
+ * 2. **Form/domain validation** (`src/domain/errors.ts` \{
  *    @link ValidationError}): user-input validation failures (missing required
  *    fields, out-of-range values, invalid profile data). Raised when raw user input
  *    fails structural checks before any domain processing.
@@ -70,7 +71,9 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
     unit: 'week',
   },
   [FoodCategory.FISH]: {
-    min: 3,
+    min: 3, // AESAN 2022: ≥3 servings/week (floor)
+    // max is a PRODUCT DECISION, NOT AESAN. AESAN sets no upper limit on fish.
+    // 7 (≈1/day) caps animal-protein balance only; see FISH_EXCESS_THRESHOLD.
     max: 7,
     unit: 'week',
   },
@@ -93,6 +96,10 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
   },
   [FoodCategory.NUTS]: {
     min: 3,
+    unit: 'week',
+  },
+  [FoodCategory.TUBERS]: {
+    max: 5,
     unit: 'week',
   },
 };
@@ -118,6 +125,29 @@ export interface RationValidationResult {
   animalProteinCount: number;
 }
 
+/**
+ * Runtime schemas for {@link RationViolation} and {@link RationValidationResult}.
+ *
+ * Single source of truth for structural validation when these values are
+ * rehydrated from persistence (ADR-014 slice 2 — replaces `z.any()` in
+ * planStore/logStore). Keep in sync with the interfaces above.
+ */
+export const RationViolationSchema = z.object({
+  category: FoodCategorySchema,
+  current: z.number(),
+  limit: z.number(),
+  direction: z.enum(['under', 'over']),
+  unit: z.enum(['day', 'week']),
+  message: z.string().optional(),
+  messageKey: z.literal('validation.crossRule.whiteMeatFish').optional(),
+});
+
+export const RationValidationResultSchema = z.object({
+  valid: z.boolean(),
+  violations: z.array(RationViolationSchema),
+  animalProteinCount: z.number(),
+});
+
 export interface CountByCategory {
   [FoodCategory.CEREALS]: number;
   [FoodCategory.VEGETABLES]: number;
@@ -131,6 +161,7 @@ export interface CountByCategory {
   [FoodCategory.RED_MEAT]: number;
   [FoodCategory.WATER]: number;
   [FoodCategory.NUTS]: number;
+  [FoodCategory.TUBERS]: number;
 }
 
 export function defaultRationCounts(): CountByCategory {
@@ -147,6 +178,7 @@ export function defaultRationCounts(): CountByCategory {
     [FoodCategory.RED_MEAT]: 0,
     [FoodCategory.WATER]: 0,
     [FoodCategory.NUTS]: 0,
+    [FoodCategory.TUBERS]: 0,
   };
 }
 
@@ -240,6 +272,7 @@ export function validateWeeklyRations(counts: CountByCategory): RationValidation
     FoodCategory.WHITE_MEAT,
     FoodCategory.RED_MEAT,
     FoodCategory.NUTS,
+    FoodCategory.TUBERS,
   ];
 
   for (const category of weeklyCategories) {
@@ -270,20 +303,22 @@ export function validateWeeklyRations(counts: CountByCategory): RationValidation
 /**
  * AESAN 2022 grammed portion standards per food category (pág. 52).
  * Each category has a valid gram range for one ration.
+ * Corrected 2026-08-21: meat 150→125g, fish 200→150g, eggs 50-100→53-63g, oil 15→10ml.
  */
 export const AESAN_GRAM_STANDARDS: Record<FoodCategoryType, { min: number; max: number }> = {
   [FoodCategory.CEREALS]: { min: 40, max: 60 },
   [FoodCategory.VEGETABLES]: { min: 150, max: 200 },
   [FoodCategory.FRUITS]: { min: 120, max: 200 },
-  [FoodCategory.OLIVE_OIL]: { min: 10, max: 15 },
+  [FoodCategory.OLIVE_OIL]: { min: 10, max: 10 }, // AESAN p.1501: 10 ml (1 cucharada sopera)
   [FoodCategory.DAIRY]: { min: 200, max: 250 },
   [FoodCategory.LEGUMES]: { min: 50, max: 60 },
-  [FoodCategory.FISH]: { min: 150, max: 200 },
-  [FoodCategory.EGGS]: { min: 50, max: 100 },
-  [FoodCategory.WHITE_MEAT]: { min: 100, max: 150 },
-  [FoodCategory.RED_MEAT]: { min: 100, max: 150 },
+  [FoodCategory.FISH]: { min: 125, max: 150 }, // AESAN p.1479: 125-150 g
+  [FoodCategory.EGGS]: { min: 53, max: 63 }, // AESAN p.1483: 53-63 g (1 huevo mediano)
+  [FoodCategory.WHITE_MEAT]: { min: 100, max: 125 }, // AESAN p.1493: 100-125 g
+  [FoodCategory.RED_MEAT]: { min: 100, max: 125 }, // AESAN p.1493: 100-125 g
   [FoodCategory.WATER]: { min: 200, max: 250 },
   [FoodCategory.NUTS]: { min: 20, max: 30 },
+  [FoodCategory.TUBERS]: { min: 150, max: 200 },
 };
 
 export type SafetyAlertSeverity = 'critical' | 'warning';
@@ -313,6 +348,9 @@ export function validateFoodPortions(foods: Food[]): SafetyAlert[] {
   const alerts: SafetyAlert[] = [];
 
   for (const food of foods) {
+    // Skip gram validation for cooked-preparation entries — AESAN standards are dry-weight only
+    if (food.preparationState === 'cooked') continue;
+
     const standard = AESAN_GRAM_STANDARDS[food.category];
     if (!standard) continue;
 

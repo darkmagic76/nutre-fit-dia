@@ -28,7 +28,18 @@ jobs:
 
       - run: pnpm quality
 
-      - run: pnpm build
+      # PR checks (and non-develop pushes) validate the production build.
+      - name: Build (verification)
+        if: github.ref != 'refs/heads/develop'
+        run: pnpm build
+
+      # Staging deploy needs the /staging/ sub-path so assets resolve
+      # under darkmagic76.github.io/nutre-fit-dia/staging/.
+      - name: Build (staging)
+        if: github.ref == 'refs/heads/develop'
+        run: pnpm build
+        env:
+          VITE_BASE_URL: /nutre-fit-dia/staging/
 
       - name: Deploy staging (develop)
         if: github.ref == 'refs/heads/develop'

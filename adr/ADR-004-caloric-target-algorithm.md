@@ -29,9 +29,9 @@ The modifier is applied **before** the 30% TDEE safety cap to preserve clinical 
 
 ## Decision
 
-Implement in `src/shared/services/caloricTargetService.ts`:
+Implement in `src/domain/caloricTargetService.ts`:
 
-> **Note (2026-07-22 amendment):** Originally located at `src/features/metabolic-tracker/services/`. Moved to `src/shared/services/` per Scope Rule (ADR-001) because `computeCaloricTarget()` is consumed by both the metabolic-tracker and recipe-engine features. The feature now imports from `@shared/services`.
+> **Note (2026-07-22 amendment):** Originally located at `src/features/metabolic-tracker/services/`. Moved to `src/shared/services/` per Scope Rule (ADR-001). Later relocated to `src/domain/caloricTargetService.ts` during the Clean Architecture layered refactor (ADR-012).
 
 ### Inputs
 

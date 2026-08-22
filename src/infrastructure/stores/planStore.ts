@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import { useTrackerStore } from './trackerStore';
+import { FoodSchema } from '@domain/food';
+import { RationValidationResultSchema } from '@domain/rationValidator';
 import type { WeeklyPlan } from '@domain/plan';
 import { generateWeeklyPlan } from '@application/services/planGenerator';
 
@@ -12,9 +14,11 @@ interface PlanState {
   generatePlan: () => void;
 }
 
-// Zod schema for persisted state (structural integrity — matches WeeklyPlan shape)
+// Zod schema for persisted state (structural integrity — matches WeeklyPlan shape).
+// Reuses domain schemas (FoodSchema, RationValidationResultSchema) as the single
+// source of truth for nested domain values (ADR-014 slice 2 — replaces z.any()).
 const MealEntrySchema = z.object({
-  food: z.any(), // Food is a complex domain object validated at creation
+  food: FoodSchema,
   rations: z.number(),
   mealType: z.string().optional(),
 });
@@ -28,8 +32,8 @@ export const PlanStateSchema = z.object({
           entries: z.array(MealEntrySchema),
         }),
       ),
-      dailyResults: z.array(z.any()),
-      weeklyResult: z.any(),
+      dailyResults: z.array(RationValidationResultSchema),
+      weeklyResult: RationValidationResultSchema,
       valid: z.boolean(),
     })
     .nullable(),

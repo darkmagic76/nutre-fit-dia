@@ -1,5 +1,5 @@
 import type { Translations } from '@shared/i18n';
-import type { SystemNotification } from '@shared/domain';
+import type { SystemNotification } from '@domain/notification';
 import { Card } from '@shared/ui';
 
 interface NudgeEngineViewProps {

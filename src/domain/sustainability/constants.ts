@@ -1,7 +1,7 @@
-/** ADR-007: Sustainability scoring — reference data from AESAN 2022 / EAT-Lancet */
+/** ADR-007: Sustainability scoring — reference data from Poore & Nemecek (2018), EAT-Lancet */
 
 /**
- * Relative emission ratios from SPECS_TECH §7 and ADR-007.
+ * Relative emission ratios from Poore & Nemecek (2018) emission data.
  * Legumes = baseline (1×). Higher values = proportionally higher emissions.
  */
 export const PROTEIN_EMISSION_RATIOS = {
@@ -16,7 +16,8 @@ export const PROTEIN_EMISSION_RATIOS = {
 
 /**
  * Carbon footprint thresholds for categorization (kg CO2eq per kg of food).
- * Based on AESAN 2022 reference data and EAT-Lancet planetary boundaries.
+ * Based on Poore & Nemecek (2018) emission data and EAT-Lancet planetary boundaries.
+ * NOTE: The official dietary report does not publish numerical CO2eq values — only qualitative assessments.
  */
 export const CARBON_THRESHOLDS = {
   VERY_LOW: 0.5,
@@ -39,7 +40,8 @@ export const CARBON_CATEGORY_SCORES = {
  * Scoring weights for the composite environmental score.
  * Configurable — clinical teams can tune without code changes.
  *
- * Carbon dominates (50%) per AESAN 2022 priority on climate impact.
+ * NOTE: These are design weights, not AESAN 2022 priorities.
+ * Carbon dominates (50%) per Poore & Nemecek (2018) findings on food system emissions.
  * Seasonality second (30%) — local/seasonal reduces transport emissions.
  * Proximity third (20%) — complements seasonality for food miles.
  */

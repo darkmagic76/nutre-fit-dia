@@ -1,6 +1,6 @@
 import type { Translations } from '@shared/i18n';
 import { Card } from '@shared/ui';
-import type { Food } from '@shared/domain';
+import type { Food } from '@domain/food';
 import type { CaloricTargetOutput } from '../../domain/caloricTargetService';
 import type { RationValidationResult } from '../../domain/rationValidator';
 import { CaloricSummary } from './components/CaloricSummary';

@@ -1,5 +1,6 @@
-import type { Food } from '@shared/domain';
-import { FoodCategory, TrafficLightColor } from '@shared/domain';
+import type { Food } from '@domain/food';
+import { FoodCategory } from '@domain/foodCategory';
+import { TrafficLightColor } from '@domain/trafficLight';
 import { detectOccultFromFood } from './occultSugarDetector';
 import { computeEnvironmentalScore } from '@domain/sustainability';
 import type { EnvironmentalScore } from '@domain/sustainability';
@@ -17,7 +18,11 @@ import type { EnvironmentalScore } from '@domain/sustainability';
 
 /** Default classification per FoodCategory when no occult/trans fat is present */
 const CATEGORY_DEFAULTS: Record<FoodCategory, TrafficLightColor> = {
-  [FoodCategory.CEREALS]: TrafficLightColor.ORANGE, // refined risk; whole-grain override below
+  // Cereals default to ORANGE (refined-grain risk). Whole-grain vs refined is NOT
+  // yet distinguished: the Food model has no `isWholeGrain` attribute, and ADR-005
+  // defers that distinction to future work. Do not claim an override that does not
+  // exist here (ADR-014 slice 3 — traceability fix C2).
+  [FoodCategory.CEREALS]: TrafficLightColor.ORANGE,
   [FoodCategory.VEGETABLES]: TrafficLightColor.GREEN,
   [FoodCategory.FRUITS]: TrafficLightColor.GREEN,
   [FoodCategory.OLIVE_OIL]: TrafficLightColor.GREEN,
@@ -29,6 +34,7 @@ const CATEGORY_DEFAULTS: Record<FoodCategory, TrafficLightColor> = {
   [FoodCategory.RED_MEAT]: TrafficLightColor.ORANGE,
   [FoodCategory.WATER]: TrafficLightColor.GREEN,
   [FoodCategory.NUTS]: TrafficLightColor.GREEN,
+  [FoodCategory.TUBERS]: TrafficLightColor.GREEN,
 };
 
 /**

@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { usePlanStore, PlanStateSchema } from './planStore';
 import { useTrackerStore } from '@infrastructure/stores/trackerStore';
+import { makeRationValidationResult } from '@/test/fixtures';
 
 describe('planStore', () => {
   const STORAGE_KEY = 'nutrefitdia-plan';
@@ -101,11 +102,23 @@ describe('PlanStateSchema', () => {
       weeklyPlan: {
         days: [],
         dailyResults: [],
-        weeklyResult: {},
+        weeklyResult: makeRationValidationResult(),
         valid: false,
       },
     });
     expect(result.success).toBe(true);
+  });
+
+  it('rejects weeklyPlan whose weeklyResult is structurally invalid', () => {
+    const result = PlanStateSchema.safeParse({
+      weeklyPlan: {
+        days: [],
+        dailyResults: [],
+        weeklyResult: {},
+        valid: false,
+      },
+    });
+    expect(result.success).toBe(false);
   });
 
   it('accepts real generated weeklyPlan', () => {
