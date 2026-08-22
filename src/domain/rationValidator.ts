@@ -1,4 +1,5 @@
-import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES } from './foodCategory';
+import { z } from 'zod';
+import { FoodCategory, ANIMAL_PROTEIN_CATEGORIES, FoodCategorySchema } from './foodCategory';
 import { CEREAL_RESTRICTED_MAX, NUTS_MAX_DAILY } from './clinical';
 import type { FoodCategory as FoodCategoryType } from './foodCategory';
 import type { Food } from './food';
@@ -121,6 +122,29 @@ export interface RationValidationResult {
   violations: RationViolation[];
   animalProteinCount: number;
 }
+
+/**
+ * Runtime schemas for {@link RationViolation} and {@link RationValidationResult}.
+ *
+ * Single source of truth for structural validation when these values are
+ * rehydrated from persistence (ADR-014 slice 2 — replaces `z.any()` in
+ * planStore/logStore). Keep in sync with the interfaces above.
+ */
+export const RationViolationSchema = z.object({
+  category: FoodCategorySchema,
+  current: z.number(),
+  limit: z.number(),
+  direction: z.enum(['under', 'over']),
+  unit: z.enum(['day', 'week']),
+  message: z.string().optional(),
+  messageKey: z.literal('validation.crossRule.whiteMeatFish').optional(),
+});
+
+export const RationValidationResultSchema = z.object({
+  valid: z.boolean(),
+  violations: z.array(RationViolationSchema),
+  animalProteinCount: z.number(),
+});
 
 export interface CountByCategory {
   [FoodCategory.CEREALS]: number;

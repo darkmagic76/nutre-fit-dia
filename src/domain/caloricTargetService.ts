@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type { UserMetrics } from './metrics';
 import { isRestrictionCandidate } from './imc';
 
@@ -35,6 +36,21 @@ export interface CaloricTargetOutput {
   target: number; // kcal/day (≥ 1200)
   caloricRestrictionActive: boolean; // true when deficit > 0
 }
+
+/**
+ * Runtime schema for {@link CaloricTargetOutput}.
+ *
+ * Single source of truth for structural validation when this value is
+ * rehydrated from persistence (ADR-014 slice 2 — replaces `z.any()` in
+ * trackerStore). Keep in sync with the interface above.
+ */
+export const CaloricTargetOutputSchema = z.object({
+  bmr: z.number(),
+  tdee: z.number(),
+  deficit: z.number(),
+  target: z.number(),
+  caloricRestrictionActive: z.boolean(),
+});
 
 const MSJ_WEIGHT_COEFF = 10;
 const MSJ_HEIGHT_COEFF = 6.25;
