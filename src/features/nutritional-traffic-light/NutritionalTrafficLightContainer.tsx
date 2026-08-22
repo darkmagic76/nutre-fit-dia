@@ -15,7 +15,7 @@ export function NutritionalTrafficLightContainer() {
   const [result, setResult] = useState<ReturnType<typeof classifyFoodWithReasons> | null>(null);
   const [safetyAlerts, setSafetyAlerts] = useState<SafetyAlert[]>([]);
   const { addFoodToLog, caloricRestrictionActive } = useNutritionalTrafficLightState();
-  const getFoodName = useFoodName;
+  const getFoodName = useFoodName();
   const trigger = useNudgeTrigger();
 
   const options = Array.from(foodsById.entries()).map(([id, food]) => ({

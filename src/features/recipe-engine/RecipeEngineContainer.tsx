@@ -5,7 +5,7 @@ import { RecipeEngineView } from './RecipeEngineView';
 
 export function RecipeEngineContainer() {
   const t = useT();
-  const getFoodName = useFoodName;
+  const getFoodName = useFoodName();
   const {
     weeklyPlan,
     generatePlan,

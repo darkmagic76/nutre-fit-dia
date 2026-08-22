@@ -9,7 +9,7 @@ interface FoodListProps {
 
 export function FoodList({ foods, onRemove }: FoodListProps) {
   const t = useT();
-  const getFoodName = useFoodName;
+  const getFoodName = useFoodName();
 
   if (foods.length === 0) {
     return <p className="text-stone-400 dark:text-zinc-500 text-sm">{t['log.emptyFoods']}</p>;
