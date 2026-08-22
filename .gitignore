@@ -53,3 +53,6 @@ dev-sw.js
 docs/domain/DDD-INTRO.md
 # Local Pi runtime state
 .atl/
+
+# CodeGraph local index
+.codegraph/
