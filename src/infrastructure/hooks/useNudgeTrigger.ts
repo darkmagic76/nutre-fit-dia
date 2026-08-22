@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useTrackerStore } from '@infrastructure/stores/trackerStore';
 import { useLogStore } from '@infrastructure/stores/logStore';
 import { useActivityStore } from '@infrastructure/stores/activityStore';
@@ -21,19 +21,19 @@ import { useContainer } from '@shared/context/useContainer';
  */
 export function useNudgeTrigger() {
   const { evaluateNudges } = useContainer();
-  const caloricRestrictionActive = useTrackerStore((s) => s.caloricRestrictionActive);
-  const todayLog = useLogStore((s) => s.todayLog);
-  const weeklyMinutes = useActivityStore((s) => s.weeklyMinutes);
-  const glucoseHistory = useBiomarkerStore((s) => s.glucoseHistory);
-  const weightHistory = useBiomarkerStore((s) => s.weightHistory);
-
-  const trends = useMemo(
-    () => computeBiomarkerTrend(glucoseHistory, weightHistory),
-    [glucoseHistory, weightHistory],
-  );
 
   return useCallback(
     (food?: Food) => {
+      // Read LIVE store state at call time, not a render-time closure. A food
+      // removed in the same tick (e.g. handleRemoveFood → removeFoodFromLog →
+      // trigger) must be reflected here so stale nudges auto-resolve on the same
+      // interaction instead of one action later.
+      const { caloricRestrictionActive } = useTrackerStore.getState();
+      const { todayLog } = useLogStore.getState();
+      const { weeklyMinutes } = useActivityStore.getState();
+      const { glucoseHistory, weightHistory } = useBiomarkerStore.getState();
+      const trends = computeBiomarkerTrend(glucoseHistory, weightHistory);
+
       const input: ContextInput = {
         caloricRestrictionActive,
         todayLog,
@@ -44,6 +44,6 @@ export function useNudgeTrigger() {
       };
       evaluateNudges(input);
     },
-    [evaluateNudges, caloricRestrictionActive, todayLog, weeklyMinutes, trends],
+    [evaluateNudges],
   );
 }

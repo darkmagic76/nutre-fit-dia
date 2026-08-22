@@ -4,7 +4,7 @@ import { renderWithI18n } from '@/test/i18n-test-utils';
 import { DailyViolations } from './DailyViolations';
 import { makeRationValidationResult, makeViolation } from '@/test/fixtures';
 import { VEGETABLE_NUDGE_HOUR_THRESHOLD } from '../../../domain/clinical';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 
 describe('DailyViolations', () => {
   it('shows green success message when valid and has foods', () => {

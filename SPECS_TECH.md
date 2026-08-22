@@ -55,7 +55,7 @@ La estabilidad metabólica se garantiza mediante un control riguroso de la frecu
 - **Frecuencias Semanales y Restricciones:**
   - **Cereales:** 3-6 raciones/día (**MÁXIMO 4 raciones** si existe restricción energética erMedDiet), exclusivamente **100% integrales**.
   - **Legumbres:** Mínimo 4 raciones/semana (prioridad proteica vegetal).
-  - **Pescado:** **3 a 4 raciones por semana**, alternando blanco y azul.
+  - **Pescado:** **mínimo 3 raciones por semana** (piso AESAN 2022, sin máximo clínico), alternando blanco y azul. El sistema aplica un techo interno de producto (7/semana ≈ 1/día) solo para equilibrar la proteína animal — no es un límite AESAN.
   - **Hortalizas y Frutas:** Mínimo 3 raciones de hortalizas y 2-3 de frutas frescas (excluyendo desecadas/almíbar).
   - **Hidratación:** El sistema debe monitorizar una ingesta de **1,5 a 2 litros de agua diarios** (4-8 vasos).
 

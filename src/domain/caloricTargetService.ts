@@ -1,3 +1,4 @@
+import { z } from 'zod';
 import type { UserMetrics } from './metrics';
 import { isRestrictionCandidate } from './imc';
 
@@ -14,7 +15,7 @@ import { isRestrictionCandidate } from './imc';
 
 export type CaloricTargetInput = UserMetrics;
 
-// Diagnosis-age modifier brackets per FR-4.1 phenotypic filtering
+// Diagnosis-age modifier brackets (Internal design decision for phenotypic scaling — no clinical source)
 const DIAGNOSIS_AGE_EARLY_THRESHOLD = 40;
 const DIAGNOSIS_AGE_LATE_THRESHOLD = 60;
 const DEFICIT_MODIFIER_EARLY = 1.0;
@@ -36,6 +37,21 @@ export interface CaloricTargetOutput {
   caloricRestrictionActive: boolean; // true when deficit > 0
 }
 
+/**
+ * Runtime schema for {@link CaloricTargetOutput}.
+ *
+ * Single source of truth for structural validation when this value is
+ * rehydrated from persistence (ADR-014 slice 2 — replaces `z.any()` in
+ * trackerStore). Keep in sync with the interface above.
+ */
+export const CaloricTargetOutputSchema = z.object({
+  bmr: z.number(),
+  tdee: z.number(),
+  deficit: z.number(),
+  target: z.number(),
+  caloricRestrictionActive: z.boolean(),
+});
+
 const MSJ_WEIGHT_COEFF = 10;
 const MSJ_HEIGHT_COEFF = 6.25;
 const MSJ_AGE_COEFF = 5;
@@ -47,6 +63,7 @@ function bmrMifflinStJeor({ weight, height, age, gender }: UserMetrics): number 
   return Math.round(gender === 'male' ? base + MSJ_MALE_OFFSET : base - MSJ_FEMALE_OFFSET);
 }
 
+// External clinical consensus (not in AESAN/SNS docs) — widely used minimum for safe caloric restriction
 const SAFETY_FLOOR = 1200;
 /** PREDIMED-Plus intensive intervention: 600 kcal daily deficit */
 const PREDIMED_PLUS_DEFICIT_KCAL = 600;

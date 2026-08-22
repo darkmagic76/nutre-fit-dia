@@ -1,7 +1,7 @@
-# ADR-005: Canonical FoodCategory — 11-Group Model
+# ADR-005: Canonical FoodCategory — 13-Group Model
 
-**Status:** Accepted  
-**Date:** 2026-07-15  
+**Status:** Accepted — Amended 2026-08-10 (NUTS, TUBERS added)
+**Date:** 2026-07-15
 **Deciders:** darkmagic76, gentle-orchestrator
 
 ## Context
@@ -14,11 +14,13 @@ Three specification documents define food groups at different granularity levels
 | `SPECS_RF.md`           | 5      | Vista condensada para UI de requisitos — omite lácteos, huevos, carnes blancas, agua, y fusiona hortalizas+frutas |
 | `SPECS_TECH.md` (§5)    | ~7     | Recupera agua y frutas separadas, pero no huevos, lácteos ni carnes blancas                                       |
 
+The canonical model has grown to **13 groups** with the addition of `NUTS` and `TUBERS` (2026-08-10).
+
 ADR-002 already established that `FoodCategory` must be a Zod-validated const object, but **never specified which model it encodes**. The `classificationService.ts` and `ErMedDietValidator` cannot be built correctly until this canonical model is fixed.
 
 ## Decision
 
-**Adopt the 11-group model from INFORME_ADR as the canonical `FoodCategory`.** The SPECS_RF simplification is a UI-level derived view, not a domain model replacement. RED_MEAT was added as the 11th group on 2026-07-21 to correct a semantic knot where ADR-007, ADR-008, and SPECS_TECH §4 referenced RED_MEAT but the canonical model only defined WHITE_MEAT.
+**Adopt the 13-group model from INFORME_ADR as the canonical `FoodCategory`.** The SPECS_RF simplification is a UI-level derived view, not a domain model replacement. RED_MEAT was added as the 11th group on 2026-07-21 to correct a semantic knot where ADR-007, ADR-008, and SPECS_TECH §4 referenced RED_MEAT but the canonical model only defined WHITE_MEAT. NUTS and TUBERS were added on 2026-08-10 to complete the AESAN food catalog alignment.
 
 ### Canonical Groups
 
@@ -35,6 +37,8 @@ export const FoodCategory = {
   WHITE_MEAT: 'white_meat',
   RED_MEAT: 'red_meat',
   WATER: 'water',
+  NUTS: 'nuts',
+  TUBERS: 'tubers',
 } as const;
 
 export type FoodCategory = (typeof FoodCategory)[keyof typeof FoodCategory];
@@ -57,6 +61,8 @@ Each group carries **irreducible clinical constraints** from INFORME_ADR that a 
 | `WHITE_MEAT` | Máx 3/semana + limit si pescado excedido                                                                   | Regla cruzada con `FISH`                                                                                            |
 | `RED_MEAT`   | Máx 3/semana (EAT-Lancet 2019: ≤ 98g/sem carne roja; 0g/sem carne procesada). Sin mínimo — nunca requerido | Separado de WHITE_MEAT por distinto perfil de emisiones (27× carnes blancas) y recomendaciones clínicas divergentes |
 | `WATER`      | 1.5-2L/día + nudge cada 3 horas                                                                            | Grupo no calórico con tracking propio                                                                               |
+| `NUTS`       | Frutos secos: porción controlada por densidad calórica                                                     | Agregado 2026-08-10 para completar catálogo AESAN                                                                   |
+| `TUBERS`     | Patata/boniato: fuente de almidón distinta a cereales                                                      | Agregado 2026-08-10 para completar catálogo AESAN                                                                   |
 
 ### Relationship to SPECS_RF (5-group model)
 
@@ -98,7 +104,7 @@ Some groups imply subtypes that future iterations will need:
 - `CEREALS` → `{ whole_grain, refined }` (aunque erMedDiet solo permite whole_grain)
 - `FRUITS` → `{ high_gi, low_gi }` (uvas/higos/dátiles vs resto)
 
-These are **not separate FoodCategory values**. They are sub-attributes on the `Food` entity. The canonical model stays at 11 groups.
+These are **not separate FoodCategory values**. They are sub-attributes on the `Food` entity. The canonical model stays at 13 groups.
 
 ### RED_MEAT — Clinical Rationale (EAT-Lancet 2019)
 
@@ -111,16 +117,16 @@ The EAT-Lancet Commission recommends ≤ 98g/week of red meat (beef, lamb, pork)
 
 ## Consequences
 
-- ✅ All 18 clinical rules from INFORME_ADR FR-2 are modelable
+- ✅ All 18 clinical rules from INFORME_ADR FR-2 are modelable, plus NUTS and TUBERS for full AESAN catalog coverage
 - ✅ `ErMedDietValidator` can distinguish `DAIRY`, `EGGS`, `WHITE_MEAT`, and `RED_MEAT` for the `Animal_Protein` counter
 - ✅ `Nudge Engine` can trigger "fuente calcio vegetal" when `Animal_Protein > 2` because it can count animal sources
 - ✅ Substitution service uses canonical category gate instead of carbon heuristic
 - ✅ SPECS_RF and SPECS_TECH views can be derived via mapping, not by mutilating the domain model
-- ❌ `classificationService.ts` must be built on these 11 categories — more work upfront than 5, but avoids rework
+- ❌ `classificationService.ts` must be built on these 13 categories — more work upfront than 5, but avoids rework
 - ❌ SPECS_RF UI will need a display mapping layer (e.g., `CEREALS` and `LEGUMES` visible as separate; `DAIRY`, `EGGS`, `WHITE_MEAT`, `RED_MEAT` visible under "Otras fuentes proteicas" or similar)
 
 ## Compliance
 
-- `src/shared/domain/foodCategory.ts` exports the 11-group const object + Zod schema
+- `src/domain/foodCategory.ts` exports the 13-group const object + Zod schema
 - No feature creates its own `FoodCategory` subset — derive views via mapping functions
 - Any proposed change to this canonical set requires a new ADR

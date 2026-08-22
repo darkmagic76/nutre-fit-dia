@@ -3,7 +3,7 @@ import { useT } from '@shared/i18n';
 import { foodsById } from '@shared/data/foods';
 import { classifyFoodWithReasons } from './services/classificationService';
 import { checkSafetyAlerts } from './services/safetyCheck';
-import { useLogStore, useTrackerStore } from '@infrastructure/stores';
+import { useNutritionalTrafficLightState } from './hooks/useNutritionalTrafficLightState';
 import { useNudgeTrigger } from '@infrastructure/hooks/useNudgeTrigger';
 import { useFoodName } from '@shared/hooks/useFoodName';
 import { NutritionalTrafficLightView } from './NutritionalTrafficLightView';
@@ -14,9 +14,8 @@ export function NutritionalTrafficLightContainer() {
   const [selectedId, setSelectedId] = useState('');
   const [result, setResult] = useState<ReturnType<typeof classifyFoodWithReasons> | null>(null);
   const [safetyAlerts, setSafetyAlerts] = useState<SafetyAlert[]>([]);
-  const addFoodToLog = useLogStore((s) => s.addFoodToLog);
-  const caloricRestrictionActive = useTrackerStore((s) => s.caloricRestrictionActive);
-  const getFoodName = useFoodName;
+  const { addFoodToLog, caloricRestrictionActive } = useNutritionalTrafficLightState();
+  const getFoodName = useFoodName();
   const trigger = useNudgeTrigger();
 
   const options = Array.from(foodsById.entries()).map(([id, food]) => ({

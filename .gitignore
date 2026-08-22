@@ -47,6 +47,12 @@ dev-sw.js
 
 # OpenCode temporary files
 .opencode/
+.pi/
 
 # Outdated documentation (pending update)
 docs/domain/DDD-INTRO.md
+# Local Pi runtime state
+.atl/
+
+# CodeGraph local index
+.codegraph/

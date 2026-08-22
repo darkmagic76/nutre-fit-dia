@@ -5,7 +5,7 @@ import { makeCaloricTargetOutput, makeMetricsFormState } from '@/test/fixtures';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { ValidationError } from '@domain/errors';
 import { es } from '@shared/i18n/es';
-import type { CaloricTargetOutput } from '@shared/services/caloricTargetService';
+import type { CaloricTargetOutput } from '@domain/caloricTargetService';
 import type { ValidationError as ValidationErrorType } from '@domain/errors';
 
 describe('MetabolicTrackerView', () => {

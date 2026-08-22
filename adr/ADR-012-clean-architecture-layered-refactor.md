@@ -1,6 +1,6 @@
 # ADR-012: Clean Architecture — Refactorización por Capas con Puertos y Adaptadores
 
-**Status:** Proposed
+**Status:** Accepted — Implemented 2026-08-10
 **Date:** 2026-08-06
 **Deciders:** darkmagic76, gentle-orchestrator
 

@@ -39,7 +39,7 @@ export class DomainError extends Error {
  * - Missing required field (empty glucose when calculating metabolic profile)
  *
  * Distinct from:
- * - **Ration-rule validation** (`src/shared/services/rationValidator.ts`):
+ * - **Ration-rule validation** (`src/domain/rationValidator.ts`):
  *   clinical rule checks against AESAN 2022 limits (e.g., cereals > 6/day)
  * - **UI violation display** (`src/features/med-diet-validator/components/
  *   DailyViolations.tsx`): rendering ration limit breaches as visual feedback

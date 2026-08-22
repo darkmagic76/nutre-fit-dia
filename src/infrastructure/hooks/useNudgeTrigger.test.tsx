@@ -6,25 +6,39 @@ import type { Container } from '@application/ports/container';
 import type { ContextInput } from '@domain/nudgeContext';
 
 // Mock stores
-vi.mock('@infrastructure/stores/trackerStore', () => ({
-  useTrackerStore: vi.fn((selector: (s: any) => any) =>
-    selector({ caloricRestrictionActive: false }),
-  ),
-}));
+vi.mock('@infrastructure/stores/trackerStore', () => {
+  const state = { caloricRestrictionActive: false };
+  const useTrackerStore = vi.fn((selector: (s: any) => any) => selector(state));
+  (useTrackerStore as any).getState = () => state;
+  return { useTrackerStore };
+});
 
-vi.mock('@infrastructure/stores/logStore', () => ({
-  useLogStore: vi.fn((selector: (s: any) => any) => selector({ todayLog: [] })),
-}));
+// The log store mock distinguishes render-time state (selector) from the live
+// store state (getState). The trigger must read the LIVE state when it runs, so
+// that a food removed in the same tick is reflected before evaluation.
+const logStoreState = { renderLog: [] as any[], liveLog: [] as any[] };
 
-vi.mock('@infrastructure/stores/activityStore', () => ({
-  useActivityStore: vi.fn((selector: (s: any) => any) => selector({ weeklyMinutes: 0 })),
-}));
+vi.mock('@infrastructure/stores/logStore', () => {
+  const useLogStore = vi.fn((selector: (s: any) => any) =>
+    selector({ todayLog: logStoreState.renderLog }),
+  );
+  (useLogStore as any).getState = () => ({ todayLog: logStoreState.liveLog });
+  return { useLogStore };
+});
 
-vi.mock('@infrastructure/stores/biomarkerStore', () => ({
-  useBiomarkerStore: vi.fn((selector: (s: any) => any) =>
-    selector({ glucoseHistory: [], weightHistory: [] }),
-  ),
-}));
+vi.mock('@infrastructure/stores/activityStore', () => {
+  const state = { weeklyMinutes: 0 };
+  const useActivityStore = vi.fn((selector: (s: any) => any) => selector(state));
+  (useActivityStore as any).getState = () => state;
+  return { useActivityStore };
+});
+
+vi.mock('@infrastructure/stores/biomarkerStore', () => {
+  const state = { glucoseHistory: [], weightHistory: [] };
+  const useBiomarkerStore = vi.fn((selector: (s: any) => any) => selector(state));
+  (useBiomarkerStore as any).getState = () => state;
+  return { useBiomarkerStore };
+});
 
 vi.mock('@domain/biomarkerTypes', () => ({
   computeBiomarkerTrend: vi.fn(() => ({
@@ -53,6 +67,24 @@ describe('useNudgeTrigger', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    logStoreState.renderLog = [];
+    logStoreState.liveLog = [];
+  });
+
+  it('evaluates against the LIVE log state, not the render-time closure', () => {
+    // Simulate a stale render: the component rendered with 5 items (renderLog),
+    // but a food was just removed so the live store now has 4 (liveLog). The
+    // trigger must evaluate the LIVE state so nudges auto-resolve immediately.
+    const five = [1, 2, 3, 4, 5].map((n) => ({ id: `c${n}`, name: 'Cereal' }) as any);
+    const four = [1, 2, 3, 4].map((n) => ({ id: `c${n}`, name: 'Cereal' }) as any);
+    logStoreState.renderLog = five;
+    logStoreState.liveLog = four;
+
+    const { result } = renderHook(() => useNudgeTrigger(), { wrapper });
+    result.current();
+
+    const callArg = mockEvaluateNudges.mock.calls[0][0] as ContextInput;
+    expect(callArg.todayLog).toHaveLength(4);
   });
 
   it('returns a callback that calls evaluateNudges with ContextInput', () => {

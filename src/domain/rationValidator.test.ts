@@ -210,6 +210,40 @@ describe('rationValidator', () => {
       expect(result.valid).toBe(false);
       expect(result.violations.some((v) => v.category === FoodCategory.RED_MEAT)).toBe(true);
     });
+
+    it('fails when TUBERS exceed 5/week', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.TUBERS]: 6,
+      });
+      const result = validateWeeklyRations(counts);
+      expect(result.valid).toBe(false);
+      const tuberViolation = result.violations.find((v) => v.category === FoodCategory.TUBERS);
+      expect(tuberViolation).toBeDefined();
+      expect(tuberViolation!.direction).toBe('over');
+      expect(tuberViolation!.limit).toBe(5);
+    });
+
+    it('passes when TUBERS at exactly 5/week', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.TUBERS]: 5,
+      });
+      const result = validateWeeklyRations(counts);
+      expect(result.violations.some((v) => v.category === FoodCategory.TUBERS)).toBe(false);
+    });
+
+    it('passes when TUBERS at 0 (no minimum for tubers)', () => {
+      const counts = countsWith({
+        [FoodCategory.LEGUMES]: 4,
+        [FoodCategory.FISH]: 3,
+        [FoodCategory.TUBERS]: 0,
+      });
+      const result = validateWeeklyRations(counts);
+      expect(result.violations.some((v) => v.category === FoodCategory.TUBERS)).toBe(false);
+    });
   });
 
   describe('animalProteinCount', () => {
@@ -241,6 +275,16 @@ describe('rationValidator', () => {
       const counts = defaultRationCounts();
       expect(Object.keys(counts)).toContain(FoodCategory.RED_MEAT);
     });
+
+    it('includes TUBERS key defaulting to 0', () => {
+      const counts = defaultRationCounts();
+      expect(counts[FoodCategory.TUBERS]).toBe(0);
+    });
+
+    it('has TUBERS key in defaultRationCounts', () => {
+      const counts = defaultRationCounts();
+      expect(Object.keys(counts)).toContain(FoodCategory.TUBERS);
+    });
   });
 
   describe('countRations', () => {
@@ -264,23 +308,57 @@ describe('rationValidator', () => {
       const counts = countRations(entries);
       expect(counts[FoodCategory.RED_MEAT]).toBe(2);
     });
+
+    it('counts TUBERS entries', () => {
+      const entries = [
+        ...makeEntries(FoodCategory.TUBERS, 2),
+        ...makeEntries(FoodCategory.CEREALS, 1),
+      ];
+      const counts = countRations(entries);
+      expect(counts[FoodCategory.TUBERS]).toBe(2);
+    });
+
+    it('counts mixed tuber and non-tuber entries correctly', () => {
+      const entries = [
+        ...makeEntries(FoodCategory.TUBERS, 1),
+        ...makeEntries(FoodCategory.LEGUMES, 1),
+        ...makeEntries(FoodCategory.FRUITS, 1),
+      ];
+      const counts = countRations(entries);
+      expect(counts[FoodCategory.TUBERS]).toBe(1);
+      expect(counts[FoodCategory.LEGUMES]).toBe(1);
+      expect(counts[FoodCategory.FRUITS]).toBe(1);
+    });
+  });
+
+  describe('RATION_LIMITS TUBERS', () => {
+    it('TUBERS weekly limit is max 5 with no min', () => {
+      const limit = RATION_LIMITS[FoodCategory.TUBERS];
+      expect(limit.max).toBe(5);
+      expect(limit.unit).toBe('week');
+      expect(limit.min).toBeUndefined();
+    });
   });
 
   describe('AESAN_GRAM_STANDARDS', () => {
-    it('covers all 12 food categories', () => {
-      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(12);
+    it('covers all 13 food categories', () => {
+      expect(Object.keys(AESAN_GRAM_STANDARDS)).toHaveLength(13);
     });
 
     it('has valid bread range (40-60g)', () => {
       expect(AESAN_GRAM_STANDARDS[FoodCategory.CEREALS]).toEqual({ min: 40, max: 60 });
     });
 
-    it('has valid fish range (150-200g)', () => {
-      expect(AESAN_GRAM_STANDARDS[FoodCategory.FISH]).toEqual({ min: 150, max: 200 });
+    it('has valid fish range (125-150g per AESAN p.1479)', () => {
+      expect(AESAN_GRAM_STANDARDS[FoodCategory.FISH]).toEqual({ min: 125, max: 150 });
     });
 
     it('has valid legume range (50-60g dry per AESAN 2022)', () => {
       expect(AESAN_GRAM_STANDARDS[FoodCategory.LEGUMES]).toEqual({ min: 50, max: 60 });
+    });
+
+    it('has TUBERS gram range (150-200g per AESAN 2022)', () => {
+      expect(AESAN_GRAM_STANDARDS[FoodCategory.TUBERS]).toEqual({ min: 150, max: 200 });
     });
   });
 
@@ -398,6 +476,77 @@ describe('rationValidator', () => {
       const food = makeFood({ category: 'nonexistent' as any });
       const alerts = validateFoodPortions([food]);
       expect(alerts).toEqual([]);
+    });
+  });
+
+  describe('validateFoodPortions with preparationState', () => {
+    it('skips gram validation for cooked legume (150g would normally exceed dry range)', () => {
+      const cookedLegume = makeFood({
+        category: FoodCategory.LEGUMES,
+        gramsPerRation: 150,
+        preparationState: 'cooked',
+      });
+      expect(validateFoodPortions([cookedLegume])).toEqual([]);
+    });
+
+    it('skips gram validation for cooked cereal (180g would normally exceed dry range)', () => {
+      const cookedCereal = makeFood({
+        category: FoodCategory.CEREALS,
+        gramsPerRation: 180,
+        preparationState: 'cooked',
+      });
+      expect(validateFoodPortions([cookedCereal])).toEqual([]);
+    });
+
+    it('still validates dry legume at 30g (below min 50g)', () => {
+      const dryLegume = makeFood({
+        category: FoodCategory.LEGUMES,
+        gramsPerRation: 30,
+        preparationState: 'as-stored',
+      });
+      const alerts = validateFoodPortions([dryLegume]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_SMALL');
+    });
+
+    it('still validates dry legume at 150g (above max 60g)', () => {
+      const dryLegume = makeFood({
+        category: FoodCategory.LEGUMES,
+        gramsPerRation: 150,
+        preparationState: 'as-stored',
+      });
+      const alerts = validateFoodPortions([dryLegume]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_LARGE');
+    });
+
+    it('tuber food at 175g produces no alerts (within 150-200)', () => {
+      const tuber = makeFood({
+        category: FoodCategory.TUBERS,
+        gramsPerRation: 175,
+      });
+      expect(validateFoodPortions([tuber])).toEqual([]);
+    });
+
+    it('tuber food at 100g produces PORTION_TOO_SMALL warning', () => {
+      const tuber = makeFood({
+        category: FoodCategory.TUBERS,
+        gramsPerRation: 100,
+      });
+      const alerts = validateFoodPortions([tuber]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_SMALL');
+    });
+
+    it('tuber food at 250g produces PORTION_TOO_LARGE critical alert', () => {
+      const tuber = makeFood({
+        category: FoodCategory.TUBERS,
+        gramsPerRation: 250,
+      });
+      const alerts = validateFoodPortions([tuber]);
+      expect(alerts).toHaveLength(1);
+      expect(alerts[0].code).toBe('PORTION_TOO_LARGE');
+      expect(alerts[0].severity).toBe('critical');
     });
   });
 });

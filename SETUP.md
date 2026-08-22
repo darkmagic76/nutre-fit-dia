@@ -278,7 +278,7 @@ nutre-fit-dia/
 npm install -g pnpm@latest
 ```
 
-### `Error: Cannot find module '@shared/domain'`
+### `Error: Cannot find module '@shared/stores'`
 
 ```bash
 pnpm install   # reinstall dependencies

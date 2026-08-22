@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { FoodList } from './FoodList';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 import { makeFood } from '@/test/fixtures';
 
 describe('FoodList', () => {

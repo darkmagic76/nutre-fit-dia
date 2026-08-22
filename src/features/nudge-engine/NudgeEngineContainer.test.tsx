@@ -4,7 +4,7 @@ import { NudgeEngineContainer } from './NudgeEngineContainer';
 import { I18nProvider } from '@shared/i18n';
 import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
 import { type ReactElement } from 'react';
-import type { SystemNotification } from '@shared/domain';
+import type { SystemNotification } from '@domain/notification';
 
 // Mock useNudgeTrigger to prevent auto-enqueue on mount
 vi.mock('@infrastructure/hooks/useNudgeTrigger', () => ({

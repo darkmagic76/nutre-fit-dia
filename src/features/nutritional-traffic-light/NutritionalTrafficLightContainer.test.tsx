@@ -38,6 +38,32 @@ describe('NutritionalTrafficLightContainer', () => {
     expect(screen.getByText('Moderación')).toBeInTheDocument();
   });
 
+  it('renders the selected food name without violating the Rules of Hooks', async () => {
+    // Regression: useFoodName used to be a hook called per-food inside a loop and
+    // conditionally for the selected food, so selecting a food changed the hook
+    // count between renders and crashed React ("order of Hooks" error).
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const user = userEvent.setup();
+
+    renderWithI18n(<NutritionalTrafficLightContainer />);
+
+    const select = screen.getByLabelText('Seleccionar alimento');
+    await user.selectOptions(select, 'cereal-pan-integral');
+
+    // The selected food name renders in the detail panel <strong> after
+    // selection (was the crash trigger). "Pan integral" also appears in the
+    // <option>, so scope the query to the detail heading element.
+    expect(screen.getByText('Pan integral', { selector: 'strong' })).toBeInTheDocument();
+
+    // No Rules-of-Hooks warning was emitted during the select re-render.
+    const hookWarnings = errorSpy.mock.calls.filter((call) =>
+      String(call[0]).includes('order of Hooks'),
+    );
+    expect(hookWarnings).toEqual([]);
+
+    errorSpy.mockRestore();
+  });
+
   it('handleAddToLog adds food to log store and triggers nudge', async () => {
     const user = userEvent.setup();
     renderWithI18n(<NutritionalTrafficLightContainer />);

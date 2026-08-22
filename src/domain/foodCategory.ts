@@ -3,7 +3,7 @@ import { defineEnum } from './enum';
 import type { ValuesOf } from './enum';
 
 /**
- * Canonical food categories per ADR-005 (12 groups from INFORME_ADR + RED_MEAT amendment 2026-07-21 + NUTS 2026-08-10).
+ * Canonical food categories per ADR-005 (13 groups from INFORME_ADR + RED_MEAT amendment 2026-07-21 + NUTS + TUBERS 2026-08-10).
  * SPECS_RF (5 groups) and SPECS_TECH (~7) are UI simplifications, not domain replacements.
  */
 export const FoodCategory = defineEnum({
@@ -19,6 +19,7 @@ export const FoodCategory = defineEnum({
   RED_MEAT: 'red_meat',
   WATER: 'water',
   NUTS: 'nuts',
+  TUBERS: 'tubers',
 });
 
 export type FoodCategory = ValuesOf<typeof FoodCategory>;
@@ -36,6 +37,7 @@ export const FoodCategorySchema = z.enum([
   'red_meat',
   'water',
   'nuts',
+  'tubers',
 ]);
 
 /** Groups that count toward animal protein (for NudgeEngine: "si Animal_Protein > 2, sugerir calcio vegetal") */

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useNudgeStore } from './nudgeStore';
-import type { SystemNotification } from '@shared/domain';
+import type { SystemNotification } from '@domain/notification';
 import { z } from 'zod';
 
 // --- Zod schema for persisted state (structural integrity only) ---

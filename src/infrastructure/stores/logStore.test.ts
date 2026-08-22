@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useLogStore } from './logStore';
 import { useTrackerStore } from './trackerStore';
-import { FoodCategory } from '@shared/domain';
+import { FoodCategory } from '@domain/foodCategory';
 import { makeFood } from '@/test/fixtures';
 import { z } from 'zod';
 

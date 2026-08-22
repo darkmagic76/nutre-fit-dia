@@ -1,5 +1,5 @@
-import { TrafficLightColor } from '@shared/domain';
-import type { Food } from '@shared/domain';
+import { TrafficLightColor } from '@domain/trafficLight';
+import type { Food } from '@domain/food';
 import { Card, SelectField, PrimaryButton } from '@shared/ui';
 import { SafetyAlertDisplay } from './components/SafetyAlertDisplay';
 import type { ClassificationResult } from './services/classificationService';

@@ -179,6 +179,7 @@ export const en: Translations = {
   'category.red_meat': 'Red Meat',
   'category.water': 'Water',
   'category.nuts': 'Nuts',
+  'category.tubers': 'Tubers',
 
   'alert.severityCritical': 'Critical',
   'alert.severityWarning': 'Warning',
@@ -230,6 +231,7 @@ export const en: Translations = {
   'nudge.title.legumeCarbSource': 'Legumes are also a source of carbohydrates',
   'nudge.title.nutsDeficit': 'Insufficient nuts',
   'nudge.title.nutsExcess': 'Excess nuts today',
+  'nudge.title.tubersExcess': 'Excess tubers this week',
 
   // Nudge bodies
   'nudge.body.cerealsRestriction':
@@ -266,6 +268,8 @@ export const en: Translations = {
     "You've had fewer than 3 servings of nuts this week. Nuts provide healthy fats, fiber, and antioxidants.",
   'nudge.body.nutsExcess':
     "You've exceeded the daily maximum for nuts (1 serving/day). Remember: no added salt or sugars.",
+  'nudge.body.tubersExcess':
+    "You've exceeded the weekly limit of 5 tuber rations. Tubers are moderate consumption per AESAN 2022.",
 
   // Activity — extended
   'activity.streakWeeksAria': 'Streak of {streak} weeks',

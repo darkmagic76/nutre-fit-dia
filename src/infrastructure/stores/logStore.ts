@@ -2,10 +2,11 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
-import type { Food } from '@shared/domain';
+import type { Food } from '@domain/food';
 import {
   countRations,
   validateRations,
+  RationValidationResultSchema,
   type RationValidationResult,
 } from '../../domain/rationValidator';
 
@@ -36,7 +37,7 @@ const LogStateSchema = z.object({
       isRestricted: z.boolean().optional(),
     }),
   ),
-  todayValidation: z.any().nullable(),
+  todayValidation: RationValidationResultSchema.nullable(),
 });
 
 /**

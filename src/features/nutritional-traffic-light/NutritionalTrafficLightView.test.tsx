@@ -2,8 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { screen } from '@testing-library/react';
 import { renderWithI18n } from '@/test/i18n-test-utils';
 import { NutritionalTrafficLightView } from './NutritionalTrafficLightView';
-import { food } from '@shared/domain';
-import type { Food } from '@shared/domain';
+import { food } from '@domain/food';
+import type { Food } from '@domain/food';
 import { es } from '@shared/i18n/es';
 
 /* ---------- test helpers ---------- */

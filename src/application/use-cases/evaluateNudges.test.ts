@@ -173,14 +173,17 @@ describe('evaluateNudges (use case)', () => {
     expect(repoWithPending._acknowledged).toContain('stale-1');
   });
 
-  it('does not auto-resolve HARD_BLOCK severity nudges', () => {
+  it('auto-resolves HARD_BLOCK nudges when their condition no longer holds', () => {
+    // Policy: a nudge is auto-resolved once its rule condition stops holding,
+    // regardless of severity. HARD_BLOCK alerts (e.g. CEREALS_RESTRICTION) must
+    // clear themselves after the user corrects the excess — they are not sticky.
     const hardBlockNudge: SystemNotification = {
       id: 'hard-block-1',
       type: NotificationType.SAFETY_ALERT,
       severity: NotificationSeverity.HARD_BLOCK,
       target: 'user',
       title: 'Hard Block',
-      body: 'This requires explicit ack',
+      body: 'Condition no longer met',
       ruleSource: 'NEVER_MATCH',
       triggeredAt: new Date(),
     };
@@ -191,8 +194,40 @@ describe('evaluateNudges (use case)', () => {
 
     evaluateNudges(ctx, rules, repoWithPending);
 
-    // HARD_BLOCK should NOT be auto-resolved
-    expect(repoWithPending._acknowledged).not.toContain('hard-block-1');
+    // HARD_BLOCK is auto-resolved because its rule condition returns false.
+    expect(repoWithPending._acknowledged).toContain('hard-block-1');
+  });
+
+  it('resets the cooldown of an auto-resolved nudge so it can re-fire later', () => {
+    // Lifecycle: a nudge fires and registers its cooldown; when the condition
+    // ceases the nudge is auto-resolved AND its cooldown is cleared, so exceeding
+    // again re-emits it instead of being silently blocked by the stale cooldown.
+    const staleNudge: SystemNotification = {
+      id: 'cereals-1',
+      type: NotificationType.SAFETY_ALERT,
+      severity: NotificationSeverity.HARD_BLOCK,
+      target: 'user',
+      title: 'Cereals',
+      body: 'Condition no longer met',
+      ruleSource: 'NEVER_MATCH',
+      triggeredAt: new Date(),
+    };
+
+    const repoWithPending = makeFakeNotificationRepo([staleNudge]) as ReturnType<
+      typeof makeFakeNotificationRepo
+    > & { _cooldowns: Record<string, number> };
+    // Simulate a previously-registered cooldown for this rule.
+    repoWithPending.registerCooldown('NEVER_MATCH', Date.now());
+    expect(repoWithPending._cooldowns['NEVER_MATCH']).toBeDefined();
+
+    const ctx = makeContextInput();
+    const rules: SafetyRule[] = [NEVER_MATCH_RULE];
+
+    evaluateNudges(ctx, rules, repoWithPending);
+
+    // Auto-resolved AND cooldown cleared.
+    expect(repoWithPending._acknowledged).toContain('cereals-1');
+    expect(repoWithPending._cooldowns['NEVER_MATCH']).toBeUndefined();
   });
 
   it('does not auto-resolve when rule not found', () => {

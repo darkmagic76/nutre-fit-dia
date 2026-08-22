@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
-import type { SystemNotification } from '@shared/domain';
+import type { SystemNotification } from '@domain/notification';
 
 interface NudgeState {
   pending: SystemNotification[];

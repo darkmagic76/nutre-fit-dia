@@ -1,5 +1,5 @@
 import type { Translations } from '@shared/i18n';
-import type { CulturalMetadata } from '@shared/domain';
+import type { CulturalMetadata } from '@domain/food';
 
 const COOKING_TECHNIQUE_I18N: Record<string, string> = {
   stew: 'cooking.stew',
