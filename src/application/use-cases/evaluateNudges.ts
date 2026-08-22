@@ -1,7 +1,6 @@
 import { buildNudgeContext } from '@domain/nudgeContextBuilder';
 import { evaluateRules } from '@domain/nudgeEvaluator';
 import { CooldownTracker } from '@domain/cooldownTracker';
-import { NotificationSeverity } from '@domain/index';
 import type { ContextInput } from '@domain/nudgeContext';
 import type { SafetyRule } from '@domain/nudgeTypes';
 import type { CooldownOps } from '@domain/cooldownTracker';
@@ -39,12 +38,20 @@ export function evaluateNudges(
 
   const pending = notifRepo.getPending();
 
-  // 1. Auto-resolve stale nudges
+  // 1. Auto-resolve stale nudges.
+  // A nudge clears once its rule condition stops holding, regardless of
+  // severity. HARD_BLOCK alerts (e.g. CEREALS_RESTRICTION) are NOT sticky: when
+  // the user corrects the excess — e.g. removes a cereal ration back to the
+  // allowed limit — the alert must disappear on the next evaluation.
+  //
+  // Resetting the cooldown on resolution closes the nudge lifecycle: the next
+  // time the condition holds again it is a NEW event, not spam, so it must be
+  // allowed to re-fire instead of being blocked by the previous cooldown window.
   for (const nudge of pending) {
-    if (nudge.severity === NotificationSeverity.HARD_BLOCK) continue;
     const rule = rules.find((r) => r.id === nudge.ruleSource);
     if (rule && !rule.condition(ctx)) {
       notifRepo.acknowledge(nudge.id);
+      cooldown.reset(rule.id);
     }
   }
 

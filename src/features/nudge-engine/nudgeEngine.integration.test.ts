@@ -167,5 +167,64 @@ describe('Nudge Engine Integration', () => {
         .pending.some((n) => n.ruleSource === 'WATER_HYDRATION');
       expect(waterStillPending).toBe(false);
     });
+
+    it('clears CEREALS_RESTRICTION nudge after removing a food drops the count back to the limit', () => {
+      // Reproduces the reported flow: 5 cereals under caloric restriction fires
+      // the nudge; removing one food (back to 4) must auto-resolve it.
+      useTrackerStore.setState({ caloricRestrictionActive: true });
+      useLogStore.setState({
+        todayLog: [cerealFood, cerealFood, cerealFood, cerealFood, cerealFood],
+      });
+
+      // Fire the nudge for the 5-cereal state.
+      container.evaluateNudges(storeContextInput());
+      expect(
+        useNudgeStore.getState().pending.some((n) => n.ruleSource === 'CEREALS_RESTRICTION'),
+      ).toBe(true);
+
+      // Remove one cereal via the real store action → count returns to 4 (within limit).
+      useLogStore.getState().removeFoodFromLog(0, true);
+      expect(useLogStore.getState().todayLog).toHaveLength(4);
+
+      // Re-evaluate with the CURRENT store state (4 cereals) → must auto-resolve.
+      container.evaluateNudges(storeContextInput());
+      expect(
+        useNudgeStore.getState().pending.some((n) => n.ruleSource === 'CEREALS_RESTRICTION'),
+      ).toBe(false);
+    });
+
+    it('re-fires CEREALS_RESTRICTION after resolve→exceed again within the cooldown window', () => {
+      // Full reported lifecycle: exceed (fires) → drop to limit (resolves +
+      // clears cooldown) → exceed again → must re-fire, NOT stay silent because
+      // of the 24h cooldown registered on the first firing.
+      useTrackerStore.setState({ caloricRestrictionActive: true });
+
+      // 1. Exceed → fires and registers the 24h cooldown.
+      useLogStore.setState({
+        todayLog: [cerealFood, cerealFood, cerealFood, cerealFood, cerealFood],
+      });
+      container.evaluateNudges(storeContextInput());
+      expect(
+        useNudgeStore.getState().pending.some((n) => n.ruleSource === 'CEREALS_RESTRICTION'),
+      ).toBe(true);
+
+      // 2. Drop back to the limit → auto-resolves and clears the cooldown.
+      useLogStore.setState({
+        todayLog: [cerealFood, cerealFood, cerealFood, cerealFood],
+      });
+      container.evaluateNudges(storeContextInput());
+      expect(
+        useNudgeStore.getState().pending.some((n) => n.ruleSource === 'CEREALS_RESTRICTION'),
+      ).toBe(false);
+
+      // 3. Exceed again → must re-fire despite the original 24h cooldown.
+      useLogStore.setState({
+        todayLog: [cerealFood, cerealFood, cerealFood, cerealFood, cerealFood],
+      });
+      container.evaluateNudges(storeContextInput());
+      expect(
+        useNudgeStore.getState().pending.some((n) => n.ruleSource === 'CEREALS_RESTRICTION'),
+      ).toBe(true);
+    });
   });
 });
