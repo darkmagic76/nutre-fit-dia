@@ -71,8 +71,10 @@ export const RATION_LIMITS: Record<FoodCategoryType, RationLimit> = {
     unit: 'week',
   },
   [FoodCategory.FISH]: {
-    min: 3,
-    max: 7, // Internal design decision — AESAN 2022 specifies ≥3/week with no maximum
+    min: 3, // AESAN 2022: ≥3 servings/week (floor)
+    // max is a PRODUCT DECISION, NOT AESAN. AESAN sets no upper limit on fish.
+    // 7 (≈1/day) caps animal-protein balance only; see FISH_EXCESS_THRESHOLD.
+    max: 7,
     unit: 'week',
   },
   [FoodCategory.EGGS]: {
