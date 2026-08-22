@@ -6,6 +6,7 @@ import type { Food } from '@domain/food';
 import {
   countRations,
   validateRations,
+  RationValidationResultSchema,
   type RationValidationResult,
 } from '../../domain/rationValidator';
 
@@ -36,7 +37,7 @@ const LogStateSchema = z.object({
       isRestricted: z.boolean().optional(),
     }),
   ),
-  todayValidation: z.any().nullable(),
+  todayValidation: RationValidationResultSchema.nullable(),
 });
 
 /**

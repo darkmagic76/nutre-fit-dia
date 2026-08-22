@@ -42,7 +42,14 @@ export const LEGUMES_CHECK_DAY_THRESHOLD = 4;
 /** Minimum legumes count for weekly check (Internal design decision — AESAN requires ≥4/week, this is a nudge trigger) */
 export const LEGUMES_MIN_WEEKLY_CHECK = 1;
 
-/** Fish rations above this triggers white meat restriction nudge (Internal design decision — AESAN 2022 specifies ≥3/week with no maximum) */
+/**
+ * Fish rations above this trigger the white-meat restriction nudge.
+ *
+ * PRODUCT DECISION, NOT AESAN: AESAN 2022 specifies a floor of ≥3 servings/week
+ * with NO maximum. The value 7 (≈1 serving/day) is an internal cap used only to
+ * balance total animal-protein intake — above it, the app nudges the user toward
+ * plant proteins. It is not a clinical limit and must not be attributed to AESAN.
+ */
 export const FISH_EXCESS_THRESHOLD = 7;
 
 /** WHO minimum weekly activity minutes (WHO physical activity) */

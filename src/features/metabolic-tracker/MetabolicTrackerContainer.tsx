@@ -1,4 +1,4 @@
-import { useTrackerStore } from '@infrastructure/stores';
+import { useMetabolicTrackerState } from './hooks/useMetabolicTrackerState';
 import { useT } from '@shared/i18n';
 import { useExportData } from '@shared/hooks/useExportData';
 import { useNudgeTrigger } from '@infrastructure/hooks/useNudgeTrigger';
@@ -29,7 +29,7 @@ export function MetabolicTrackerContainer() {
     setGlucose,
     setGlucoseContext,
     calculateTarget,
-  } = useTrackerStore();
+  } = useMetabolicTrackerState();
   const { exportAllData, isExporting } = useExportData();
   const trigger = useNudgeTrigger();
 

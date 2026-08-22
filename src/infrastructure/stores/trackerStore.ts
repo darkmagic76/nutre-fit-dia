@@ -4,6 +4,7 @@ import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
 import { ValidationError } from '@domain/errors';
 import { calculateTarget as calculateTargetUseCase } from '@application/use-cases/calculateTarget';
+import { CaloricTargetOutputSchema } from '@domain/caloricTargetService';
 import type { Translations } from '@shared/i18n/types';
 import { es as DEFAULT_TRANSLATIONS } from '@shared/i18n/es';
 import type { BiomarkerRepository } from '@application/ports/biomarkerRepository';
@@ -113,9 +114,23 @@ export const useTrackerStore = create<TrackerState>()(
             paf: z.string(),
             glucose: z.string(),
             glucoseContext: z.enum(['fasting', 'postprandial']),
-            caloricTarget: z.any().nullable(),
+            caloricTarget: CaloricTargetOutputSchema.nullable(),
             caloricRestrictionActive: z.boolean(),
-            profileError: z.any().nullable(),
+            // profileError is a serialized ValidationError (class instance). After
+            // rehydration it is a plain object — we validate its SHAPE, not
+            // reconstruct the class instance (instanceof is lost across the JSON
+            // round-trip). calculateTarget() always produces a fresh ValidationError
+            // at runtime; the persisted value is only used for structural integrity.
+            // Extension point: add a .transform() here if instance reconstruction
+            // is ever needed (ADR-014 slice 2).
+            profileError: z
+              .object({
+                name: z.string(),
+                message: z.string(),
+                code: z.string(),
+                context: z.unknown().optional(),
+              })
+              .nullable(),
           });
           const parsed = TrackerStateSchema.safeParse(state);
           if (!parsed.success) {

@@ -122,8 +122,12 @@ function computeEnvironmentalScore(food: Food): EnvironmentalScore {
   const proximity = getProximity(food, userRegion);
 
   // Weighted composite (0–100)
+  // NOTE: the 50/30/20 weights are an internal design decision, NOT published by
+  // AESAN. AESAN 2022 qualitatively prioritises reducing environmental impact but
+  // does not publish numeric CO₂eq values or weightings. Carbon-footprint figures
+  // derive from Poore & Nemecek (2018) / EAT-Lancet (ADR-014 slice 3 — C3).
   const overallScore = round(
-    carbon.weight * 0.5 + // Carbon dominates (AESAN 2022 priority)
+    carbon.weight * 0.5 + // Carbon weighted highest (design decision)
       season.weight * 0.3 + // Seasonality second
       proximity.weight * 0.2, // Proximity third
   );
