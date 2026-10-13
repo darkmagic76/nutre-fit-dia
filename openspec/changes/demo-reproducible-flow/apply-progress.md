@@ -912,3 +912,181 @@ File section above is the full record (MERGED: all prior slices preserved).
 
 DRAGFIX-MOBILE CLOSED. No open warnings. Recommended: `sdd-verify` (focused)
 or direct user acceptance (post-archive follow-up, no archive phase pending).
+
+---
+
+# Apply Progress: demo-reproducible-flow — Micro-slice RESPONSIVE-PANEL (post-archive user-reported UX follow-up)
+
+## Scope
+
+STRICT micro-slice only (user correction): the tour panel must look good BOTH
+on desktop browser AND on mobile (the always-narrow `max-w-sm` phone look from
+DRAGFIX-MOBILE is wrong on desktop). Classes only on the `src/App.tsx` dialog
+inner wrapper — no logic/prop/i18n/store/hook changes. Work directly on
+`develop`, local only, no push. Review budget 400 lines — STOP and report if
+exceeded (no overflow: 1 line).
+
+## Status: RESPONSIVE-PANEL complete
+
+- [x] `src/App.tsx` dialog inner wrapper (1 line):
+  `w-full max-w-sm` → `w-[calc(100%-2rem)] sm:w-full sm:max-w-lg`;
+  `max-h-[85vh]` → `max-h-[85dvh]`. `my-4 sm:my-8`, `overflow-y-auto`,
+  `rounded-2xl` unchanged.
+  - Mobile (<sm): nearly full-width (`w-[calc(100%-2rem)]` keeps safe side
+    margins inside the overlay's `p-3`), `max-h-[85dvh]` internal scroll,
+    `rounded-2xl`.
+  - Desktop (sm+): centered dialog with comfortable reading width
+    (`sm:max-w-lg`), same `max-h-[85dvh]`/scroll behavior (overlay already
+    `justify-center` + `sm:items-center`).
+- [x] Kept: `fixed inset-0` overlay, `bg-stone-950/50` backdrop,
+  `role="dialog"`/`aria-modal`/`aria-label` exactly, drag handle behavior and
+  `useDraggablePanel` hook untouched, all existing role queries passing.
+- [x] No new functions (functions 100% holds). No new i18n keys.
+
+## TDD Cycle Evidence
+
+| Task | RED | GREEN | REFACTOR |
+|------|-----|-------|----------|
+| Responsive panel (classes only) | n/a (styling-only; existing 65 focused tests pin strings/roles/drag) | 65/65 pass unchanged, `tsc -b` exit 0 | — |
+
+## Work Unit Evidence
+
+| Evidence | Value |
+|----------|-------|
+| Focused test command | `pnpm vitest run src/features/demo-guide/ src/App.test.tsx src/App.integration.test.tsx` → 5 files, 65 tests, all pass |
+| Full gates | `pnpm quality` green (prettier + oxlint 1 pre-existing warn in DemoGuideContainer + `tsc -b` + 92 files / 1008 tests pass; pre-commit hook re-ran it on commit) |
+| Runtime harness | `pnpm test:e2e -- demo` → 9/9 pass (5 demo + 4 smoke; responsive wrapper keeps role queries green) |
+| Rollback boundary | Revert the single RESPONSIVE-PANEL commit (`c78816c`); DRAGFIX-MOBILE commit `e9d9f51` untouched below |
+
+## Commits (local, no push)
+
+- `c78816c` style(demo): responsive tour panel for mobile and desktop
+
+## Line count
+
+1 insertion + 1 deletion = 2 changed lines (well under 400 budget).
+
+## Design decisions / deviations
+
+- None — implementation matches the micro-slice spec (`sm:max-w-lg`
+  comfortable reading width, `dvh` units, mobile `calc(100%-2rem)` margins).
+- `sm:w-full` added alongside `sm:max-w-lg` so the panel fills up to the cap
+  on small tablets instead of shrink-wrapping.
+
+## Native attempt ledger
+
+UNAVAILABLE (gentle-ai 4.1.1 has no sdd-attempt command). Manual budget used:
+micro-slice 2/400 lines, stop-and-report on overflow (no overflow occurred).
+
+## Engram mirror note
+
+Memory tools unavailable in this subagent context — file written fully above
+(MERGED: all prior slices preserved, nothing overwritten). Orchestrator: please
+mirror this section to topic_key `sdd/demo-reproducible-flow/apply-progress`
+via `mem_update` on the tasks-observation id.
+
+## Next
+
+RESPONSIVE-PANEL CLOSED. No open warnings. Recommended: direct user acceptance
+(post-archive follow-up, no archive phase pending).
+
+---
+
+# Apply Progress: demo-reproducible-flow — Micro-slice DRAGLAYOUT-FIX (post-archive user-reported UX follow-up)
+
+## Scope
+
+STRICT micro-slice only (diagnosed root cause, no redesign): the drag
+`transform` sat on an INNER content div inside an `overflow-y-auto` + `max-h`
+clipping box, so dragged content slid under its own clip and looked
+lost/misaligned; flex-centering + inner translate also fought each other. Move
+the transform onto the POSITIONED panel element itself. No logic/prop/i18n/
+store/hook changes; `clampDragOffset` kept and verified against the new
+structure. Work directly on `develop`, local only, no push. Review budget 400
+lines — STOP and report if exceeded (no overflow: 53 changed lines).
+
+## Status: DRAGLAYOUT-FIX complete
+
+- [x] Root cause CONFIRMED on HEAD before fixing: `src/App.tsx` rendered
+  `fixed` overlay (flex center, `overflow-y-auto`, backdrop) > inner box div
+  (`w-[calc(100%-2rem)] sm:max-w-lg`, margins, `max-h-[85dvh]`,
+  `overflow-y-auto`, `rounded-2xl`) > Container > View root
+  `<div style={panelStyle} className="w-full">` — transform on inner content
+  div inside the clipping box. Container renders the View directly (no
+  wrapper) — verified in `DemoGuideContainer.tsx`.
+- [x] `src/App.tsx` dialog block: overlay keeps ONLY `fixed inset-0 z-50` +
+  backdrop (`bg-stone-950/50`) + `role="dialog"`/`aria-modal`/`aria-label`
+  (unchanged) + `overflow-y-auto p-3 sm:p-6` as plain block positioning
+  context; inner box div DELETED (flex-centering that fought the transform
+  removed with it).
+- [x] `src/features/demo-guide/DemoGuideView.tsx` root is now the panel box:
+  carries `panelStyle` transform + `w-[calc(100%-2rem)] sm:w-full sm:max-w-lg`
+  + `mx-auto` (horizontal centering when undragged; translate offsets from
+  there once dragged) + `my-4 sm:my-8` + `max-h-[85dvh] overflow-y-auto
+  rounded-2xl`. Content scrolls INSIDE the moving panel; nothing clips the
+  panel itself except the viewport. All header drag handles, inner
+  buttons/scroll, responsive mobile (nearly full-width) + desktop (capped
+  centered) behavior kept.
+- [x] Tests — EVERY panel variant now asserts the transform lands on the outer
+  panel element: shared `renderAndDrag` helper (runs for all 6 steps +
+  completed summary + confirm-reset + null-step fallback) asserts the panel
+  root (`container.firstElementChild`) carries `max-h-[85dvh]` +
+  `overflow-y-auto` + `rounded-2xl`, walks header→panel-root asserting NO
+  intermediate `overflow-y-auto`/`overflow-hidden` clipper, then asserts
+  `translate(60px, 30px)` on the root. First View wiring test + new App-level
+  test (`dialog.firstElementChild` carries panel classes, drag moves it,
+  starts untransformed) lock the overlay→panel structure end to end. Only
+  asserts invalidated by the restructure were extended; all existing tests
+  green unchanged otherwise. No new functions → functions 100% holds.
+
+## TDD Cycle Evidence
+
+| Task | RED | GREEN | REFACTOR |
+|------|-----|-------|----------|
+| Draglayout restructure (classes + wrapper move) | n/a (layout-only; existing drag asserts pin transform values) | 44/44 focused pass, `tsc -b` exit 0 | inner box div deleted, panel classes consolidated on View root |
+| Per-variant outer-panel guards | n/a — passed immediately (transform was already applied to View root; guards lock the corrected structure) | 10/10 variant drags + App-level structural test pass | clip-walk assert shared in helper (no duplication) |
+
+## Work Unit Evidence
+
+| Evidence | Value |
+|----------|-------|
+| Focused test command | `pnpm vitest run src/features/demo-guide src/App.test.tsx` → 4 files, 44 tests, all pass |
+| Full gates | `pnpm quality` green (prettier + oxlint 1 pre-existing warn in DemoGuideContainer + `tsc -b` + 92 files / 1009 tests pass; pre-commit hook re-ran it on commit) |
+| Runtime harness | `pnpm test:e2e e2e/demo.spec.ts` → 5/5 pass (Playwright webServer auto-boots `pnpm dev` on :5173; dialog role queries + full 6-step offline walk green under the restructured overlay) |
+| Rollback boundary | Revert the single DRAGLAYOUT-FIX commit (`7c3cad8`); RESPONSIVE-PANEL commit `c78816c` untouched below. Exact files: `src/App.tsx` dialog block, `src/features/demo-guide/DemoGuideView.tsx` root, `DemoGuideView.test.tsx` guards, `src/App.test.tsx` structural test |
+
+## Commits (local, no push)
+
+- `7c3cad8` fix(demo): place drag transform on outer panel box, drop clipping wrapper
+
+## Line count
+
+48 insertions + 5 deletions = 53 changed lines (well under 400 budget).
+
+## Design decisions / deviations
+
+- None — implementation matches the micro-slice spec exactly (block overlay +
+  panel-root transform + `mx-auto` centering + internal panel scroll).
+- Overlay keeps `overflow-y-auto` as the viewport-level fallback scroller (the
+  panel's own `max-h-[85dvh]` handles normal scrolling); the deleted inner box
+  was the tight clip that caused the bug.
+- Desktop vertical centering (`sm:items-center`) is intentionally gone with the
+  flex context (it fought the translate); panel sits top-anchored with `my-8`
+  on sm+ — accepted tradeoff per spec.
+
+## Native attempt ledger
+
+UNAVAILABLE (gentle-ai 4.1.1 has no sdd-attempt command). Manual budget used:
+micro-slice 53/400 lines, stop-and-report on overflow (no overflow occurred).
+
+## Engram mirror note
+
+Memory tools unavailable in this subagent context — file written fully above
+(MERGED: all prior slices preserved, nothing overwritten). Orchestrator: please
+mirror this section to topic_key `sdd/demo-reproducible-flow/apply-progress`
+via `mem_update` on the tasks-observation id.
+
+## Next
+
+DRAGLAYOUT-FIX CLOSED. No open warnings. Recommended: direct user acceptance
+(post-archive follow-up, no archive phase pending).
