@@ -37,10 +37,17 @@ describe('resetDemoStorage', () => {
     await expect(decryptSensitive(encrypted)).resolves.toBe('after-reset');
   });
 
-  it('succeeds without IndexedDB (warn + localStorage-only fallback)', async () => {
+  it('warns and continues with localStorage only when IndexedDB is unavailable', async () => {
+    vi.resetModules();
+    vi.stubGlobal('indexedDB', undefined);
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const { resetDemoStorage } = await import('@infrastructure/storage');
 
     await expect(resetDemoStorage()).resolves.toBeUndefined();
     expect(localStorage.getItem('nutrefitdia-log')).toBeNull();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('IndexedDB unavailable'));
+
+    warn.mockRestore();
+    vi.unstubAllGlobals();
   });
 });
