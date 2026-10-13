@@ -108,4 +108,24 @@ describe('App demo entry', () => {
     expect(await screen.findByRole('heading', { name: 'Datos iniciales' })).toBeInTheDocument();
     expect(window.location.search).toBe('');
   });
+
+  it('drag transform lands on the outer panel with no clipping wrapper', async () => {
+    // DRAGLAYOUT-FIX guard: the overlay keeps only positioning context —
+    // the panel box (dialog > first child) carries the drag transform and
+    // its own internal scroll, with no overflow-clipping box in between.
+    renderAppWithFreshContainer();
+    fireEvent.click(screen.getByRole('button', { name: 'Demostración guiada' }));
+    const dialog = await screen.findByRole('dialog');
+    const heading = await screen.findByRole('heading', { name: 'Datos iniciales' });
+    const panel = dialog.firstElementChild as HTMLElement;
+    expect(panel.className).toContain('max-h-[85dvh]');
+    expect(panel.className).toContain('overflow-y-auto');
+    expect(panel.style.transform).toBe('');
+
+    const handle = heading.closest('header') as HTMLElement;
+    fireEvent.pointerDown(handle, { clientX: 100, clientY: 100, button: 0 });
+    fireEvent.pointerMove(window, { clientX: 160, clientY: 130 });
+    expect(panel.style.transform).toBe('translate(60px, 30px)');
+    fireEvent.pointerUp(window);
+  });
 });

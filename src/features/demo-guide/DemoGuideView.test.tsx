@@ -102,6 +102,9 @@ describe('DemoGuideView (pure props)', () => {
     const panel = container.firstElementChild as HTMLElement;
     const handle = screen.getByRole('heading').closest('header') as HTMLElement;
     expect(handle.className).toContain('cursor-grab');
+    // Transform lives on the outer panel box (not an inner clipped div).
+    expect(panel.className).toContain('max-h-[85dvh]');
+    expect(panel.className).toContain('overflow-y-auto');
     expect(panel.style.transform).toBe('');
 
     fireEvent.pointerDown(handle, { clientX: 100, clientY: 100, button: 0 });
@@ -120,6 +123,12 @@ describe('DemoGuideView (pure props)', () => {
 });
 
 describe('DemoGuideView drag handle coverage (every tour panel)', () => {
+  /**
+   * DRAGLAYOUT-FIX guard: the drag transform must land on the OUTER panel
+   * box itself (the element carrying max-h + internal scroll), never on an
+   * inner content div inside an overflow-clipping ancestor. Every variant
+   * below asserts this through this shared helper.
+   */
   function renderAndDrag(props: DemoGuideViewProps): { transform: string; handleClass: string } {
     const { container, unmount } = render(
       <I18nProvider>
@@ -127,7 +136,20 @@ describe('DemoGuideView drag handle coverage (every tour panel)', () => {
       </I18nProvider>,
     );
     const panel = container.firstElementChild as HTMLElement;
+    // Outer panel box: responsive width + centered + internal scroll.
+    expect(panel.className).toContain('max-h-[85dvh]');
+    expect(panel.className).toContain('overflow-y-auto');
+    expect(panel.className).toContain('rounded-2xl');
     const handle = screen.getByRole('heading').closest('header') as HTMLElement;
+    // No overflow-clipping wrapper between the header handle and the panel
+    // root: content scrolls INSIDE the moving panel, nothing clips the panel.
+    let node: HTMLElement | null = handle;
+    while (node !== null && node !== panel) {
+      expect(node.className).not.toContain('overflow-y-auto');
+      expect(node.className).not.toContain('overflow-hidden');
+      node = node.parentElement;
+    }
+    expect(node).toBe(panel);
     const handleClass = handle.className;
     fireEvent.pointerDown(handle, { clientX: 100, clientY: 100, button: 0 });
     fireEvent.pointerMove(window, { clientX: 160, clientY: 130 });

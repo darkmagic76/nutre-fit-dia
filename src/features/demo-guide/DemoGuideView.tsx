@@ -238,7 +238,10 @@ export function DemoGuideView(props: DemoGuideViewProps) {
       />
     );
   return (
-    <div style={panelStyle} className="w-full">
+    <div
+      style={panelStyle}
+      className="w-[calc(100%-2rem)] sm:w-full sm:max-w-lg mx-auto my-4 sm:my-8 max-h-[85dvh] overflow-y-auto rounded-2xl"
+    >
       {content}
     </div>
   );
