@@ -15,6 +15,7 @@ export function createZustandBiomarkerRepository(): BiomarkerRepository & StateE
     recordGlucose: (reading) => useBiomarkerStore.getState().recordGlucose(reading),
     recordWeight: (kg, cm) => useBiomarkerStore.getState().recordWeight(kg, cm),
     detectIMCThresholdCrossing: () => useBiomarkerStore.getState().detectIMCThresholdCrossing(),
+    clearBiomarkers: () => useBiomarkerStore.getState().resetBiomarkerHistory(),
     getState: () => useBiomarkerStore.getState() as unknown as Record<string, unknown>,
   };
 }

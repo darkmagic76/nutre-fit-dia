@@ -14,6 +14,7 @@ export function createZustandActivityRepository(): ActivityRepository & StateExp
     getEntries: () => useActivityStore.getState().entries,
     addEntry: (entry) => useActivityStore.getState().addEntry(entry),
     getStreak: () => useActivityStore.getState().streak,
+    clearActivity: () => useActivityStore.getState().resetWeek(),
     getState: () => useActivityStore.getState() as unknown as Record<string, unknown>,
   };
 }

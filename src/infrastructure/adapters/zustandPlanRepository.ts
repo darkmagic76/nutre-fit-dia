@@ -11,6 +11,7 @@ export function createZustandPlanRepository(): PlanRepository & StateExporter {
   return {
     getPlan: () => usePlanStore.getState().weeklyPlan,
     generatePlan: () => usePlanStore.getState().generatePlan(),
+    clearPlan: () => usePlanStore.getState().clearPlan(),
     getState: () => usePlanStore.getState() as unknown as Record<string, unknown>,
   };
 }

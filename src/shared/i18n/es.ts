@@ -286,4 +286,41 @@ export const es: Translations = {
 
   // Log — extended
   'log.animalProteinWarning': 'Proteína animal: {count}/día — considerar fuente de calcio vegetal',
+
+  // Demo guide
+  'demo.title': 'Demostración guiada',
+  'demo.steps.1.title': 'Datos iniciales',
+  'demo.steps.2.title': 'Perfil',
+  'demo.steps.3.title': 'Escaneo',
+  'demo.steps.4.title': 'Recomendación',
+  'demo.steps.5.title': 'Sustitución',
+  'demo.steps.6.title': 'Validaciones',
+  'demo.steps.1.hint':
+    'Empezamos con datos de ejemplo para que explores sin miedo a equivocarte. Así ves cómo la app guarda tu información.',
+  'demo.steps.2.hint':
+    'Calculá tu objetivo calórico diario con glucosa 100 en ayunas. Este número adapta el plan a tu cuerpo y tu diabetes.',
+  'demo.steps.3.hint':
+    'El aceite de oliva virgen extra es VERDE (recomendable) y la cola es ROJA (evitar). El semáforo te dice al instante qué te conviene.',
+  'demo.steps.4.hint':
+    'Generá el plan semanal: 7 días válidos según AESAN 2022. Te muestra qué comer cada día sin adivinar.',
+  'demo.steps.5.hint':
+    'Pedí hasta 3 alternativas más sostenibles para la ternera. Te enseña a cambiar un alimento por una opción más sana.',
+  'demo.steps.6.hint':
+    'Revisá las violaciones diarias y semanales detectadas. Estas reglas te dan confianza de que el plan cumple criterios clínicos.',
+  'demo.expected': 'Esperado',
+  'demo.actual': 'Obtenido',
+  'demo.replay': 'Reiniciar demo',
+  'demo.exit': 'Salir de la demo',
+  'demo.confirmReset': 'Ya hay datos guardados. ¿Querés reemplazarlos con los datos de la demo?',
+  'demo.check.green': 'Clasificación VERDE',
+  'demo.check.red': 'Clasificación ROJA',
+  'demo.check.planValid': 'Plan válido',
+  'demo.check.alternatives': 'Alternativas',
+  'demo.check.violations': 'Violaciones',
+  'demo.next': 'Siguiente',
+  'demo.back': 'Atrás',
+  'demo.pass': 'Correcto',
+  'demo.fail': 'Falló',
+  'demo.confirm': 'Confirmar',
+  'demo.cancel': 'Cancelar',
 };

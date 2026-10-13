@@ -10,6 +10,8 @@ describe('Container port interface', () => {
     expectTypeOf(_container.calculateTarget).toBeFunction();
     expectTypeOf(_container.evaluateNudges).toBeFunction();
     expectTypeOf(_container.exportData).toBeFunction();
+    expectTypeOf(_container.seedDemo).toBeFunction();
+    expectTypeOf(_container.resetDemo).toBeFunction();
 
     // Repositories
     expectTypeOf(_container.notificationRepo).toBeObject();

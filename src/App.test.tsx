@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nProvider } from '@shared/i18n';
 import { ContainerProvider } from '@shared/context/ContainerContext';
-import { container } from '@infrastructure/compositionRoot';
+import { container, createContainer } from '@infrastructure/compositionRoot';
 import { createLocalStorage, createMatchMedia } from './test/test-helpers';
 import App from './App';
 import indexHtml from '../index.html?raw';
@@ -72,5 +72,40 @@ describe('App', () => {
     // Act: read the raw HTML content
     // Assert: CSP meta tag includes the upgrade-insecure-requests directive
     expect(indexHtml).toContain('upgrade-insecure-requests');
+  });
+});
+
+describe('App demo entry', () => {
+  beforeEach(async () => {
+    window.history.replaceState(null, '', '/');
+    // Stores are module-level singletons shared across containers —
+    // reset so each entry path starts from a clean profile.
+    await container.resetDemo();
+  });
+
+  function renderAppWithFreshContainer() {
+    render(
+      <ContainerProvider value={createContainer()}>
+        <I18nProvider>
+          <App />
+        </I18nProvider>
+      </ContainerProvider>,
+    );
+  }
+
+  it('opens the guided tour at step 1 from the header demo button', async () => {
+    renderAppWithFreshContainer();
+    expect(screen.queryByRole('heading', { name: 'Datos iniciales' })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Demostración guiada' }));
+    expect(await screen.findByRole('heading', { name: 'Datos iniciales' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Salir de la demo' }));
+    expect(screen.queryByRole('heading', { name: 'Datos iniciales' })).not.toBeInTheDocument();
+  });
+
+  it('opens the tour at step 1 from the ?demo=1 deep-link', async () => {
+    window.history.replaceState(null, '', '/?demo=1');
+    renderAppWithFreshContainer();
+    expect(await screen.findByRole('heading', { name: 'Datos iniciales' })).toBeInTheDocument();
+    expect(window.location.search).toBe('');
   });
 });

@@ -26,6 +26,7 @@ const createMockBiomarkerRepo = (): BiomarkerRepository => ({
   recordGlucose: (reading) => useBiomarkerStore.getState().recordGlucose(reading),
   recordWeight: (kg, cm) => useBiomarkerStore.getState().recordWeight(kg, cm),
   detectIMCThresholdCrossing: () => useBiomarkerStore.getState().detectIMCThresholdCrossing(),
+  clearBiomarkers: () => useBiomarkerStore.getState().resetBiomarkerHistory(),
 });
 
 // --- Zod schema for persisted state (structural integrity only) ---

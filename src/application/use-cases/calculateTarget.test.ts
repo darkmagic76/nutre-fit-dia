@@ -50,6 +50,10 @@ function makeFakeBiomarkerRepo(
     detectIMCThresholdCrossing() {
       return this.thresholdCrossing;
     },
+    clearBiomarkers() {
+      this._glucoseReadings.length = 0;
+      this._weightReadings.length = 0;
+    },
   };
 }
 

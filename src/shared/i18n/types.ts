@@ -285,4 +285,35 @@ export interface Translations {
 
   // Nudge rule bodies (dynamic — key used as format string with {names} placeholder)
   'nudge.body.sustainableSubstitution': string;
+
+  // Demo guide (reproducible evaluator tour — es + en required, typecheck enforced)
+  'demo.title': string;
+  'demo.steps.1.title': string;
+  'demo.steps.2.title': string;
+  'demo.steps.3.title': string;
+  'demo.steps.4.title': string;
+  'demo.steps.5.title': string;
+  'demo.steps.6.title': string;
+  'demo.steps.1.hint': string;
+  'demo.steps.2.hint': string;
+  'demo.steps.3.hint': string;
+  'demo.steps.4.hint': string;
+  'demo.steps.5.hint': string;
+  'demo.steps.6.hint': string;
+  'demo.expected': string;
+  'demo.actual': string;
+  'demo.replay': string;
+  'demo.exit': string;
+  'demo.confirmReset': string;
+  'demo.check.green': string;
+  'demo.check.red': string;
+  'demo.check.planValid': string;
+  'demo.check.alternatives': string;
+  'demo.check.violations': string;
+  'demo.next': string;
+  'demo.back': string;
+  'demo.pass': string;
+  'demo.fail': string;
+  'demo.confirm': string;
+  'demo.cancel': string;
 }

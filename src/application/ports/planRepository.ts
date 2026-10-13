@@ -7,4 +7,7 @@ export interface PlanRepository {
 
   /** Generate a new weekly plan based on current tracker state. */
   generatePlan(): void;
+
+  /** Discard the current weekly plan (demo replay / guided reset). */
+  clearPlan(): void;
 }

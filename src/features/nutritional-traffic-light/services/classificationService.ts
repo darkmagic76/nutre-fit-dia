@@ -1,70 +1,14 @@
 import type { Food } from '@domain/food';
-import { FoodCategory } from '@domain/foodCategory';
 import { TrafficLightColor } from '@domain/trafficLight';
-import { detectOccultFromFood } from './occultSugarDetector';
 import { computeEnvironmentalScore } from '@domain/sustainability';
-import type { EnvironmentalScore } from '@domain/sustainability';
+import { classifyFood, detectOccultFromFood } from '@domain/classification';
+import type { ClassificationResult } from '@domain/classification';
 
 /**
- * Classifies a food into Green/Orange/Red per FR-3.1 (Semáforo Nutricional, Modelo Hospital Rey Juan Carlos)
- * and SPECS_TECH §3.
- *
- * Priority order:
- * 1. Occult sugars detected → RED (FR-3.2 — overrides everything)
- * 2. Trans fats → RED
- * 3. Category-based defaults
- * 4. Specific overrides (high GI fruits, processed items)
+ * Presentation mapper over the domain classification core.
+ * Adds Spanish reason strings for the traffic-light UI — the pure
+ * detection/color rules live in `@domain/classification` (no duplicated logic).
  */
-
-/** Default classification per FoodCategory when no occult/trans fat is present */
-const CATEGORY_DEFAULTS: Record<FoodCategory, TrafficLightColor> = {
-  // Cereals default to ORANGE (refined-grain risk). Whole-grain vs refined is NOT
-  // yet distinguished: the Food model has no `isWholeGrain` attribute, and ADR-005
-  // defers that distinction to future work. Do not claim an override that does not
-  // exist here (ADR-014 slice 3 — traceability fix C2).
-  [FoodCategory.CEREALS]: TrafficLightColor.ORANGE,
-  [FoodCategory.VEGETABLES]: TrafficLightColor.GREEN,
-  [FoodCategory.FRUITS]: TrafficLightColor.GREEN,
-  [FoodCategory.OLIVE_OIL]: TrafficLightColor.GREEN,
-  [FoodCategory.DAIRY]: TrafficLightColor.ORANGE,
-  [FoodCategory.LEGUMES]: TrafficLightColor.GREEN,
-  [FoodCategory.FISH]: TrafficLightColor.GREEN,
-  [FoodCategory.EGGS]: TrafficLightColor.GREEN,
-  [FoodCategory.WHITE_MEAT]: TrafficLightColor.ORANGE,
-  [FoodCategory.RED_MEAT]: TrafficLightColor.ORANGE,
-  [FoodCategory.WATER]: TrafficLightColor.GREEN,
-  [FoodCategory.NUTS]: TrafficLightColor.GREEN,
-  [FoodCategory.TUBERS]: TrafficLightColor.GREEN,
-};
-
-/**
- * FR-3.2: "Si se detecta coincidencia en ingredientes, el producto se clasificará
- * automáticamente como Rojo (Evitar), independientemente de su aporte calórico total."
- */
-export function classifyFood(food: Food): TrafficLightColor {
-  const detection = detectOccultFromFood(food.harmfulIngredients);
-
-  // Rule 1: occult sugars → RED (clinical override)
-  if (detection.hasOccultSugars) {
-    return TrafficLightColor.RED;
-  }
-
-  // Rule 2: trans fats → RED
-  if (detection.hasTransFats || food.hasTransFats) {
-    return TrafficLightColor.RED;
-  }
-
-  // Rule 3: category default
-  return CATEGORY_DEFAULTS[food.category];
-}
-
-export interface ClassificationResult {
-  color: TrafficLightColor;
-  reasons: string[];
-  /** Environmental sustainability score (ADR-007). Optional — degrades gracefully when carbon data is missing. */
-  environmentalScore?: EnvironmentalScore;
-}
-
 export function classifyFoodWithReasons(food: Food): ClassificationResult {
   const detection = detectOccultFromFood(food.harmfulIngredients);
   const reasons: string[] = [];
@@ -83,7 +27,7 @@ export function classifyFoodWithReasons(food: Food): ClassificationResult {
     reasons.push('Producto procesado con ingredientes no recomendados');
   }
 
-  const color = CATEGORY_DEFAULTS[food.category];
+  const color = classifyFood(food);
   const environmentalScore = computeEnvironmentalScore(food);
   return { color, reasons, environmentalScore };
 }

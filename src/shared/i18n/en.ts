@@ -281,4 +281,41 @@ export const en: Translations = {
 
   // Log — extended
   'log.animalProteinWarning': 'Animal protein: {count}/day — consider plant-based calcium source',
+
+  // Demo guide
+  'demo.title': 'Guided demo',
+  'demo.steps.1.title': 'Initial data',
+  'demo.steps.2.title': 'Profile',
+  'demo.steps.3.title': 'Scan',
+  'demo.steps.4.title': 'Recommendation',
+  'demo.steps.5.title': 'Substitution',
+  'demo.steps.6.title': 'Validations',
+  'demo.steps.1.hint':
+    'We start with sample data so you can explore without fear of mistakes. This shows how the app keeps your information.',
+  'demo.steps.2.hint':
+    'Calculate your daily calorie target with fasting glucose 100. This number adapts the plan to your body and your diabetes.',
+  'demo.steps.3.hint':
+    'Extra virgin olive oil is GREEN (recommended) and cola is RED (avoid). The traffic light tells you instantly what suits you.',
+  'demo.steps.4.hint':
+    'Generate the weekly plan: 7 valid days per AESAN 2022. It shows what to eat each day without guessing.',
+  'demo.steps.5.hint':
+    'Ask for up to 3 more sustainable alternatives to beef. It shows how to swap a food for a healthier option.',
+  'demo.steps.6.hint':
+    'Review the daily and weekly violations found. These rules give you confidence the plan meets clinical criteria.',
+  'demo.expected': 'Expected',
+  'demo.actual': 'Actual',
+  'demo.replay': 'Replay demo',
+  'demo.exit': 'Exit demo',
+  'demo.confirmReset': 'There is saved data. Replace it with the demo data?',
+  'demo.check.green': 'GREEN classification',
+  'demo.check.red': 'RED classification',
+  'demo.check.planValid': 'Valid plan',
+  'demo.check.alternatives': 'Alternatives',
+  'demo.check.violations': 'Violations',
+  'demo.next': 'Next',
+  'demo.back': 'Back',
+  'demo.pass': 'Pass',
+  'demo.fail': 'Fail',
+  'demo.confirm': 'Confirm',
+  'demo.cancel': 'Cancel',
 };
