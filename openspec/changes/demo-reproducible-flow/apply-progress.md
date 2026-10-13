@@ -712,3 +712,102 @@ micro-slice 346/400 lines, stop-and-report on overflow (no overflow occurred).
 
 Phase 5 (rollback note 5.1 + final checks 5.2) — then verify Phase 4 / archive.
 DRAGGABLE CLOSED. No open warnings.
+
+---
+
+# Apply Progress: demo-reproducible-flow — Micro-slice CONTENT-EDUCATIONAL (user-requested product/content pass)
+
+## Scope
+STRICT micro-slice only (user request, product/content pass, NO structural
+changes): revise the VALUES (never key names) of `demo.steps.{1..6}.hint` in
+`src/shared/i18n/es.ts` AND `en.ts` — max 1-2 short sentences per hint, plain
+patient words, each hint states (a) what the step does + (b) patient value.
+Titles kept (already simple nouns). No logic, no props, no styles, no new
+keys, no new functions. `demoDataset.ts` checked — ids only, NO change (pinned
+ids/values `oil-aove`, `proc-refresco-cola`, glucose 100 untouched). Local
+commit on `feature/demo-reproducible-flow` only, no push, no merge.
+
+## Status: CONTENT-EDUCATIONAL complete
+
+- [x] es.ts — 6 hints revised (voseo kept per file convention):
+  1. `Empezamos con datos de ejemplo para que explores sin miedo a
+     equivocarte. Así ves cómo la app guarda tu información.`
+  2. `Calculá tu objetivo calórico diario con glucosa 100 en ayunas. Este
+     número adapta el plan a tu cuerpo y tu diabetes.`
+  3. `El aceite de oliva virgen extra es VERDE (recomendable) y la cola es
+     ROJA (evitar). El semáforo te dice al instante qué te conviene.`
+  4. `Generá el plan semanal: 7 días válidos según AESAN 2022. Te muestra qué
+     comer cada día sin adivinar.`
+  5. `Pedí hasta 3 alternativas más sostenibles para la ternera. Te enseña a
+     cambiar un alimento por una opción más sana.`
+  6. `Revisá las violaciones diarias y semanales detectadas. Estas reglas te
+     dan confianza de que el plan cumple criterios clínicos.`
+- [x] en.ts — 6 hints revised (parity enforced by `Translations` type):
+  1. `We start with sample data so you can explore without fear of mistakes.
+     This shows how the app keeps your information.`
+  2. `Calculate your daily calorie target with fasting glucose 100. This
+     number adapts the plan to your body and your diabetes.`
+  3. `Extra virgin olive oil is GREEN (recommended) and cola is RED (avoid).
+     The traffic light tells you instantly what suits you.`
+  4. `Generate the weekly plan: 7 valid days per AESAN 2022. It shows what to
+     eat each day without guessing.`
+  5. `Ask for up to 3 more sustainable alternatives to beef. It shows how to
+     swap a food for a healthier option.`
+  6. `Review the daily and weekly violations found. These rules give you
+     confidence the plan meets clinical criteria.`
+- [x] CLINICAL ACCURACY GUARD: hints reuse only domain truth the app already
+  computes (glucose-100 dataset input, oil-aove GREEN / cola RED worked hint,
+  7 valid days, ≤3 alternatives, AESAN 2022 rules). No new health claims, no
+  invented numbers, no medical advice beyond computed output. Patient-benefit
+  phrasing kept weak/accurate (`adapta`, `te dice`, `te enseña`, `confianza`).
+- [x] Test asserts: NO test pinned the old hint strings (grep confirmed — only
+  `demo.confirmReset` is pinned in `DemoGuideContainer.test.tsx:63` and
+  `DemoGuideView.test.tsx:59`, untouched; `e2e/demo.spec.ts` uses role
+  queries). Zero test edits needed; truth asserts intact.
+
+## TDD Cycle Evidence
+
+| Task | RED | GREEN | REFACTOR |
+|------|-----|-------|----------|
+| Hint copy (values only) | n/a (copy-only; no behavior change, no test pins the strings) | 31/31 focused pass unchanged, `tsc -b` exit 0 | — |
+
+## Work Unit Evidence
+
+| Evidence | Value |
+|----------|-------|
+| Focused test command | `pnpm vitest run src/features/demo-guide/ src/App.test.tsx` → 4 files, 31 tests, all pass |
+| Full gates | `pnpm quality` green (prettier + oxlint 1 pre-existing warn + `tsc -b` + 92 files / 994 tests pass; pre-commit hook re-ran it on commit) |
+| Runtime harness | `pnpm test:e2e -- demo` → 9/9 pass (5 demo + 4 smoke; revised hints render via `useT()` role queries) |
+| Rollback boundary | Revert the 1 micro-slice commit (`faec133`); all prior slice commits untouched below |
+
+## Commits (local, no push)
+
+- `faec133` feat(demo): revise tour hints with patient-centered educational copy
+
+## Line count
+
+24 insertions + 12 deletions = 36 changed lines (well under 400 budget).
+
+## Design decisions / deviations
+
+- Step titles + `demo.title`/`demo.confirmReset` unchanged — already simple
+  labels; scope asked for educational DATA, which lives in the hints.
+- `demoDataset.ts` unchanged — display-facing labels do not live there (ids
+  only); pinned test values preserved by not touching it.
+
+## Native attempt ledger
+
+UNAVAILABLE (gentle-ai 4.1.1 has no sdd-attempt command). Manual budget used:
+micro-slice 36/400 lines, stop-and-report on overflow (no overflow occurred).
+
+## Engram mirror note
+
+Memory tools unavailable in this subagent context — file written fully above
+(MERGED: all prior slices preserved, nothing overwritten). Orchestrator: please
+mirror this section to topic_key `sdd/demo-reproducible-flow/apply-progress`
+via `mem_update` on the tasks-observation id.
+
+## Next
+
+Phase 5 (rollback note 5.1 + final checks 5.2) — then verify Phase 4 / archive.
+CONTENT-EDUCATIONAL CLOSED. No open warnings.
