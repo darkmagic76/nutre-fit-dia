@@ -182,9 +182,9 @@ export default function App() {
           role="dialog"
           aria-modal="true"
           aria-label={t['demo.title']}
-          className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto bg-stone-950/25 p-3 sm:p-6"
+          className="fixed inset-0 z-50 flex items-start sm:items-center justify-center overflow-y-auto bg-stone-950/50 p-3 sm:p-6"
         >
-          <div className="w-full max-w-2xl my-4 sm:my-8">
+          <div className="w-full max-w-sm my-4 sm:my-8 max-h-[85vh] overflow-y-auto rounded-2xl">
             <DemoGuideContainer onNavigate={setTab} onExit={() => setShowDemo(false)} />
           </div>
         </div>

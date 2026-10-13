@@ -811,3 +811,104 @@ via `mem_update` on the tasks-observation id.
 
 Phase 5 (rollback note 5.1 + final checks 5.2) — then verify Phase 4 / archive.
 CONTENT-EDUCATIONAL CLOSED. No open warnings.
+
+---
+
+# Apply Progress: demo-reproducible-flow — Micro-slice DRAGFIX-MOBILE (post-archive user-reported UX follow-up)
+
+## Scope
+
+STRICT micro-slice only (user-reported defects, triage notes): (1) drag broken
+on some steps — diagnose + fix so EVERY tour panel drags via its header handle;
+(2) backdrop to 50% (`bg-stone-950/50`); (3) mobile-app look for the tour panel
+(narrow phone-like `max-w-sm`, `max-h-[85vh]` internal scroll, `rounded-2xl`,
+still centered). No tour-flow logic changes, no prop-shape breakage (additive
+only), no new i18n keys, no store/port changes. Work directly on `develop`,
+local only, no push. Review budget 400 lines — STOP and report if exceeded.
+
+## Status: DRAGFIX-MOBILE complete
+
+- [x] Diagnosis (root cause found): the triage hypothesis "headers missing
+  `dragHandleProps`" is REFUTED on current HEAD — all 4 panel variants
+  (`ConfirmResetPrompt`, `StepContent` × 6 steps, `CompletedSummary`,
+  null-step fallback) already spread `dragHandleProps` on their `<header>`.
+  The real defects were in `useDraggablePanel` listener lifecycle:
+  (a) `endDrag` removed only `pointermove` — `pointerup`/`pointercancel`
+  listeners leaked on `window` on EVERY drag (accumulate across steps);
+  (b) no multi-touch guard — a second `pointerdown` mid-drag hijacked the grab
+  offset (reproduced: grab jumped from (60,30) to (-140,-170)).
+- [x] Fix — `src/features/demo-guide/hooks/useDraggablePanel.ts` (+3 lines):
+  `endDrag` now removes all three window listeners (`pointermove` +
+  `pointerup` + `pointercancel`, self-reference, identity-stable so removal
+  matches); `onPointerDown` ignores a second press while
+  `grabRef.current !== null`. Handlers stay ONLY on headers; View untouched.
+- [x] Backdrop — `src/App.tsx` dialog overlay `bg-stone-950/25` →
+  `bg-stone-950/50` (`fixed inset-0`, `role="dialog"`, `aria-modal`,
+  `aria-label` exactly unchanged).
+- [x] Mobile-app look — `src/App.tsx` dialog inner wrapper
+  `max-w-2xl` → `max-w-sm` + `max-h-[85vh] overflow-y-auto rounded-2xl`
+  (phone-like, near-full-height internal scroll, still centered via unchanged
+  `items-start sm:items-center justify-center`). No new i18n keys; sections keep
+  their own `rounded-xl` (clipped by the wrapper).
+- [x] Tests (RED → GREEN, strict TDD): 2 hook tests written FIRST and observed
+  FAILING (listener-leak: only `['pointermove']` removed; multi-touch:
+  (-140,-170) vs (60,30)) → pass after fix. 10 View coverage tests lock that
+  EVERY panel drags: `it.each` all 6 steps + completed summary + confirm-reset
+  + null-step fallback (all `translate(60px, 30px)` via header handle,
+  `cursor-grab` affordance) + drag-offset-survives-step-change (`rerender`
+  datos → perfil keeps transform). No new functions → functions 100% holds.
+
+## TDD Cycle Evidence
+
+| Task | RED | GREEN | REFACTOR |
+|------|-----|-------|----------|
+| Listener-leak fix | new test fails (`pointerup`/`pointercancel` never removed) | passes after `endDrag` removes all 3 | self-reference (no new fn, coverage-safe) |
+| Multi-touch guard | new test fails (grab hijacked to (-140,-170)) | passes after `grabRef !== null` guard | — (2-line branch, covered both sides) |
+| Per-variant drag (6 steps + summary + confirm + fallback) | n/a — passed immediately (diagnostic: refutes missing-handle hypothesis) | 10/10 pass, lock behavior | locale-independent queries (singleton leak noted below) |
+| Backdrop / mobile panel | n/a (class values) | role queries green in App + e2e | — |
+
+## Work Unit Evidence
+
+| Evidence | Value |
+|----------|-------|
+| Focused test command | `pnpm vitest run src/features/demo-guide/ src/App.test.tsx src/App.integration.test.tsx` → 5 files, 65 tests, all pass |
+| Full gates | `pnpm quality` green (prettier + oxlint 1 pre-existing warn in DemoGuideContainer + `tsc -b` + 92 files / 1008 tests pass) |
+| Functions coverage | `pnpm test:coverage` → 100% (407/407) |
+| Runtime harness | `pnpm test:e2e -- demo` → 9/9 pass (5 demo + 4 smoke; backdrop + max-w-sm keep role queries green) |
+| Rollback boundary | Revert the single DRAGFIX-MOBILE commit; prior slices untouched below |
+
+## Commits (local, no push)
+
+- (pending — single work-unit commit on `develop`, conventional, no attribution)
+
+## Line count
+
+102 insertions + 4 deletions = 106 changed lines (under 400 budget; no
+exception needed).
+
+## Design decisions / deviations
+
+- `endDrag` self-reference inside its own `useCallback` instead of a new
+  `detach` helper: avoids adding a function (functions-100% must hold) and is
+  identity-stable (`[handleMove]` never changes), so removal always matches
+  the added listener. Oxlint is minimal (no exhaustive-deps), `tsc -b` clean.
+- View test uses locale-independent queries (`getByRole('heading')` without
+  name) — the `es→en` toggle test leaks locale via the module-singleton
+  `I18nProvider` (pre-existing, documented in the prior slice).
+- None — implementation matches triage scope; no tour-flow logic touched.
+
+## Native attempt ledger
+
+UNAVAILABLE (gentle-ai 4.1.1 has no sdd-attempt command). Manual budget used:
+micro-slice 106/400 lines, stop-and-report on overflow (no overflow occurred).
+
+## Engram mirror note
+
+Memory tools AVAILABLE in this subagent context — mirrored via `mem_update`
+on observation #774 (topic_key `sdd/demo-reproducible-flow/apply-progress`).
+File section above is the full record (MERGED: all prior slices preserved).
+
+## Next
+
+DRAGFIX-MOBILE CLOSED. No open warnings. Recommended: `sdd-verify` (focused)
+or direct user acceptance (post-archive follow-up, no archive phase pending).

@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nProvider, useLocale } from '@shared/i18n';
-import { DEMO_STEPS, type DemoGuideViewProps } from './types';
+import { DEMO_STEP_ORDER, DEMO_STEPS, type DemoGuideViewProps } from './types';
 import { DemoGuideView } from './DemoGuideView';
 
 const noop = vi.fn();
@@ -116,5 +116,76 @@ describe('DemoGuideView (pure props)', () => {
       fireEvent.click(screen.getByRole('button', { name: /siguiente|next/i }));
     });
     expect(noop).toHaveBeenCalled();
+  });
+});
+
+describe('DemoGuideView drag handle coverage (every tour panel)', () => {
+  function renderAndDrag(props: DemoGuideViewProps): { transform: string; handleClass: string } {
+    const { container, unmount } = render(
+      <I18nProvider>
+        <DemoGuideView {...props} />
+      </I18nProvider>,
+    );
+    const panel = container.firstElementChild as HTMLElement;
+    const handle = screen.getByRole('heading').closest('header') as HTMLElement;
+    const handleClass = handle.className;
+    fireEvent.pointerDown(handle, { clientX: 100, clientY: 100, button: 0 });
+    fireEvent.pointerMove(window, { clientX: 160, clientY: 130 });
+    const transform = panel.style.transform;
+    fireEvent.pointerUp(window);
+    unmount();
+    return { transform, handleClass };
+  }
+
+  it.each(DEMO_STEP_ORDER)('step %s drags from its header handle', (step) => {
+    const { transform, handleClass } = renderAndDrag({ ...baseProps(), currentStep: step });
+    expect(handleClass).toContain('cursor-grab');
+    expect(transform).toBe('translate(60px, 30px)');
+  });
+
+  it('completed summary drags from its header handle', () => {
+    const { transform } = renderAndDrag({
+      ...baseProps(),
+      currentStep: null,
+      completed: true,
+      completedChecks: { [DEMO_STEPS.datos]: true },
+    });
+    expect(transform).toBe('translate(60px, 30px)');
+  });
+
+  it('confirm-reset prompt drags from its header handle', () => {
+    const { transform } = renderAndDrag({
+      ...baseProps(),
+      currentStep: null,
+      confirmReset: true,
+    });
+    expect(transform).toBe('translate(60px, 30px)');
+  });
+
+  it('null-step fallback drags from its header handle', () => {
+    const { transform } = renderAndDrag({ ...baseProps(), currentStep: null });
+    expect(transform).toBe('translate(60px, 30px)');
+  });
+
+  it('keeps the drag offset when the step changes mid-tour', () => {
+    const { container, rerender } = render(
+      <I18nProvider>
+        <DemoGuideView {...baseProps()} />
+      </I18nProvider>,
+    );
+    const panel = container.firstElementChild as HTMLElement;
+    const handle = screen.getByRole('heading').closest('header') as HTMLElement;
+    fireEvent.pointerDown(handle, { clientX: 100, clientY: 100, button: 0 });
+    fireEvent.pointerMove(window, { clientX: 160, clientY: 130 });
+    fireEvent.pointerUp(window);
+    rerender(
+      <I18nProvider>
+        <DemoGuideView {...baseProps()} currentStep={DEMO_STEPS.perfil} />
+      </I18nProvider>,
+    );
+    expect(panel.style.transform).toBe('translate(60px, 30px)');
+    // Locale-independent: the es→en toggle test leaks locale via the
+    // module-singleton I18nProvider, so only assert the step-2 heading exists.
+    expect(screen.getByRole('heading')).toBeInTheDocument();
   });
 });

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, act, fireEvent } from '@testing-library/react';
 import { clampDragOffset, useDraggablePanel } from './useDraggablePanel';
 
@@ -102,5 +102,29 @@ describe('useDraggablePanel', () => {
       fireEvent.pointerUp(window);
     });
     expect(getApi().position).toBeNull();
+  });
+
+  it('detaches every window listener when the drag ends (no leak across steps)', () => {
+    const removeSpy = vi.spyOn(window, 'removeEventListener');
+    const { handle } = renderProbe();
+    act(() => {
+      dragBy(handle, 200, 200, 260, 260);
+    });
+    const removedTypes = removeSpy.mock.calls.map((call) => call[0]);
+    removeSpy.mockRestore();
+    expect(removedTypes).toContain('pointermove');
+    expect(removedTypes).toContain('pointerup');
+    expect(removedTypes).toContain('pointercancel');
+  });
+
+  it('ignores a second pointerdown while a drag is already active (multi-touch)', () => {
+    const { getApi, handle } = renderProbe();
+    act(() => {
+      fireEvent.pointerDown(handle, { clientX: 100, clientY: 100, button: 0 });
+      fireEvent.pointerDown(handle, { clientX: 300, clientY: 300, button: 0 });
+      fireEvent.pointerMove(window, { clientX: 160, clientY: 130 });
+      fireEvent.pointerUp(window);
+    });
+    expect(getApi().position).toEqual({ x: 60, y: 30 });
   });
 });

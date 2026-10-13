@@ -66,6 +66,8 @@ export function useDraggablePanel() {
     grabRef.current = null;
     setIsDragging(false);
     window.removeEventListener('pointermove', handleMove);
+    window.removeEventListener('pointerup', endDrag);
+    window.removeEventListener('pointercancel', endDrag);
   }, [handleMove]);
 
   useEffect(
@@ -80,6 +82,7 @@ export function useDraggablePanel() {
   const onPointerDown = useCallback(
     (event: ReactPointerEvent<HTMLElement>) => {
       if (event.button !== 0) return;
+      if (grabRef.current !== null) return;
       const base = positionRef.current;
       grabRef.current = { dx: event.clientX - base.x, dy: event.clientY - base.y };
       setIsDragging(true);
