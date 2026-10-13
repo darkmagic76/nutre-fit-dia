@@ -632,3 +632,83 @@ micro-slice 148/400 lines, stop-and-report on overflow (no overflow occurred).
 
 Phase 5 (rollback note 5.1 + final checks 5.2) — then verify Phase 4 / archive.
 PRE-PHASE5-POLISH CLOSED. No open warnings.
+
+---
+
+# Apply Progress: demo-reproducible-flow — Micro-slice DRAGGABLE (user-reported UX)
+
+## Scope
+STRICT micro-slice only (user request): (1) demo backdrop transparent enough
+to see the screen behind; (2) tour panel movable by click-and-drag. No logic
+changes to tour flow, no new i18n keys, no prop-shape breakage. Local commits
+on `feature/demo-reproducible-flow` only, no push, no merge.
+
+## Status: DRAGGABLE complete
+
+- [x] Backdrop: `src/App.tsx` dialog overlay `bg-stone-950/60` → `bg-stone-950/25`
+  (`fixed inset-0`, `role="dialog"`, `aria-modal`, `aria-label` unchanged).
+- [x] Drag hook: `src/features/demo-guide/hooks/useDraggablePanel.ts` (new) —
+  Pointer Events (mouse + touch), `position: DragPosition | null` (`null` =
+  centered initially), pure `clampDragOffset` (half-viewport minus 48px grab
+  margin), window-level move/up/cancel listeners, non-primary buttons ignored.
+  Ephemeral UI state lives in the View layer; Container untouched, no
+  store/port methods added.
+- [x] View wiring: `src/features/demo-guide/DemoGuideView.tsx` — calls the
+  hook, wraps content in `<div style={panelStyle} className="w-full">` (keeps
+  `max-w-2xl` centering from the App wrapper); every section header spreads
+  `dragHandleProps` with `cursor-grab`/`cursor-grabbing` + `touch-none` +
+  `select-none` (handlers ONLY on headers, so inner buttons/scroll unaffected).
+  `DemoGuideViewProps` unchanged (additive internal `DraggableSection` only).
+- [x] Tests: `useDraggablePanel.test.tsx` (8 tests: clamp triangulation +
+  probe-component pointer down/move/up, clamping, no-move-without-start,
+  right-button ignore, no-drag-from-inner-buttons) + 1 View wiring test
+  (header drag moves panel, cursor flips, inner Next button still fires).
+
+## TDD Cycle Evidence
+
+| Task | RED | GREEN | REFACTOR |
+|------|-----|-------|----------|
+| Drag hook | new test fails on missing module import | 8/8 pass after hook | window-listener cleanup in `endDrag`; `DragHandleProps` type export |
+| View wiring | 1 new View test fails (no transform) | 31/31 focused pass | content-variable restructure (same branches, wrapper div only) |
+| Backdrop | n/a (single class value) | role queries green in App + e2e | — |
+
+## Work Unit Evidence
+
+| Evidence | Value |
+|----------|-------|
+| Focused test command | `pnpm vitest run src/features/demo-guide/ src/App.test.tsx` → 4 files, 31 tests, all pass |
+| Full gates | `pnpm quality` green (prettier + oxlint 1 pre-existing warn + `tsc -b` + 92 files / 994 tests pass; pre-commit hook re-ran it on both commits) |
+| Functions coverage | `pnpm test:coverage` → 100% (407/407) |
+| Runtime harness | `pnpm test:e2e -- demo` → 9/9 pass (5 demo + 4 smoke; lighter backdrop + draggable panel keep role queries green) |
+| Rollback boundary | Revert the 2 micro-slice commits (`418d4fa`, `34dca8a`); all prior slice commits untouched below |
+
+## Commits (local, no push)
+
+- `418d4fa` feat(demo): make tour panel draggable with lighter backdrop
+- `34dca8a` chore(demo): drop unused renderHook import in drag hook test
+
+## Line count
+
+312 insertions + 34 deletions = 346 changed lines (under 400 budget; forecast
+was ~80-130 — miss cause: View restructure touches all 4 section branches +
+probe-component drag tests; still inside budget, no exception needed).
+
+## Design decisions / deviations
+
+- Window-level `pointermove`/`pointerup` listeners instead of `setPointerCapture`:
+  jsdom-safe and unit-testable without capture mocks; unmount cleanup included.
+- `handleClassName` helper is the only new View function — covered by the View
+  wiring test (grab + grabbing branches asserted).
+- View test uses locale-independent queries (`getByRole('heading')`,
+  `/siguiente|next/i`) after finding the `es→en` toggle test leaks locale via
+  the module-singleton `I18nProvider`.
+
+## Native attempt ledger
+
+UNAVAILABLE (gentle-ai 4.1.1 has no sdd-attempt command). Manual budget used:
+micro-slice 346/400 lines, stop-and-report on overflow (no overflow occurred).
+
+## Next
+
+Phase 5 (rollback note 5.1 + final checks 5.2) — then verify Phase 4 / archive.
+DRAGGABLE CLOSED. No open warnings.
