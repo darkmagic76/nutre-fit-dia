@@ -45,6 +45,7 @@ describe('Zustand adapter contracts', () => {
       expect(typeof repo.getEntries).toBe('function');
       expect(typeof repo.addEntry).toBe('function');
       expect(typeof repo.getStreak).toBe('function');
+      expect(typeof repo.clearActivity).toBe('function');
     });
   });
 
@@ -73,6 +74,7 @@ describe('Zustand adapter contracts', () => {
       expect(typeof repo.recordGlucose).toBe('function');
       expect(typeof repo.recordWeight).toBe('function');
       expect(typeof repo.detectIMCThresholdCrossing).toBe('function');
+      expect(typeof repo.clearBiomarkers).toBe('function');
     });
   });
 
@@ -84,6 +86,7 @@ describe('Zustand adapter contracts', () => {
       expect(repo).toBeDefined();
       expect(typeof repo.getPlan).toBe('function');
       expect(typeof repo.generatePlan).toBe('function');
+      expect(typeof repo.clearPlan).toBe('function');
     });
   });
 });

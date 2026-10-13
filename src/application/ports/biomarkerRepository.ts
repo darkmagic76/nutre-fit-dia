@@ -19,4 +19,7 @@ export interface BiomarkerRepository {
 
   /** Detect if IMC has crossed a clinical threshold since last reading. */
   detectIMCThresholdCrossing(): 'crossed_above' | 'crossed_below' | null;
+
+  /** Clear glucose and weight histories (demo replay / guided reset). */
+  clearBiomarkers(): void;
 }

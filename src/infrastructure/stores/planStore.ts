@@ -12,6 +12,7 @@ interface PlanState {
   weeklyPlan: WeeklyPlan | null;
 
   generatePlan: () => void;
+  clearPlan: () => void;
 }
 
 // Zod schema for persisted state (structural integrity — matches WeeklyPlan shape).
@@ -47,6 +48,10 @@ export const usePlanStore = create<PlanState>()(
       generatePlan: () => {
         const { caloricRestrictionActive } = useTrackerStore.getState();
         set({ weeklyPlan: generateWeeklyPlan(caloricRestrictionActive) });
+      },
+
+      clearPlan: () => {
+        set({ weeklyPlan: null });
       },
     }),
     {

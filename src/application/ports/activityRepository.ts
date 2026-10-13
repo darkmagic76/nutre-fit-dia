@@ -16,4 +16,7 @@ export interface ActivityRepository {
 
   /** Get current streak (consecutive weeks of 100% compliance). */
   getStreak(): number;
+
+  /** Clear the current week entries and counters (demo replay / guided reset). */
+  clearActivity(): void;
 }

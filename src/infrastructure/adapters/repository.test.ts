@@ -173,6 +173,14 @@ describe('Zustand adapter runtime tests', () => {
       useActivityStore.setState({ streak: 5 });
       expect(repo.getStreak()).toBe(5);
     });
+
+    it('clearActivity delegates to resetWeek', () => {
+      const repo = createZustandActivityRepository();
+      repo.addEntry({ date: '2026-10-13', moderateMinutes: 30, strengthSessions: 0 });
+      repo.clearActivity();
+      expect(repo.getEntries()).toHaveLength(0);
+      expect(repo.getWeeklyMinutes()).toBe(0);
+    });
   });
 
   // ─── LogRepository ────────────────────────────────────────────────────────
@@ -248,6 +256,15 @@ describe('Zustand adapter runtime tests', () => {
       const repo = createZustandBiomarkerRepository();
       expect(repo.detectIMCThresholdCrossing()).toBeNull();
     });
+
+    it('clearBiomarkers delegates to resetBiomarkerHistory', () => {
+      const repo = createZustandBiomarkerRepository();
+      repo.recordGlucose({ value: 100, timestamp: Date.now(), context: 'fasting' });
+      repo.recordWeight(70, 175);
+      repo.clearBiomarkers();
+      expect(repo.getGlucoseHistory()).toHaveLength(0);
+      expect(repo.getWeightHistory()).toHaveLength(0);
+    });
   });
 
   // ─── PlanRepository ───────────────────────────────────────────────────────
@@ -264,6 +281,14 @@ describe('Zustand adapter runtime tests', () => {
     it('generatePlan creates a plan', () => {
       const repo = createZustandPlanRepository();
       expect(() => repo.generatePlan()).not.toThrow();
+    });
+
+    it('clearPlan discards the current plan', () => {
+      const repo = createZustandPlanRepository();
+      repo.generatePlan();
+      expect(repo.getPlan()).not.toBeNull();
+      repo.clearPlan();
+      expect(repo.getPlan()).toBeNull();
     });
   });
 });
