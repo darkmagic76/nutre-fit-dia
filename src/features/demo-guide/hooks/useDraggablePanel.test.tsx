@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, renderHook, act, fireEvent } from '@testing-library/react';
+import { render, act, fireEvent } from '@testing-library/react';
 import { clampDragOffset, useDraggablePanel } from './useDraggablePanel';
 
 describe('clampDragOffset', () => {
