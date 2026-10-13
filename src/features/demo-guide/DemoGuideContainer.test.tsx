@@ -8,7 +8,9 @@ import type { Container } from '@application/ports/container';
 import type { BiomarkerRepository } from '@application/ports/biomarkerRepository';
 import { calculateTarget as calculateTargetUseCase } from '@application/use-cases/calculateTarget';
 import { generateWeeklyPlan } from '@application/services/planGenerator';
-import { DEMO_METRICS_INPUT } from '@application/services/demoDataset';
+import { DEMO_METRICS_INPUT, DEMO_TRIGGER_FOOD_ID } from '@application/services/demoDataset';
+import { suggestAlternative } from '@domain/sustainability/substitutionService';
+import { foods, foodsById } from '@shared/data/foods';
 import { DemoGuideContainer } from './DemoGuideContainer';
 
 // Seeded values MUST satisfy domain truth (verify-2A carry-forward): the stub
@@ -130,6 +132,22 @@ describe('DemoGuideContainer state machine', () => {
     await advance(user, 2);
     await screen.findByRole('heading', { name: 'Validaciones' });
     expect(checkTexts().length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('step 5 shows suggestAlternative truth for the trigger food', async () => {
+    const { user } = await setup();
+    await advance(user, 4);
+    await screen.findByRole('heading', { name: 'Sustitución' });
+    const trigger = foodsById.get(DEMO_TRIGGER_FOOD_ID);
+    expect(trigger).toBeDefined();
+    const alternatives = suggestAlternative(trigger!, foods);
+    expect(alternatives.length).toBeGreaterThanOrEqual(1);
+    expect(alternatives.length).toBeLessThanOrEqual(3);
+    expect(
+      checkTexts().some(
+        (t) => t.includes('1-3 alternatives') && t.includes(`${alternatives.length} alternatives`),
+      ),
+    ).toBe(true);
   });
 
   it('REPLAY resets then seeds from scratch at step 1', async () => {
