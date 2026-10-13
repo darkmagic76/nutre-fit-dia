@@ -56,6 +56,42 @@ describe('useInstallPrompt', () => {
     expect(result.current.isInstallable).toBe(true);
   });
 
+  it('normal path calls preventDefault and sets isInstallable=true', () => {
+    const { result } = renderHook(() => useInstallPrompt());
+    expect(result.current.isInstallable).toBe(false);
+
+    const promptFn = vi.fn();
+    const event = new Event('beforeinstallprompt');
+    (event as any).prompt = promptFn;
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+    act(() => {
+      window.dispatchEvent(event);
+    });
+
+    expect(preventDefaultSpy).toHaveBeenCalledTimes(1);
+    expect(result.current.isInstallable).toBe(true);
+  });
+
+  it('cooldown-active event does NOT call preventDefault and keeps isInstallable=false', () => {
+    const { result } = renderHook(() => useInstallPrompt());
+
+    // Set cooldown timestamp to now (within 7-day window)
+    localStorageMock.setItem(COOLDOWN_KEY, String(Date.now()));
+
+    const promptFn = vi.fn();
+    const event = new Event('beforeinstallprompt');
+    (event as any).prompt = promptFn;
+    const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+    act(() => {
+      window.dispatchEvent(event);
+    });
+
+    expect(preventDefaultSpy).not.toHaveBeenCalled();
+    expect(result.current.isInstallable).toBe(false);
+  });
+
   it('install() calls deferredPrompt.prompt() and sets isInstallable=false', async () => {
     const { result } = renderHook(() => useInstallPrompt());
 

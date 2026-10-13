@@ -21,17 +21,17 @@ export function useInstallPrompt(): UseInstallPromptReturn {
   useEffect(() => {
     const handler = (event: Event) => {
       const bEvent = event as BeforeInstallPromptEvent;
-      bEvent.preventDefault();
 
       try {
         const dismissed = localStorage.getItem(COOLDOWN_KEY);
         if (dismissed && Date.now() - parseInt(dismissed) < COOLDOWN_MS) {
-          return; // suppressed — cooldown still active
+          return; // suppressed — cooldown still active, let browser handle natively
         }
       } catch {
         /* localStorage unavailable — proceed without cooldown check */
       }
 
+      bEvent.preventDefault();
       setDeferredPrompt(bEvent);
       setIsInstallable(true);
     };
