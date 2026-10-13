@@ -879,7 +879,7 @@ local only, no push. Review budget 400 lines — STOP and report if exceeded.
 
 ## Commits (local, no push)
 
-- (pending — single work-unit commit on `develop`, conventional, no attribution)
+- `e9d9f51` fix(demo): drag on every tour panel, 50% backdrop, mobile-app panel
 
 ## Line count
 
