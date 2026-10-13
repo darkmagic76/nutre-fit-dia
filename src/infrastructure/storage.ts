@@ -142,6 +142,47 @@ async function loadKeyFromIndexedDB(): Promise<CryptoKey | null> {
 
 let cachedKey: CryptoKey | null = null;
 
+async function deleteKeyFromIndexedDB(): Promise<void> {
+  if (!indexedDBAvailable) return;
+  try {
+    const db = await openKeyDB();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      tx.objectStore(STORE_NAME).delete(KEY_ID);
+      tx.oncomplete = () => {
+        db.close();
+        resolve();
+      };
+      tx.onerror = () => {
+        db.close();
+        reject(tx.error);
+      };
+    });
+  } catch {
+    indexedDBAvailable = false;
+    console.warn('IndexedDB unavailable — demo reset continues with localStorage only.');
+  }
+}
+
+/**
+ * Atomically reset demo persistence: delete the IndexedDB AES key, drop the
+ * module key cache, and remove every localStorage key under the app prefix.
+ * Non-prefixed keys are left untouched. The next encrypt regenerates the key
+ * via `getOrCreateKey()`. Safe when IndexedDB is unavailable (warn + continue).
+ */
+export async function resetDemoStorage(): Promise<void> {
+  await deleteKeyFromIndexedDB();
+  cachedKey = null;
+
+  const prefix = `${env.VITE_STORAGE_PREFIX}-`;
+  const doomed: string[] = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key?.startsWith(prefix)) doomed.push(key);
+  }
+  for (const key of doomed) localStorage.removeItem(key);
+}
+
 /**
  * Returns the AES-GCM encryption key, loading from IndexedDB if available
  * or generating a new one. The returned key reference is cached for the
