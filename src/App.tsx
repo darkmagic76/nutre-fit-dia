@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { TabButton, LegalDisclaimer, InstallPrompt, ErrorBoundary } from '@shared/ui';
 import { createErrorFallback } from '@shared/ui/createErrorFallback';
 import { useTabNavigation, TAB_IDS, TAB_ICONS, type Tab } from '@shared/hooks/useTabNavigation';
@@ -10,6 +11,7 @@ import { RecipeEngineContainer } from '@features/recipe-engine';
 import { ActivityTrackerContainer } from '@features/activity-tracker';
 import { NudgeEngineContainer } from '@features/nudge-engine';
 import { SustainabilityContainer } from '@features/sustainability';
+import { DemoGuideContainer } from '@features/demo-guide/DemoGuideContainer';
 
 const TAB_LABEL_KEYS: Record<Tab, keyof ReturnType<typeof useT>> = {
   scanner: 'tab.scanner',
@@ -27,6 +29,22 @@ export default function App() {
   const { locale, setLocale } = useLocale();
   const { isInstallable, install, dismiss } = useInstallPrompt();
   const errorFallback = createErrorFallback(t);
+  const [showDemo, setShowDemo] = useState(false);
+
+  // ?demo=1 deep-link (secondary entry): fires once on mount, then stripped.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('demo') === '1') {
+      params.delete('demo');
+      const query = params.toString();
+      window.history.replaceState(
+        null,
+        '',
+        `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`,
+      );
+      setShowDemo(true);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-stone-100 text-stone-900 dark:bg-zinc-800 dark:text-zinc-100">
@@ -40,6 +58,12 @@ export default function App() {
             aria-label={locale === 'es' ? 'Switch to English' : 'Cambiar a Español'}
           >
             {locale === 'es' ? '🇬🇧 EN' : '🇪🇸 ES'}
+          </button>
+          <button
+            onClick={() => setShowDemo(true)}
+            className="text-xs bg-emerald-700 hover:bg-emerald-600 text-emerald-200 px-3 py-1 rounded-full transition-colors"
+          >
+            {t['demo.title']}
           </button>
           {isInstallable && (
             <InstallPrompt
@@ -152,6 +176,12 @@ export default function App() {
           )}
         </div>
       </main>
+
+      {showDemo && (
+        <div role="dialog" aria-modal="true" aria-label={t['demo.title']}>
+          <DemoGuideContainer onNavigate={setTab} onExit={() => setShowDemo(false)} />
+        </div>
+      )}
 
       <footer
         className="text-center text-stone-400 text-xs p-4 border-t border-stone-200"
