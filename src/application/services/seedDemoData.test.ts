@@ -51,6 +51,10 @@ function createFakeBiomarkerRepo(): BiomarkerRepository & {
       return reading;
     },
     detectIMCThresholdCrossing: () => null,
+    clearBiomarkers: () => {
+      glucose.length = 0;
+      weight.length = 0;
+    },
   };
 }
 
@@ -60,6 +64,9 @@ function createFakePlanRepo(): PlanRepository & { generated: number } {
     getPlan: () => (repo.generated > 0 ? ({ valid: true } as WeeklyPlan) : null),
     generatePlan: () => {
       repo.generated += 1;
+    },
+    clearPlan: () => {
+      repo.generated = 0;
     },
   };
   return repo;
@@ -74,6 +81,9 @@ function createFakeActivityRepo(): ActivityRepository & { entries: ActivityEntry
     getEntries: () => entries,
     addEntry: (entry) => {
       entries.push(entry);
+    },
+    clearActivity: () => {
+      entries.length = 0;
     },
     getStreak: () => 0,
   };
@@ -134,14 +144,29 @@ describe('seedDemo guard', () => {
     expect(deps.logRepo.getTodayLog().length).toBeGreaterThan(1);
   });
 
-  it('resetDemo clears the log and cycles storage', async () => {
+  it('resetDemo clears all in-memory stores and cycles storage', async () => {
     const service = createDemoGuideService(deps);
     await service.seedDemo();
 
     await service.resetDemo();
 
     expect(deps.logRepo.getTodayLog()).toHaveLength(0);
+    expect(deps.biomarkerRepo.getGlucoseHistory()).toHaveLength(0);
+    expect(deps.biomarkerRepo.getWeightHistory()).toHaveLength(0);
+    expect(deps.planRepo.getPlan()).toBeNull();
+    expect(deps.activityRepo.getEntries()).toHaveLength(0);
     expect(deps.resetStorage).toHaveBeenCalledTimes(1);
+  });
+
+  it('supports seed → reset → seed without confirm (replay regression)', async () => {
+    const service = createDemoGuideService(deps);
+    await service.seedDemo();
+    await service.resetDemo();
+
+    const result = await service.seedDemo();
+
+    expect(result).toEqual({ seeded: true, aborted: false });
+    expect(deps.logRepo.getTodayLog()).toHaveLength(DEMO_ENTRY_IDS.length);
   });
 
   it('keeps two service instances isolated (separate repos)', async () => {

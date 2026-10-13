@@ -61,6 +61,9 @@ export function createDemoGuideService(deps: DemoGuideDeps): DemoGuidePort {
 
     async resetDemo() {
       deps.logRepo.clearLog();
+      deps.biomarkerRepo.clearBiomarkers();
+      deps.planRepo.clearPlan();
+      deps.activityRepo.clearActivity();
       await deps.resetStorage();
     },
   };
