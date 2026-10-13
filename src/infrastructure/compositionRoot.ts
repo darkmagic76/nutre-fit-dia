@@ -10,6 +10,8 @@ import { createZustandTrackerExporter } from '@infrastructure/adapters/zustandTr
 import { calculateTarget as calculateTargetUseCase } from '@application/use-cases/calculateTarget';
 import { evaluateNudges as evaluateNudgesUseCase } from '@application/use-cases/evaluateNudges';
 import { exportData as exportDataUseCase } from '@application/use-cases/exportData';
+import { createDemoGuideService } from '@application/services/seedDemoData';
+import { resetDemoStorage } from '@infrastructure/storage';
 
 // ─── Infrastructure data ────────────────────────────────────────────────────
 import { NUDGE_RULES } from '@infrastructure/nudge/rules';
@@ -51,10 +53,22 @@ export function createContainer(): Container {
       biomarkerRepo,
     );
 
+  // Demo guide service — port-injected over repo adapters; storage reset
+  // injected from infrastructure so the application service stays pure.
+  const demoGuide = createDemoGuideService({
+    logRepo,
+    biomarkerRepo,
+    planRepo,
+    activityRepo,
+    resetStorage: resetDemoStorage,
+  });
+
   return {
     calculateTarget,
     evaluateNudges,
     exportData: exportAllData,
+    seedDemo: demoGuide.seedDemo,
+    resetDemo: demoGuide.resetDemo,
     // Expose adapters directly for consumers that need port-level access
     notificationRepo,
     activityRepo,

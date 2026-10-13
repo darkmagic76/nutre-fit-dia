@@ -3,6 +3,7 @@ import type { ActivityRepository } from './activityRepository';
 import type { LogRepository } from './logRepository';
 import type { BiomarkerRepository } from './biomarkerRepository';
 import type { PlanRepository } from './planRepository';
+import type { DemoGuidePort } from './demoGuide';
 import type { ContextInput } from '@domain/nudgeContext';
 import type { ProfileInput } from '@application/dtos/ProfileInput';
 import type { CaloricTargetOutput } from '@domain/caloricTargetService';
@@ -23,6 +24,8 @@ export interface Container {
   };
   evaluateNudges: (input: ContextInput) => void;
   exportData: () => string;
+  seedDemo: DemoGuidePort['seedDemo'];
+  resetDemo: DemoGuidePort['resetDemo'];
 
   // Repositories (port-level access)
   notificationRepo: NotificationRepository;
