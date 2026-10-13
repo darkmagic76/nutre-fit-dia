@@ -13,8 +13,6 @@ import type { Food } from '@domain/food';
 import { classifyFood } from '@features/nutritional-traffic-light/services/classificationService';
 import { foods, foodsById } from '@shared/data/foods';
 import { useContainer } from '@shared/context/useContainer';
-import { useT } from '@shared/i18n';
-import type { Translations } from '@shared/i18n/types';
 import type { Tab } from '@shared/hooks/useTabNavigation';
 import {
   DEMO_STEP_ORDER,
@@ -23,21 +21,19 @@ import {
   type DemoGuideContainerProps,
   type DemoStep,
 } from './types';
+import { DemoGuideView } from './DemoGuideView';
 
 /** Port-bound target type (container.calculateTarget returns Error, not ValidationError). */
 type DemoTarget = ReturnType<Container['calculateTarget']>;
 
-/** Step copy + App tab for onNavigate (datos has no tab; App owns useTabNavigation). */
-const STEP_META: Record<
-  DemoStep,
-  { title: keyof Translations; hint: keyof Translations; tab: Tab | null }
-> = {
-  datos: { title: 'demo.steps.1.title', hint: 'demo.steps.1.hint', tab: null },
-  perfil: { title: 'demo.steps.2.title', hint: 'demo.steps.2.hint', tab: 'metabolic' },
-  escaneo: { title: 'demo.steps.3.title', hint: 'demo.steps.3.hint', tab: 'scanner' },
-  recomendacion: { title: 'demo.steps.4.title', hint: 'demo.steps.4.hint', tab: 'plan' },
-  sustitucion: { title: 'demo.steps.5.title', hint: 'demo.steps.5.hint', tab: 'sustainability' },
-  validaciones: { title: 'demo.steps.6.title', hint: 'demo.steps.6.hint', tab: 'log' },
+/** Step → App tab for onNavigate (datos has no tab; App owns useTabNavigation). */
+const STEP_TAB: Record<DemoStep, Tab | null> = {
+  datos: null,
+  perfil: 'metabolic',
+  escaneo: 'scanner',
+  recomendacion: 'plan',
+  sustitucion: 'sustainability',
+  validaciones: 'log',
 };
 
 /**
@@ -101,12 +97,10 @@ export function computeDemoChecks(seeded: boolean, target: DemoTarget | null): D
 
 /**
  * Demo tour state machine: closed → step[1..6] → completed.
- * Local currentStep/completedChecks/seeded; ports only via useContainer().
- * Minimal inline markup keeps 2B autonomous — 2C extracts DemoGuideView.
+ * Logic only — all markup lives in DemoGuideView (container/presentational).
  */
 export function DemoGuideContainer({ onNavigate, onExit }: DemoGuideContainerProps) {
   const { seedDemo, resetDemo, calculateTarget } = useContainer();
-  const t = useT();
   const [currentStep, setCurrentStep] = useState<DemoStep | null>(null);
   const [completed, setCompleted] = useState(false);
   const [seeded, setSeeded] = useState(false);
@@ -151,7 +145,7 @@ export function DemoGuideContainer({ onNavigate, onExit }: DemoGuideContainerPro
 
   function goToStep(step: DemoStep) {
     setCurrentStep(step);
-    const tab = STEP_META[step].tab;
+    const tab = STEP_TAB[step];
     if (tab) onNavigate(tab);
   }
 
@@ -200,76 +194,19 @@ export function DemoGuideContainer({ onNavigate, onExit }: DemoGuideContainerPro
       });
   }
 
-  if (confirmReset) {
-    return (
-      <section>
-        <h2>{t['demo.title']}</h2>
-        <p>{t['demo.confirmReset']}</p>
-        <button type="button" onClick={handleConfirmSeed}>
-          {t['demo.confirm']}
-        </button>
-        <button type="button" onClick={onExit}>
-          {t['demo.cancel']}
-        </button>
-      </section>
-    );
-  }
-
-  if (currentStep === null) {
-    return (
-      <section>
-        <h2>{t['demo.title']}</h2>
-      </section>
-    );
-  }
-
-  if (completed) {
-    return (
-      <section>
-        <h2>{t['demo.title']}</h2>
-        <ul>
-          {DEMO_STEP_ORDER.map((step) => (
-            <li
-              key={step}
-            >{`${t[STEP_META[step].title]}: ${completedChecks[step] ? t['demo.pass'] : t['demo.fail']}`}</li>
-          ))}
-        </ul>
-        <button type="button" onClick={handleReplay}>
-          {t['demo.replay']}
-        </button>
-        <button type="button" onClick={onExit}>
-          {t['demo.exit']}
-        </button>
-      </section>
-    );
-  }
-
-  const stepIndex = DEMO_STEP_ORDER.indexOf(currentStep);
   return (
-    <section>
-      <h2>{t[STEP_META[currentStep].title]}</h2>
-      <p>{t[STEP_META[currentStep].hint]}</p>
-      <ul>
-        {checks
-          .filter((c) => c.step === currentStep)
-          .map((c, i) => (
-            <li key={`${c.step}-${i}`}>
-              {`${t['demo.expected']}: ${c.expected} · ${t['demo.actual']}: ${c.actual} · ${c.passed ? t['demo.pass'] : t['demo.fail']}`}
-            </li>
-          ))}
-      </ul>
-      <button type="button" disabled={stepIndex === 0} onClick={handleBack}>
-        {t['demo.back']}
-      </button>
-      <button type="button" onClick={handleNext}>
-        {t['demo.next']}
-      </button>
-      <button type="button" onClick={handleReplay}>
-        {t['demo.replay']}
-      </button>
-      <button type="button" onClick={onExit}>
-        {t['demo.exit']}
-      </button>
-    </section>
+    <DemoGuideView
+      currentStep={currentStep}
+      completed={completed}
+      completedChecks={completedChecks}
+      checks={checks}
+      seeded={seeded}
+      confirmReset={confirmReset}
+      onNext={handleNext}
+      onBack={handleBack}
+      onReplay={handleReplay}
+      onExit={onExit}
+      onConfirmSeed={handleConfirmSeed}
+    />
   );
 }

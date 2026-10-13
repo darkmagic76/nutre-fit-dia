@@ -89,6 +89,17 @@ describe('DemoGuideContainer state machine', () => {
     expect(onExit).not.toHaveBeenCalled();
   });
 
+  it('aborted seed Cancel exits without seeding', async () => {
+    const user = userEvent.setup();
+    const stub = makeStub();
+    stub.seedDemo.mockResolvedValueOnce({ seeded: false, aborted: true });
+    const { onExit } = renderContainer(stub);
+    await screen.findByText(CONFIRM_MSG);
+    await user.click(screen.getByRole('button', { name: 'Cancelar' }));
+    expect(onExit).toHaveBeenCalledTimes(1);
+    expect(stub.seedDemo).toHaveBeenCalledTimes(1);
+  });
+
   it('NEXT/BACK move along steps and notify the App-owned navigator', async () => {
     const { user, onNavigate } = await setup();
     await advance(user, 1);
@@ -157,6 +168,18 @@ describe('DemoGuideContainer state machine', () => {
     await screen.findByRole('heading', { name: 'Datos iniciales' });
     expect(stub.resetDemo).toHaveBeenCalledTimes(1);
     expect(stub.seedDemo).toHaveBeenCalledTimes(2);
+  });
+
+  it('REPLAY aborted returns to the confirm prompt', async () => {
+    const user = userEvent.setup();
+    const stub = makeStub();
+    const { onExit } = renderContainer(stub);
+    await screen.findByRole('heading', { name: 'Datos iniciales' });
+    stub.seedDemo.mockResolvedValueOnce({ seeded: false, aborted: true });
+    await user.click(screen.getByRole('button', { name: 'Reiniciar demo' }));
+    await screen.findByText(CONFIRM_MSG);
+    expect(stub.resetDemo).toHaveBeenCalledTimes(1);
+    expect(onExit).not.toHaveBeenCalled();
   });
 
   it('EXIT closes via onExit and never wipes seeded data', async () => {

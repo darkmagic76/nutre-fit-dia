@@ -46,7 +46,9 @@ export interface DemoGuideContainerProps {
 
 /** Pure props for `DemoGuideView` — no store imports (container/presentational). */
 export interface DemoGuideViewProps {
-  currentStep: DemoStep;
+  currentStep: DemoStep | null;
+  completed: boolean;
+  completedChecks: Partial<Record<DemoStep, boolean>>;
   checks: readonly DemoCheckResult[];
   seeded: boolean;
   confirmReset: boolean;
