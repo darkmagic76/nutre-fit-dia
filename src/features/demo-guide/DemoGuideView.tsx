@@ -19,15 +19,27 @@ function ConfirmResetPrompt({
 }: Pick<DemoGuideViewProps, 'onConfirmSeed' | 'onExit'>) {
   const t = useT();
   return (
-    <section>
-      <h2>{t['demo.title']}</h2>
-      <p>{t['demo.confirmReset']}</p>
-      <button type="button" onClick={onConfirmSeed}>
-        {t['demo.confirm']}
-      </button>
-      <button type="button" onClick={onExit}>
-        {t['demo.cancel']}
-      </button>
+    <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6 space-y-4">
+      <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
+        {t['demo.title']}
+      </h2>
+      <p className="text-stone-600 dark:text-zinc-300 text-sm">{t['demo.confirmReset']}</p>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={onConfirmSeed}
+          className="flex-1 min-h-[44px] bg-emerald-700 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.confirm']}
+        </button>
+        <button
+          type="button"
+          onClick={onExit}
+          className="flex-1 min-h-[44px] bg-stone-200 dark:bg-zinc-700 text-stone-800 dark:text-zinc-100 py-2 rounded-lg text-sm font-medium hover:bg-stone-300 dark:hover:bg-zinc-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.cancel']}
+        </button>
+      </div>
     </section>
   );
 }
@@ -43,30 +55,60 @@ function StepContent({ step, checks, onNext, onBack, onReplay, onExit }: StepCon
   const t = useT();
   const isFirst = DEMO_STEP_ORDER.indexOf(step) === 0;
   return (
-    <section>
-      <h2>{t[STEP_COPY[step].title]}</h2>
-      <p>{t[STEP_COPY[step].hint]}</p>
-      <ul>
+    <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6 space-y-4">
+      <header>
+        <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
+          {t[STEP_COPY[step].title]}
+        </h2>
+        <p className="text-stone-500 dark:text-zinc-400 text-sm mt-1">{t[STEP_COPY[step].hint]}</p>
+      </header>
+      <ul className="space-y-2">
         {checks
           .filter((c: DemoCheckResult) => c.step === step)
           .map((c, i) => (
-            <li key={`${c.step}-${i}`}>
+            <li
+              key={`${c.step}-${i}`}
+              className={`rounded-lg px-3 py-2 text-sm ${
+                c.passed
+                  ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200'
+                  : 'bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-200'
+              }`}
+            >
               {`${t['demo.expected']}: ${c.expected} · ${t['demo.actual']}: ${c.actual} · ${c.passed ? t['demo.pass'] : t['demo.fail']}`}
             </li>
           ))}
       </ul>
-      <button type="button" disabled={isFirst} onClick={onBack}>
-        {t['demo.back']}
-      </button>
-      <button type="button" onClick={onNext}>
-        {t['demo.next']}
-      </button>
-      <button type="button" onClick={onReplay}>
-        {t['demo.replay']}
-      </button>
-      <button type="button" onClick={onExit}>
-        {t['demo.exit']}
-      </button>
+      <div className="flex gap-2 flex-wrap">
+        <button
+          type="button"
+          disabled={isFirst}
+          onClick={onBack}
+          className="flex-1 min-h-[44px] min-w-[44px] bg-stone-200 dark:bg-zinc-700 text-stone-800 dark:text-zinc-100 py-2 px-3 rounded-lg text-sm font-medium disabled:opacity-40 hover:bg-stone-300 dark:hover:bg-zinc-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.back']}
+        </button>
+        <button
+          type="button"
+          onClick={onNext}
+          className="flex-1 min-h-[44px] min-w-[44px] bg-emerald-700 text-white py-2 px-3 rounded-lg text-sm font-medium disabled:opacity-40 hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.next']}
+        </button>
+        <button
+          type="button"
+          onClick={onReplay}
+          className="flex-1 min-h-[44px] min-w-[44px] bg-stone-200 dark:bg-zinc-700 text-stone-800 dark:text-zinc-100 py-2 px-3 rounded-lg text-sm font-medium hover:bg-stone-300 dark:hover:bg-zinc-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.replay']}
+        </button>
+        <button
+          type="button"
+          onClick={onExit}
+          className="flex-1 min-h-[44px] min-w-[44px] bg-stone-200 dark:bg-zinc-700 text-stone-800 dark:text-zinc-100 py-2 px-3 rounded-lg text-sm font-medium hover:bg-stone-300 dark:hover:bg-zinc-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.exit']}
+        </button>
+      </div>
     </section>
   );
 }
@@ -78,21 +120,38 @@ function CompletedSummary({
 }: Pick<DemoGuideViewProps, 'completedChecks' | 'onReplay' | 'onExit'>) {
   const t = useT();
   return (
-    <section>
-      <h2>{t['demo.title']}</h2>
-      <ul>
+    <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6 space-y-4">
+      <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
+        {t['demo.title']}
+      </h2>
+      <ul className="space-y-2">
         {DEMO_STEP_ORDER.map((step) => (
           <li
             key={step}
+            className={`rounded-lg px-3 py-2 text-sm ${
+              completedChecks[step]
+                ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200'
+                : 'bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-200'
+            }`}
           >{`${t[STEP_COPY[step].title]}: ${completedChecks[step] ? t['demo.pass'] : t['demo.fail']}`}</li>
         ))}
       </ul>
-      <button type="button" onClick={onReplay}>
-        {t['demo.replay']}
-      </button>
-      <button type="button" onClick={onExit}>
-        {t['demo.exit']}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={onReplay}
+          className="flex-1 min-h-[44px] bg-emerald-700 text-white py-2 rounded-lg text-sm font-medium hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.replay']}
+        </button>
+        <button
+          type="button"
+          onClick={onExit}
+          className="flex-1 min-h-[44px] bg-stone-200 dark:bg-zinc-700 text-stone-800 dark:text-zinc-100 py-2 rounded-lg text-sm font-medium hover:bg-stone-300 dark:hover:bg-zinc-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 transition"
+        >
+          {t['demo.exit']}
+        </button>
+      </div>
     </section>
   );
 }
@@ -116,8 +175,10 @@ export function DemoGuideView(props: DemoGuideViewProps) {
         />
       );
     return (
-      <section>
-        <h2>{t['demo.title']}</h2>
+      <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
+          {t['demo.title']}
+        </h2>
       </section>
     );
   }
