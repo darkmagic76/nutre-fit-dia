@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nProvider, useLocale } from '@shared/i18n';
 import { DEMO_STEPS, type DemoGuideViewProps } from './types';
@@ -91,5 +91,30 @@ describe('DemoGuideView (pure props)', () => {
     await user.click(screen.getByRole('button', { name: 'to-en' }));
     expect(await screen.findByRole('heading', { name: 'Scan' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Next' })).toBeInTheDocument();
+  });
+
+  it('moves the panel by dragging the header handle, keeping buttons working', () => {
+    const { container } = render(
+      <I18nProvider>
+        <DemoGuideView {...baseProps()} />
+      </I18nProvider>,
+    );
+    const panel = container.firstElementChild as HTMLElement;
+    const handle = screen.getByRole('heading').closest('header') as HTMLElement;
+    expect(handle.className).toContain('cursor-grab');
+    expect(panel.style.transform).toBe('');
+
+    fireEvent.pointerDown(handle, { clientX: 100, clientY: 100, button: 0 });
+    expect(handle.className).toContain('cursor-grabbing');
+    fireEvent.pointerMove(window, { clientX: 160, clientY: 130 });
+    expect(panel.style.transform).toBe('translate(60px, 30px)');
+    fireEvent.pointerUp(window);
+    expect(handle.className).toContain('cursor-grab');
+
+    // Inner buttons keep working after a drag: Next still fires its handler.
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: /siguiente|next/i }));
+    });
+    expect(noop).toHaveBeenCalled();
   });
 });

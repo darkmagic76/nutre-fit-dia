@@ -1,7 +1,19 @@
 import { DEMO_STEP_ORDER, type DemoCheckResult, type DemoGuideViewProps } from './types';
 import type { DemoStep } from './types';
+import type { ReactNode } from 'react';
 import { useT } from '@shared/i18n';
 import type { Translations } from '@shared/i18n/types';
+import { useDraggablePanel, type DragHandleProps } from './hooks/useDraggablePanel';
+
+/** Ephemeral drag-handle props threaded to each section header (View-local). */
+interface DraggableSection {
+  dragHandleProps: DragHandleProps;
+  isDragging: boolean;
+}
+
+function handleClassName(isDragging: boolean): string {
+  return `${isDragging ? 'cursor-grabbing' : 'cursor-grab'} touch-none select-none`;
+}
 
 /** Step copy keys — presentational concern; the Container keeps the tab map. */
 const STEP_COPY: Record<DemoStep, { title: keyof Translations; hint: keyof Translations }> = {
@@ -16,13 +28,17 @@ const STEP_COPY: Record<DemoStep, { title: keyof Translations; hint: keyof Trans
 function ConfirmResetPrompt({
   onConfirmSeed,
   onExit,
-}: Pick<DemoGuideViewProps, 'onConfirmSeed' | 'onExit'>) {
+  dragHandleProps,
+  isDragging,
+}: Pick<DemoGuideViewProps, 'onConfirmSeed' | 'onExit'> & DraggableSection) {
   const t = useT();
   return (
     <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6 space-y-4">
-      <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
-        {t['demo.title']}
-      </h2>
+      <header {...dragHandleProps} className={handleClassName(isDragging)}>
+        <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
+          {t['demo.title']}
+        </h2>
+      </header>
       <p className="text-stone-600 dark:text-zinc-300 text-sm">{t['demo.confirmReset']}</p>
       <div className="flex gap-2">
         <button
@@ -44,19 +60,28 @@ function ConfirmResetPrompt({
   );
 }
 
-interface StepContentProps extends Pick<
-  DemoGuideViewProps,
-  'checks' | 'onNext' | 'onBack' | 'onReplay' | 'onExit'
-> {
+interface StepContentProps
+  extends
+    Pick<DemoGuideViewProps, 'checks' | 'onNext' | 'onBack' | 'onReplay' | 'onExit'>,
+    DraggableSection {
   step: DemoStep;
 }
 
-function StepContent({ step, checks, onNext, onBack, onReplay, onExit }: StepContentProps) {
+function StepContent({
+  step,
+  checks,
+  onNext,
+  onBack,
+  onReplay,
+  onExit,
+  dragHandleProps,
+  isDragging,
+}: StepContentProps) {
   const t = useT();
   const isFirst = DEMO_STEP_ORDER.indexOf(step) === 0;
   return (
     <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6 space-y-4">
-      <header>
+      <header {...dragHandleProps} className={handleClassName(isDragging)}>
         <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
           {t[STEP_COPY[step].title]}
         </h2>
@@ -117,13 +142,17 @@ function CompletedSummary({
   completedChecks,
   onReplay,
   onExit,
-}: Pick<DemoGuideViewProps, 'completedChecks' | 'onReplay' | 'onExit'>) {
+  dragHandleProps,
+  isDragging,
+}: Pick<DemoGuideViewProps, 'completedChecks' | 'onReplay' | 'onExit'> & DraggableSection) {
   const t = useT();
   return (
     <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6 space-y-4">
-      <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
-        {t['demo.title']}
-      </h2>
+      <header {...dragHandleProps} className={handleClassName(isDragging)}>
+        <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
+          {t['demo.title']}
+        </h2>
+      </header>
       <ul className="space-y-2">
         {DEMO_STEP_ORDER.map((step) => (
           <li
@@ -163,33 +192,54 @@ function CompletedSummary({
 export function DemoGuideView(props: DemoGuideViewProps) {
   const { currentStep, completed, confirmReset } = props;
   const t = useT();
+  const { panelStyle, isDragging, dragHandleProps } = useDraggablePanel();
+  let content: ReactNode;
   if (confirmReset)
-    return <ConfirmResetPrompt onConfirmSeed={props.onConfirmSeed} onExit={props.onExit} />;
-  if (completed || currentStep === null) {
+    content = (
+      <ConfirmResetPrompt
+        onConfirmSeed={props.onConfirmSeed}
+        onExit={props.onExit}
+        dragHandleProps={dragHandleProps}
+        isDragging={isDragging}
+      />
+    );
+  else if (completed || currentStep === null) {
     if (completed)
-      return (
+      content = (
         <CompletedSummary
           completedChecks={props.completedChecks}
           onReplay={props.onReplay}
           onExit={props.onExit}
+          dragHandleProps={dragHandleProps}
+          isDragging={isDragging}
         />
       );
-    return (
-      <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6">
-        <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
-          {t['demo.title']}
-        </h2>
-      </section>
+    else
+      content = (
+        <section className="bg-white dark:bg-zinc-800 rounded-xl shadow p-4 sm:p-6">
+          <header {...dragHandleProps} className={handleClassName(isDragging)}>
+            <h2 className="text-lg sm:text-xl font-semibold text-emerald-700 dark:text-emerald-400">
+              {t['demo.title']}
+            </h2>
+          </header>
+        </section>
+      );
+  } else
+    content = (
+      <StepContent
+        step={currentStep}
+        checks={props.checks}
+        onNext={props.onNext}
+        onBack={props.onBack}
+        onReplay={props.onReplay}
+        onExit={props.onExit}
+        dragHandleProps={dragHandleProps}
+        isDragging={isDragging}
+      />
     );
-  }
   return (
-    <StepContent
-      step={currentStep}
-      checks={props.checks}
-      onNext={props.onNext}
-      onBack={props.onBack}
-      onReplay={props.onReplay}
-      onExit={props.onExit}
-    />
+    <div style={panelStyle} className="w-full">
+      {content}
+    </div>
   );
 }
