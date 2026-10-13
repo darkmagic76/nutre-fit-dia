@@ -10,7 +10,7 @@ import { countRations, validateRations, validateWeeklyRations } from '@domain/ra
 import { suggestAlternative } from '@domain/sustainability/substitutionService';
 import { TrafficLightColor } from '@domain/trafficLight';
 import type { Food } from '@domain/food';
-import { classifyFood } from '@features/nutritional-traffic-light/services/classificationService';
+import { classifyFood } from '@domain/classification';
 import { foods, foodsById } from '@shared/data/foods';
 import { useContainer } from '@shared/context/useContainer';
 import type { Tab } from '@shared/hooks/useTabNavigation';

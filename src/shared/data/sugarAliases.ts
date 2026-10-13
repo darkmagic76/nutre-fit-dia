@@ -1,27 +1,8 @@
 /**
- * Canonical sugar alias list — single source of truth.
+ * Canonical sugar alias list — re-exported from the domain layer.
  *
- * Union of patterns from occultSugarDetector.ts and MockScannerAdapter.ts.
- * Each consumer applies its own matching semantics (includes vs Set.has).
+ * Nutrition vocabulary data lives in `@domain/classification` (domain must
+ * not import from shared). This module keeps the historical import path
+ * working for the scanner adapter (`MockScannerAdapter`).
  */
-export const SUGAR_ALIASES = [
-  'azúcar',
-  'azucar',
-  'sacarosa',
-  'sacarina',
-  'jarabe',
-  'glucosa',
-  'fructosa',
-  'dextrosa',
-  'maltosa',
-  'sirope',
-  'melaza',
-  'miel',
-  'maltodextrina',
-  'concentrado de zumo',
-  'néctar',
-  'nectar',
-  'panela',
-  'zumo concentrado',
-  'zumo de fruta concentrado',
-];
+export { SUGAR_ALIASES } from '@domain/classification';

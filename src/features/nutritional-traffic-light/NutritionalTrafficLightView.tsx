@@ -2,7 +2,7 @@ import { TrafficLightColor } from '@domain/trafficLight';
 import type { Food } from '@domain/food';
 import { Card, SelectField, PrimaryButton } from '@shared/ui';
 import { SafetyAlertDisplay } from './components/SafetyAlertDisplay';
-import type { ClassificationResult } from './services/classificationService';
+import type { ClassificationResult } from '@domain/classification';
 import type { SafetyAlert } from '../../domain/rationValidator';
 import type { Translations } from '@shared/i18n';
 
