@@ -15,7 +15,7 @@ export const es: Translations = {
   'tab.plan': 'Plan',
   'tab.activity': 'Actividad',
   'tab.nudges': 'Nudges',
-  'tab.sustainability': 'Sostenibilidad',
+  'tab.sustainability': 'Eco',
 
   'ui.scan': 'Escanear',
   'ui.classify': 'Clasificar',

@@ -52,7 +52,7 @@ describe('App integration', () => {
     expect(screen.getByRole('tab', { name: /hoy/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /perfil/i })).toBeInTheDocument();
     expect(screen.getByRole('tab', { name: /plan/i })).toBeInTheDocument();
-    expect(screen.getByRole('tab', { name: /sostenibilidad/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /eco/i })).toBeInTheDocument();
   });
   // Prueba accesibilidad de la navegación por teclado entre las pestañas, asegurando
   // que se puede cambiar de una pestaña a otra con las teclas de flecha.
@@ -85,7 +85,7 @@ describe('App integration', () => {
     fireEvent.keyDown(document, { key: 'ArrowLeft' });
 
     const selected = getSelectedTabs()[0];
-    expect(selected?.textContent).toContain('Sostenibilidad');
+    expect(selected?.textContent).toContain('Eco');
   });
 
   describe('Scanner', () => {
@@ -273,7 +273,7 @@ describe('App integration', () => {
 
   describe('Sustainability', () => {
     it('renders sustainability tab', () => {
-      selectTab('Sostenibilidad');
+      selectTab('Eco');
       expect(screen.getByText(/Puntuación Ambiental/)).toBeInTheDocument();
     });
   });
