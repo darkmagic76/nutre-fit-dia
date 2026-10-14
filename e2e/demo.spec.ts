@@ -11,7 +11,7 @@ test.describe('NutreFitDia Demo Reproducible Flow', () => {
   test('visible entry button opens the tour at step 1', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByRole('button', { name: /demostración guiada/i }).click();
+    await page.getByRole('button', { name: /demo guiada/i }).click();
 
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
@@ -23,7 +23,7 @@ test.describe('NutreFitDia Demo Reproducible Flow', () => {
     // Offline AFTER initial load: the PWA tour must run without network.
     await page.context().setOffline(true);
 
-    await page.getByRole('button', { name: /demostración guiada/i }).click();
+    await page.getByRole('button', { name: /demo guiada/i }).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
@@ -73,7 +73,7 @@ test.describe('NutreFitDia Demo Reproducible Flow', () => {
   test('replay resets the tour from scratch', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByRole('button', { name: /demostración guiada/i }).click();
+    await page.getByRole('button', { name: /demo guiada/i }).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog.getByRole('heading', { name: /datos iniciales/i })).toBeVisible();
 
@@ -91,7 +91,7 @@ test.describe('NutreFitDia Demo Reproducible Flow', () => {
   test('exit preserves seeded data (reopen asks to confirm)', async ({ page }) => {
     await page.goto('/');
 
-    await page.getByRole('button', { name: /demostración guiada/i }).click();
+    await page.getByRole('button', { name: /demo guiada/i }).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog.getByRole('heading', { name: /datos iniciales/i })).toBeVisible();
 
@@ -100,7 +100,7 @@ test.describe('NutreFitDia Demo Reproducible Flow', () => {
     await expect(dialog).toBeHidden();
 
     // Reopen: seeded data remains, so the guard asks to confirm.
-    await page.getByRole('button', { name: /demostración guiada/i }).click();
+    await page.getByRole('button', { name: /demo guiada/i }).click();
     await expect(dialog.getByText(/ya hay datos guardados/i)).toBeVisible();
   });
 
