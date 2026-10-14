@@ -288,7 +288,7 @@ export const es: Translations = {
   'log.animalProteinWarning': 'Proteína animal: {count}/día — considerar fuente de calcio vegetal',
 
   // Demo guide
-  'demo.title': 'Demostración guiada',
+  'demo.title': 'Demo guiada',
   'demo.steps.1.title': 'Datos iniciales',
   'demo.steps.2.title': 'Perfil',
   'demo.steps.3.title': 'Escaneo',

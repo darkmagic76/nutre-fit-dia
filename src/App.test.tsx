@@ -96,7 +96,7 @@ describe('App demo entry', () => {
   it('opens the guided tour at step 1 from the header demo button', async () => {
     renderAppWithFreshContainer();
     expect(screen.queryByRole('heading', { name: 'Datos iniciales' })).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Demostración guiada' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Demo guiada' }));
     expect(await screen.findByRole('heading', { name: 'Datos iniciales' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Salir de la demo' }));
     expect(screen.queryByRole('heading', { name: 'Datos iniciales' })).not.toBeInTheDocument();
@@ -114,7 +114,7 @@ describe('App demo entry', () => {
     // the panel box (dialog > first child) carries the drag transform and
     // its own internal scroll, with no overflow-clipping box in between.
     renderAppWithFreshContainer();
-    fireEvent.click(screen.getByRole('button', { name: 'Demostración guiada' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Demo guiada' }));
     const dialog = await screen.findByRole('dialog');
     const heading = await screen.findByRole('heading', { name: 'Datos iniciales' });
     const panel = dialog.firstElementChild as HTMLElement;
