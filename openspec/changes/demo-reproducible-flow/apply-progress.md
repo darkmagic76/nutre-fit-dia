@@ -1090,3 +1090,42 @@ via `mem_update` on the tasks-observation id.
 
 DRAGLAYOUT-FIX CLOSED. No open warnings. Recommended: direct user acceptance
 (post-archive follow-up, no archive phase pending).
+
+# Apply Progress: demo-reproducible-flow — CLOSING follow-ups (post-archive, orchestrator-recorded)
+
+## Scope
+User-ordered follow-ups after DRAGLAYOUT-FIX, all on local `develop`, no push
+until explicit order. No SDD phase launched for these (directed micro-work);
+recorded here so every change is documented.
+
+## Status: all complete and pushed
+
+- [x] PWA cooldown fix (`9d65f60`): `preventDefault()` moved after the 7-day
+  dismiss check in `useInstallPrompt.ts` (+2 tests proving no-preventDefault
+  on cooldown). Chrome banner message confirmed informational (deferred
+  pattern wiring intact) — not a bug.
+- [x] Sustainability tab label: first renamed `Eco` → `Sostenibilidad` /
+  `Sustainability` (`d8a28bc`), then REVERTED to `Eco` per user final call
+  (`44ea5ef`) — Eco covers Ecológico + Sostenible and is shorter.
+- [x] Demo link copy: `Demostración guiada` → `Demo guiada` (`2719037`,
+  es only; en stays `Guided demo`).
+- [x] E2E pins follow-up (`31e3955`): entry-button regexes updated to
+  `/demo guiada/i` after the rename (pre-push hook caught 4 failures —
+  lesson: UI renames must grep `e2e/` too).
+- [x] Local integration: feature branch merged to local `develop`
+  (`5d8928f`), branch deleted (`-d`), quality green on develop.
+- [x] Remote: `develop` pushed to `origin/develop` in two steps
+  (`31e3955`, then `44ea5ef`); pre-push gates (coverage + e2e chromium)
+  green; local and remote in sync. CI + staging deploy triggered by push.
+- [x] Delivery decisions (also in Engram `delivery/flow`): single PR to
+  develop in draft when ordered (no stacked branches); no merge/CI until
+  develop is perfect; release planned for next day after owner review.
+
+## Gates at close
+`pnpm quality` 92 files / 1009 tests green; functions 100%; e2e 9/9
+chromium. One pre-existing oxlint warning (DemoGuideContainer
+only-export-components, untouched).
+
+## Next
+Owner manual testing → push/release on order. Deferred: docs/slides+README
+demo section (separate change); optional en-locale e2e step.
