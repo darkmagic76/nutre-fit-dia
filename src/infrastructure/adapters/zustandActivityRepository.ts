@@ -1,20 +1,24 @@
+import type { StoreApi } from 'zustand';
 import type { ActivityRepository } from '@application/ports/activityRepository';
 import type { StateExporter } from '@application/ports/stateExporter';
-import { useActivityStore } from '@infrastructure/stores/activityStore';
+import { useActivityStore, type ActivityState } from '@infrastructure/stores/activityStore';
 
 /**
  * Zustand-backed adapter for ActivityRepository + StateExporter.
  *
- * Thin wrapper — delegates every call to `useActivityStore.getState()`.
+ * Thin wrapper — delegates every call to the injected store. Defaults to the
+ * global persisted store; `createContainer()` injects an ephemeral one.
  */
-export function createZustandActivityRepository(): ActivityRepository & StateExporter {
+export function createZustandActivityRepository(
+  store: StoreApi<ActivityState> = useActivityStore,
+): ActivityRepository & StateExporter {
   return {
-    getWeeklyMinutes: () => useActivityStore.getState().weeklyMinutes,
-    getStrengthSessions: () => useActivityStore.getState().strengthSessions,
-    getEntries: () => useActivityStore.getState().entries,
-    addEntry: (entry) => useActivityStore.getState().addEntry(entry),
-    getStreak: () => useActivityStore.getState().streak,
-    clearActivity: () => useActivityStore.getState().resetWeek(),
-    getState: () => useActivityStore.getState() as unknown as Record<string, unknown>,
+    getWeeklyMinutes: () => store.getState().weeklyMinutes,
+    getStrengthSessions: () => store.getState().strengthSessions,
+    getEntries: () => store.getState().entries,
+    addEntry: (entry) => store.getState().addEntry(entry),
+    getStreak: () => store.getState().streak,
+    clearActivity: () => store.getState().resetWeek(),
+    getState: () => store.getState() as unknown as Record<string, unknown>,
   };
 }

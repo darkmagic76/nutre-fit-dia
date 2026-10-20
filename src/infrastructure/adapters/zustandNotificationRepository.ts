@@ -1,24 +1,28 @@
+import type { StoreApi } from 'zustand';
 import type { NotificationRepository } from '@application/ports/notificationRepository';
 import type { StateExporter } from '@application/ports/stateExporter';
-import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
+import { useNudgeStore, type NudgeState } from '@infrastructure/stores/nudgeStore';
 
 /**
  * Zustand-backed adapter for NotificationRepository + StateExporter.
  *
- * Thin wrapper — delegates every call to `useNudgeStore.getState()`.
- * Zero new logic, zero React hooks, zero Zustand import surface
- * beyond the store module.
+ * Thin wrapper — delegates every call to the injected store. Defaults to the
+ * global persisted store; `createContainer()` injects an ephemeral one.
+ * Zero new logic, zero React hooks, zero Zustand import surface beyond types
+ * and the default store.
  */
-export function createZustandNotificationRepository(): NotificationRepository & StateExporter {
+export function createZustandNotificationRepository(
+  store: StoreApi<NudgeState> = useNudgeStore,
+): NotificationRepository & StateExporter {
   return {
-    getPending: () => useNudgeStore.getState().pending,
-    getHistory: () => useNudgeStore.getState().history,
-    enqueue: (n) => useNudgeStore.getState().enqueue(n),
-    acknowledge: (id) => useNudgeStore.getState().acknowledge(id),
-    dismiss: (id) => useNudgeStore.getState().dismiss(id),
-    getCooldowns: () => useNudgeStore.getState().cooldowns,
-    registerCooldown: (id, timestamp) => useNudgeStore.getState().registerCooldown(id, timestamp),
-    resetCooldown: (id) => useNudgeStore.getState().resetCooldown(id),
-    getState: () => useNudgeStore.getState() as unknown as Record<string, unknown>,
+    getPending: () => store.getState().pending,
+    getHistory: () => store.getState().history,
+    enqueue: (n) => store.getState().enqueue(n),
+    acknowledge: (id) => store.getState().acknowledge(id),
+    dismiss: (id) => store.getState().dismiss(id),
+    getCooldowns: () => store.getState().cooldowns,
+    registerCooldown: (id, timestamp) => store.getState().registerCooldown(id, timestamp),
+    resetCooldown: (id) => store.getState().resetCooldown(id),
+    getState: () => store.getState() as unknown as Record<string, unknown>,
   };
 }

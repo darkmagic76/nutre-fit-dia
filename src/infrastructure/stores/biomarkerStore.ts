@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create, type StateCreator } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { z } from 'zod';
 import { computeIMC, IMC_NORMAL_MAX } from '@domain/imc';
@@ -24,7 +24,7 @@ const BiomarkerStateSchema = z.object({
   ),
 });
 
-interface BiomarkerState {
+export interface BiomarkerState {
   glucoseHistory: GlucoseReading[];
   weightHistory: WeightReading[];
 
@@ -35,61 +35,73 @@ interface BiomarkerState {
   resetBiomarkerHistory: () => void;
 }
 
+/**
+ * State creator shared by the persisted singleton and the ephemeral factory.
+ * One definition, two instances — store logic never forks.
+ */
+const createBiomarkerState: StateCreator<BiomarkerState> = (set, get) => ({
+  glucoseHistory: [],
+  weightHistory: [],
+
+  recordGlucose: (glucose) => {
+    set({ glucoseHistory: [...get().glucoseHistory, glucose] });
+  },
+
+  recordWeight: (weightKg, heightCm) => {
+    const imc = computeIMC(weightKg, heightCm);
+    const reading: WeightReading = {
+      value: weightKg,
+      timestamp: Date.now(),
+      imc,
+    };
+    set({ weightHistory: [...get().weightHistory, reading] });
+    return reading;
+  },
+
+  getTrend: (): BiomarkerTrend => {
+    const { glucoseHistory, weightHistory } = get();
+    return computeBiomarkerTrend(glucoseHistory, weightHistory);
+  },
+
+  detectIMCThresholdCrossing: () => {
+    const { weightHistory } = get();
+    if (weightHistory.length < 2) return null;
+
+    const prev = weightHistory[weightHistory.length - 2].imc;
+    const curr = weightHistory[weightHistory.length - 1].imc;
+
+    if (prev <= IMC_NORMAL_MAX && curr > IMC_NORMAL_MAX) return 'crossed_above';
+    if (prev > IMC_NORMAL_MAX && curr <= IMC_NORMAL_MAX) return 'crossed_below';
+    return null;
+  },
+
+  resetBiomarkerHistory: () => {
+    set({ glucoseHistory: [], weightHistory: [] });
+  },
+});
+
 export const useBiomarkerStore = create<BiomarkerState>()(
-  persist(
-    (set, get) => ({
-      glucoseHistory: [],
-      weightHistory: [],
-
-      recordGlucose: (glucose) => {
-        set({ glucoseHistory: [...get().glucoseHistory, glucose] });
-      },
-
-      recordWeight: (weightKg, heightCm) => {
-        const imc = computeIMC(weightKg, heightCm);
-        const reading: WeightReading = {
-          value: weightKg,
-          timestamp: Date.now(),
-          imc,
-        };
-        set({ weightHistory: [...get().weightHistory, reading] });
-        return reading;
-      },
-
-      getTrend: (): BiomarkerTrend => {
-        const { glucoseHistory, weightHistory } = get();
-        return computeBiomarkerTrend(glucoseHistory, weightHistory);
-      },
-
-      detectIMCThresholdCrossing: () => {
-        const { weightHistory } = get();
-        if (weightHistory.length < 2) return null;
-
-        const prev = weightHistory[weightHistory.length - 2].imc;
-        const curr = weightHistory[weightHistory.length - 1].imc;
-
-        if (prev <= IMC_NORMAL_MAX && curr > IMC_NORMAL_MAX) return 'crossed_above';
-        if (prev > IMC_NORMAL_MAX && curr <= IMC_NORMAL_MAX) return 'crossed_below';
-        return null;
-      },
-
-      resetBiomarkerHistory: () => {
-        set({ glucoseHistory: [], weightHistory: [] });
-      },
+  persist(createBiomarkerState, {
+    ...createPersistConfig('biomarker', {
+      sensitiveFields: ['glucoseHistory', 'weightHistory'],
     }),
-    {
-      ...createPersistConfig('biomarker', {
-        sensitiveFields: ['glucoseHistory', 'weightHistory'],
-      }),
-      onRehydrateStorage: () => (state, error) => {
-        if (error) return;
-        if (state) {
-          const parsed = BiomarkerStateSchema.safeParse(state);
-          if (!parsed.success) {
-            useBiomarkerStore.setState({ glucoseHistory: [], weightHistory: [] });
-          }
+    onRehydrateStorage: () => (state, error) => {
+      if (error) return;
+      if (state) {
+        const parsed = BiomarkerStateSchema.safeParse(state);
+        if (!parsed.success) {
+          useBiomarkerStore.setState({ glucoseHistory: [], weightHistory: [] });
         }
-      },
+      }
     },
-  ),
+  }),
 );
+
+/**
+ * Ephemeral biomarker store — a fresh, non-persisted instance per call.
+ * `createContainer()` builds one store set per container so two containers
+ * never share state and never hydrate the same localStorage key.
+ */
+export function createBiomarkerStore() {
+  return create<BiomarkerState>()(createBiomarkerState);
+}

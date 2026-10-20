@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create, type StateCreator } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { createPersistConfig } from '@infrastructure/storage';
 import { z } from 'zod';
@@ -10,7 +10,7 @@ import {
   type RationValidationResult,
 } from '../../domain/rationValidator';
 
-interface LogState {
+export interface LogState {
   todayLog: Food[];
   todayValidation: RationValidationResult | null;
 
@@ -52,35 +52,47 @@ export function evaluateLog(
   return validateRations(counts, caloricRestrictionActive);
 }
 
+/**
+ * State creator shared by the persisted singleton and the ephemeral factory.
+ * One definition, two instances — store logic never forks.
+ */
+const createLogState: StateCreator<LogState> = (set, get) => ({
+  todayLog: [],
+  todayValidation: null,
+
+  addFoodToLog: (food, caloricRestrictionActive) => {
+    const { todayLog } = get();
+    const log = [...todayLog, food];
+    set({ todayLog: log, todayValidation: evaluateLog(log, caloricRestrictionActive) });
+  },
+
+  removeFoodFromLog: (index, caloricRestrictionActive) => {
+    const { todayLog } = get();
+    const log = todayLog.filter((_, i) => i !== index);
+    set({ todayLog: log, todayValidation: evaluateLog(log, caloricRestrictionActive) });
+  },
+});
+
 export const useLogStore = create<LogState>()(
-  persist(
-    (set, get) => ({
-      todayLog: [],
-      todayValidation: null,
-
-      addFoodToLog: (food, caloricRestrictionActive) => {
-        const { todayLog } = get();
-        const log = [...todayLog, food];
-        set({ todayLog: log, todayValidation: evaluateLog(log, caloricRestrictionActive) });
-      },
-
-      removeFoodFromLog: (index, caloricRestrictionActive) => {
-        const { todayLog } = get();
-        const log = todayLog.filter((_, i) => i !== index);
-        set({ todayLog: log, todayValidation: evaluateLog(log, caloricRestrictionActive) });
-      },
-    }),
-    {
-      ...createPersistConfig('log'),
-      onRehydrateStorage: () => (state, error) => {
-        if (error) return;
-        if (state) {
-          const parsed = LogStateSchema.safeParse(state);
-          if (!parsed.success) {
-            useLogStore.setState({ todayLog: [], todayValidation: null });
-          }
+  persist(createLogState, {
+    ...createPersistConfig('log'),
+    onRehydrateStorage: () => (state, error) => {
+      if (error) return;
+      if (state) {
+        const parsed = LogStateSchema.safeParse(state);
+        if (!parsed.success) {
+          useLogStore.setState({ todayLog: [], todayValidation: null });
         }
-      },
+      }
     },
-  ),
+  }),
 );
+
+/**
+ * Ephemeral log store — a fresh, non-persisted instance per call.
+ * `createContainer()` builds one store set per container so two containers
+ * never share state and never hydrate the same localStorage key.
+ */
+export function createLogStore() {
+  return create<LogState>()(createLogState);
+}

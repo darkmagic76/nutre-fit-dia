@@ -15,6 +15,11 @@ import { resetDemoStorage } from '@infrastructure/storage';
 
 // ─── Infrastructure data ────────────────────────────────────────────────────
 import { NUDGE_RULES } from '@infrastructure/nudge/rules';
+import {
+  GLOBAL_STORE_SET,
+  createStoreSet,
+  type StoreSet,
+} from '@infrastructure/stores/createStoreSet';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 import type { ContextInput } from '@domain/nudgeContext';
@@ -22,19 +27,26 @@ import type { ProfileInput } from '@application/dtos/ProfileInput';
 import type { Container } from '@application/ports/container';
 
 /**
- * Composition root — single factory that wires adapters → use cases.
+ * Composition root — single factory that wires stores → adapters → use cases.
  *
- * Called once at application startup. The returned container provides
- * fully-wired use case functions that React components / hooks consume.
+ * Every call gets its own `StoreSet`. By default that set is ephemeral
+ * (fresh, non-persisted stores), so two containers never share data — the
+ * isolation guarantee the demo spec requires.
+ *
+ * `resetStorage` defaults to a no-op for the same reason: an ephemeral
+ * container must never wipe the real application's localStorage.
  */
-export function createContainer(): Container {
+export function createContainer(
+  stores: StoreSet = createStoreSet(),
+  resetStorage: () => Promise<void> = async () => {},
+): Container {
   // 1. Adapters — thin Zustand wrappers implementing port interfaces
-  const notificationRepo = createZustandNotificationRepository();
-  const activityRepo = createZustandActivityRepository();
-  const logRepo = createZustandLogRepository();
-  const biomarkerRepo = createZustandBiomarkerRepository();
-  const planRepo = createZustandPlanRepository();
-  const trackerExporter = createZustandTrackerExporter();
+  const notificationRepo = createZustandNotificationRepository(stores.nudge);
+  const activityRepo = createZustandActivityRepository(stores.activity);
+  const logRepo = createZustandLogRepository(stores.log);
+  const biomarkerRepo = createZustandBiomarkerRepository(stores.biomarker);
+  const planRepo = createZustandPlanRepository(stores.plan);
+  const trackerExporter = createZustandTrackerExporter(stores.tracker);
 
   // 2. Use cases — receive ports, never import stores directly
   const calculateTarget = (input: ProfileInput) => calculateTargetUseCase(input, biomarkerRepo);
@@ -60,7 +72,7 @@ export function createContainer(): Container {
     biomarkerRepo,
     planRepo,
     activityRepo,
-    resetStorage: resetDemoStorage,
+    resetStorage,
   });
 
   return {
@@ -85,15 +97,15 @@ export function createContainer(): Container {
  * Why a singleton?
  * - The application has exactly one runtime state (single user, single device).
  * - React Context providers need a stable reference across renders.
- * - All Zustand stores are already module-level singletons; the container
- *   merely wires them into use cases.
+ * - The UI reads the exported `useXStore` hooks directly, so the production
+ *   container must be wired to those same persisted stores (`GLOBAL_STORE_SET`).
  *
  * When to use `createContainer()` instead:
- * - Tests call `createContainer()` to get a fresh wired instance without
- *   polluting the global singleton state.
- * - Each call returns a new container with its own adapter instances,
- *   useful for parallel test isolation.
+ * - Tests get a fully wired container backed by its own ephemeral store set,
+ *   with no shared state and no persistence.
+ * - The default `resetStorage` no-op keeps `resetDemo()` from touching the
+ *   real application storage.
  *
- * @see {@link createContainer} for the factory used in tests
+ * @see {@link createContainer} for the isolated factory used in tests
  */
-export const container = createContainer();
+export const container = createContainer(GLOBAL_STORE_SET, resetDemoStorage);

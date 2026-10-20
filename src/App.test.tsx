@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nProvider } from '@shared/i18n';
 import { ContainerProvider } from '@shared/context/ContainerContext';
-import { container, createContainer } from '@infrastructure/compositionRoot';
+import { container } from '@infrastructure/compositionRoot';
 import { createLocalStorage, createMatchMedia } from './test/test-helpers';
 import App from './App';
 import indexHtml from '../index.html?raw';
@@ -78,14 +78,15 @@ describe('App', () => {
 describe('App demo entry', () => {
   beforeEach(async () => {
     window.history.replaceState(null, '', '/');
-    // Stores are module-level singletons shared across containers —
-    // reset so each entry path starts from a clean profile.
+    // The UI reads the global stores directly, so App must render with the
+    // singleton container wired to those same stores (ephemeral containers
+    // would let the demo seed data the UI cannot see).
     await container.resetDemo();
   });
 
-  function renderAppWithFreshContainer() {
+  function renderApp() {
     render(
-      <ContainerProvider value={createContainer()}>
+      <ContainerProvider value={container}>
         <I18nProvider>
           <App />
         </I18nProvider>
@@ -94,7 +95,7 @@ describe('App demo entry', () => {
   }
 
   it('opens the guided tour at step 1 from the header demo button', async () => {
-    renderAppWithFreshContainer();
+    renderApp();
     expect(screen.queryByRole('heading', { name: 'Datos iniciales' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Demo guiada' }));
     expect(await screen.findByRole('heading', { name: 'Datos iniciales' })).toBeInTheDocument();
@@ -104,7 +105,7 @@ describe('App demo entry', () => {
 
   it('opens the tour at step 1 from the ?demo=1 deep-link', async () => {
     window.history.replaceState(null, '', '/?demo=1');
-    renderAppWithFreshContainer();
+    renderApp();
     expect(await screen.findByRole('heading', { name: 'Datos iniciales' })).toBeInTheDocument();
     expect(window.location.search).toBe('');
   });
@@ -113,7 +114,7 @@ describe('App demo entry', () => {
     // DRAGLAYOUT-FIX guard: the overlay keeps only positioning context —
     // the panel box (dialog > first child) carries the drag transform and
     // its own internal scroll, with no overflow-clipping box in between.
-    renderAppWithFreshContainer();
+    renderApp();
     fireEvent.click(screen.getByRole('button', { name: 'Demo guiada' }));
     const dialog = await screen.findByRole('dialog');
     const heading = await screen.findByRole('heading', { name: 'Datos iniciales' });
