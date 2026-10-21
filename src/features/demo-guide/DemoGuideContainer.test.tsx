@@ -68,12 +68,12 @@ describe('DemoGuideContainer state machine', () => {
     vi.clearAllMocks();
   });
 
-  it('START seeds once on mount; ?demo=1 fires once then stripped', async () => {
+  it('START seeds once on mount and leaves the URL alone (App owns deep-link)', async () => {
     window.history.replaceState(null, '', '/?demo=1');
     const { stub } = await setup();
     expect(stub.seedDemo).toHaveBeenCalledTimes(1);
     expect(stub.seedDemo).toHaveBeenCalledWith();
-    expect(window.location.search).toBe('');
+    expect(window.location.search).toBe('?demo=1');
   });
 
   it('aborted seed shows confirm; Confirm seeds flagged, Cancel exits', async () => {

@@ -121,21 +121,10 @@ export function DemoGuideContainer({ onNavigate, onExit }: DemoGuideContainerPro
   const startedRef = useRef(false);
   const targetRequestedRef = useRef(false);
 
-  // START on mount (mount = open). ?demo=1 fires once: stripped via replaceState.
+  // START on mount (mount = open). App owns deep-link parsing and URL cleanup.
   useEffect(() => {
     if (startedRef.current) return;
     startedRef.current = true;
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('demo') === '1') {
-      params.delete('demo');
-      const query = params.toString();
-      const hash = window.location.hash;
-      window.history.replaceState(
-        null,
-        '',
-        `${window.location.pathname}${query ? `?${query}` : ''}${hash}`,
-      );
-    }
     void seedDemo().then((result) => {
       if (result.aborted) setConfirmReset(true);
       else {
