@@ -4,11 +4,11 @@ import {
   DEMO_METRICS_INPUT,
   DEMO_TRIGGER_FOOD_ID,
 } from '@application/services/demoDataset';
+import { DEMO_EXPECTED } from '@application/services/demoExpectations';
 import { generateWeeklyPlan } from '@application/services/planGenerator';
 import type { Container } from '@application/ports/container';
 import { countRations, validateRations, validateWeeklyRations } from '@domain/rationValidator';
 import { suggestAlternative } from '@domain/sustainability/substitutionService';
-import { TrafficLightColor } from '@domain/trafficLight';
 import type { Food } from '@domain/food';
 import { classifyFood } from '@domain/classification';
 import { foods, foodsById } from '@shared/data/foods';
@@ -37,18 +37,33 @@ const STEP_TAB: Record<DemoStep, Tab | null> = {
 };
 
 /**
- * Advisory per-step checks from domain truth (never hardcoded strings alone).
+ * Advisory per-step checks against frozen demo expectations.
  * Clinical drift surfaces as FAIL so e2e goes red by design.
  */
 function row(step: DemoStep, passed: boolean, expected: string, actual: string): DemoCheckResult {
   return { step, passed, expected, actual };
 }
 
+/** Canary row: the live value must match the frozen expectation verbatim. */
+function compare(step: DemoStep, expected: string, actual: string): DemoCheckResult {
+  return row(step, actual === expected, expected, actual);
+}
+
+function formatTargetLine(target: DemoTarget | null): string {
+  if (target === null || target.profileError !== null || target.caloricTarget === null) return '—';
+  return `BMR ${target.caloricTarget.bmr} kcal · TDEE ${target.caloricTarget.tdee} kcal`;
+}
+
+function formatPlanLine(valid: boolean, days: number): string {
+  return `${valid ? 'valid' : 'invalid'} · ${days} days`;
+}
+
+function formatViolations(count: number, unit: 'daily' | 'weekly'): string {
+  return `${count} ${unit} violations`;
+}
+
 export function computeDemoChecks(seeded: boolean, target: DemoTarget | null): DemoCheckResult[] {
   const restriction = target?.caloricRestrictionActive ?? false;
-  const bmr = target?.caloricTarget ? String(target.caloricTarget.bmr) : '—';
-  const tdee = target?.caloricTarget ? String(target.caloricTarget.tdee) : '—';
-  const perfilValue = `BMR ${bmr} kcal · TDEE ${tdee} kcal`;
   const oil = foodsById.get('oil-aove');
   const cola = foodsById.get('proc-refresco-cola');
   const trigger = foodsById.get(DEMO_TRIGGER_FOOD_ID);
@@ -60,38 +75,34 @@ export function computeDemoChecks(seeded: boolean, target: DemoTarget | null): D
   const daily = validateRations(counts, restriction);
   const weekly = validateWeeklyRations(counts);
   const alternatives = trigger ? suggestAlternative(trigger, foods) : [];
-  const green = TrafficLightColor.GREEN;
-  const red = TrafficLightColor.RED;
+  const expectedTarget = `BMR ${DEMO_EXPECTED.bmr} kcal · TDEE ${DEMO_EXPECTED.tdee} kcal`;
+  const expectedPlan = formatPlanLine(DEMO_EXPECTED.planValid, DEMO_EXPECTED.planDays);
+  const alternativesInRange =
+    alternatives.length >= DEMO_EXPECTED.alternativesMin &&
+    alternatives.length <= DEMO_EXPECTED.alternativesMax;
   const { datos, perfil, escaneo, recomendacion, sustitucion, validaciones } = DEMO_STEPS;
   return [
-    row(datos, seeded, 'seeded', seeded ? 'seeded' : 'empty'),
-    row(perfil, target !== null && target.profileError === null, perfilValue, perfilValue),
-    row(
-      escaneo,
-      oil !== undefined && classifyFood(oil) === green,
-      green,
-      oil ? classifyFood(oil) : 'missing',
-    ),
-    row(
-      escaneo,
-      cola !== undefined && classifyFood(cola) === red,
-      red,
-      cola ? classifyFood(cola) : 'missing',
-    ),
-    row(
-      recomendacion,
-      plan.valid && plan.days.length === 7,
-      'valid · 7 days',
-      `${plan.valid ? 'valid' : 'invalid'} · ${plan.days.length} days`,
-    ),
+    compare(datos, DEMO_EXPECTED.seeded, seeded ? DEMO_EXPECTED.seeded : 'empty'),
+    compare(perfil, expectedTarget, formatTargetLine(target)),
+    compare(escaneo, DEMO_EXPECTED.oil, oil ? classifyFood(oil) : 'missing'),
+    compare(escaneo, DEMO_EXPECTED.cola, cola ? classifyFood(cola) : 'missing'),
+    compare(recomendacion, expectedPlan, formatPlanLine(plan.valid, plan.days.length)),
     row(
       sustitucion,
-      alternatives.length >= 1 && alternatives.length <= 3,
-      '1-3 alternatives',
+      alternativesInRange,
+      `${DEMO_EXPECTED.alternativesMin}-${DEMO_EXPECTED.alternativesMax} alternatives`,
       `${alternatives.length} alternatives`,
     ),
-    row(validaciones, true, 'listed', `${daily.violations.length} daily violations`),
-    row(validaciones, true, 'listed', `${weekly.violations.length} weekly violations`),
+    compare(
+      validaciones,
+      formatViolations(DEMO_EXPECTED.dailyViolations, 'daily'),
+      formatViolations(daily.violations.length, 'daily'),
+    ),
+    compare(
+      validaciones,
+      formatViolations(DEMO_EXPECTED.weeklyViolations, 'weekly'),
+      formatViolations(weekly.violations.length, 'weekly'),
+    ),
   ];
 }
 

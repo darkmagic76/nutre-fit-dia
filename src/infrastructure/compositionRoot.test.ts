@@ -1,34 +1,10 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { createContainer, container } from './compositionRoot';
-
-// Reset stores before each test
-import { useTrackerStore } from '@infrastructure/stores/trackerStore';
-import { useLogStore } from '@infrastructure/stores/logStore';
-import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
-import { useActivityStore } from '@infrastructure/stores/activityStore';
-import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
-import { usePlanStore } from '@infrastructure/stores/planStore';
+import { resetGlobalStores } from '@/test/storeReset';
 
 describe('compositionRoot', () => {
   beforeEach(() => {
-    useTrackerStore.setState({
-      weight: '',
-      height: '',
-      age: '',
-      diagnosisAge: '',
-      gender: 'male',
-      paf: '',
-      glucose: '',
-      glucoseContext: 'fasting',
-      caloricTarget: null,
-      caloricRestrictionActive: false,
-      profileError: null,
-    });
-    useLogStore.setState({ todayLog: [], todayValidation: null });
-    useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
-    useActivityStore.setState({ weeklyMinutes: 0, strengthSessions: 0, entries: [], streak: 0 });
-    useBiomarkerStore.setState({ glucoseHistory: [], weightHistory: [], lastIMC: null });
-    usePlanStore.setState({ weeklyPlan: null });
+    resetGlobalStores();
   });
 
   describe('createContainer', () => {

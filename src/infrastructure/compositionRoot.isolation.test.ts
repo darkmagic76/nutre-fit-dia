@@ -1,34 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { createContainer, container } from './compositionRoot';
-import { useTrackerStore } from '@infrastructure/stores/trackerStore';
+import { resetGlobalStores } from '@/test/storeReset';
 import { useLogStore } from '@infrastructure/stores/logStore';
-import { useNudgeStore } from '@infrastructure/stores/nudgeStore';
-import { useActivityStore } from '@infrastructure/stores/activityStore';
 import { useBiomarkerStore } from '@infrastructure/stores/biomarkerStore';
 import { usePlanStore } from '@infrastructure/stores/planStore';
-
-// seedDemo aborts unless the target stores are empty, so every test starts
-// from a clean global state regardless of the previous test in this file.
-function resetGlobalStores() {
-  useTrackerStore.setState({
-    weight: '',
-    height: '',
-    age: '',
-    diagnosisAge: '',
-    gender: 'male',
-    paf: '',
-    glucose: '',
-    glucoseContext: 'fasting',
-    caloricTarget: null,
-    caloricRestrictionActive: false,
-    profileError: null,
-  });
-  useLogStore.setState({ todayLog: [], todayValidation: null });
-  useNudgeStore.setState({ pending: [], history: [], cooldowns: {} });
-  useActivityStore.setState({ weeklyMinutes: 0, strengthSessions: 0, entries: [], streak: 0 });
-  useBiomarkerStore.setState({ glucoseHistory: [], weightHistory: [] });
-  usePlanStore.setState({ weeklyPlan: null });
-}
 
 describe('compositionRoot isolation', () => {
   beforeEach(() => {
