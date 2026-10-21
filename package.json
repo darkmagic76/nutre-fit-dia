@@ -20,6 +20,7 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "test:e2e:offline": "playwright test --config playwright.offline.config.ts",
     "test:e2e:ui": "playwright test --ui",
     "quality": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test:run",
     "verify": "pnpm quality && pnpm build",
