@@ -50,6 +50,7 @@ test.describe('NutreFitDia Demo Reproducible Flow', () => {
     // Step 4 recomendacion: valid 7-day plan, Day 1 rendered.
     await expect(dialog.getByRole('heading', { name: /recomendación/i })).toBeVisible();
     await expect(dialog.getByText(/valid · 7 days/i)).toBeVisible();
+    await expect(page.locator('#panel-plan')).toContainText(/Día 1/);
     await expect(dialog.getByText('Falló')).toHaveCount(0);
     await dialog.getByRole('button', { name: /siguiente/i }).click();
 
@@ -59,15 +60,27 @@ test.describe('NutreFitDia Demo Reproducible Flow', () => {
     await expect(dialog.getByText('Falló')).toHaveCount(0);
     await dialog.getByRole('button', { name: /siguiente/i }).click();
 
-    // Step 6 validaciones: daily + weekly violations listed.
+    // Step 6 validaciones: daily + weekly violations listed in the tour and in the Log tab.
     await expect(dialog.getByRole('heading', { name: /validaciones/i })).toBeVisible();
     await expect(dialog.getByText(/violations/i).first()).toBeVisible();
+    await expect(page.locator('#panel-log')).toContainText(/Errores detectados|violaciones/i);
     await expect(dialog.getByText('Falló')).toHaveCount(0);
     await dialog.getByRole('button', { name: /siguiente/i }).click();
 
     // Completed summary: all 6 steps pass — drift fails loudly here.
     await expect(dialog.getByText('Correcto')).toHaveCount(6);
     await expect(dialog.getByText('Falló')).toHaveCount(0);
+  });
+
+  test('tour follows the app locale (EN)', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: /switch to english/i }).click();
+
+    await page.getByRole('button', { name: /guided demo/i }).click();
+    const dialog = page.getByRole('dialog');
+
+    await expect(dialog.getByRole('heading', { name: /initial data/i })).toBeVisible();
+    await expect(dialog.getByText(/expected:/i).first()).toBeVisible();
   });
 
   test('replay resets the tour from scratch', async ({ page }) => {
