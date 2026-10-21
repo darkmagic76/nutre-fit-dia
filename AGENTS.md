@@ -123,7 +123,10 @@ src/features/<feature>/
 
 ## Archivos ignorados (no tocar)
 
-- `.atl/`, `sdd/`, `openspec/` — generados por tooling SDD, en `.gitignore`.
+- `.atl/`, `sdd` — estado local del tooling SDD, en `.gitignore`.
+- `openspec/` — **sí se versiona**: `openspec/specs/` (especificaciones de dominio) y
+  `openspec/changes/` (registro de cambios, incluidos los archivados) son documentación
+  del repo. No está en `.gitignore`; no lo asumas ignorado.
 - `sw.js`, `dev-sw.js` — service workers auto-generados por `vite-plugin-pwa`.
 - `session-ses_*` — logs de sesión, en `.gitignore`.
 - `.env` — nunca commitear; usar `.env.example` como template.
